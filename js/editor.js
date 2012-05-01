@@ -1,9 +1,8 @@
 // The CodeMirror2 editor instance.
 var editor;
 
-// A mapping from character indices in the editor to associated
-// context-sensitive help information.
-var helpIndex = [];
+// Provides context-sensitive help based on an index in HTML source code.
+var helpIndex = Help.Index();
 
 // Keep track of CodeMirror2 mark objects corresponding to help
 // highlighting.
@@ -30,92 +29,6 @@ function getIndexFromPos(editor, pos) {
     index += editor.getLine(i).length + 1;
   return index;
 }
-
-// Recursively build the help index mapping editor character indices 
-// to context-sensitive help.
-function buildHelpIndex(element, index) {
-  var i, child,
-      html = editor.getValue(),
-      pi = element.parseInfo,
-      tagInfo = {
-        type: "tag",
-        value: element.nodeName.toLowerCase(),
-        highlights: []
-      };
-  if (pi) {
-    if (pi.openTag) {
-      tagInfo.highlights.push(pi.openTag);
-      for (i = pi.openTag.start; i < pi.openTag.end; i++)
-        index[i] = tagInfo;
-    }
-    if (pi.closeTag) {
-      tagInfo.highlights.push(pi.closeTag);
-      for (i = pi.closeTag.start; i < pi.closeTag.end; i++)
-        index[i] = tagInfo;
-    }
-  }
-  for (i = 0; i < element.childNodes.length; i++) {
-    child = element.childNodes[i];
-    if (child.nodeType == element.ELEMENT_NODE) {
-      buildHelpIndex(child, index);
-    }
-    if (element.nodeName == "STYLE" && child.parseInfo.rules) {
-      child.parseInfo.rules.forEach(function(rule) {
-        var selectorInfo = {
-          type: "cssSelector",
-          highlights: [rule.selector]
-        };
-        for (var i = rule.selector.start; i < rule.selector.end; i++)
-          index[i] = selectorInfo;
-        rule.declarations.properties.forEach(function(prop) {
-          var cssInfo = {
-            type: "cssProperty",
-            value: html.slice(prop.name.start, prop.name.end).toLowerCase(),
-            highlights: [prop.name]
-          };
-          for (var i = prop.name.start; i < prop.name.end; i++)
-            index[i] = cssInfo;
-        });
-      });
-    }
-  }
-}
-
-// Return the context-sensitive help information for a particular position
-// in the editor, or undefined if no help is available.
-function getHelp(pos) {
-  var index = getIndexFromPos(editor, pos),
-      help = helpIndex[index];
-  if (help) {
-    if (help.type == "tag" &&
-        help.value in HacktionaryData["html-element-docs"])
-      return {
-        html: HacktionaryData["html-element-docs"][help.value],
-        url: MDN_URLS.html + help.value,
-        highlights: help.highlights
-      };
-    else if (help.type == "cssProperty" &&
-             help.value in HacktionaryData["css-property-docs"])
-      return {
-        html: HacktionaryData["css-property-docs"][help.value],
-        url: MDN_URLS.css + help.value,
-        highlights: help.highlights
-      };
-    else if (help.type == "cssSelector")
-      return {
-        html: $("#templates .selector-help").html(),
-        url: MDN_URLS.cssSelectors,
-        highlights: help.highlights
-      };
-  }
-}
-
-// URLs for help on the Mozilla Developer Network.
-var MDN_URLS = {
-  html: "https://developer.mozilla.org/en/HTML/Element/",
-  css: "https://developer.mozilla.org/en/CSS/",
-  cssSelectors: "https://developer.mozilla.org/en/CSS/Getting_Started/Selectors"
-};
 
 // Report the given Slowparse error.
 function reportError(error) {
@@ -159,12 +72,12 @@ function updatePreview(html) {
 function onChange() {
   var html = editor.getValue();
   var result = Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
-  helpIndex = [];  
+  helpIndex.clear();
   clearErrorHighlights();
   if (result.error)
     reportError(result.error);
   else {
-    buildHelpIndex(result.document, helpIndex);
+    helpIndex.build(result.document, html);
     updatePreview(html);
   }
   // Cursor activity would've been fired before us, so call it again
@@ -183,7 +96,7 @@ function onCursorActivity() {
     mark.clear();
   });
   cursorHelpMarks = [];
-  var help = getHelp(editor.getCursor());
+  var help = helpIndex.get(getIndexFromPos(editor, editor.getCursor()));
   if (help) {
     var learn = $("#templates .learn-more").clone()
       .attr("href", help.url);
