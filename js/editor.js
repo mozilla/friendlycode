@@ -1,26 +1,3 @@
-// TODOS:
-//
-// * Mouseover of DOM elements in preview area should highlight the relevant
-//   source code.
-//
-// * Cursor-over of attributes on page should show relevant
-//   MDN help tooltip, with link to more information on MDN (e.g. via
-//   shift-click).
-//
-// * On mouseover of word "here" in error message, the associated source code
-//   should scroll into view if not already visible.
-//
-// * Suggestions for unrecognized tags/properties/attrs should have MDN
-//   blurbs next to them.
-//
-// * We should detect unrecognized attributes for the current tag and
-//   provide suggestions for those.
-//
-// * Images that don't load should also dim the preview area and provide
-//   help atop it, e.g. telling the user to check the URL and make sure
-//   it's an image and not a web page. Relevant source code should
-//   be highlighted.
-
 // The CodeMirror2 editor instance.
 var editor;
 
