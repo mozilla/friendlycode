@@ -133,33 +133,6 @@ function getHelp(pos) {
   }
 }
 
-// Create a list of suggested HTML tags/CSS properties for the given
-// input. Return the result as a jQuery selection.
-function createSuggestions(options) {
-  // TODO: Substring matching isn't very useful; we should use something
-  // better, like string distance, and/or hard-code particular suggestions
-  // that we see in the wild (e.g. suggest 'color' when user writes
-  // 'font-color' or 'text-color'). 
-  var name = options.name.toLowerCase();
-  var matches = options.lexicon.filter(function(s) {
-    return s.indexOf(name) != -1;
-  });
-  if (!matches.length)
-    return $();
-  var suggs = $("#templates .suggestions").clone();
-  var li = suggs.find("li").remove();
-  matches.forEach(function(sugg) {
-    var suggItem = li.clone();
-    suggItem.find('a')
-      .attr("href", options.baseURL + sugg)
-      .text(sugg);
-    if (sugg in options.blurbs)
-      suggItem.find('p').html(options.blurbs[sugg]);
-    suggItem.appendTo(suggs.find('ul'));
-  });
-  return suggs;
-}
-
 // URLs for help on the Mozilla Developer Network.
 var MDN_URLS = {
   html: "https://developer.mozilla.org/en/HTML/Element/",
@@ -167,26 +140,10 @@ var MDN_URLS = {
   cssSelectors: "https://developer.mozilla.org/en/CSS/Getting_Started/Selectors"
 };
 
-// Report the given Slowparse error, optionally providing suggestions to
-// the user.
+// Report the given Slowparse error.
 function reportError(error) {
   $(".error").fillError(error).eachErrorHighlight(setErrorHighlight);
   $(".help").hide();
-  if (error.type == "INVALID_TAG_NAME") {
-    createSuggestions({
-      name: error.openTag.name,
-      lexicon: Slowparse.HTML_ELEMENT_NAMES,
-      baseURL: MDN_URLS.html,
-      blurbs: HacktionaryData["html-element-docs"]
-    }).appendTo(".error");
-  } else if (error.type == "INVALID_CSS_PROPERTY_NAME") {
-    createSuggestions({
-      name: error.cssProperty.name,
-      lexicon: Slowparse.CSS_PROPERTY_NAMES,
-      baseURL: MDN_URLS.css,
-      blurbs: HacktionaryData["css-property-docs"]
-    }).appendTo(".error");
-  }
 }
 
 // Assuming "this" is an element with a data-highlight attribute,
