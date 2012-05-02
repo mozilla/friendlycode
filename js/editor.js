@@ -10,20 +10,6 @@ var cursorHelpMarks = null;
 // Keep track of error highlighting.
 var errorHelpMarks = null;
 
-// Select the given {start,end} interval in the editor.
-function selectInterval(interval) {
-  var start = editor.coordsFromIndex(interval.start);
-  var end = editor.coordsFromIndex(interval.end);
-  editor.setSelection(start, end);
-  editor.focus();
-}
-
-// When the user moves over anything with a data-highlight attribute,
-// select the text in the editor that corresponds to the highlight.
-$(document).on("mouseover", "[data-highlight]", function(event) {
-  selectInterval($(this).errorHighlightInterval());
-});
-
 // This is the reverse of CodeMirror2's editor.coordsFromIndex().
 function getIndexFromPos(editor, pos) {
   var index = pos.ch;
