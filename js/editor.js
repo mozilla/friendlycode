@@ -91,27 +91,41 @@ function ContextSensitiveHelp(options) {
   return self;
 }
 
-// The main editor widget.
-function Editor(options) {
+// Provides helpful error suggestions for an editor.
+function ErrorHelp(options) {
   var self = {};
+  var editor = options.editor;
   var errorArea = options.errorArea;
-  
-  // Our CodeMirror instance.
-  var editor;
-  
-  // Keep track of error highlighting.
-  var errorHelpMarks = null;
 
+  // Keep track of error highlighting.
+  var errorHelpMarks = MarkTracker(editor.codeMirror);
+  
   // Report the given Slowparse error.
   function reportError(error) {
     errorArea.fillError(error).eachErrorHighlight(function(start, end, i) {
       errorHelpMarks.mark(start, end, "highlight-" + (i+1));
     });
   }
+  
+  editor.on("reparse", function(event) {
+    errorHelpMarks.clear();
+    if (event.error)
+      reportError(event.error);
+    else
+      errorArea.hide();
+  });
+  return self;
+}
 
+// The main editor widget.
+function Editor(options) {
+  var self = {};
+  
+  // Our CodeMirror instance.
+  var editor;
+  
   // Update the preview area with the given HTML.
   function updatePreview(html) {
-    errorArea.hide();
     var doc = options.previewArea.contents()[0];
     doc.open();
     doc.write(html);
@@ -122,17 +136,13 @@ function Editor(options) {
   function onChange() {
     var html = editor.getValue();
     var result = Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
-    errorHelpMarks.clear();
     self.trigger("reparse", {
       error: result.error,
       html: html,
       document: result.document
     });
-    if (result.error)
-      reportError(result.error);
-    else {
+    if (!result.error)
       updatePreview(html);
-    }
     // Cursor activity would've been fired before us, so call it again
     // to make sure it displays the right context-sensitive help based
     // on the new state of the document.
@@ -160,7 +170,6 @@ function Editor(options) {
     editor = IndexableCodeMirror(options.editorArea[0], cmOptions);
     self.codeMirror = editor;
     self.refresh = onChange;
-    errorHelpMarks = MarkTracker(editor);
   })();
   
   return self;
@@ -169,7 +178,6 @@ function Editor(options) {
 $(window).load(function() {
   jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
     var editor = Editor({
-      errorArea: $(".error"),
       previewArea: $(".preview"),
       editorArea: $("#html-editor"),
       codeMirror: {
@@ -181,10 +189,14 @@ $(window).load(function() {
         value: $("#initial-html").text().trim(),
       }
     });
-    var help = ContextSensitiveHelp({
+    var cursorHelp = ContextSensitiveHelp({
       editor: editor,
       templates: $("#templates"),
       helpArea: $(".help")
+    });
+    var errorHelp = ErrorHelp({
+      editor: editor,
+      errorArea: $(".error")
     });
     editor.refresh();
     editor.codeMirror.focus();
