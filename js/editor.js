@@ -4,9 +4,11 @@ var editor;
 // Provides context-sensitive help based on an index in HTML source code.
 var helpIndex = Help.Index();
 
-// Keep track of CodeMirror2 mark objects corresponding to help
-// highlighting.
-var cursorHelpMarks = [];
+// Keep track of context-sensitive help highlighting.
+var cursorHelpMarks = null;
+
+// Keep track of error highlighting.
+var errorHelpMarks = null;
 
 // Select the given {start,end} interval in the editor.
 function selectInterval(interval) {
@@ -32,31 +34,10 @@ function getIndexFromPos(editor, pos) {
 
 // Report the given Slowparse error.
 function reportError(error) {
-  $(".error").fillError(error).eachErrorHighlight(setErrorHighlight);
-  $(".help").hide();
-}
-
-// Assuming "this" is an element with a data-highlight attribute,
-// give the highlighted text interval in the editor a numbered error
-// highlight class.
-function setErrorHighlight(start, end, i) {
-  var className = "highlight-" + (i+1);
-  var start = editor.coordsFromIndex(start);
-  var end = editor.coordsFromIndex(end);
-  var mark = editor.markText(start, end, className);
-  $(this).addClass(className).data("mark", mark);
-}
-
-// Remove all highlights made by setErrorHighlight().
-function clearErrorHighlights() {
-  $(".error").eachErrorHighlight(function() {
-    // Odd, from the CodeMirror docs you'd think this would remove
-    // the class from the highlighted text, too, but it doesn't.
-    // I guess we're just garbage collecting here.
-    $(this).data("mark").clear();
+  $(".error").fillError(error).eachErrorHighlight(function(start, end, i) {
+    errorHelpMarks.mark(start, end, "highlight-" + (i+1));
   });
-  for (var i = 1; i <= 5; i++)
-    $(".CodeMirror .highlight-" + i).removeClass("highlight-" + i);
+  $(".help").hide();
 }
 
 // Update the preview area with the given HTML.
@@ -73,7 +54,7 @@ function onChange() {
   var html = editor.getValue();
   var result = Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
   helpIndex.clear();
-  clearErrorHighlights();
+  errorHelpMarks.clear();
   if (result.error)
     reportError(result.error);
   else {
@@ -88,27 +69,51 @@ function onChange() {
 
 // Called whenever the user moves their cursor in the editor area.
 function onCursorActivity() {
-  $(".CodeMirror .highlight").removeClass("cursor-help-highlight");
-  cursorHelpMarks.forEach(function(mark) {
-    // Odd, from the CodeMirror docs you'd think this would remove
-    // the class from the highlighted text, too, but it doesn't.
-    // I guess we're just garbage collecting here.
-    mark.clear();
-  });
-  cursorHelpMarks = [];
+  cursorHelpMarks.clear();
   var help = helpIndex.get(getIndexFromPos(editor, editor.getCursor()));
   if (help) {
     var learn = $("#templates .learn-more").clone()
       .attr("href", help.url);
     $(".help").html(help.html).append(learn).show();
     help.highlights.forEach(function(interval) {
-      var start = editor.coordsFromIndex(interval.start);
-      var end = editor.coordsFromIndex(interval.end);
-      var mark = editor.markText(start, end, "cursor-help-highlight");
-      cursorHelpMarks.push(mark);
+      cursorHelpMarks.mark(interval.start, interval.end,
+                           "cursor-help-highlight");
     });
   } else
     $(".help").hide();
+}
+
+// This helper class keeps track of different kinds of highlighting in
+// the editor.
+function MarkTracker(editor) {
+  var classNames = {};
+  var marks = [];
+
+  return {
+    // Mark a given start/end interval in the editor, based on character
+    // indices (not {line, ch} objects), with the given class name.
+    mark: function(start, end, className) {
+      if (!(className in classNames))
+        classNames[className] = true;
+      start = editor.coordsFromIndex(start);
+      end = editor.coordsFromIndex(end);
+      marks.push(editor.markText(start, end, className));
+    },
+    // Clear all marks made so far.
+    clear: function() {
+      marks.forEach(function(mark) {
+        // Odd, from the CodeMirror docs you'd think this would remove
+        // the class from the highlighted text, too, but it doesn't.
+        // I guess we're just garbage collecting here.
+        mark.clear();
+      });
+      for (var className in classNames)
+        $("." + className, editor.getWrapperElement()).removeClass(className);
+
+      marks = [];
+      classNames = {};
+    }
+  };
 }
 
 $(window).load(function() {
@@ -131,6 +136,8 @@ $(window).load(function() {
       },
       onCursorActivity: onCursorActivity
     });
+    cursorHelpMarks = MarkTracker(editor);
+    errorHelpMarks = MarkTracker(editor);
     editor.focus();
     onChange();
     onCursorActivity();
