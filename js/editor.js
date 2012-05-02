@@ -117,6 +117,24 @@ function ErrorHelp(options) {
   return self;
 }
 
+function LivePreview(options) {
+  var self = {};
+  var editor = options.editor;
+  var previewArea = options.previewArea;
+  
+  editor.on("reparse", function(event) {
+    if (!event.error) {
+      // Update the preview area with the given HTML.
+      var doc = previewArea.contents()[0];
+      doc.open();
+      doc.write(event.html);
+      doc.close();
+    }
+  });
+  
+  return self;
+}
+
 // The main editor widget.
 function Editor(options) {
   var self = {};
@@ -124,14 +142,6 @@ function Editor(options) {
   // Our CodeMirror instance.
   var editor;
   
-  // Update the preview area with the given HTML.
-  function updatePreview(html) {
-    var doc = options.previewArea.contents()[0];
-    doc.open();
-    doc.write(html);
-    doc.close();
-  }
-
   // Called whenever content of the editor area changes.
   function onChange() {
     var html = editor.getValue();
@@ -141,8 +151,6 @@ function Editor(options) {
       html: html,
       document: result.document
     });
-    if (!result.error)
-      updatePreview(html);
     // Cursor activity would've been fired before us, so call it again
     // to make sure it displays the right context-sensitive help based
     // on the new state of the document.
@@ -178,7 +186,6 @@ function Editor(options) {
 $(window).load(function() {
   jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
     var editor = Editor({
-      previewArea: $(".preview"),
       editorArea: $("#html-editor"),
       codeMirror: {
         mode: "text/html",
@@ -197,6 +204,10 @@ $(window).load(function() {
     var errorHelp = ErrorHelp({
       editor: editor,
       errorArea: $(".error")
+    });
+    var preview = LivePreview({
+      editor: editor,
+      previewArea: $(".preview")
     });
     editor.refresh();
     editor.codeMirror.focus();
