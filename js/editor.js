@@ -52,19 +52,53 @@ function MarkTracker(editor) {
   };
 }
 
-function Editor(options) {
-  var errorArea = options.errorArea;
+// Provides context-sensitive help for an editor.
+function ContextSensitiveHelp(options) {
+  var self = {};
+  var editor = options.editor;
+  var templates = options.templates;
   var helpArea = options.helpArea;
-  
-  // Our CodeMirror instance.
-  var editor;
   
   // Provides context-sensitive help based on an index in HTML source code.
   var helpIndex = Help.Index();
 
   // Keep track of context-sensitive help highlighting.
-  var cursorHelpMarks = null;
+  var cursorHelpMarks = MarkTracker(editor.codeMirror);
 
+  editor.on("reparse", function(event) {
+    helpIndex.clear();
+    if (event.error)
+      helpArea.hide();
+    else
+      helpIndex.build(event.document, event.html);
+  });
+  
+  editor.on("cursor-activity", function() {
+    cursorHelpMarks.clear();
+    var help = helpIndex.get(editor.codeMirror.getCursorIndex());
+    if (help) {
+      var learn = templates.find(".learn-more").clone()
+        .attr("href", help.url);
+      helpArea.html(help.html).append(learn).show();
+      help.highlights.forEach(function(interval) {
+        cursorHelpMarks.mark(interval.start, interval.end,
+                             "cursor-help-highlight");
+      });
+    } else
+      helpArea.hide();
+  });
+  
+  return self;
+}
+
+// The main editor widget.
+function Editor(options) {
+  var self = {};
+  var errorArea = options.errorArea;
+  
+  // Our CodeMirror instance.
+  var editor;
+  
   // Keep track of error highlighting.
   var errorHelpMarks = null;
 
@@ -73,7 +107,6 @@ function Editor(options) {
     errorArea.fillError(error).eachErrorHighlight(function(start, end, i) {
       errorHelpMarks.mark(start, end, "highlight-" + (i+1));
     });
-    helpArea.hide();
   }
 
   // Update the preview area with the given HTML.
@@ -89,12 +122,15 @@ function Editor(options) {
   function onChange() {
     var html = editor.getValue();
     var result = Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
-    helpIndex.clear();
     errorHelpMarks.clear();
+    self.trigger("reparse", {
+      error: result.error,
+      html: html,
+      document: result.document
+    });
     if (result.error)
       reportError(result.error);
     else {
-      helpIndex.build(result.document, html);
       updatePreview(html);
     }
     // Cursor activity would've been fired before us, so call it again
@@ -105,18 +141,7 @@ function Editor(options) {
 
   // Called whenever the user moves their cursor in the editor area.
   function onCursorActivity() {
-    cursorHelpMarks.clear();
-    var help = helpIndex.get(editor.getCursorIndex());
-    if (help) {
-      var learn = options.templates.find(".learn-more").clone()
-        .attr("href", help.url);
-      helpArea.html(help.html).append(learn).show();
-      help.highlights.forEach(function(interval) {
-        cursorHelpMarks.mark(interval.start, interval.end,
-                             "cursor-help-highlight");
-      });
-    } else
-      helpArea.hide();
+    self.trigger("cursor-activity");
   }
 
   (function init() {
@@ -130,30 +155,23 @@ function Editor(options) {
       clearTimeout(onChangeTimeout);
       onChangeTimeout = setTimeout(onChange, ON_CHANGE_DELAY);
     };
+    _.extend(self, Backbone.Events);
     cmOptions.onCursorActivity = onCursorActivity;
     editor = IndexableCodeMirror(options.editorArea[0], cmOptions);
-    cursorHelpMarks = MarkTracker(editor);
+    self.codeMirror = editor;
+    self.refresh = onChange;
     errorHelpMarks = MarkTracker(editor);
-    editor.focus();
-    onChange();
-    onCursorActivity();
   })();
   
-  return {
-    codeMirror: editor
-  };
+  return self;
 }
 
-$(window).load(function() {  
+$(window).load(function() {
   jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
-    // We're only exposing the editor as a global so we can debug via
-    // the console. Other parts of our code should never reference this.
-    window._editor = Editor({
+    var editor = Editor({
       errorArea: $(".error"),
-      helpArea: $(".help"),
       previewArea: $(".preview"),
       editorArea: $("#html-editor"),
-      templates: $("#templates"),
       codeMirror: {
         mode: "text/html",
         theme: "jsbin",
@@ -163,6 +181,18 @@ $(window).load(function() {
         value: $("#initial-html").text().trim(),
       }
     });
+    var help = ContextSensitiveHelp({
+      editor: editor,
+      templates: $("#templates"),
+      helpArea: $(".help")
+    });
+    editor.refresh();
+    editor.codeMirror.focus();
+
+    // We're only exposing the editor as a global so we can debug via
+    // the console. Other parts of our code should never reference this.
+    window._editor = editor;
+    
     $(window).trigger("editorloaded");
   });
 });
