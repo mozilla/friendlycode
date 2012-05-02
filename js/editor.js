@@ -10,14 +10,6 @@ var cursorHelpMarks = null;
 // Keep track of error highlighting.
 var errorHelpMarks = null;
 
-// This is the reverse of CodeMirror2's editor.coordsFromIndex().
-function getIndexFromPos(editor, pos) {
-  var index = pos.ch;
-  for (var i = 0; i < pos.line; i++)
-    index += editor.getLine(i).length + 1;
-  return index;
-}
-
 // Report the given Slowparse error.
 function reportError(error) {
   $(".error").fillError(error).eachErrorHighlight(function(start, end, i) {
@@ -56,7 +48,7 @@ function onChange() {
 // Called whenever the user moves their cursor in the editor area.
 function onCursorActivity() {
   cursorHelpMarks.clear();
-  var help = helpIndex.get(getIndexFromPos(editor, editor.getCursor()));
+  var help = helpIndex.get(editor.getCursorIndex());
   if (help) {
     var learn = $("#templates .learn-more").clone()
       .attr("href", help.url);
@@ -67,6 +59,25 @@ function onCursorActivity() {
     });
   } else
     $(".help").hide();
+}
+
+// An subclass of CodeMirror which adds a few methods that make it easier
+// to work with character indexes rather than {line, ch} objects.
+function IndexableCodeMirror(codeMirror) {
+  // This is the reverse of CodeMirror2's coordsFromIndex() method.
+  codeMirror.indexFromCoords = function(pos) {
+    var index = pos.ch;
+    for (var i = 0; i < pos.line; i++)
+      index += codeMirror.getLine(i).length + 1;
+    return index;
+  };
+  
+  // Returns the character index of the cursor position.
+  codeMirror.getCursorIndex = function() {
+    return codeMirror.indexFromCoords(codeMirror.getCursor());
+  };
+  
+  return codeMirror;
 }
 
 // This helper class keeps track of different kinds of highlighting in
@@ -110,7 +121,7 @@ $(window).load(function() {
   
   $(".html").val($("#initial-html").text().trim());
   jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
-    editor = CodeMirror.fromTextArea($(".html")[0], {
+    editor = IndexableCodeMirror(CodeMirror.fromTextArea($(".html")[0], {
       mode: "text/html",
       theme: "jsbin",
       tabMode: "indent",
@@ -121,7 +132,7 @@ $(window).load(function() {
         onChangeTimeout = setTimeout(onChange, ON_CHANGE_DELAY);
       },
       onCursorActivity: onCursorActivity
-    });
+    }));
     cursorHelpMarks = MarkTracker(editor);
     errorHelpMarks = MarkTracker(editor);
     editor.focus();
