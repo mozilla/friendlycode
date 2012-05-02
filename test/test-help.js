@@ -25,6 +25,13 @@
     return index;
   }
   
+  test("Index.clear() works", function() {
+    var index = buildIndex('<p>hi</p>');
+    ok(index.get(0));
+    index.clear();
+    equal(index.get(0), undefined);
+  });
+  
   test("Index.get() returns undefined when in text node", function() {
     equal(buildIndex('<em>hi</em>').get(4), undefined);
   });
