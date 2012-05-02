@@ -20,20 +20,20 @@ function IndexableCodeMirror(place, givenOptions) {
 }
 
 // This helper class keeps track of different kinds of highlighting in
-// the editor.
-function MarkTracker(editor) {
+// a CodeMirror instance.
+function MarkTracker(codeMirror) {
   var classNames = {};
   var marks = [];
 
   return {
-    // Mark a given start/end interval in the editor, based on character
+    // Mark a given start/end interval in the CodeMirror, based on character
     // indices (not {line, ch} objects), with the given class name.
     mark: function(start, end, className) {
       if (!(className in classNames))
         classNames[className] = true;
-      start = editor.coordsFromIndex(start);
-      end = editor.coordsFromIndex(end);
-      marks.push(editor.markText(start, end, className));
+      start = codeMirror.coordsFromIndex(start);
+      end = codeMirror.coordsFromIndex(end);
+      marks.push(codeMirror.markText(start, end, className));
     },
     // Clear all marks made so far.
     clear: function() {
@@ -43,8 +43,9 @@ function MarkTracker(editor) {
         // I guess we're just garbage collecting here.
         mark.clear();
       });
+      var wrapper = codeMirror.getWrapperElement();
       for (var className in classNames)
-        $("." + className, editor.getWrapperElement()).removeClass(className);
+        $("." + className, wrapper).removeClass(className);
 
       marks = [];
       classNames = {};
@@ -52,10 +53,10 @@ function MarkTracker(editor) {
   };
 }
 
-// Provides context-sensitive help for an editor.
+// Provides context-sensitive help for a ParsingCodeMirror.
 function ContextSensitiveHelp(options) {
   var self = {};
-  var editor = options.editor;
+  var codeMirror = options.codeMirror;
   var templates = options.templates;
   var helpArea = options.helpArea;
   
@@ -63,19 +64,19 @@ function ContextSensitiveHelp(options) {
   var helpIndex = Help.Index();
 
   // Keep track of context-sensitive help highlighting.
-  var cursorHelpMarks = MarkTracker(editor.codeMirror);
+  var cursorHelpMarks = MarkTracker(codeMirror);
 
-  editor.on("reparse", function(event) {
+  codeMirror.on("reparse", function(event) {
     helpIndex.clear();
     if (event.error)
       helpArea.hide();
     else
-      helpIndex.build(event.document, event.html);
+      helpIndex.build(event.document, event.sourceCode);
   });
   
-  editor.on("cursor-activity", function() {
+  codeMirror.on("cursor-activity", function() {
     cursorHelpMarks.clear();
-    var help = helpIndex.get(editor.codeMirror.getCursorIndex());
+    var help = helpIndex.get(codeMirror.getCursorIndex());
     if (help) {
       var learn = templates.find(".learn-more").clone()
         .attr("href", help.url);
@@ -91,14 +92,14 @@ function ContextSensitiveHelp(options) {
   return self;
 }
 
-// Provides helpful error suggestions for an editor.
+// Provides helpful error suggestions for a ParsingCodeMirror.
 function ErrorHelp(options) {
   var self = {};
-  var editor = options.editor;
+  var codeMirror = options.codeMirror;
   var errorArea = options.errorArea;
 
   // Keep track of error highlighting.
-  var errorHelpMarks = MarkTracker(editor.codeMirror);
+  var errorHelpMarks = MarkTracker(codeMirror);
   
   // Report the given Slowparse error.
   function reportError(error) {
@@ -107,7 +108,7 @@ function ErrorHelp(options) {
     });
   }
   
-  editor.on("reparse", function(event) {
+  codeMirror.on("reparse", function(event) {
     errorHelpMarks.clear();
     if (event.error)
       reportError(event.error);
@@ -119,15 +120,13 @@ function ErrorHelp(options) {
 
 function LivePreview(options) {
   var self = {};
-  var editor = options.editor;
-  var previewArea = options.previewArea;
   
-  editor.on("reparse", function(event) {
+  options.codeMirror.on("reparse", function(event) {
     if (!event.error) {
       // Update the preview area with the given HTML.
-      var doc = previewArea.contents()[0];
+      var doc = options.previewArea.contents()[0];
       doc.open();
-      doc.write(event.html);
+      doc.write(event.sourceCode);
       doc.close();
     }
   });
@@ -135,20 +134,17 @@ function LivePreview(options) {
   return self;
 }
 
-// The main editor widget.
-function Editor(options) {
-  var self = {};
-  
-  // Our CodeMirror instance.
-  var editor;
-  
+// A subclass of IndexableCodeMirror which continuously re-parses
+// the code in its editor. Also adds a Backbone.Events interface
+// for extension points to hook into.
+function ParsingCodeMirror(place, givenOptions) {
   // Called whenever content of the editor area changes.
-  function onChange() {
-    var html = editor.getValue();
-    var result = Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
-    self.trigger("reparse", {
+  function reparse() {
+    var sourceCode = codeMirror.getValue();
+    var result = givenOptions.parse(sourceCode);
+    codeMirror.trigger("reparse", {
       error: result.error,
-      html: html,
+      sourceCode: sourceCode,
       document: result.document
     });
     // Cursor activity would've been fired before us, so call it again
@@ -159,62 +155,58 @@ function Editor(options) {
 
   // Called whenever the user moves their cursor in the editor area.
   function onCursorActivity() {
-    self.trigger("cursor-activity");
+    codeMirror.trigger("cursor-activity");
   }
 
-  (function init() {
-    // The number of milliseconds to wait before refreshing the preview
-    // content and checking the user's HTML for errors.
-    var ON_CHANGE_DELAY = 300;
-    var onChangeTimeout;
-    var cmOptions = JSON.parse(JSON.stringify(options.codeMirror));
+  // The number of milliseconds to wait before re-parsing the editor
+  // content.
+  var parseDelay = givenOptions.parseDelay || 300;
+  var reparseTimeout;
 
-    cmOptions.onChange = function() {
-      clearTimeout(onChangeTimeout);
-      onChangeTimeout = setTimeout(onChange, ON_CHANGE_DELAY);
-    };
-    _.extend(self, Backbone.Events);
-    cmOptions.onCursorActivity = onCursorActivity;
-    editor = IndexableCodeMirror(options.editorArea[0], cmOptions);
-    self.codeMirror = editor;
-    self.refresh = onChange;
-  })();
-  
-  return self;
+  givenOptions.onChange = function() {
+    clearTimeout(reparseTimeout);
+    reparseTimeout = setTimeout(reparse, parseDelay);
+  };
+  givenOptions.onCursorActivity = onCursorActivity;
+
+  var codeMirror = IndexableCodeMirror(place, givenOptions);
+  _.extend(codeMirror, Backbone.Events);
+  codeMirror.reparse = reparse;
+  return codeMirror;
 }
 
 $(window).load(function() {
   jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
-    var editor = Editor({
-      editorArea: $("#html-editor"),
-      codeMirror: {
-        mode: "text/html",
-        theme: "jsbin",
-        tabMode: "indent",
-        lineWrapping: true,
-        lineNumbers: true,
-        value: $("#initial-html").text().trim(),
+    var codeMirror = ParsingCodeMirror($("#html-editor")[0], {
+      mode: "text/html",
+      theme: "jsbin",
+      tabMode: "indent",
+      lineWrapping: true,
+      lineNumbers: true,
+      value: $("#initial-html").text().trim(),
+      parse: function(html) {
+        return Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
       }
     });
     var cursorHelp = ContextSensitiveHelp({
-      editor: editor,
+      codeMirror: codeMirror,
       templates: $("#templates"),
       helpArea: $(".help")
     });
     var errorHelp = ErrorHelp({
-      editor: editor,
+      codeMirror: codeMirror,
       errorArea: $(".error")
     });
     var preview = LivePreview({
-      editor: editor,
+      codeMirror: codeMirror,
       previewArea: $(".preview")
     });
-    editor.refresh();
-    editor.codeMirror.focus();
+    codeMirror.reparse();
+    codeMirror.focus();
 
     // We're only exposing the editor as a global so we can debug via
     // the console. Other parts of our code should never reference this.
-    window._editor = editor;
+    window._codeMirror = codeMirror;
     
     $(window).trigger("editorloaded");
   });

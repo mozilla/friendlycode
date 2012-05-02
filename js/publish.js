@@ -1,5 +1,5 @@
-// TODO: Get rid of direct references to window._editor, have it passed-in
-// as a dependency instead.
+// TODO: Get rid of direct references to window._codeMirror, have it
+// provided as a dependency instead.
 $(window).bind("editorloaded", function() {
   var MY_URL = $('<a href="."></a>')[0].href
   var BASE_URL = "http://wpm.toolness.org";
@@ -17,7 +17,7 @@ $(window).bind("editorloaded", function() {
   }
 
   if (getQueryVariable('p')) {
-    window._editor.codeMirror.setValue('');
+    window._codeMirror.setValue('');
     jQuery.ajax({
       type: 'GET',
       url: BASE_URL + getQueryVariable('p'),
@@ -27,7 +27,7 @@ $(window).bind("editorloaded", function() {
         alert('Sorry, an error occurred while trying to get the page. :(');
       },
       success: function(data) {
-        window._editor.codeMirror.setValue(data);
+        window._codeMirror.setValue(data);
       }
     });
   }
@@ -43,7 +43,7 @@ $(window).bind("editorloaded", function() {
       type: 'POST',
       url: BASE_URL + '/api/page',
       crossDomain: true,
-      data: window._editor.codeMirror.getValue(),
+      data: window._codeMirror.getValue(),
       error: function() {
         alert("Sorry, an error occurred while trying to publish. :(");
         dlg.hide();
