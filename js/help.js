@@ -45,7 +45,7 @@ var Help = (function(HacktionaryData) {
         };
       else if (help.type == "cssSelector")
         return {
-          html: $("#templates .selector-help").html(),
+          html: HacktionaryData["css-selector-docs"],
           url: Help.MDN_URLS.cssSelectors,
           highlights: help.highlights
         };

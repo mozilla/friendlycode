@@ -364,5 +364,6 @@ var HacktionaryData = {
     "var": "The HTML Variable Element (<code>&lt;var&gt;</code>) represents a variable in a mathematical expression or a programming context.",
     "video": "The HTML&nbsp; <code>&lt;video&gt;</code> element is used to embed video content in an HTML&nbsp;or XHTML document.",
     "wbr": "The <em>Word Break Opportunit</em><em>y</em> (<code>&lt;wbr&gt;</code>) HTML element represents a position within text where the browser may optionally break a line, though its line-breaking rules would not otherwise create a break at that location."
-  }
+  },
+  "css-selector-docs": "This is a CSS selector. It describes the kinds of HTML elements that a CSS rule's style will be applied to."
 };
