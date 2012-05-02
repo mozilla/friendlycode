@@ -63,7 +63,9 @@ function onCursorActivity() {
 
 // An subclass of CodeMirror which adds a few methods that make it easier
 // to work with character indexes rather than {line, ch} objects.
-function IndexableCodeMirror(codeMirror) {
+function IndexableCodeMirror(place, givenOptions) {
+  var codeMirror = CodeMirror(place, givenOptions);
+  
   // This is the reverse of CodeMirror2's coordsFromIndex() method.
   codeMirror.indexFromCoords = function(pos) {
     var index = pos.ch;
@@ -119,20 +121,20 @@ $(window).load(function() {
   var ON_CHANGE_DELAY = 300;
   var onChangeTimeout;
   
-  $(".html").val($("#initial-html").text().trim());
   jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
-    editor = IndexableCodeMirror(CodeMirror.fromTextArea($(".html")[0], {
+    editor = IndexableCodeMirror($("#html-editor")[0], {
       mode: "text/html",
       theme: "jsbin",
       tabMode: "indent",
       lineWrapping: true,
       lineNumbers: true,
+      value: $("#initial-html").text().trim(),
       onChange: function() {
         clearTimeout(onChangeTimeout);
         onChangeTimeout = setTimeout(onChange, ON_CHANGE_DELAY);
       },
       onCursorActivity: onCursorActivity
-    }));
+    });
     cursorHelpMarks = MarkTracker(editor);
     errorHelpMarks = MarkTracker(editor);
     editor.focus();

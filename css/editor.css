@@ -38,6 +38,7 @@ iframe {
   width: 100%;
   margin: 0px;
   padding: 0px;
+  z-index: 1000;
 }
 
 #split-pane {
@@ -68,7 +69,7 @@ iframe {
   background: url("../img/codemirror-gutter.png") repeat-y, url("../img/02original.gif") repeat;
 }
 
-#html-editor textarea,
+#html-editor,
 .CodeMirror-scroll.cm-s-jsbin {
   height: 100%;
   overflow: hidden;
