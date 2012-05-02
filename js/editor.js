@@ -1,66 +1,3 @@
-// The CodeMirror2 editor instance.
-var editor;
-
-// Provides context-sensitive help based on an index in HTML source code.
-var helpIndex = Help.Index();
-
-// Keep track of context-sensitive help highlighting.
-var cursorHelpMarks = null;
-
-// Keep track of error highlighting.
-var errorHelpMarks = null;
-
-// Report the given Slowparse error.
-function reportError(error) {
-  $(".error").fillError(error).eachErrorHighlight(function(start, end, i) {
-    errorHelpMarks.mark(start, end, "highlight-" + (i+1));
-  });
-  $(".help").hide();
-}
-
-// Update the preview area with the given HTML.
-function updatePreview(html) {
-  $(".error").hide();
-  var doc = $(".preview").contents()[0];
-  doc.open();
-  doc.write(html);
-  doc.close();
-}
-
-// Called whenever content of the editor area changes.
-function onChange() {
-  var html = editor.getValue();
-  var result = Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
-  helpIndex.clear();
-  errorHelpMarks.clear();
-  if (result.error)
-    reportError(result.error);
-  else {
-    helpIndex.build(result.document, html);
-    updatePreview(html);
-  }
-  // Cursor activity would've been fired before us, so call it again
-  // to make sure it displays the right context-sensitive help based
-  // on the new state of the document.
-  onCursorActivity();
-}
-
-// Called whenever the user moves their cursor in the editor area.
-function onCursorActivity() {
-  cursorHelpMarks.clear();
-  var help = helpIndex.get(editor.getCursorIndex());
-  if (help) {
-    var learn = $("#templates .learn-more").clone()
-      .attr("href", help.url);
-    $(".help").html(help.html).append(learn).show();
-    help.highlights.forEach(function(interval) {
-      cursorHelpMarks.mark(interval.start, interval.end,
-                           "cursor-help-highlight");
-    });
-  } else
-    $(".help").hide();
-}
-
 // An subclass of CodeMirror which adds a few methods that make it easier
 // to work with character indexes rather than {line, ch} objects.
 function IndexableCodeMirror(place, givenOptions) {
@@ -115,31 +52,117 @@ function MarkTracker(editor) {
   };
 }
 
-$(window).load(function() {
-  // The number of milliseconds to wait before refreshing the preview
-  // content and checking the user's HTML for errors.
-  var ON_CHANGE_DELAY = 300;
-  var onChangeTimeout;
+function Editor(options) {
+  var errorArea = options.errorArea;
+  var helpArea = options.helpArea;
   
-  jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
-    editor = IndexableCodeMirror($("#html-editor")[0], {
-      mode: "text/html",
-      theme: "jsbin",
-      tabMode: "indent",
-      lineWrapping: true,
-      lineNumbers: true,
-      value: $("#initial-html").text().trim(),
-      onChange: function() {
-        clearTimeout(onChangeTimeout);
-        onChangeTimeout = setTimeout(onChange, ON_CHANGE_DELAY);
-      },
-      onCursorActivity: onCursorActivity
+  // Our CodeMirror instance.
+  var editor;
+  
+  // Provides context-sensitive help based on an index in HTML source code.
+  var helpIndex = Help.Index();
+
+  // Keep track of context-sensitive help highlighting.
+  var cursorHelpMarks = null;
+
+  // Keep track of error highlighting.
+  var errorHelpMarks = null;
+
+  // Report the given Slowparse error.
+  function reportError(error) {
+    errorArea.fillError(error).eachErrorHighlight(function(start, end, i) {
+      errorHelpMarks.mark(start, end, "highlight-" + (i+1));
     });
+    helpArea.hide();
+  }
+
+  // Update the preview area with the given HTML.
+  function updatePreview(html) {
+    errorArea.hide();
+    var doc = options.previewArea.contents()[0];
+    doc.open();
+    doc.write(html);
+    doc.close();
+  }
+
+  // Called whenever content of the editor area changes.
+  function onChange() {
+    var html = editor.getValue();
+    var result = Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
+    helpIndex.clear();
+    errorHelpMarks.clear();
+    if (result.error)
+      reportError(result.error);
+    else {
+      helpIndex.build(result.document, html);
+      updatePreview(html);
+    }
+    // Cursor activity would've been fired before us, so call it again
+    // to make sure it displays the right context-sensitive help based
+    // on the new state of the document.
+    onCursorActivity();
+  }
+
+  // Called whenever the user moves their cursor in the editor area.
+  function onCursorActivity() {
+    cursorHelpMarks.clear();
+    var help = helpIndex.get(editor.getCursorIndex());
+    if (help) {
+      var learn = options.templates.find(".learn-more").clone()
+        .attr("href", help.url);
+      helpArea.html(help.html).append(learn).show();
+      help.highlights.forEach(function(interval) {
+        cursorHelpMarks.mark(interval.start, interval.end,
+                             "cursor-help-highlight");
+      });
+    } else
+      helpArea.hide();
+  }
+
+  (function init() {
+    // The number of milliseconds to wait before refreshing the preview
+    // content and checking the user's HTML for errors.
+    var ON_CHANGE_DELAY = 300;
+    var onChangeTimeout;
+    var cmOptions = JSON.parse(JSON.stringify(options.codeMirror));
+
+    cmOptions.onChange = function() {
+      clearTimeout(onChangeTimeout);
+      onChangeTimeout = setTimeout(onChange, ON_CHANGE_DELAY);
+    };
+    cmOptions.onCursorActivity = onCursorActivity;
+    editor = IndexableCodeMirror(options.editorArea[0], cmOptions);
     cursorHelpMarks = MarkTracker(editor);
     errorHelpMarks = MarkTracker(editor);
     editor.focus();
     onChange();
     onCursorActivity();
+  })();
+  
+  return {
+    codeMirror: editor
+  };
+}
+
+$(window).load(function() {  
+  jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
+    // We're only exposing the editor as a global so we can debug via
+    // the console. Other parts of our code should never reference this.
+    window._editor = Editor({
+      errorArea: $(".error"),
+      helpArea: $(".help"),
+      previewArea: $(".preview"),
+      editorArea: $("#html-editor"),
+      templates: $("#templates"),
+      codeMirror: {
+        mode: "text/html",
+        theme: "jsbin",
+        tabMode: "indent",
+        lineWrapping: true,
+        lineNumbers: true,
+        value: $("#initial-html").text().trim(),
+      }
+    });
     $(window).trigger("editorloaded");
   });
 });
