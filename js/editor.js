@@ -68,15 +68,21 @@ function MarkTracker(codeMirror) {
 
   return {
     // Mark a given start/end interval in the CodeMirror, based on character
-    // indices (not {line, ch} objects), with the given class name.
-    mark: function(start, end, className) {
+    // indices (not {line, ch} objects), with the given class name. If
+    // an element is provided, give it the class name too.
+    mark: function(start, end, className, element) {
       if (!(className in classNames))
-        classNames[className] = true;
+        classNames[className] = [];
+      if (element) {
+        classNames[className].push(element);
+        $(element).addClass(className);
+      }
       start = codeMirror.coordsFromIndex(start);
       end = codeMirror.coordsFromIndex(end);
       marks.push(codeMirror.markText(start, end, className));
     },
-    // Clear all marks made so far.
+    // Clear all marks made so far and remove the class from any elements
+    // it was previously given to.
     clear: function() {
       marks.forEach(function(mark) {
         // Odd, from the CodeMirror docs you'd think this would remove
@@ -85,9 +91,13 @@ function MarkTracker(codeMirror) {
         mark.clear();
       });
       var wrapper = codeMirror.getWrapperElement();
-      for (var className in classNames)
+      for (var className in classNames) {
+        classNames[className].forEach(function(element) {
+          $(element).removeClass(className);
+        });
         $("." + className, wrapper).removeClass(className);
-
+      }
+      
       marks = [];
       classNames = {};
     }
@@ -145,7 +155,7 @@ function ErrorHelp(options) {
   // Report the given Slowparse error.
   function reportError(error) {
     errorArea.fillError(error).eachErrorHighlight(function(start, end, i) {
-      errorHelpMarks.mark(start, end, "highlight-" + (i+1));
+      errorHelpMarks.mark(start, end, "highlight-" + (i+1), this);
     });
   }
   
