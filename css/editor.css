@@ -191,3 +191,19 @@ code {
   background: white;
   color: black;
 }
+
+#publish-dialog {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 40px;
+  color: white;
+  z-index: 1000000;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+
+#publish-dialog a {
+  color: inherit;
+}
