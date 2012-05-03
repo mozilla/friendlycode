@@ -217,6 +217,9 @@ $(window).load(function() {
     codeMirror.reparse();
     codeMirror.focus();
 
+    $("#undo").click(function() { codeMirror.undo(); });
+    $("#redo").click(function() { codeMirror.redo(); });
+
     // We're only exposing the editor as a global so we can debug via
     // the console. Other parts of our code should never reference this.
     window._codeMirror = codeMirror;
