@@ -1,115 +1,153 @@
 html, body {
+  margin: 0px;
+  padding: 0px;
   height: 100%;
-  width: 100%;
-  margin: 0px;
-  padding: 0px;
+  color: #414244;
+  min-width: 800px;
 }
 
-iframe {
-  border: none;
-  height: 100%;
-  width: 100%;
-}
-
-#header {
-  position: fixed;
-  z-index: 2;
-  top: 0;
-
-  background-color: rgb(160,120,220);
-  color: rgb(255,255,210);
-  text-align: center;
-
-  height: 4em;                    /* NOTE: this value MUST agree with [#html-editor, #live-render].margin-bottom */
-  width: 100%;
-  margin: 0px;
-  padding: 0px;
-}
-
-
-#footer {
-  position: fixed;
-  bottom: 0;
-
-  background-color: rgb(0,130,255);
-  color: white;
-
-  height: 2em;                    /* NOTE: this value MUST agree with [#split-page, #html-editor, #live-render].bottom */
-  width: 100%;
-  margin: 0px;
-  padding: 0px;
-  z-index: 1000;
-}
-
-#split-pane {
-  display: block;
-  position: fixed;
-  z-index: 1;
-  top: 0px;
-  width: 100%;
-}
-
-#split-page, #html-editor, #live-render {
-  bottom: 2em;                    /* NOTE: this value MUST agree with [#footer].height */
-}
-
-#html-editor, #live-render {
-  display: inline-block;
-  position: fixed;
-  top: 0px;
-  margin-top: 4em;                /* NOTE: this value MUST agree with [#header].height */
-
-  width: 50%;
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   overflow: hidden;
+  background-color: #f9dee3;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f9dee3), to(white));
+  background-image: -webkit-linear-gradient(top, #f9dee3, white);
+  background-image: -moz-linear-gradient(top, #f9dee3, white);  
+  background-image: -o-linear-gradient(top, #f9dee3, white);
 }
 
-#html-editor {
-  background-color: white;
-  overflow: auto;
-  background: url("../img/codemirror-gutter.png") repeat-y, url("../img/02original.gif") repeat;
+header {
+  height: 100px;
+  background-color: #aa4d9d;
+  position: relative;
+  display: block;                     /* Needed on IE8 for some reason. */
+  box-shadow: 0px 5px 10px #414244;
 }
 
-#html-editor,
-.CodeMirror-scroll.cm-s-jsbin {
-  height: 100%;
-  overflow: hidden;
-}
-
-#live-render {
-  border-left: 1px solid black;
-  margin-left: -1px;
-  background-color: white;
-  right: 0;
-}
-
-/* ------------------- */
-
-/*
-.error, .preview {
+header h1 {
+  font-family: 'BebasRegular';
+  font-weight: normal;
   position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  width: 50%;
-  height: 100%;
-  border: none;
+  bottom: 20px;
+  left: 20px;
+  margin: 0px;
 }
 
-.preview {
-  border-left: 1px solid black;
+header a {
+  color: inherit;
+  text-decoration: none;
 }
 
-
-.error {
-  background: rgba(128, 0, 0, 0.75);
+header h1 span.logo {
+  font-family: 'TrashHandRegular';
+  font-size: 50px;
+  padding-right: 10px;
   color: white;
-  padding: 10px;
-  overflow: auto;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
 }
-*/
+
+section {
+  position: absolute;
+  top: 100px;
+  left: 0px;
+  right: 0px;
+  bottom: 30px;
+}
+
+div.editor-actions {
+  visibility: visible;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+header button {
+  background: #414244;
+  box-shadow: none;
+}
+
+button {
+  font-family: 'BebasRegular';
+  font-size: 30px;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  box-shadow: 5px 5px 10px #414244;
+}
+
+button:hover {
+  text-decoration: underline;
+}
+
+footer {
+  background: #414244;
+  color: #a0a0a0;
+  text-align: center;
+  font-size: 11px;
+  padding-top: 8px;
+  padding-bottom: 12px;
+  position: absolute;
+  height: 10px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+}
+
+footer a {
+  color: #e0e0e0;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+div#source, div#preview-holder {
+  width: 50%;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0px;
+  top: 10px;
+}
+
+div#preview-holder {
+  right: 0px;
+  border-left: 1px solid black;
+  background: white;
+}
+
+iframe#preview {
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+
+div#source .CodeMirror, div#source .CodeMirror-scroll {
+  height: 100%;
+}
+
+div#source .CodeMirror-gutter {
+  background-color: rgba(0, 0, 0, 0.1);
+  opacity: 0.0;
+  -moz-transition: opacity 0.25s;
+  -webkit-transition: opacity 0.25s;
+  -o-transition: opacity 0.25s;
+}
+
+div#source:hover .CodeMirror-gutter {
+  opacity: 1.0;
+}
+
+.error p {
+  margin: 0px;
+  display: inline-block;
+}
 
 .error em[data-highlight] {
   font-style: normal;
@@ -128,14 +166,6 @@ iframe {
 
 .CodeMirror span.cursor-help-highlight {
   background: rgba(0, 0, 0, 0.1);
-}
-
-.suggestions a {
-  color: inherit;
-}
-
-.suggestions li p {
-  font-size: smaller;
 }
 
 code {
@@ -160,75 +190,4 @@ code {
 .help a.learn-more:hover {
   background: white;
   color: black;
-}
-
-#publish-box {
-  float: right;
-  position: relative;
-  top: 1em;
-  margin-right: 1em;
-}
-
-#publish, #publish-dialog {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-#publish {
-  display: inline-block;
-  font-size: small;
-  padding: 4px 4px 2px 4px;
-  background: white;
-  color: #333;
-  cursor: pointer;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  
-  margin-left: 4em;
-  font-family: Verdana, sans-serif;
-}
-
-#publish-text {
-  display: inline-block;
-  font-family: Georgia, sans-serif;
-}
-
-#publish:hover {
-  background: rgb(0,130,255);
-  color: white;
-}
-
-#publish-dialog {
-  position: absolute;
-  width: 600px;
-  height: 300px;
-  top: 50%;
-  left: 50%;
-  margin-top: -150px;
-  margin-left: -300px;
-  padding: 10px;
-  z-index: 1000000;
-  background-color: rgba(0, 0, 100, 0.75);
-  color: white;
-  text-align: center;
-  -webkit-border-radius: 1em;
-  -moz-border-radius: 1em;
-  border-radius: 1em;
-}
-
-#publish-dialog a {
-  color: inherit;
-}
-
-
-/* ------------------- */
-
-h1 {
-  display: inline-block;
-  position: relative;
-  top: -0.5em;
-  font-family: Verdana, sans-serif;
-  font-size: 220%;
-  font-weight: 400;
-  text-align: center;
 }

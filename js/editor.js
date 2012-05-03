@@ -179,7 +179,7 @@ function LivePreview(options) {
 
 $(window).load(function() {
   jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
-    var codeMirror = ParsingCodeMirror($("#html-editor")[0], {
+    var codeMirror = ParsingCodeMirror($("#source")[0], {
       mode: "text/html",
       theme: "jsbin",
       tabMode: "indent",
@@ -202,7 +202,7 @@ $(window).load(function() {
     });
     var preview = LivePreview({
       codeMirror: codeMirror,
-      previewArea: $(".preview")
+      previewArea: $("#preview")
     });
     codeMirror.reparse();
     codeMirror.focus();
