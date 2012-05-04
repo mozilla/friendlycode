@@ -175,7 +175,7 @@ function LivePreview(options) {
   var self = {};
   
   options.codeMirror.on("reparse", function(event) {
-    if (!event.error) {
+    if (!event.error || options.ignoreErrors) {
       // Update the preview area with the given HTML.
       var doc = options.previewArea.contents()[0];
       doc.open();
@@ -223,6 +223,7 @@ $(window).load(function() {
     });
     var preview = LivePreview({
       codeMirror: codeMirror,
+      ignoreErrors: true,
       previewArea: $("#preview")
     });
     var publishUI = PublishUI({
