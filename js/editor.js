@@ -187,6 +187,17 @@ function LivePreview(options) {
   return self;
 }
 
+function getQueryVariable(variable) {
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    if (pair[0] == variable) {
+      return unescape(pair[1]);
+    }
+  }
+}
+
 $(window).load(function() {
   jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
     var codeMirror = ParsingCodeMirror($("#source")[0], {
@@ -214,16 +225,23 @@ $(window).load(function() {
       codeMirror: codeMirror,
       previewArea: $("#preview")
     });
+    var publisher = Publisher({
+      codeMirror: codeMirror,
+      publishURL: "http://wpm.toolness.org",
+      dialog: $("#publish-dialog")
+    });
     codeMirror.reparse();
     codeMirror.focus();
 
     $("#undo").click(function() { codeMirror.undo(); });
     $("#redo").click(function() { codeMirror.redo(); });
+    $("#publish").click(function() { publisher.saveCode(); });
+
+    if (getQueryVariable('p'))
+      publisher.loadCode(getQueryVariable('p'));
 
     // We're only exposing the editor as a global so we can debug via
     // the console. Other parts of our code should never reference this.
     window._codeMirror = codeMirror;
-    
-    $(window).trigger("editorloaded");
   });
 });
