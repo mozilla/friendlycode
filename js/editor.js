@@ -225,9 +225,9 @@ $(window).load(function() {
       codeMirror: codeMirror,
       previewArea: $("#preview")
     });
-    var publisher = Publisher({
+    var publishUI = PublishUI({
       codeMirror: codeMirror,
-      publishURL: "http://wpm.toolness.org",
+      publisher: Publisher("http://wpm.toolness.org"),
       dialog: $("#publish-dialog")
     });
     codeMirror.reparse();
@@ -235,10 +235,10 @@ $(window).load(function() {
 
     $("#undo").click(function() { codeMirror.undo(); });
     $("#redo").click(function() { codeMirror.redo(); });
-    $("#publish").click(function() { publisher.saveCode(); });
+    $("#publish").click(function() { publishUI.saveCode(); });
 
     if (getQueryVariable('p'))
-      publisher.loadCode(getQueryVariable('p'));
+      publishUI.loadCode(getQueryVariable('p'));
 
     // We're only exposing the editor as a global so we can debug via
     // the console. Other parts of our code should never reference this.
