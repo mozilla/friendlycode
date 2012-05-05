@@ -109,26 +109,13 @@ function MarkTracker(codeMirror) {
 function ContextSensitiveHelp(options) {
   var self = {};
   var codeMirror = options.codeMirror;
-  var templates = options.templates;
+  var template = options.template;
   var helpArea = options.helpArea;
   var helpIndex = options.helpIndex;
   var lastEvent = null;
   
   // Keep track of context-sensitive help highlighting.
   var cursorHelpMarks = MarkTracker(codeMirror);
-
-  // Helper function to show how many elements match the currently
-  // highlighted selector.
-  function makeSelectorMatchesHelp(help) {
-    // TODO: Because we're looking at the generated document fragment and
-    // not an actual HTML document, implied elements like <body> may not
-    // be captured here.
-    var selector = help.highlights[0].value;
-    var matches = lastEvent.document.querySelectorAll(selector).length;
-    var matchHelp = templates.find(".selector-matches").clone();
-    matchHelp.find(".match-count").text(matches);
-    return matchHelp;
-  }
   
   codeMirror.on("reparse", function(event) {
     lastEvent = event;
@@ -143,12 +130,15 @@ function ContextSensitiveHelp(options) {
     cursorHelpMarks.clear();
     var help = helpIndex.get(codeMirror.getCursorIndex());
     if (help) {
-      helpArea.html(help.html);
-      if (help.type == "cssSelector" && !lastEvent.error)
-        helpArea.append(makeSelectorMatchesHelp(help));
-      var learn = templates.find(".learn-more").clone()
-        .attr("href", help.url);
-      helpArea.append(learn).show();
+      if (help.type == "cssSelector") {
+        // TODO: Because we're looking at the generated document fragment and
+        // not an actual HTML document, implied elements like <body> may not
+        // be captured here.
+        var selector = help.highlights[0].value;
+        var matches = lastEvent.document.querySelectorAll(selector).length;
+        help.matchCount = matches;
+      }
+      helpArea.html(template(help)).show();
       help.highlights.forEach(function(interval) {
         cursorHelpMarks.mark(interval.start, interval.end,
                              "cursor-help-highlight");
@@ -242,7 +232,7 @@ $(window).load(function() {
     var cursorHelp = ContextSensitiveHelp({
       codeMirror: codeMirror,
       helpIndex: Help.Index(),
-      templates: $("#templates"),
+      template: _.template($("#help-template").text()),
       helpArea: $(".help")
     });
     var errorHelp = ErrorHelp({

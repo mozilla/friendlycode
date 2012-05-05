@@ -26,12 +26,6 @@
     </section>
 
     <footer><div class="help"></div><div class="error"></div></footer>    
-
-    <!-- (invisible) template for help -->
-    <div id="templates" style="display: none">
-      <a class="learn-more" href="">more…</a>
-      <span class="selector-matches"> It currently matches <span class="match-count"></span> element(s).</span>
-    </div>
     
     <!-- modal overlay -->
     <div id="publish-dialog" style="display: none">
@@ -45,6 +39,14 @@
       </div>
     </div>
   </body>
+
+<script type="text/html" id="help-template">
+<%= html %>
+<% if (type == "cssSelector") { %>
+  <span class="selector-matches"> It currently matches <%- matchCount %> element(s).</span>
+<% } %>
+<a class="learn-more" href="<%- url %>">more…</a>
+</script>
 
 <script type="text/html" id="initial-html">
 <!DOCTYPE html>
