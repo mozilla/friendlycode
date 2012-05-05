@@ -32,6 +32,7 @@ var Help = (function(HacktionaryData) {
       if (help.type == "tag" &&
           help.value in HacktionaryData["html-element-docs"])
         return {
+          type: help.type,
           html: HacktionaryData["html-element-docs"][help.value],
           url: Help.MDN_URLS.html + help.value,
           highlights: help.highlights
@@ -39,12 +40,14 @@ var Help = (function(HacktionaryData) {
       else if (help.type == "cssProperty" &&
                help.value in HacktionaryData["css-property-docs"])
         return {
+          type: help.type,
           html: HacktionaryData["css-property-docs"][help.value],
           url: Help.MDN_URLS.css + help.value,
           highlights: help.highlights
         };
       else if (help.type == "cssSelector")
         return {
+          type: help.type,
           html: HacktionaryData["css-selector-docs"],
           url: Help.MDN_URLS.cssSelectors,
           highlights: help.highlights

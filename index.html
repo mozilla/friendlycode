@@ -30,6 +30,7 @@
     <!-- (invisible) template for help -->
     <div id="templates" style="display: none">
       <a class="learn-more" href="">more…</a>
+      <span class="selector-matches"> It currently matches <span class="match-count"></span> element(s).</span>
     </div>
     
     <!-- modal overlay -->
@@ -46,30 +47,36 @@
   </body>
 
 <script type="text/html" id="initial-html">
-<style>
-  body {
-    background-color: white;
-    color: #333;
-    padding-top: 1em;
-  }
-  h1 {
-    color: #333;
-    font-family: Georgia;
-    text-align: center;
-    text-shadow: 2px 2px 3px #CCC;
-  }
-  p {
-    text-align: justify;
-    text-shadow: 2px 2px 3px #999;
-  }
-</style>
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        background-color: white;
+        color: #333;
+        padding-top: 1em;
+      }
+      h1 {
+        color: #333;
+        font-family: Georgia;
+        text-align: center;
+        text-shadow: 2px 2px 3px #CCC;
+      }
+      p {
+        text-align: justify;
+        text-shadow: 2px 2px 3px #999;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Let's remix the web! It's easy!</h1>
 
-<h1>Let's remix the web! It's easy!</h1>
-
-<p>Remixing the web is easier than you think. A bit of styling
-   here, an image replacement there, and suddenly a page can
-   look completely different! Give it a try with some of our
-   templates, or load your favourite site and let's get mixin'.</p>
+    <p>Remixing the web is easier than you think. A bit of styling
+       here, an image replacement there, and suddenly a page can
+       look completely different! Give it a try with some of our
+       templates, or load your favourite site and let's get mixin'.</p>
+  </body>
+</html>
 </script>
 
   <script src="js/jquery.min.js"></script>
