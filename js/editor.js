@@ -120,12 +120,10 @@ function ContextSensitiveHelp(options) {
   // Helper function to show how many elements match the currently
   // highlighted selector.
   function makeSelectorMatchesHelp(help) {
-    var interval = help.highlights[0];
-    var selector = lastEvent.sourceCode.slice(interval.start, interval.end);
-
     // TODO: Because we're looking at the generated document fragment and
     // not an actual HTML document, implied elements like <body> may not
     // be captured here.
+    var selector = help.highlights[0].value;
     var matches = lastEvent.document.querySelectorAll(selector).length;
     var matchHelp = templates.find(".selector-matches").clone();
     matchHelp.find(".match-count").text(matches);
