@@ -178,9 +178,19 @@ function LivePreview(options) {
     if (!event.error || options.ignoreErrors) {
       // Update the preview area with the given HTML.
       var doc = options.previewArea.contents()[0];
+      var wind = doc.defaultView;
+      var x = wind.pageXOffset;
+      var y = wind.pageYOffset;
+
       doc.open();
       doc.write(event.sourceCode);
       doc.close();
+
+      // TODO: If the document has images that take a while to load
+      // and the previous scroll position of the document depends on
+      // their dimensions being set on load, we may need to refresh
+      // this scroll position after the document has loaded.
+      wind.scroll(x, y);
     }
   });
   
