@@ -13,6 +13,8 @@ function PublishUI(options) {
 
   return {
     loadCode: function(path) {
+      codeMirror.setValue('Please wait, loading...');
+      codeMirror.reparse();
       publisher.loadCode(path, function(err, data) {
         if (err)
           // TODO: Put nicer error here.
