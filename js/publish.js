@@ -19,8 +19,10 @@ function PublishUI(options) {
         if (err)
           // TODO: Put nicer error here.
           alert('Sorry, an error occurred while trying to get the page. :(');
-        else
+        else {
           codeMirror.setValue(data);
+          codeMirror.reparse();
+        }
       });
     },
     saveCode: function() {
