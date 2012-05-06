@@ -53,6 +53,10 @@ section {
   bottom: 40px;
 }
 
+#editor.loading, #editor.loading .CodeMirror-cursor {
+  visibility: hidden;
+}
+
 div.editor-actions {
   visibility: visible;
   position: absolute;

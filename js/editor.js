@@ -205,6 +205,44 @@ function LivePreview(options) {
   return self;
 }
 
+// This helper saves the editor's data to local storage just before
+// the page unloads, and provides a method to restore it. Useful for
+// when a user accidentally refreshes/navigates away from the editor
+// and wants to retrieve their old content.
+//
+// TODO: This could be a privacy concern, since people at shared terminals
+// might not want the next user to be able to see what they were just
+// working on.
+function Parachute(window, codeMirror) {
+  // We would use window.sessionStorage, but it goes away too quickly,
+  // e.g. if the user accidentally closes the current window.
+  var key = "FRIENDLYCODE_PARACHUTE_DATA";
+  var storage = window.localStorage;
+  var originalData = codeMirror.getValue();
+  var self = {
+    restore: function() {
+      if (key in storage) {
+        codeMirror.setValue(storage[key]);
+        self.refresh();
+      }
+    },
+    save: function() {
+      if (codeMirror.getValue() != originalData)
+        storage[key] = codeMirror.getValue();
+    },
+    refresh: function() {
+      originalData = codeMirror.getValue();
+    },
+    destroy: function() {
+      window.removeEventListener("beforeunload", self.save, true);
+      delete storage[key];
+    }
+  };
+  
+  window.addEventListener("beforeunload", self.save, true);
+  return self;
+}
+
 function getQueryVariable(variable) {
   var query = window.location.search.substring(1);
   var vars = query.split("&");
@@ -249,18 +287,32 @@ $(window).load(function() {
       publisher: Publisher("http://wpm.toolness.org"),
       dialog: $("#publish-dialog")
     });
-    codeMirror.reparse();
-    codeMirror.focus();
+    var parachute = Parachute(window, codeMirror);
 
-    $("#undo").click(function() { codeMirror.undo(); });
-    $("#redo").click(function() { codeMirror.redo(); });
+    $("#undo").click(function() { codeMirror.undo(); codeMirror.reparse(); });
+    $("#redo").click(function() { codeMirror.redo(); codeMirror.reparse(); });
     $("#publish").click(function() { publishUI.saveCode(); });
 
+    // TODO: Restoring the parachute here will get overwritten by a
+    // loaded file, and the user will need to click 'undo' to retrieve
+    // their lost data, which is not at all obvious--but for now, it's
+    // better than nothing.
+    parachute.restore();
+    codeMirror.reparse();
     if (getQueryVariable('p'))
-      publishUI.loadCode(getQueryVariable('p'));
+      publishUI.loadCode(getQueryVariable('p'), function() {
+        $("#editor").removeClass("loading");
+        // Parachute should only save lost data if it's different from
+        // the URL we just (hopefully) loaded.
+        parachute.refresh();
+      });
+    else
+      $("#editor").removeClass("loading");
+    codeMirror.focus();
 
-    // We're only exposing the editor as a global so we can debug via
-    // the console. Other parts of our code should never reference this.
+    // We're only exposing these as globals so we can debug via
+    // the console. Other parts of our code should never reference them.
     window._codeMirror = codeMirror;
+    window._parachute = parachute;
   });
 });
