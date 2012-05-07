@@ -77,6 +77,10 @@ test("ParsingCodeMirror works", function() {
     "cm.trigger('reparse')",
     "cm.trigger('cursor-activity')"
   ]);
+  events = [];
+  
+  cm.setCursor({line: 0, ch: 2});
+  deepEqual(events, ["cm.trigger('cursor-activity')"]);
 
   place.remove();
 });
