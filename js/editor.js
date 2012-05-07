@@ -49,6 +49,7 @@ function ParsingCodeMirror(place, givenOptions) {
   var reparseTimeout;
 
   givenOptions.onChange = function() {
+    codeMirror.trigger("change");
     clearTimeout(reparseTimeout);
     reparseTimeout = setTimeout(reparse, parseDelay);
   };
@@ -229,9 +230,15 @@ function Parachute(window, codeMirror, page) {
   var self = {
     restore: function() {
       if (key in storage) {
-        codeMirror.setValue(storage[key]);
-        self.refresh();
-        return true;
+        if (storage[key] == codeMirror.getValue()) {
+          // Our saved data is the same as the unmodified data, so there's
+          // no need to store it.
+          delete storage[key];
+        } else {
+          codeMirror.setValue(storage[key]);
+          self.refresh();
+          return true;
+        }
       }
       return false;
     },
@@ -257,6 +264,33 @@ function Parachute(window, codeMirror, page) {
   
   window.addEventListener("beforeunload", self.save, true);
   return self;
+}
+
+// This manages the UI for undo/redo.
+function HistoryUI(options) {
+  var undo = options.undo;
+  var redo = options.redo;
+  var codeMirror = options.codeMirror;
+
+  function refreshButtons() {
+    var history = codeMirror.historySize();
+    undo.toggleClass("enabled", history.undo == 0 ? false : true);
+    redo.toggleClass("enabled", history.redo == 0 ? false : true);
+  }
+  
+  undo.click(function() {
+    codeMirror.undo();
+    codeMirror.reparse();
+    refreshButtons();
+  });
+  redo.click(function() {
+    codeMirror.redo();
+    codeMirror.reparse();
+    refreshButtons();
+  });
+  codeMirror.on("change", refreshButtons);
+  refreshButtons();
+  return {refresh: refreshButtons};
 }
 
 function getQueryVariable(variable) {
@@ -302,16 +336,20 @@ $(window).load(function() {
       publisher: Publisher("http://wpm.toolness.org"),
       dialog: $("#publish-dialog")
     });
+    var historyUI = HistoryUI({
+      codeMirror: codeMirror,
+      undo: $("#undo"),
+      redo: $("#redo")
+    });
     var pageToLoad = getQueryVariable('p') || "default";
     var parachute = Parachute(window, codeMirror, pageToLoad);
     
-    $("#undo").click(function() { codeMirror.undo(); codeMirror.reparse(); });
-    $("#redo").click(function() { codeMirror.redo(); codeMirror.reparse(); });
     $("#publish").click(function() { publishUI.saveCode(); });
     
     function doneLoading() {
       $("#editor").removeClass("loading");
       codeMirror.clearHistory();
+      historyUI.refresh();
       if (parachute.restore()) {
         // TODO: Display a non-modal message telling the user that their
         // previous data has been restored, and that they can click 'undo'

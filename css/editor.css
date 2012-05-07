@@ -67,6 +67,16 @@ div.editor-actions {
 header button {
   background: #414244;
   box-shadow: none;
+  opacity: 0.25;
+  pointer-events: none;
+  -moz-transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+}
+
+header button.enabled {
+  pointer-events: auto;
+  opacity: 1.0;
 }
 
 button {
