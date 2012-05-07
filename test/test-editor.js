@@ -5,10 +5,13 @@ test("IndexableCodeMirror works", function() {
   var cm = IndexableCodeMirror(place[0], {mode: "text/plain"});
   var content = "hello\nthere";
   cm.setValue(content);
-  equal(cm.indexFromCoords({line: 0, ch: 0}), 0);
-  equal(cm.indexFromCoords({line: 1, ch: 0}), content.indexOf("there"));
+  equal(cm.indexFromCoords({line: 0, ch: 0}), 0,
+        "index of line 0, char 0 is 0");
+  equal(cm.indexFromCoords({line: 1, ch: 0}), content.indexOf("there"),
+        "index of line 1, char 0 works");
   cm.setCursor({line: 1, ch: 0});
-  equal(cm.getCursorIndex(), content.indexOf("there"));
+  equal(cm.getCursorIndex(), content.indexOf("there"),
+        "getCursorIndex() works");
   place.remove();
 });
 
@@ -45,19 +48,19 @@ test("ParsingCodeMirror works", function() {
   deepEqual(events, [
     "cm.trigger('change')",
     "time.setTimeout(fn, 1) -> 0",
-  ]);
+  ], "change event is triggered and timeout function is set");
   events = [];
 
   cm.on("reparse", function(arg) {
-    equal(arg.document, "here is a document");
-    equal(arg.error, "here is an error");
-    equal(arg.sourceCode, "hello");
+    equal(arg.document, "here is a document", "document passed on reparse");
+    equal(arg.error, "here is an error", "error passed on reparse");
+    equal(arg.sourceCode, "hello", "source code passed on reparse");
   });
   cm.reparse();
   deepEqual(events, [
     "cm.trigger('reparse')",
     "cm.trigger('cursor-activity')",
-  ]);
+  ], "reparse and cursor activity events are triggered");
   cm.off("reparse");
   events = [];
 
@@ -66,21 +69,23 @@ test("ParsingCodeMirror works", function() {
     "cm.trigger('change')",
     "time.clearTimeout(0)",
     "time.setTimeout(fn, 1) -> 1"
-  ]);
+  ], "old timeout function is cleared");
   events = [];
 
   cm.on("reparse", function(event) {
-    equal(event.sourceCode, "hello goober");
+    equal(event.sourceCode, "hello goober",
+          "correct source code is passed on reparse event");
   });
   fakeTime.cb();
   deepEqual(events, [
     "cm.trigger('reparse')",
     "cm.trigger('cursor-activity')"
-  ]);
+  ], "reparse/cursor-activity events are triggered by timeout function");
   events = [];
   
   cm.setCursor({line: 0, ch: 2});
-  deepEqual(events, ["cm.trigger('cursor-activity')"]);
+  deepEqual(events, ["cm.trigger('cursor-activity')"],
+            "cursor-activity event is triggered by setCursor()");
 
   place.remove();
 });
