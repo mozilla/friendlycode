@@ -1,19 +1,34 @@
-module("Editor");
+(function() {
+  module("IndexableCodeMirror");
+  
+  function icmTest(cb) {
+    return function() {
+      var place = $("<div></div>").appendTo(document.body);
+      var cm = IndexableCodeMirror(place[0], {mode: "text/plain"});
+      var content = "hello\nthere";
+      cm.setValue(content);
+      try {
+        cb(cm, content);
+      } finally {
+        place.remove();
+      }
+    };
+  }
+  
+  test("indexFromCoords() works", icmTest(function(cm, content) {
+    equal(cm.indexFromCoords({line: 0, ch: 0}), 0,
+          "index of line 0, char 0 is 0");
+    equal(cm.indexFromCoords({line: 1, ch: 0}), content.indexOf("there"),
+          "index of line 1, char 0 works");
+  }));
+  
+  test("getCursorIndex() works", icmTest(function(cm, content) {
+    cm.setCursor({line: 1, ch: 0});
+    equal(cm.getCursorIndex(), content.indexOf("there"));
+  }));
+})();
 
-test("IndexableCodeMirror works", function() {
-  var place = $("<div></div>").appendTo(document.body);
-  var cm = IndexableCodeMirror(place[0], {mode: "text/plain"});
-  var content = "hello\nthere";
-  cm.setValue(content);
-  equal(cm.indexFromCoords({line: 0, ch: 0}), 0,
-        "index of line 0, char 0 is 0");
-  equal(cm.indexFromCoords({line: 1, ch: 0}), content.indexOf("there"),
-        "index of line 1, char 0 works");
-  cm.setCursor({line: 1, ch: 0});
-  equal(cm.getCursorIndex(), content.indexOf("there"),
-        "getCursorIndex() works");
-  place.remove();
-});
+module("Editor");
 
 test("ParsingCodeMirror works", function() {
   var place = $("<div></div>").appendTo(document.body);
