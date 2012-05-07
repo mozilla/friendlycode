@@ -56,7 +56,7 @@ function Publisher(baseURL) {
           cb("ERROR");
         },
         success: function(data) {
-          cb(null, data);
+          cb(null, fixDoctypeHeadBodyMunging(data));
         }
       });
     },
@@ -76,4 +76,16 @@ function Publisher(baseURL) {
       });
     }
   };
+}
+
+// This is a fix for https://github.com/mozilla/webpagemaker/issues/20.
+function fixDoctypeHeadBodyMunging(html) {
+  var lines = html.split('\n');
+  if (lines.length > 2 &&
+      lines[0] == '<!DOCTYPE html><html><head>' &&
+      lines[lines.length-1] == '</body></html>') {
+    return '<!DOCTYPE html>\n<html>\n  <head>\n' +
+           lines.slice(1, -1).join('\n') + '</body>\n</html>';
+  }
+  return html;
 }
