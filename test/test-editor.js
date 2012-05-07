@@ -1,8 +1,8 @@
 (function() {
   module("IndexableCodeMirror");
   
-  function icmTest(cb) {
-    return function() {
+  function icmTest(name, cb) {
+    test(name, function() {
       var place = $("<div></div>").appendTo(document.body);
       var cm = IndexableCodeMirror(place[0], {mode: "text/plain"});
       var content = "hello\nthere";
@@ -12,27 +12,27 @@
       } finally {
         place.remove();
       }
-    };
+    });
   }
   
-  test("indexFromCoords() works", icmTest(function(cm, content) {
+  icmTest("indexFromCoords() works", function(cm, content) {
     equal(cm.indexFromCoords({line: 0, ch: 0}), 0,
           "index of line 0, char 0 is 0");
     equal(cm.indexFromCoords({line: 1, ch: 0}), content.indexOf("there"),
           "index of line 1, char 0 works");
-  }));
+  });
   
-  test("getCursorIndex() works", icmTest(function(cm, content) {
+  icmTest("getCursorIndex() works", function(cm, content) {
     cm.setCursor({line: 1, ch: 0});
     equal(cm.getCursorIndex(), content.indexOf("there"));
-  }));
+  });
 })();
 
 (function() {
   module("ParsingCodeMirror");
   
-  function pcmTest(cb) {
-    return function() {
+  function pcmTest(name, cb) {
+    test(name, function() {
       var place = $("<div></div>").appendTo(document.body);
       var events = [];
       var fakeTime = {
@@ -65,64 +65,64 @@
       } finally {
         place.remove();
       }
-    };
+    });
   }
   
-  test("change triggered and timeout set on codeMirror.setValue()",
-       pcmTest(function(cm, events, fakeTime) {
-         cm.setValue("hello");
-         deepEqual(events, [
-           "cm.trigger('change')",
-           "time.setTimeout(fn, 1) -> 0",
-         ]);
-       }));
+  pcmTest("change triggered and timeout set on codeMirror.setValue()",
+    function(cm, events, fakeTime) {
+      cm.setValue("hello");
+      deepEqual(events, [
+        "cm.trigger('change')",
+        "time.setTimeout(fn, 1) -> 0",
+      ]);
+    });
 
-  test("reparse() triggers events and passes expected arguments",
-       pcmTest(function(cm, events, fakeTime) {
-         cm.setValue("hello"); events.splice(0);
-         cm.on("reparse", function(arg) {
-           equal(arg.document, "here is a document", "document passed");
-           equal(arg.error, "here is an error", "error passed");
-           equal(arg.sourceCode, "hello", "source code passed");
-         });
-         cm.reparse();
-         deepEqual(events, [
-           "cm.trigger('reparse')",
-           "cm.trigger('cursor-activity')",
-          ]);
-       }));
+  pcmTest("reparse() triggers events and passes expected arguments",
+    function(cm, events, fakeTime) {
+      cm.setValue("hello"); events.splice(0);
+      cm.on("reparse", function(arg) {
+        equal(arg.document, "here is a document", "document passed");
+        equal(arg.error, "here is an error", "error passed");
+        equal(arg.sourceCode, "hello", "source code passed");
+      });
+      cm.reparse();
+      deepEqual(events, [
+        "cm.trigger('reparse')",
+        "cm.trigger('cursor-activity')",
+       ]);
+    });
   
-  test("old timeout cancelled on multiple content changes",
-       pcmTest(function(cm, events, fakeTime) {
-         cm.setValue("hello"); events.splice(0);
-         cm.setValue("hello goober");
-         deepEqual(events, [
-           "cm.trigger('change')",
-           "time.clearTimeout(0)",
-           "time.setTimeout(fn, 1) -> 1"
-         ]);
-       }));
+  pcmTest("old timeout cancelled on multiple content changes",
+    function(cm, events, fakeTime) {
+      cm.setValue("hello"); events.splice(0);
+      cm.setValue("hello goober");
+      deepEqual(events, [
+        "cm.trigger('change')",
+        "time.clearTimeout(0)",
+        "time.setTimeout(fn, 1) -> 1"
+      ]);
+    });
 
-  test("timeout function triggers events w/ expected args",
-       pcmTest(function(cm, events, fakeTime) {
-         cm.setValue("hello goober"); events.splice(0);
-         cm.on("reparse", function(event) {
-           equal(event.sourceCode, "hello goober",
-                 "correct source code is passed on reparse event");
-         });
-         fakeTime.cb();
-         deepEqual(events, [
-           "cm.trigger('reparse')",
-           "cm.trigger('cursor-activity')"
-         ], "events are triggered");
-       }));
+  pcmTest("timeout function triggers events w/ expected args",
+    function(cm, events, fakeTime) {
+      cm.setValue("hello goober"); events.splice(0);
+      cm.on("reparse", function(event) {
+        equal(event.sourceCode, "hello goober",
+              "correct source code is passed on reparse event");
+      });
+      fakeTime.cb();
+      deepEqual(events, [
+        "cm.trigger('reparse')",
+        "cm.trigger('cursor-activity')"
+      ], "events are triggered");
+    });
 
-  test("cursor-activity event is triggered by codeMirror.setCursor()",
-       pcmTest(function(cm, events, fakeTime) {
-         cm.setValue("hello"); events.splice(0);
-         cm.setCursor({line: 0, ch: 2});
-         deepEqual(events, ["cm.trigger('cursor-activity')"]);
-       }));
+  pcmTest("cursor-activity event is triggered by codeMirror.setCursor()",
+    function(cm, events, fakeTime) {
+      cm.setValue("hello"); events.splice(0);
+      cm.setCursor({line: 0, ch: 2});
+      deepEqual(events, ["cm.trigger('cursor-activity')"]);
+    });
 })();
 
 (function() {
