@@ -140,6 +140,7 @@ asyncTest("LivePreview works", function() {
     wind = previewArea.contents()[0].defaultView;
     equal(wind.pageXOffset, 5, "x scroll is preserved across refresh");
     equal(wind.pageYOffset, 6, "y scroll is preserved across refresh");
+    previewArea.remove();
     start();
   });
 });
