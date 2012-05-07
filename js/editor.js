@@ -219,10 +219,11 @@ function LivePreview(options) {
 // TODO: This could be a privacy concern, since people at shared terminals
 // might not want the next user to be able to see what they were just
 // working on.
-function Parachute(window, codeMirror) {
+function Parachute(window, codeMirror, page) {
   // We would use window.sessionStorage, but it goes away too quickly,
   // e.g. if the user accidentally closes the current window.
-  var key = "FRIENDLYCODE_PARACHUTE_DATA";
+  var prefix = "FRIENDLYCODE_PARACHUTE_DATA_";
+  var key = prefix + page;
   var storage = window.localStorage;
   var originalData = codeMirror.getValue();
   var self = {
@@ -230,7 +231,9 @@ function Parachute(window, codeMirror) {
       if (key in storage) {
         codeMirror.setValue(storage[key]);
         self.refresh();
+        return true;
       }
+      return false;
     },
     save: function() {
       if (codeMirror.getValue() != originalData)
@@ -239,9 +242,16 @@ function Parachute(window, codeMirror) {
     refresh: function() {
       originalData = codeMirror.getValue();
     },
-    destroy: function() {
+    listAll: function() {
+      var list = [];
+      for (var name in storage)
+        if (name.indexOf(prefix) == 0)
+          list.push(name);
+      return list;
+    },
+    destroyAll: function() {
       window.removeEventListener("beforeunload", self.save, true);
-      delete storage[key];
+      self.listAll().forEach(function(name) { delete storage[name]; });
     }
   };
   
@@ -268,7 +278,6 @@ $(window).load(function() {
       tabMode: "indent",
       lineWrapping: true,
       lineNumbers: true,
-      value: $("#initial-html").text().trim(),
       parse: function(html) {
         return Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
       }
@@ -293,28 +302,34 @@ $(window).load(function() {
       publisher: Publisher("http://wpm.toolness.org"),
       dialog: $("#publish-dialog")
     });
-    var parachute = Parachute(window, codeMirror);
-
+    var pageToLoad = getQueryVariable('p') || "default";
+    var parachute = Parachute(window, codeMirror, pageToLoad);
+    
     $("#undo").click(function() { codeMirror.undo(); codeMirror.reparse(); });
     $("#redo").click(function() { codeMirror.redo(); codeMirror.reparse(); });
     $("#publish").click(function() { publishUI.saveCode(); });
-
-    // TODO: Restoring the parachute here will get overwritten by a
-    // loaded file, and the user will need to click 'undo' to retrieve
-    // their lost data, which is not at all obvious--but for now, it's
-    // better than nothing.
-    parachute.restore();
-    codeMirror.reparse();
-    if (getQueryVariable('p'))
-      publishUI.loadCode(getQueryVariable('p'), function() {
-        $("#editor").removeClass("loading");
-        // Parachute should only save lost data if it's different from
+    
+    function doneLoading() {
+      $("#editor").removeClass("loading");
+      codeMirror.clearHistory();
+      if (parachute.restore()) {
+        // TODO: Display a non-modal message telling the user that their
+        // previous data has been restored, and that they can click 'undo'
+        // to go back to the original version of the editor content.
+      } else {
+        // Only save data on page unload if it's different from
         // the URL we just (hopefully) loaded.
         parachute.refresh();
-      });
-    else
-      $("#editor").removeClass("loading");
-    codeMirror.focus();
+      }
+      codeMirror.reparse();
+      codeMirror.focus();
+    }
+    
+    if (pageToLoad == "default") {
+      codeMirror.setValue($("#initial-html").text().trim());
+      doneLoading();
+    } else
+      publishUI.loadCode(pageToLoad, doneLoading);
 
     // We're only exposing these as globals so we can debug via
     // the console. Other parts of our code should never reference them.
