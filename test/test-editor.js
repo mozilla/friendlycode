@@ -128,8 +128,8 @@
 (function() {
   module("MarkTracker");
   
-  function mtTest(cb) {
-    return function() {
+  function mtTest(name, cb) {
+    test(name, function() {
       var place = $("<div></div>").appendTo(document.body);
       var cm = CodeMirror(place[0], {mode: "text/plain"});
       var mt = MarkTracker(cm);
@@ -138,25 +138,25 @@
       } finally {
         place.remove();
       }
-    };
+    });
   }
   
-  test("codeMirror content mark/clear works", mtTest(function(place, cm, mt) {
+  mtTest("codeMirror content mark/clear works", function(place, cm, mt) {
     cm.setValue("hello");
     mt.mark(2, 4, "blah");
     equal(place.find(".blah").text(), "ll", "source code is marked w/ class");
     mt.clear();
     equal(place.find(".blah").length, 0, "source code class is cleared");
-  }));
+  });
   
-  test("related element mark/clear works", mtTest(function(place, cm, mt) {
+  mtTtest("related element mark/clear works", function(place, cm, mt) {
     var thing = $("<div></div>");
     cm.setValue("hello");
     mt.mark(1, 4, "foo", thing[0]);
     ok(thing.hasClass("foo"), "related element is marked w/ class");
     mt.clear();
     ok(!thing.hasClass("foo"), "related element class is cleared");
-  }));
+  });
 })();
 
 (function() {
@@ -198,7 +198,7 @@
     equal($('base[target="_blank"]', previewArea.contents()).length, 1);
   });
   
-  lpTest('scrolling is preserved', function(previewArea, preview, cm) {
+  lpTest('scrolling is preserved across refresh', function(previewArea, cm) {
     cm.trigger('reparse', {
       error: null,
       sourceCode: '<p style="font-size: 400px">hi <em>there</em></p>'
