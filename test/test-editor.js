@@ -109,3 +109,37 @@ test("MarkTracker works", function() {
 
   place.remove();
 });
+
+asyncTest("LivePreview works", function() {
+  var previewArea = $('<iframe src="../blank.html"></iframe>');
+  previewArea.appendTo(document.body).css({
+    visibility: "hidden"
+  }).load(function() {
+    var cm = {};
+    _.extend(cm, Backbone.Events);
+    var preview = LivePreview({
+      codeMirror: cm,
+      previewArea: previewArea
+    });
+    cm.trigger('reparse', {
+      error: null,
+      sourceCode: '<p style="font-size: 400px">hi <em>there</em></p>'
+    });
+    equal($("p", previewArea.contents()).html(),
+          "hi <em>there</em>",
+          "HTML source code is written into preview area");
+    equal($('base[target="_blank"]', previewArea.contents()).length, 1,
+          '<base target="_blank"> is inserted into document');
+
+    var wind = previewArea.contents()[0].defaultView;
+    wind.scroll(5, 6);
+    cm.trigger('reparse', {
+      error: null,
+      sourceCode: '<p style="font-size: 400px">hi <em>dood</em></p>'
+    });
+    wind = previewArea.contents()[0].defaultView;
+    equal(wind.pageXOffset, 5, "x scroll is preserved across refresh");
+    equal(wind.pageYOffset, 6, "y scroll is preserved across refresh");
+    start();
+  });
+});
