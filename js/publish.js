@@ -5,6 +5,7 @@ function PublishUI(options) {
   var dlg = options.dialog;
   var codeMirror = options.codeMirror;
   var publisher = options.publisher;
+  var currURL;
   
   $(".close", dlg).click(function() {
     dlg.hide();
@@ -13,19 +14,21 @@ function PublishUI(options) {
 
   return {
     loadCode: function(path, cb) {
-      publisher.loadCode(path, function(err, data) {
+      publisher.loadCode(path, function(err, data, url) {
         if (err)
           // TODO: Put nicer error here.
           alert('Sorry, an error occurred while trying to get the page. :(');
-        else
+        else {
           codeMirror.setValue(data);
+          currURL = url;
+        }
         cb();
       });
     },
     saveCode: function() {
       dlg.show();
       $(".done", dlg).hide();
-      publisher.saveCode(codeMirror.getValue(), function(err, info) {
+      publisher.saveCode(codeMirror.getValue(), currURL, function(err, info) {
         if (err) {
           // TODO: Put nicer error here.
           alert("Sorry, an error occurred while trying to publish. :(");
@@ -47,25 +50,29 @@ function PublishUI(options) {
 function Publisher(baseURL) {
   return {
     loadCode: function(path, cb) {
+      var url = baseURL + path;
       jQuery.ajax({
         type: 'GET',
-        url: baseURL + path,
+        url: url,
         crossDomain: true,
         dataType: 'text',
         error: function() {
           cb("ERROR");
         },
         success: function(data) {
-          cb(null, fixDoctypeHeadBodyMunging(data));
+          cb(null, fixDoctypeHeadBodyMunging(data), url);
         }
       });
     },
-    saveCode: function(data, cb) {
+    saveCode: function(data, originalURL, cb) {
       $.ajax({
         type: 'POST',
         url: baseURL + '/api/page',
         crossDomain: true,
-        data: data,
+        data: {
+          'html': data,
+          'original-url': originalURL || ''
+        },
         dataType: 'text',
         error: function() {
           cb("ERROR");
