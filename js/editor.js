@@ -46,12 +46,14 @@ function ParsingCodeMirror(place, givenOptions) {
   // The number of milliseconds to wait before re-parsing the editor
   // content.
   var parseDelay = givenOptions.parseDelay || 300;
+  var time = givenOptions.time || window;
   var reparseTimeout;
 
   givenOptions.onChange = function() {
     codeMirror.trigger("change");
-    clearTimeout(reparseTimeout);
-    reparseTimeout = setTimeout(reparse, parseDelay);
+    if (reparseTimeout !== undefined)
+      time.clearTimeout(reparseTimeout);
+    reparseTimeout = time.setTimeout(reparse, parseDelay);
   };
   givenOptions.onCursorActivity = onCursorActivity;
 
