@@ -149,7 +149,7 @@
     equal(place.find(".blah").length, 0, "source code class is cleared");
   });
   
-  mtTtest("related element mark/clear works", function(place, cm, mt) {
+  mtTest("related element mark/clear works", function(place, cm, mt) {
     var thing = $("<div></div>");
     cm.setValue("hello");
     mt.mark(1, 4, "foo", thing[0]);
@@ -198,19 +198,20 @@
     equal($('base[target="_blank"]', previewArea.contents()).length, 1);
   });
   
-  lpTest('scrolling is preserved across refresh', function(previewArea, cm) {
-    cm.trigger('reparse', {
-      error: null,
-      sourceCode: '<p style="font-size: 400px">hi <em>there</em></p>'
+  lpTest('scrolling is preserved across refresh',
+    function(previewArea, preview, cm) {
+      cm.trigger('reparse', {
+        error: null,
+        sourceCode: '<p style="font-size: 400px">hi <em>there</em></p>'
+      });
+      var wind = previewArea.contents()[0].defaultView;
+      wind.scroll(5, 6);
+      cm.trigger('reparse', {
+        error: null,
+        sourceCode: '<p style="font-size: 400px">hi <em>dood</em></p>'
+      });
+      wind = previewArea.contents()[0].defaultView;
+      equal(wind.pageXOffset, 5, "x scroll is preserved across refresh");
+      equal(wind.pageYOffset, 6, "y scroll is preserved across refresh");
     });
-    var wind = previewArea.contents()[0].defaultView;
-    wind.scroll(5, 6);
-    cm.trigger('reparse', {
-      error: null,
-      sourceCode: '<p style="font-size: 400px">hi <em>dood</em></p>'
-    });
-    wind = previewArea.contents()[0].defaultView;
-    equal(wind.pageXOffset, 5, "x scroll is preserved across refresh");
-    equal(wind.pageYOffset, 6, "y scroll is preserved across refresh");
-  });
 })();
