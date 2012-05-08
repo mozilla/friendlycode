@@ -19,6 +19,10 @@ body {
   background-image: -o-linear-gradient(top, #7c9e30, white);
 }
 
+img {
+    border: 0 none;
+}
+
 #header {
   position: fixed;
   z-index: 2;
@@ -41,7 +45,8 @@ body {
   border-bottom: 0.5em solid #7ba127;
 }
 
-.logo {
+
+#header .logo {
   font-family: OpenSansLight, sans-serif;
   font-size: 220%;
   font-weight: 200;
@@ -49,18 +54,19 @@ body {
   margin-top: 0.5em;
 }
 
-.logo a {
-  color: #7c9e30; 
+#header .logo a {
+  color: #7c9e30;
   text-decoration: none;
 }
 
-.logo a img {
+#header .logo a img {
   display: block;
   /* EDIT LOGO INSTEAD */
   position: relative;
   left: -5px;
   top: 0.2em;
 }
+
 
 /* ------ BUTTONS AND CONTENT AREA ------ */
 
@@ -251,176 +257,3 @@ b {
   color: white;
   background: gray;
 }
-
-/*
-.error p {
-  margin: 0px;
-  display: inline-block;
-}
-
-.error em[data-highlight] {
-  font-style: normal;
-  cursor: pointer;
-}
-
-.error em.highlight-1, .CodeMirror span.highlight-1 {
-  color: black;
-  background: yellow;
-}
-
-.error em.highlight-2, .CodeMirror span.highlight-2 {
-  color: white;
-  background: gray;
-}
-
-.help a {
-  color: inherit;
-}
-
-.help a.learn-more {
-  display: inline-block;
-  text-decoration: none;
-  padding: 1px 2px 1px 2px;
-  margin: 0px 2px 0px 2px;
-  font-size: smaller;
-  background: lightgray;
-  color: #222222;
-}
-
-.help a.learn-more:hover {
-  background: white;
-  color: black;
-}
-
-.CodeMirror span.cursor-help-highlight {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-code {
-  font-family: Menlo, Monaco, consolas, monospace;
-  font-size: smaller;
-}
-*/
-
-/* ------ MODAL DIALOGS ------ */
-
-#publish-box {
-  float: right;
-  position: relative;
-  top: 1em;
-  margin-right: 1em;
-}
-
-#publish, #publish-dialog {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-#publish {
-  display: inline-block;
-  font-size: small;
-  padding: 4px 4px 2px 4px;
-  background: white;
-  color: #333;
-  cursor: pointer;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  
-  margin-left: 4em;
-  font-family: Verdana, sans-serif;
-}
-
-#publish-text {
-  display: inline-block;
-  font-family: Georgia, sans-serif;
-}
-
-#publish:hover {
-  background: rgb(0,130,255);
-  color: white;
-}
-
-/*
-#publish-dialog {
-  background: rgba(0, 0, 0, 0.8);
-  padding: 40px;
-  color: white;
-  z-index: 1000000;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-}
-
-#publish-dialog a {
-  color: inherit;
-}
-*/
-
-
-
-
-/*
-header {
-  height: 100px;
-  background-color: #aa4d9d;
-  position: relative;
-  display: block;
-  box-shadow: 0px 5px 10px #414244;
-}
-
-header h1 {
-  font-family: 'BebasRegular';
-  font-weight: normal;
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  margin: 0px;
-}
-
-header a {
-  color: inherit;
-  text-decoration: none;
-}
-
-header h1 span.logo {
-  font-family: 'TrashHandRegular';
-  font-size: 50px;
-  padding-right: 10px;
-  color: white;
-}
-
-header button {
-  background: #414244;
-  box-shadow: none;
-  opacity: 0.25;
-  pointer-events: none;
-  -moz-transition: opacity 0.5s;
-  -webkit-transition: opacity 0.5s;
-  -o-transition: opacity 0.5s;
-}
-
-header button.enabled {
-  pointer-events: auto;
-  opacity: 1.0;
-}
-
-button {
-  font-family: 'BebasRegular';
-  font-size: 30px;
-  display: inline-block;
-  text-align: center;
-  text-decoration: none;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  color: white;
-  box-shadow: 5px 5px 10px #414244;
-}
-
-button:hover {
-  text-decoration: underline;
-}
-*/

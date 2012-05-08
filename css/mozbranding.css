@@ -1,29 +1,4 @@
 
-.logo {
-  font-family: OpenSansLight, sans-serif;
-  font-size: 220%;
-  font-weight: 200;
-  margin-left: 2.5em;
-  margin-top: 0.5em;
-}
-
-.logo a {
-    color: #444;
-    text-decoration: none;
-}
-
-.logo a img {
-    display: block;
-    /* EDIT LOGO INSTEAD */
-    position: relative;
-    left: -5px;
-    top: 0.2em;
-}
-
-img {
-    border: 0 none;
-}
-
 #tabzilla {
     background: url("http://www.mozilla.org/tabzilla/media/img/tab.png") repeat scroll 0 0 transparent;
     position: absolute;
