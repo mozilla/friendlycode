@@ -44,8 +44,8 @@ $(window).load(function() {
     });
     var historyUI = HistoryUI({
       codeMirror: codeMirror,
-      undo: $("#undo"),
-      redo: $("#redo")
+      undo: $("#undo_button"),
+      redo: $("#redo_button")
     });
     var pageToLoad = getQueryVariable('p') || "default";
     var parachute = Parachute(window, codeMirror, pageToLoad);

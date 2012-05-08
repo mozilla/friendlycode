@@ -72,15 +72,24 @@ body {
   margin-right: 1em;
 }
 
-#save_button, #share_button {
+#undo_button, #redo_button, #save_button, #share_button {
   position: relative;
   right: 9em;
   top: -3em;
   cursor: pointer;
 }
 
-#share_button {
-  right: 8em;
+#undo_button, #redo_button {
+  opacity: 0.25;
+  pointer-events: none;
+  -moz-transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+}
+
+#undo_button.enabled, #redo_button.enabled {
+  pointer-events: auto;
+  opacity: 1.0;
 }
 
 .button {
