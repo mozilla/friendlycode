@@ -19,6 +19,10 @@ body {
   background-image: -o-linear-gradient(top, #7c9e30, white);
 }
 
+img {
+    border: 0 none;
+}
+
 #header {
   position: fixed;
   z-index: 2;
@@ -41,7 +45,8 @@ body {
   border-bottom: 0.5em solid #7ba127;
 }
 
-.logo {
+
+#header .logo {
   font-family: OpenSansLight, sans-serif;
   font-size: 220%;
   font-weight: 200;
@@ -49,18 +54,19 @@ body {
   margin-top: 0.5em;
 }
 
-.logo a {
-  color: #7c9e30; 
+#header .logo a {
+  color: #7c9e30;
   text-decoration: none;
 }
 
-.logo a img {
+#header .logo a img {
   display: block;
   /* EDIT LOGO INSTEAD */
   position: relative;
   left: -5px;
   top: 0.2em;
 }
+
 
 /* ------ BUTTONS AND CONTENT AREA ------ */
 
@@ -248,40 +254,3 @@ b {
   background: gray;
 }
 
-/* ------ MODAL DIALOGS ------ */
-
-#publish-box {
-  float: right;
-  position: relative;
-  top: 1em;
-  margin-right: 1em;
-}
-
-#publish, #publish-dialog {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-#publish {
-  display: inline-block;
-  font-size: small;
-  padding: 4px 4px 2px 4px;
-  background: white;
-  color: #333;
-  cursor: pointer;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  
-  margin-left: 4em;
-  font-family: Verdana, sans-serif;
-}
-
-#publish-text {
-  display: inline-block;
-  font-family: Georgia, sans-serif;
-}
-
-#publish:hover {
-  background: rgb(0,130,255);
-  color: white;
-}
