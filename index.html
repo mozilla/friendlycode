@@ -6,15 +6,34 @@
     <title>Friendlycode Editor</title>
     <link rel="stylesheet" href="codemirror2/lib/codemirror.css">
     <link rel="stylesheet" href="css/jsbin-codemirror-theme.css">
+    <link rel="stylesheet" href="css/mozbranding.css">
+    <link rel="stylesheet" href="css/gumdrops.css">
     <link rel="stylesheet" href="css/editor.css">
+    <link rel="stylesheet" href="css/modals.css">
   </html>
   <body>
-    <header>
-      <a><h1><span class="logo">Friendlycode</span> Editor</h1></a>
-      <div class="editor-actions">
+
+    <header id="header">
+      <div class="busta">
+        <a id="tabzilla" href="http://www.mozilla.org" class="tabzilla-closed">mozilla.org</a>
+        <div class="logo">
+          <a href=".">
+            <img src="img/mozilla-logo.png">
+            <b>W</b>EB<b>P</b>AGE <b>M</b>AKER
+          </a>
+        </div>
+      </div>
+
+      <!--
+      <div class="editor-actions">     
         <button id="undo">Undo</button>
         <button id="redo">Redo</button>
         <button id="publish" class="enabled">Publish</button>
+      </div>
+      -->
+      <div id="publish-box">
+          <a class="button blue" id="save_button">SAVE</a>
+          <a class="button" id="share_button">SHARE</a>
       </div>
     </header>
 
@@ -25,9 +44,18 @@
       </div>
     </section>
 
-    <footer><div class="help"></div><div class="error"></div></footer>    
-    
+    <!--
+    <footer><div class="help"></div><div class="error"></div></footer>
+    -->
+
+    <!-- footer -->
+    <footer>
+      <div class="error" class="hidden"></div>
+      <div class="help" class="hidden"></div>
+    </footer>
+
     <!-- modal overlay -->
+    <!--
     <div id="publish-dialog" style="display: none">
       <h1>Hold on a sec.</h1>
       <p>We are publishing your thing.</p>
@@ -38,14 +66,106 @@
         <p><a class="close" href="#">Go back to the editor</a>.</p>
       </div>
     </div>
+    -->
+    
+    <!-- save/public modal -->
+    <div id="publish-dialog" class="modal-overlay" style="display: none">
+      <div class="modal-box">
+        <div class="close-icon"><img src="img/temp-icon.png"></div>
+
+        <div class="modal-title">
+          <strong>Hold on</strong>
+          <span class="light-text">we're saving your thing.</span>
+        </div>
+
+        <div class="modal-selection done">
+          <p>Ok, we're done.</p>
+          <div class="content-box">
+            <p><a class="view" href="" target="_blank"></a></p>
+            <p><a class="remix" href="" target="_blank"></a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end of save/public modal dialog -->
+ 
+    <!-- modal overlay (not a template) -->
+    <div id="share-dialog" class="modal-overlay" style="display: none">
+      <div class="modal-box">
+        <div class="close-icon"><img src="img/temp-icon.png"></div>
+
+        <div class="modal-title">
+          <strong>choose</strong>
+          <span class="light-text">how you want to share:</span>
+        </div>
+
+        <div class="button-bar">
+          <ul id="share-buttons">
+            <li><a id="socialshare-widget"><img src="img/chopped/twitter.png"  alt="share with twitter"></a></li>
+            <li><a id="socialshare-widget"><img src="img/chopped/facebook.png" alt="share with facebook"></a></li>
+            <li><a id="socialshare-widget"><img src="img/chopped/google.png"   alt="share with google+"></a></li>
+            <li><a id="link-to-this"><img src="img/chopped/link.png"      alt="embed as link"></a></li>
+            <li><a id="download-code"><img src="img/chopped/download.png" alt="download code"></a></li>
+            <li><a id="mail-this"><img src="img/chopped/email.png"        alt="email to a friend"></a></li>
+          </ul>
+        </div>
+        
+        <div class="modal-selections">
+          <!-- twitter, facebook and goolge+ use socialshare -->
+          <div class="modal-selection socialshare-widget" style="display: none">
+            share your page on social media
+            <div class="content-box">
+              click here to pick a social medium<br>
+              (SocialShare code goes here)
+            </div>
+          </div>
+
+          <div class="modal-selection link-to-this" style="display: none">
+            get the link for your page
+            <div class="content-box">
+              your link is: (link goes here)
+            </div>
+          </div>
+
+          <div class="modal-selection download-code" style="display: none">
+            get the source code for your page:
+            <div class="content-box">
+              <textarea id="modal-source-code" readonly>
+              </textarea>
+            </div>
+          </div>
+
+          <div class="modal-selection mail-this" style="display: none">
+            mail this to a friend
+            <div class="content-box">
+              (mailto link goes here)
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- modal overlay end -->
+    
+    
   </body>
 
 <script type="text/html" id="help-template">
-<%= html %>
-<% if (type == "cssSelector") { %>
-  <span class="selector-matches"> It currently matches <%- matchCount %> element(s).</span>
-<% } %>
-<a class="learn-more" href="<%- url %>">more…</a>
+  <div class="icon"><img src="img/help.png"></div>
+  <div class="content">
+    <%= html %>
+    <% if (type == "cssSelector") { %>
+      <span class="selector-matches"> It currently matches <%- matchCount %> element(s).</span>
+    <% } %>
+    <a class="learn-more" href="<%- url %>">more…</a>
+  </div>
+</script>
+
+<script type="text/html" id="error-template">
+  <div class="icon"><img src="img/error.png"></div>
+  <div class="content">
+    <%= error %>
+  </div>
 </script>
 
 <script type="text/html" id="initial-html">
@@ -96,5 +216,6 @@
   <script src="js/help.js"></script>
   <script src="js/editor.js"></script>
   <script src="js/publish.js"></script>
+  <script src="js/modals.js"></script>
   <script src="js/main.js"></script>
 </html>

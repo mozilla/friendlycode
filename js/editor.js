@@ -158,6 +158,7 @@ function ContextSensitiveHelp(options) {
 function ErrorHelp(options) {
   var self = {};
   var codeMirror = options.codeMirror;
+  var template = options.template;
   var errorArea = options.errorArea;
 
   // Keep track of error highlighting.
@@ -165,9 +166,10 @@ function ErrorHelp(options) {
   
   // Report the given Slowparse error.
   function reportError(error) {
-    errorArea.fillError(error).eachErrorHighlight(function(start, end, i) {
+    var errorHTML = $("<div></div>").fillError(error).eachErrorHighlight(function(start, end, i) {
       errorHelpMarks.mark(start, end, "highlight-" + (i+1), this);
     });
+    errorArea.html(template({error: errorHTML.html()})).show();
   }
   
   codeMirror.on("reparse", function(event) {

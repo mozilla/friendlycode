@@ -23,3 +23,32 @@
   font-size: 12px;
   line-height: 1.2em;
 }
+
+
+.CodeMirror-gutter {
+  background-color: #b9b8b3;
+}
+
+.CodeMirror-gutter-text {
+  color: #FCFCFC;
+}
+
+.cm-s-jsbin span.cm-comment {
+  background-color: white;
+  color: black;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.CodeMirror span.cursor-help-highlight,
+.cursor-help-highlight {
+  background-color: rgba(30,150,255,0.5) !important;
+}
+
+.CodeMirror-wrap .CodeMirror-scroll {
+  overflow: hidden;
+}
+
+.CodeMirror-scroll.cm-s-jsbin {
+  height: 100%;
+}
