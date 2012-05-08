@@ -179,6 +179,7 @@ footer a:hover {
 
 #source .CodeMirror, #source .CodeMirror-scroll {
   height: 100%;
+  overflow: auto;
 }
 
 #source .CodeMirror-gutter {
