@@ -1,3 +1,6 @@
+/* Open Sans font styles */
+@import url("opensans/stylesheet.css");
+
 html, body {
   margin: 0px;
   padding: 0px;
@@ -9,18 +12,312 @@ html, body {
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   overflow: hidden;
-  background-color: #f9dee3;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#f9dee3), to(white));
-  background-image: -webkit-linear-gradient(top, #f9dee3, white);
-  background-image: -moz-linear-gradient(top, #f9dee3, white);  
-  background-image: -o-linear-gradient(top, #f9dee3, white);
+  background-color: #7c9e30;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#7c9e30), to(white));
+  background-image: -webkit-linear-gradient(top, #7c9e30, white);
+  background-image: -moz-linear-gradient(top, #7c9e30, white);  
+  background-image: -o-linear-gradient(top, #7c9e30, white);
 }
 
+#header {
+  position: fixed;
+  z-index: 2;
+  top: 0;
+
+  background-color: #D2D2D2;
+  background-image: url("../img/embroidery-texture.png"), url("../img/furley_bg.png");
+  background-position: left top, left center;
+  background-repeat: repeat, repeat;  background-color: rgb(210,210,210);
+
+  font-family: OpenSansRegular;
+  color: #333;
+
+  height: 120px;    /* height value must correspond with section.top */
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+
+  border-bottom: 0.5em solid #7ba127;
+}
+
+.logo {
+  font-family: OpenSansLight, sans-serif;
+  font-size: 220%;
+  font-weight: 200;
+  margin-left: 2.5em;
+  margin-top: 0.5em;
+}
+
+.logo a {
+  color: #7c9e30; 
+  text-decoration: none;
+}
+
+.logo a img {
+  display: block;
+  /* EDIT LOGO INSTEAD */
+  position: relative;
+  left: -5px;
+  top: 0.2em;
+}
+
+/* ------ BUTTONS AND CONTENT AREA ------ */
+
+
+#publish-box {
+  float: right;
+  position: relative;
+  top: 1em;
+  margin-right: 1em;
+}
+
+#save_button, #share_button {
+  position: relative;
+  right: 9em;
+  top: -3em;
+  cursor: pointer;
+}
+
+#share_button {
+  right: 8em;
+}
+
+.button {
+  padding: 0px 1.5em;
+}
+
+section {
+  position: absolute;
+  top: 120px;       /* corresponds to #header.height */
+  left: 0px;
+  right: 0px;
+  bottom: 80px;    /* corresponds to 20 + footer.height */
+}
+
+#editor.loading, #editor.loading .CodeMirror-cursor {
+  visibility: hidden;
+}
+
+div.editor-actions {
+  visibility: visible;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+footer {
+  /*
+  background: #414244;
+  color: #a0a0a0;
+  */
+  background-color: rgba(255,255,255,0.1);
+  border-top: 1px solid black;
+  color: #333;
+  
+  text-align: center;
+  font-size: 11px;
+  padding-top: 8px;
+  padding-bottom: 12px;
+  position: absolute;
+
+  height: 60px;    /* corresponds to section.bottom - 20 */
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+
+  -webkit-box-shadow: 0px -5px 10px -8px rgba(0, 0, 0, 1);
+  box-shadow: 0px -5px 10px -8px rgba(0, 0, 0, 1);
+}
+
+footer a {
+  color: #e0e0e0;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+#source {
+  background: url("../img/editor-left-texture.png") repeat;
+}
+
+#source, #preview-holder {
+  width: 50%;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0px;
+  top: 10px;
+}
+
+#preview-holder {
+  right: 0px;
+  border-left: 1px solid black;
+  background: white;
+}
+
+#preview {
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+
+#source .CodeMirror, #source .CodeMirror-scroll {
+  height: 100%;
+}
+
+#source .CodeMirror-gutter {
+  background-color: rgba(0, 0, 0, 0.1);
+  opacity: 0.0;
+  -moz-transition: opacity 0.25s;
+  -webkit-transition: opacity 0.25s;
+  -o-transition: opacity 0.25s;
+}
+
+#source:hover .CodeMirror-gutter {
+  opacity: 1.0;
+}
+
+/* ------ ERRORS AND HELP MESSAGE STYLING ------ */
+
+.error,
+.help {
+  display: table-row;
+  width: 100%;
+  color: #666;
+}
+
+.error .icon,
+.help .icon,
+.error .content,
+.help .content {
+  display: table-cell;
+}
+
+.error .icon img,
+.help .icon img {
+  height: 3em;
+  width: 3em;
+  margin: 1em;
+  margin-left: 2em;
+  vertical-align: middle;
+}
+
+b {
+  font-family: OpenSansRegular, sans-serif;
+}
+
+ {
+
+}
+.error strong,
+.help strong {
+  color: #7c9e30;
+  font-family: OpenSansRegular, sans-serif;	
+}
+.error code,
+.help code {
+  color: rgb(0,130,255);
+}
+.error em[data-highlight],
+.help em[data-highlight] {
+  color: rgb(0,130,255);
+}
+
+.error em.highlight-1,
+.help em.highlight-1,
+.CodeMirror span.highlight-1 {
+  color: black;
+  background: yellow;
+}
+
+.error em.highlight-2,
+.help em.highlight-2,
+.CodeMirror span.highlight-2 {
+  color: white;
+  background: gray;
+}
+
+/*
+.error p {
+  margin: 0px;
+  display: inline-block;
+}
+
+.error em[data-highlight] {
+  font-style: normal;
+  cursor: pointer;
+}
+
+.error em.highlight-1, .CodeMirror span.highlight-1 {
+  color: black;
+  background: yellow;
+}
+
+.error em.highlight-2, .CodeMirror span.highlight-2 {
+  color: white;
+  background: gray;
+}
+
+.help a {
+  color: inherit;
+}
+
+.help a.learn-more {
+  display: inline-block;
+  text-decoration: none;
+  padding: 1px 2px 1px 2px;
+  margin: 0px 2px 0px 2px;
+  font-size: smaller;
+  background: lightgray;
+  color: #222222;
+}
+
+.help a.learn-more:hover {
+  background: white;
+  color: black;
+}
+
+.CodeMirror span.cursor-help-highlight {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+code {
+  font-family: Menlo, Monaco, consolas, monospace;
+  font-size: smaller;
+}
+*/
+
+/* ------ MODAL DIALOGS ------ */
+
+#publish-dialog {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 40px;
+  color: white;
+  z-index: 1000000;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+
+#publish-dialog a {
+  color: inherit;
+}
+
+
+
+
+
+/*
 header {
   height: 100px;
   background-color: #aa4d9d;
   position: relative;
-  display: block;                     /* Needed on IE8 for some reason. */
+  display: block;
   box-shadow: 0px 5px 10px #414244;
 }
 
@@ -43,25 +340,6 @@ header h1 span.logo {
   font-size: 50px;
   padding-right: 10px;
   color: white;
-}
-
-section {
-  position: absolute;
-  top: 100px;
-  left: 0px;
-  right: 0px;
-  bottom: 40px;
-}
-
-#editor.loading, #editor.loading .CodeMirror-cursor {
-  visibility: hidden;
-}
-
-div.editor-actions {
-  visibility: visible;
-  position: absolute;
-  right: 20px;
-  top: 20px;
 }
 
 header button {
@@ -96,128 +374,4 @@ button {
 button:hover {
   text-decoration: underline;
 }
-
-footer {
-  background: #414244;
-  color: #a0a0a0;
-  text-align: center;
-  font-size: 11px;
-  padding-top: 8px;
-  padding-bottom: 12px;
-  position: absolute;
-  height: 20px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
-}
-
-footer a {
-  color: #e0e0e0;
-  text-decoration: none;
-}
-
-footer a:hover {
-  text-decoration: underline;
-}
-
-div#source, div#preview-holder {
-  width: 50%;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  position: absolute;
-  bottom: 0px;
-  top: 10px;
-}
-
-div#preview-holder {
-  right: 0px;
-  border-left: 1px solid black;
-  background: white;
-}
-
-iframe#preview {
-  border: none;
-  width: 100%;
-  height: 100%;
-}
-
-div#source .CodeMirror, div#source .CodeMirror-scroll {
-  height: 100%;
-}
-
-div#source .CodeMirror-gutter {
-  background-color: rgba(0, 0, 0, 0.1);
-  opacity: 0.0;
-  -moz-transition: opacity 0.25s;
-  -webkit-transition: opacity 0.25s;
-  -o-transition: opacity 0.25s;
-}
-
-div#source:hover .CodeMirror-gutter {
-  opacity: 1.0;
-}
-
-.error p {
-  margin: 0px;
-  display: inline-block;
-}
-
-.error em[data-highlight] {
-  font-style: normal;
-  cursor: pointer;
-}
-
-.error em.highlight-1, .CodeMirror span.highlight-1 {
-  color: black;
-  background: yellow;
-}
-
-.error em.highlight-2, .CodeMirror span.highlight-2 {
-  color: white;
-  background: gray;
-}
-
-.CodeMirror span.cursor-help-highlight {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-code {
-  font-family: Menlo, Monaco, consolas, monospace;
-  font-size: smaller;
-}
-
-.help a {
-  color: inherit;
-}
-
-.help a.learn-more {
-  display: inline-block;
-  text-decoration: none;
-  padding: 1px 2px 1px 2px;
-  margin: 0px 2px 0px 2px;
-  font-size: smaller;
-  background: lightgray;
-  color: #222222;
-}
-
-.help a.learn-more:hover {
-  background: white;
-  color: black;
-}
-
-#publish-dialog {
-  background: rgba(0, 0, 0, 0.8);
-  padding: 40px;
-  color: white;
-  z-index: 1000000;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-}
-
-#publish-dialog a {
-  color: inherit;
-}
+*/
