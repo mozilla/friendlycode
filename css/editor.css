@@ -210,9 +210,11 @@ b {
   font-family: OpenSansRegular, sans-serif;
 }
 
- {
-
+.error a,
+.help a  {
+  color: rgb(0,130,255);
 }
+
 .error strong,
 .help strong {
   color: #7c9e30;
