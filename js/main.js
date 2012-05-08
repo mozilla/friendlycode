@@ -50,7 +50,7 @@ $(window).load(function() {
     var pageToLoad = getQueryVariable('p') || "default";
     var parachute = Parachute(window, codeMirror, pageToLoad);
     
-    $("#publish").click(function() { publishUI.saveCode(); });
+    $("#save_button").click(function() { publishUI.saveCode(); });
     
     function doneLoading() {
       $("#editor").removeClass("loading");
