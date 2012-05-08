@@ -141,7 +141,6 @@ function ContextSensitiveHelp(options) {
         var matches = lastEvent.document.querySelectorAll(selector).length;
         help.matchCount = matches;
       }
-          window.console.log(help);
       helpArea.html(template(help)).show();
       help.highlights.forEach(function(interval) {
         cursorHelpMarks.mark(interval.start, interval.end,
