@@ -29,6 +29,7 @@ $(window).load(function() {
     });
     var errorHelp = ErrorHelp({
       codeMirror: codeMirror,
+      template: _.template($("#error-template").text()),
       errorArea: $(".error")
     });
     var preview = LivePreview({

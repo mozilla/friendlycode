@@ -50,14 +50,8 @@
 
     <!-- footer -->
     <footer>
-      <div class="error" class="hidden">
-        <div class="icon"><img src="img/error.png"></div>
-        <div class="content"></div>
-      </div>
-      <div class="help" class="hidden">
-        <div class="icon"><img src="img/help.png"></div>
-        <div class="content"></div>
-      </div>
+      <div class="error" class="hidden"></div>
+      <div class="help" class="hidden"></div>
     </footer>
 
     <!-- modal overlay -->
@@ -157,11 +151,21 @@
   </body>
 
 <script type="text/html" id="help-template">
-<%= html %>
-<% if (type == "cssSelector") { %>
-  <span class="selector-matches"> It currently matches <%- matchCount %> element(s).</span>
-<% } %>
-<a class="learn-more" href="<%- url %>">more…</a>
+  <div class="icon"><img src="img/help.png"></div>
+  <div class="content">
+    <%= html %>
+    <% if (type == "cssSelector") { %>
+      <span class="selector-matches"> It currently matches <%- matchCount %> element(s).</span>
+    <% } %>
+    <a class="learn-more" href="<%- url %>">more…</a>
+  </div>
+</script>
+
+<script type="text/html" id="error-template">
+  <div class="icon"><img src="img/error.png"></div>
+  <div class="content">
+    <%= error %>
+  </div>
 </script>
 
 <script type="text/html" id="initial-html">
