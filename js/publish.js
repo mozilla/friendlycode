@@ -6,11 +6,8 @@ function PublishUI(options) {
   var codeMirror = options.codeMirror;
   var publisher = options.publisher;
   var currURL;
-  
-  $(".close", dlg).click(function() {
-    dlg.hide();
-    return false;
-  });
+
+  dlg.find('.close-icon').click(function(){ dlg.hide(); });
 
   return {
     loadCode: function(path, cb) {

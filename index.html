@@ -83,18 +83,18 @@
 
         <div class="button-bar">
           <ul id="share-buttons">
-            <li><a id="socialshare-widget"><img src="img/chopped/twitter.png"  alt="share with twitter"></a></li>
-            <li><a id="socialshare-widget"><img src="img/chopped/facebook.png" alt="share with facebook"></a></li>
-            <li><a id="socialshare-widget"><img src="img/chopped/google.png"   alt="share with google+"></a></li>
-            <li><a id="link-to-this"><img src="img/chopped/link.png"      alt="embed as link"></a></li>
-            <li><a id="download-code"><img src="img/chopped/download.png" alt="download code"></a></li>
-            <li><a id="mail-this"><img src="img/chopped/email.png"        alt="email to a friend"></a></li>
+            <li><a data-id="socialshare-widget" class="twitter">Share with Twitter</a></li>
+            <li><a data-id="socialshare-widget" class="facebook">Share with Facebook</a></li>
+            <li><a data-id="socialshare-widget" class="google">Share with Google+</a></li>
+            <li><a data-id="link-to-this" class="link">Embed as Link</a></li>
+            <li><a data-id="download-code" class="download">Download Code</a></li>
+            <li><a data-id="mail-this" class="email">Email to a Friend</a></li>
           </ul>
         </div>
         
         <div class="modal-selections">
           <!-- twitter, facebook and goolge+ use socialshare -->
-          <div class="modal-selection socialshare-widget" style="display: none">
+          <div class="modal-selection socialshare-widget">
             share your page on social media
             <div class="content-box">
               click here to pick a social medium<br>
@@ -102,14 +102,14 @@
             </div>
           </div>
 
-          <div class="modal-selection link-to-this" style="display: none">
+          <div class="modal-selection link-to-this">
             get the link for your page
             <div class="content-box">
               your link is: (link goes here)
             </div>
           </div>
 
-          <div class="modal-selection download-code" style="display: none">
+          <div class="modal-selection download-code">
             get the source code for your page:
             <div class="content-box">
               <textarea id="modal-source-code" readonly>
@@ -117,7 +117,7 @@
             </div>
           </div>
 
-          <div class="modal-selection mail-this" style="display: none">
+          <div class="modal-selection mail-this">
             mail this to a friend
             <div class="content-box">
               (mailto link goes here)

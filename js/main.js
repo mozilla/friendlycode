@@ -47,11 +47,13 @@ $(window).load(function() {
       undo: $("#undo_button"),
       redo: $("#redo_button")
     });
+    var shareUI = ShareUI($('#share-dialog'));
     var pageToLoad = getQueryVariable('p') || "default";
     var parachute = Parachute(window, codeMirror, pageToLoad);
-    
+
     $("#save_button").click(function() { publishUI.saveCode(); });
-    
+    $("#share_button").click(function() { shareUI.shareCode(); });
+
     function doneLoading() {
       $("#editor").removeClass("loading");
       codeMirror.clearHistory();

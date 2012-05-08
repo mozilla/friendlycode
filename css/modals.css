@@ -93,10 +93,73 @@
 .modal-selection {
   width: 340px;
   margin: auto;
+  display: none;
 }
 
 #modal-source-code {
   width: 100%;
   min-height: 100px;
   font-size: 80%;
+}
+
+#share-buttons a {
+  display: inline-block;
+  vertical-align: top;
+  min-width: 50px;
+  min-height: 50px;
+  line-height: 0; 
+  font-size: 0;
+  color: transparent;
+}
+
+#share-buttons a.twitter {
+  background-image: url(../img/chopped/twitter.png);
+}
+
+#share-buttons a.twitter.selected {
+  background-image: url(../img/chopped/selected/twitter.png);
+}
+
+#share-buttons a.facebook {
+  background-image: url(../img/chopped/facebook.png);
+}
+
+#share-buttons a.facebook.selected {
+  background-image: url(../img/chopped/selected/facebook.png);
+}
+
+#share-buttons a.google {
+  background-image: url(../img/chopped/google.png);
+}
+
+#share-buttons a.google.selected {
+  background-image: url(../img/chopped/selected/google.png);
+}
+
+#share-buttons a.link {
+  background-image: url(../img/chopped/link.png);
+}
+
+#share-buttons a.link.selected {
+  background-image: url(../img/chopped/selected/link.png);
+}
+
+#share-buttons a.email {
+  background-image: url(../img/chopped/email.png);
+}
+
+#share-buttons a.email.selected {
+  background-image: url(../img/chopped/selected/email.png);
+}
+
+#share-buttons a.download {
+  background-image: url(../img/chopped/download.png);
+}
+
+#share-buttons a.download.selected {
+  background-image: url(../img/chopped/selected/download.png);
+}
+
+.modal-selection.selected {
+  display: block;
 }
