@@ -4,7 +4,11 @@
  * they click the like button and we don't like that kind of
  * monitoring behaviour.
  */
-(function($){
+var SocialMedia = function(options) {
+    var $ = options.jQuery;
+    var targetSelector = options.selector;
+    var urlPlaceHolder = "__URL__PLACE__HOLDER__";
+ 
     /**
      * The various social media all have the same API.
      */
@@ -14,20 +18,19 @@
             class: "facebook",
             id: "facebook-jssdk",
             src: "http://connect.facebook.net/en_US/all.js#xfbml=1&appId=1",
-            html: "<div id='fb-root'></div><div class='fb-like' data-send='false' data-show-faces='false' data-font='tahoma'></div>" },
+            html: "<div id='fb-root'></div><div class='fb-like' data-href='"+urlPlaceHolder+"' data-send='false' data-show-faces='false' data-font='tahoma'></div>" },
 
         google: {
             class: "google",
             id: "google-plus",
             src: "https://apis.google.com/js/plusone.js",
-            html: "<g:plusone annotation='none'></g:plusone>" },
+            html: "<g:plusone annotation='none' href='"+urlPlaceHolder+"'></g:plusone>" },
 
         twitter: {
             class: "twitter",
             id: "twitter-wjs",
             src: "http://platform.twitter.com/widgets.js",
-            html: "<a href='https://twitter.com/share' class='twitter-share-button' data-via='Mozilla' data-count='none'>Tweet</a>" }
-
+            html: "<a href='https://twitter.com/share'class='twitter-share-button' data-url='"+urlPlaceHolder+"' data-via='Mozilla' data-count='none'>Tweet</a>" }
     }
     
     /**
@@ -37,9 +40,9 @@
      * then late-loading the script required for
      * the medium to load up its functionality.
      */
-    var hotLoad = function(element, socialMedium) {
-        element.innerHTML = socialMedium.html;
-        (function(document, id, src) {
+    var hotLoad = function($, element, socialMedium, targetSelector) {
+        element.innerHTML = socialMedium.html.replace(urlPlaceHolder, $(targetSelector).text());
+        (function(document, id, src, url) {
             var script = document.createElement("script");
             script.type = "text/javascript";
             script.id = id;
@@ -57,10 +60,10 @@
      * object in the socialMedia object. Effectively
      * it makes every button a twitter button.
      */
-    var setupHotLoading = function($, parent, medium) {
+    var setupHotLoading = function($, targetSelector, parent, medium) {
         if (medium.src) {
             $("." + medium.class, parent).click(function() {
-                hotLoad(this, medium);
+                hotLoad($, this, medium, targetSelector);
                 // prevent default click behaviour
                 return false;
             });
@@ -78,6 +81,6 @@
     for (medium in socialMedia) {
         // call an actual function to force
         // immediate evaluation of {medium}
-        setupHotLoading($, parent, socialMedia[medium]);
+        setupHotLoading($, targetSelector, parent, socialMedia[medium]);
     }
-}(jQuery));
+};

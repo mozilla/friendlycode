@@ -51,6 +51,10 @@ $(window).load(function() {
        codeMirror: codeMirror,
        dialog: $('#share-dialog')
     });
+    var socialMedia = SocialMedia({
+        jQuery: jQuery,
+        selector: "#share-container a.view"
+    });
     var pageToLoad = getQueryVariable('p') || "default";
     var parachute = Parachute(window, codeMirror, pageToLoad);
 
