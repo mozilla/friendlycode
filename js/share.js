@@ -1,8 +1,19 @@
-function ShareUI(dialog) {
+function ShareUI(options) {
+  var codeMirror = options.codeMirror;
+  var dialog = options.dialog;
+
   var self = {
     shareCode: function() {
       dialog.show();
       select.call(dialog.find('a.link')[0]);
+      $("#modal-source-code").text(codeMirror.getValue());
+      PublishUI({
+        codeMirror: codeMirror,
+        publisher: Publisher("http://wpm.toolness.org"),
+        dialog: $("#quick-save")
+      }).saveCode(function(viewURL,remixURL) {
+        $("#share-container a.mailto").attr('href', 'mailto:?subject=Check out the page I just remixed!?body=You can check it out here: '+viewURL);
+      });
     }
   };
 
@@ -13,7 +24,7 @@ function ShareUI(dialog) {
     $(this).addClass("selected");
     content.addClass("selected");
   }
-  
+
   // clicking the "close" button
   dialog.find('.close-icon').click(function(){ dialog.hide(); });
 

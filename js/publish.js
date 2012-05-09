@@ -22,7 +22,7 @@ function PublishUI(options) {
         cb();
       });
     },
-    saveCode: function() {
+    saveCode: function(callback) {
       dlg.show();
       $(".done", dlg).hide();
       publisher.saveCode(codeMirror.getValue(), currURL, function(err, info) {
@@ -36,6 +36,9 @@ function PublishUI(options) {
           $(".done", dlg).fadeIn();
           $('a.view', dlg).attr('href', viewURL).text(viewURL);
           $('a.remix', dlg).attr('href', remixURL).text(remixURL);
+          if (callback) {
+            callback(viewURL, remixURL);
+          }
         }
       });
     }
