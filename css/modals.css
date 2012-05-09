@@ -68,8 +68,10 @@
 }
 
 .content-box {
-  width: 300px;
+  width: 32s0px;
   min-height: 100px;
+  max-height: 200px;
+  overflow: auto;
   border: 20px solid #79a327;
   margin: auto;
   font-size: 80%;
@@ -99,7 +101,7 @@
 #modal-source-code {
   width: 100%;
   min-height: 100px;
-  font-size: 80%;
+  font-size: 90%;
 }
 
 #share-buttons a {
@@ -162,4 +164,11 @@
 
 .modal-selection.selected {
   display: block;
+}
+
+/* facebook needs a width override, because it reserves way too much
+   horizontal space by default (450px) that interferes with the modal. */
+#share-dialog div.fb-like span,
+#share-dialog div.fb-like span iframe {
+  width: 280px !important;
 }

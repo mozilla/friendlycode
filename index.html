@@ -30,8 +30,8 @@
           <!-- TODO: Until we actually implement the sharing widget,
                we're renaming 'Save' to 'Share' and not displaying the
                real 'Share' button. -->
-          <a class="button blue" id="save_button">Share</a>
-          <a class="button" id="share_button" style="display: none">Share</a>
+          <a class="button blue" id="save_button">Save</a>
+          <a class="button" id="share_button">Share</a>
       </div>
     </header>
 
@@ -83,44 +83,57 @@
 
         <div class="button-bar">
           <ul id="share-buttons">
-            <li><a data-id="socialshare-widget" class="twitter">Share with Twitter</a></li>
-            <li><a data-id="socialshare-widget" class="facebook">Share with Facebook</a></li>
-            <li><a data-id="socialshare-widget" class="google">Share with Google+</a></li>
+            <li><a data-id="twitter-widget" class="twitter">Share with Twitter</a></li>
+            <li><a data-id="facebook-widget" class="facebook">Share with Facebook</a></li>
+            <li><a data-id="google-widget" class="google">Share with Google+</a></li>
             <li><a data-id="link-to-this" class="link">Embed as Link</a></li>
             <li><a data-id="download-code" class="download">Download Code</a></li>
             <li><a data-id="mail-this" class="email">Email to a Friend</a></li>
           </ul>
         </div>
         
-        <div class="modal-selections">
+        <div class="modal-selections" id="share-container">
           <!-- twitter, facebook and goolge+ use socialshare -->
-          <div class="modal-selection socialshare-widget">
-            share your page on social media
-            <div class="content-box">
-              click here to pick a social medium<br>
-              (SocialShare code goes here)
+          <div class="modal-selection facebook-widget">
+            Share your work on FaceBook!
+            <div class="content-box facebook">
+              <a href="">Click here for the facebook like button</a>
             </div>
           </div>
-
+          <div class="modal-selection google-widget">
+            Share your work through Google!
+            <div class="content-box google">
+              <a href="">Click here for the Google+ button</a>
+            </div>
+          </div>
+          <div class="modal-selection twitter-widget">
+            Share your work via Twitter!
+            <div class="content-box twitter">
+              <a href="">Click here for the tweet button</a>
+            </div>
+          </div>
+          
           <div class="modal-selection link-to-this">
             get the link for your page
-            <div class="content-box">
-              your link is: (link goes here)
+            <div class="content-box" id="quick-save">
+              <div class="done">
+                your link is: <a href="" class="view">here</a>
+              </div>
             </div>
           </div>
 
           <div class="modal-selection download-code">
             get the source code for your page:
             <div class="content-box">
-              <textarea id="modal-source-code" readonly>
-              </textarea>
+              <pre id="modal-source-code" readonly>
+              </pre>
             </div>
           </div>
 
           <div class="modal-selection mail-this">
             mail this to a friend
             <div class="content-box">
-              (mailto link goes here)
+              <a href="" class="mailto">Click here to let a friend know about your remix!</a>
             </div>
           </div>
 
@@ -150,8 +163,7 @@
   </div>
 </script>
 
-<script type="text/html" id="initial-html">
-<!DOCTYPE html>
+<script type="text/html" id="initial-html"><!DOCTYPE html>
 <html>
   <head>
     <style>
@@ -199,5 +211,6 @@
   <script src="js/editor.js"></script>
   <script src="js/publish.js"></script>
   <script src="js/share.js"></script>
+  <script src="js/lateSocials.js"></script>
   <script src="js/main.js"></script>
 </html>
