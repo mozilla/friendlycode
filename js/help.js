@@ -55,6 +55,15 @@ var Help = (function(HacktionaryData) {
     }
   }
 
+  // "Normalize" a tag name by converting e.g. any heading level to h1,
+  // so that they can be easily looked up in the hacktionary.
+  function normalizeTagName(tagName) {
+    tagName = tagName.toLowerCase();
+    if (tagName.match(/^h[1-6]$/))
+      return "h1";
+    return tagName;
+  }
+
   // Recursively build the help index mapping source code indices 
   // to context-sensitive help.
   function buildHelpIndex(element, helpIndex, html) {
@@ -62,7 +71,7 @@ var Help = (function(HacktionaryData) {
         pi = element.parseInfo,
         tagInfo = {
           type: "tag",
-          value: element.nodeName.toLowerCase(),
+          value: normalizeTagName(element.nodeName),
           highlights: []
         };
     if (pi) {

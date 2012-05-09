@@ -48,6 +48,16 @@
     assertHighlightIntervals(index, "<p>", ["<p>", "</p>"], html);
     assertHighlightIntervals(index, "<br>", ["<br>"], html);
   });
+
+  test("Index.get() returns help for <h1> thru <h6>", function() {
+    var html = '<h1>a</h1> <h2>b</h2> <h3>c</h3>' + 
+               '<h4>d</h4> <H5>e</H5> <h6>f</h6>';
+    var index = buildIndex(html);
+    
+    ["<h1>", "<h2>", "<h3>", "<h4>", "<H5>", "<h6>"].forEach(function(hTag) {
+      ok(helpAt(index, hTag, html).html.match(/heading/i));
+    });
+  });
   
   test("Index.get() returns help for CSS properties", function() {
     var html = '<style>body { color: blue; }</style>';
