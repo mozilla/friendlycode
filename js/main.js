@@ -47,7 +47,10 @@ $(window).load(function() {
       undo: $("#undo_button"),
       redo: $("#redo_button")
     });
-    var shareUI = ShareUI($('#share-dialog'));
+    var shareUI = ShareUI({
+       codeMirror: codeMirror,
+       dialog: $('#share-dialog')
+    });
     var pageToLoad = getQueryVariable('p') || "default";
     var parachute = Parachute(window, codeMirror, pageToLoad);
 
