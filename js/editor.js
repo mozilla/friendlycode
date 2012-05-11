@@ -223,23 +223,24 @@ function LivePreview(options) {
 //
 // TODO: This could be a privacy concern, since people at shared terminals
 // might not want the next user to be able to see what they were just
-// working on.
-function Parachute(window, codeMirror, page) {
-  // We would use window.sessionStorage, but it goes away too quickly,
-  // e.g. if the user accidentally closes the current window.
+// working on. We're currently only saving the data for a few minutes, though,
+// so hopefully this shouldn't be that big a problem.
+function Parachute(window, codeMirror, page, lscache) {  
+  // Amount of time, in minutes, to save parachute data.
+  var timeLimit = 5;
   var prefix = "FRIENDLYCODE_PARACHUTE_DATA_";
   var key = prefix + page;
-  var storage = window.localStorage;
   var originalData = codeMirror.getValue();
   var self = {
     restore: function() {
-      if (key in storage) {
-        if (storage[key] == codeMirror.getValue()) {
+      var saved = lscache.get(key);
+      if (saved) {
+        if (saved == codeMirror.getValue()) {
           // Our saved data is the same as the unmodified data, so there's
           // no need to store it.
-          delete storage[key];
+          lscache.remove(key);
         } else {
-          codeMirror.setValue(storage[key]);
+          codeMirror.setValue(saved);
           self.refresh();
           return true;
         }
@@ -248,21 +249,14 @@ function Parachute(window, codeMirror, page) {
     },
     save: function() {
       if (codeMirror.getValue() != originalData)
-        storage[key] = codeMirror.getValue();
+        lscache.set(key, codeMirror.getValue(), timeLimit);
     },
     refresh: function() {
       originalData = codeMirror.getValue();
     },
-    listAll: function() {
-      var list = [];
-      for (var name in storage)
-        if (name.indexOf(prefix) == 0)
-          list.push(name);
-      return list;
-    },
     destroyAll: function() {
       window.removeEventListener("beforeunload", self.save, true);
-      self.listAll().forEach(function(name) { delete storage[name]; });
+      lscache.flush();
     }
   };
   

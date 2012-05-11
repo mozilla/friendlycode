@@ -56,7 +56,7 @@ $(window).load(function() {
         selector: "#share-container a.view"
     });
     var pageToLoad = getQueryVariable('p') || "default";
-    var parachute = Parachute(window, codeMirror, pageToLoad);
+    var parachute = Parachute(window, codeMirror, pageToLoad, lscache);
 
     $("#save_button").click(function() { publishUI.saveCode(); });
     $("#share_button").click(function() { shareUI.shareCode(); });
