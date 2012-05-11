@@ -241,7 +241,6 @@ function Parachute(window, codeMirror, page, lscache) {
           lscache.remove(key);
         } else {
           codeMirror.setValue(saved);
-          self.refresh();
           return true;
         }
       }
