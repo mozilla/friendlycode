@@ -6,6 +6,7 @@
     <title>Friendlycode Editor</title>
     <link rel="stylesheet" href="codemirror2/lib/codemirror.css">
     <link rel="stylesheet" href="css/jsbin-codemirror-theme.css">
+    <link rel="stylesheet" href="css/tipsy.css">
     <link rel="stylesheet" href="css/mozbranding.css">
     <link rel="stylesheet" href="css/gumdrops.css">
     <link rel="stylesheet" href="css/editor.css">
@@ -25,7 +26,7 @@
       </div>
 
       <div id="publish-box">
-          <a class="button" id="undo_button">Undo</a>
+          <a class="button" id="undo_button" data-restore-help="We've restored your changes to this page from earlier, but you can click this button to undo them.">Undo</a>
           <a class="button" id="redo_button">Redo</a>
           <!-- TODO: Until we actually implement the sharing widget,
                we're renaming 'Save' to 'Share' and not displaying the
@@ -196,6 +197,7 @@
 </script>
 
   <script src="js/jquery.min.js"></script>
+  <script src="js/jquery.tipsy.js"></script>
   <script src="js/underscore.min.js"></script>
   <script src="js/backbone.min.js"></script>
   <script src="codemirror2/lib/codemirror.js"></script>

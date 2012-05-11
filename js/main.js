@@ -66,9 +66,21 @@ $(window).load(function() {
       codeMirror.clearHistory();
       historyUI.refresh();
       if (parachute.restore()) {
-        // TODO: Display a non-modal message telling the user that their
+        // Display a non-modal message telling the user that their
         // previous data has been restored, and that they can click 'undo'
         // to go back to the original version of the editor content.
+        // This is just a temporary workaround to avoid confusion until
+        // we figure out a better solution; see this issue for more
+        // discussion:
+        //
+        // https://github.com/mozilla/webpagemaker/issues/53
+        $("#undo_button").tipsy({
+          gravity: 'n',
+          fade: true,
+          trigger: 'manual',
+          title: 'data-restore-help'
+        }).tipsy("show");
+        setTimeout(function() { $("#undo_button").tipsy("hide"); }, 6000);
       } else {
         // Only save data on page unload if it's different from
         // the URL we just (hopefully) loaded.
