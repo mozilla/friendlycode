@@ -1,3 +1,5 @@
+"use strict";
+
 // An subclass of CodeMirror which adds a few methods that make it easier
 // to work with character indexes rather than {line, ch} objects.
 function IndexableCodeMirror(place, givenOptions) {

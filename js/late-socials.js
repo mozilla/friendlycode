@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * A tiny library for load-loading social media share buttons.
  * If we don't do this, social media will track users even before

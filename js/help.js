@@ -1,3 +1,5 @@
+"use strict";
+
 var Help = (function(HacktionaryData) {
   // A help index provides context-sensitive help for an HTML document,
   // indexed by characters in the HTML source code.

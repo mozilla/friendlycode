@@ -1,3 +1,5 @@
+"use strict";
+
 // This class is responsible for the UI behind saving and loading published
 // code.
 function PublishUI(options) {

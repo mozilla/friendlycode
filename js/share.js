@@ -1,3 +1,5 @@
+"use strict";
+
 function ShareUI(options) {
   var codeMirror = options.codeMirror;
   var dialog = options.dialog;

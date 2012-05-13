@@ -1,3 +1,5 @@
+"use strict";
+
 // Data here is ultimately scraped from MDN:
 // https://github.com/toolness/hacktionary
 var HacktionaryData = {
