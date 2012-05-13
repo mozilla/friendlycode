@@ -6,7 +6,8 @@
  */
 var SocialMedia = function(options) {
     var $ = options.jQuery;
-    var targetSelector = options.selector;
+    var parent = options.container;
+    var getURL = options.getURL;
     var urlPlaceHolder = "__URL__PLACE__HOLDER__";
  
     /**
@@ -40,8 +41,12 @@ var SocialMedia = function(options) {
      * then late-loading the script required for
      * the medium to load up its functionality.
      */
-    var hotLoad = function($, element, socialMedium, targetSelector) {
-        element.innerHTML = socialMedium.html.replace(urlPlaceHolder, $(targetSelector).text());
+    var hotLoad = function($, element, socialMedium) {
+        // TODO: Should we escape the return value of getURL()? It's likely
+        // to not contain any characters that need escaping, and its value
+        // is trusted, but we may still want to do it.
+        element.innerHTML = socialMedium.html.replace(urlPlaceHolder,
+                                                      getURL());
         (function(document, id, src, url) {
             var script = document.createElement("script");
             script.type = "text/javascript";
@@ -49,27 +54,8 @@ var SocialMedia = function(options) {
             script.src = src;
             document.head.appendChild(script);
         }(document, socialMedium.id, socialMedium.src));
-    }
-    
-    /**
-     * This is a separate function because the
-     * for/in loop is a weird JavaScript thing;
-     * it does late variable binding, somehow,
-     * so dynamic functions that involve "medium"
-     * end up all being evaluated for the last
-     * object in the socialMedia object. Effectively
-     * it makes every button a twitter button.
-     */
-    var setupHotLoading = function($, targetSelector, parent, medium) {
-        if (medium.src) {
-            $("." + medium.class, parent).click(function() {
-                hotLoad($, this, medium, targetSelector);
-                // prevent default click behaviour
-                return false;
-            });
-        }
-    }    
- 
+    };
+
     /**
      * Set up the onclick bindings. Content will
      * be injected into elements inside a master
@@ -77,10 +63,14 @@ var SocialMedia = function(options) {
      * content replacements are based on each
      * social medium's "class" property.
      */
-    var parent = $("#share-container");
-    for (medium in socialMedia) {
-        // call an actual function to force
-        // immediate evaluation of {medium}
-        setupHotLoading($, targetSelector, parent, socialMedia[medium]);
-    }
+    $.each(socialMedia, function(mediumName) {
+        var medium = socialMedia[mediumName];
+        if (medium.src) {
+            $("." + medium.class, parent).click(function() {
+                hotLoad($, this, medium);
+                // prevent default click behaviour
+                return false;
+            });
+        }
+    });
 };

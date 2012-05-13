@@ -53,7 +53,10 @@ $(window).load(function() {
     });
     var socialMedia = SocialMedia({
         jQuery: jQuery,
-        selector: "#share-container a.view"
+        getURL: function() {
+          return $("#share-container .link-to-this a.view")[0].href;
+        },
+        container: $("#share-container")
     });
     var pageToLoad = getQueryVariable('p') || "default";
     var parachute = Parachute(window, codeMirror, pageToLoad, lscache);
