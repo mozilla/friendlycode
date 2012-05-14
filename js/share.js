@@ -3,6 +3,7 @@
 function ShareUI(options) {
   var codeMirror = options.codeMirror;
   var dialog = options.dialog;
+  var publisher = options.publisher;
 
   var self = {
     shareCode: function() {
@@ -11,7 +12,7 @@ function ShareUI(options) {
       $("#modal-source-code").text(codeMirror.getValue());
       PublishUI({
         codeMirror: codeMirror,
-        publisher: Publisher("http://wpm.toolness.org"),
+        publisher: publisher,
         dialog: $("#quick-save")
       }).saveCode(function(viewURL,remixURL) {
         $("#share-container a.mailto").attr('href', 'mailto:?subject=Check out the page I just remixed!?body=You can check it out here: '+viewURL);

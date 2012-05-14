@@ -51,6 +51,7 @@ function PublishUI(options) {
 // to save and load published code.
 function Publisher(baseURL) {
   return {
+    baseURL: baseURL,
     loadCode: function(path, cb) {
       var url = baseURL + path;
       jQuery.ajax({
