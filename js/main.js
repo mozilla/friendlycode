@@ -39,9 +39,10 @@ $(window).load(function() {
       ignoreErrors: true,
       previewArea: $("#preview")
     });
+    var publisher = Publisher($("meta[name='publish-url']").attr("content"));
     var publishUI = PublishUI({
       codeMirror: codeMirror,
-      publisher: Publisher($("meta[name='publish-url']").attr("content")),
+      publisher: publisher,
       dialog: $("#publish-dialog")
     });
     var historyUI = HistoryUI({
@@ -51,7 +52,8 @@ $(window).load(function() {
     });
     var shareUI = ShareUI({
        codeMirror: codeMirror,
-       dialog: $('#share-dialog')
+       dialog: $('#share-dialog'),
+       publisher: publisher
     });
     var socialMedia = SocialMedia({
         jQuery: jQuery,
