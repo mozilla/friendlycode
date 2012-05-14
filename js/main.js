@@ -41,7 +41,7 @@ $(window).load(function() {
     });
     var publishUI = PublishUI({
       codeMirror: codeMirror,
-      publisher: Publisher("http://wpm.toolness.org"),
+      publisher: Publisher($("meta[name='publish-url']").attr("content")),
       dialog: $("#publish-dialog")
     });
     var historyUI = HistoryUI({
