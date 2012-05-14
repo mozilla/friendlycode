@@ -3,7 +3,9 @@
 // This class is responsible for the UI behind saving and loading published
 // code.
 function PublishUI(options) {
-  var baseRemixURL = options.remixURL || $('<a href="."></a>')[0].href;
+  var defaultRemixURL = location.protocol + "//" + location.host + 
+                        location.pathname;
+  var baseRemixURL = options.remixURL || defaultRemixURL;
   var dlg = options.dialog;
   var codeMirror = options.codeMirror;
   var publisher = options.publisher;
