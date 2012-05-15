@@ -50,17 +50,18 @@ $(window).load(function() {
       undo: $("#undo_button"),
       redo: $("#redo_button")
     });
-    var shareUI = ShareUI({
-       codeMirror: codeMirror,
-       dialog: $('#share-dialog'),
-       publisher: publisher
-    });
     var socialMedia = SocialMedia({
         jQuery: jQuery,
         getURL: function() {
           return $("#share-container .link-to-this a.view")[0].href;
         },
         container: $("#share-container")
+    });
+    var shareUI = ShareUI({
+       codeMirror: codeMirror,
+       dialog: $('#share-dialog'),
+       socialMedia: socialMedia,
+       publisher: publisher
     });
     var pageToLoad = getQueryVariable('p') || "default";
     var parachute = Parachute(window, codeMirror, pageToLoad, lscache);
