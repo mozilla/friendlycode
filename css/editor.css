@@ -152,7 +152,10 @@ footer a:hover {
 }
 
 #source {
+  /*
   background: url("../img/editor-left-texture.png") repeat;
+  */
+  background-color: #F5F5F2;
 }
 
 #source, #preview-holder {
@@ -164,6 +167,37 @@ footer a:hover {
   bottom: 0px;
   top: 10px;
 }
+
+
+#source-guide-note, #preview-guide-note {
+  font-family: Georgia;
+  text-align: center;
+  font-size: 120%;
+  height: 25px;
+  width: 40%;
+  margin: 5px;
+  background-color: rgb(255,255,150);
+  border: 1px solid black;
+  /*border-width: 0px 0px 1px 0px;*/
+  padding-top: 0.3em;
+  line-height: 1em;
+  color: #006;
+  background-color: rgb(255,250,150);
+  z-index: 1000000;
+}
+
+#source-guide-note {
+  position: fixed;
+  top: 95px;
+  left: 5%;
+}
+
+#preview-guide-note {
+  position: fixed;
+  bottom: 60px;
+  right: 5%;
+}
+
 
 #preview-holder {
   right: 0px;
