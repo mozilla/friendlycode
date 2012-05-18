@@ -197,10 +197,19 @@ function LivePreview(options) {
       var x = wind.pageXOffset;
       var y = wind.pageYOffset;
 
-      doc.open();
-      doc.write(event.sourceCode);
-      doc.close();
-
+      if (jQuery.browser.mozilla) {
+        // Due to Firefox bug 148794, we can't use document.write() lest
+        // we break the user's back button, so we'll just settle with
+        // using innerHTML. This is not ideal because it means we won't
+        // be transferring the doctype or any attributes on the <html>
+        // tag.
+        doc.documentElement.innerHTML = event.sourceCode;
+      } else {
+        doc.open();
+        doc.write(event.sourceCode);
+        doc.close();
+      }
+      
       // Insert a BASE TARGET tag so that links don't open in
       // the iframe.
       var baseTag = doc.createElement('base');
