@@ -6,5 +6,8 @@ require([
   "./test-live-preview",
   "./test-publisher"
 ], function() {
-  QUnit.start();
+  if (QUnit.config.blocking)
+    QUnit.config.autostart = true;
+  else
+    QUnit.start();
 });
