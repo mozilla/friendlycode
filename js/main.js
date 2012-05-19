@@ -10,10 +10,10 @@
   var blankURL = $("meta[name='blank-url']").attr("content");
   var iframe = $('<iframe id="preview" src="' + blankURL + '"></iframe>');
   
-  define("app-readiness", [], {
+  define("appReady", [], {
     load: function(name, req, load, config) {
       jQuery.when(errorsLoaded, iframeLoaded).then(function() {
-        load(null);
+        load({previewArea: iframe});
       });
     }
   });
@@ -64,6 +64,7 @@ define("main", function(require) {
       SocialMedia = require("ui/social-media"),
       HelpTemplate = require("template!help"),
       ErrorTemplate = require("template!error"),
+      AppReady = require("appReady!"),
       publishURL = $("meta[name='publish-url']").attr("content");
   
   var codeMirror = ParsingCodeMirror($("#source")[0], {
@@ -90,7 +91,7 @@ define("main", function(require) {
   var preview = LivePreview({
     codeMirror: codeMirror,
     ignoreErrors: true,
-    previewArea: $("#preview")
+    previewArea: AppReady.previewArea
   });
   var publisher = Publisher(publishURL);
   var publishUI = PublishUI({
