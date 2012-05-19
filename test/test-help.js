@@ -1,4 +1,4 @@
-(function() {
+require(["../js/help"], function(Help) {
   module("Help");
 
   function helpAt(index, searchString, html) {
@@ -82,4 +82,4 @@
        "Index contains MDN URL for CSS selectors");
     assertHighlightIntervals(buildIndex(html), "body", ["body"], html);
   });
-})();
+});

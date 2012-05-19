@@ -1,6 +1,6 @@
 "use strict";
 
-var Help = (function(HacktionaryData) {
+define(["./hacktionary-data"], function(HacktionaryData) {
   // A help index provides context-sensitive help for an HTML document,
   // indexed by characters in the HTML source code.
   function HelpIndex() {
@@ -127,4 +127,4 @@ var Help = (function(HacktionaryData) {
   };
 
   return Help;
-})(HacktionaryData);
+});
