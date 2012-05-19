@@ -28,46 +28,16 @@
 // This is a simple RequireJS plugin that loads an underscore.js template.
 define("template", [], {
   load: function(name, req, load, config) {
-    req(["text!../templates/" + name], function(text) {
+    req(["text!../templates/" + name + ".html"], function(text) {
       load(_.template(text));
     });
   }
 });
 
-require([
-  "./help",
-  "./parachute",
-  "./publisher",
-  "../slowparse/slowparse",
-  "../slowparse/tree-inspectors",
-  "./ui/parsing-codemirror",
-  "./ui/context-sensitive-help",
-  "./ui/error-help",
-  "./ui/live-preview",
-  "./ui/history",
-  "./ui/publish",
-  "./ui/share",
-  "./ui/social-media",
-  "template!help.html",
-  "template!error.html",
-  "app-readiness!"
-], function(
-  Help,
-  Parachute,
-  Publisher,
-  Slowparse,
-  TreeInspectors,
-  ParsingCodeMirror,
-  ContextSensitiveHelp,
-  ErrorHelp,
-  LivePreview,
-  HistoryUI,
-  PublishUI,
-  ShareUI,
-  SocialMedia,
-  HelpTemplate,
-  ErrorTemplate
-) {
+// All of this module's exports are only being exposed for debugging
+// purposes. Other parts of our code should never cite this module
+// as a dependency.
+define("main", function(require) {
   function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split("&");
@@ -79,7 +49,22 @@ require([
     }
   }
 
-  var publishURL = $("meta[name='publish-url']").attr("content");
+  var Help = require("help"),
+      Parachute = require("parachute"),
+      Publisher = require("publisher"),
+      Slowparse = require("../slowparse/slowparse"),
+      TreeInspectors = require("../slowparse/tree-inspectors"),
+      ParsingCodeMirror = require("ui/parsing-codemirror"),
+      ContextSensitiveHelp = require("ui/context-sensitive-help"),
+      ErrorHelp = require("ui/error-help"),
+      LivePreview = require("ui/live-preview"),
+      HistoryUI = require("ui/history"),
+      PublishUI = require("ui/publish"),
+      ShareUI = require("ui/share"),
+      SocialMedia = require("ui/social-media"),
+      HelpTemplate = require("template!help"),
+      ErrorTemplate = require("template!error"),
+      publishURL = $("meta[name='publish-url']").attr("content");
   
   var codeMirror = ParsingCodeMirror($("#source")[0], {
     mode: "text/html",
@@ -174,8 +159,8 @@ require([
   } else
     publishUI.loadCode(pageToLoad, doneLoading);
 
-  // We're only exposing these as globals so we can debug via
-  // the console. Other parts of our code should never reference them.
-  window._codeMirror = codeMirror;
-  window._parachute = parachute;
+  return {
+    codeMirror: codeMirror,
+    parachute: parachute
+  };
 });
