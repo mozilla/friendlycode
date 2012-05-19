@@ -1,4 +1,6 @@
-(function() {
+"use strict";
+
+require(["../js/ui/live-preview"], function(LivePreview) {
   module("LivePreview");
   
   function lpTest(name, cb) {
@@ -53,4 +55,4 @@
       equal(wind.pageXOffset, 5, "x scroll is preserved across refresh");
       equal(wind.pageYOffset, 6, "y scroll is preserved across refresh");
     });
-})();
+});
