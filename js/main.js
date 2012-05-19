@@ -4,6 +4,8 @@ require([
   "./help",
   "./parachute",
   "./publisher",
+  "../slowparse/slowparse",
+  "../slowparse/tree-inspectors",
   "./ui/parsing-codemirror",
   "./ui/context-sensitive-help",
   "./ui/error-help",
@@ -12,9 +14,9 @@ require([
   "./ui/publish",
   "./ui/share",
   "./ui/social-media"
-], function(Help, Parachute, Publisher, ParsingCodeMirror,
-            ContextSensitiveHelp, ErrorHelp, LivePreview, HistoryUI,
-            PublishUI, ShareUI, SocialMedia) {
+], function(Help, Parachute, Publisher, Slowparse, TreeInspectors,
+            ParsingCodeMirror, ContextSensitiveHelp, ErrorHelp, LivePreview,
+            HistoryUI, PublishUI, ShareUI, SocialMedia) {
   function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split("&");

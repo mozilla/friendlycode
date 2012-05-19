@@ -1,4 +1,4 @@
-require(["../js/help"], function(Help) {
+require(["../js/help", "../slowparse/slowparse"], function(Help, Slowparse) {
   module("Help");
 
   function helpAt(index, searchString, html) {
