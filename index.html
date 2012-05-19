@@ -156,24 +156,6 @@
       </div>
     </div>
     <!-- modal overlay end -->
-
-<script type="text/html" id="help-template">
-  <div class="icon"><img src="img/help.png"></div>
-  <div class="content">
-    <%= html %>
-    <% if (type == "cssSelector") { %>
-      <span class="selector-matches"> It currently matches <%- matchCount %> element(s).</span>
-    <% } %>
-    <a class="learn-more" href="<%- url %>">more…</a>
-  </div>
-</script>
-
-<script type="text/html" id="error-template">
-  <div class="icon"><img src="img/error.png"></div>
-  <div class="content">
-    <%= error %>
-  </div>
-</script>
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery.tipsy.js"></script>
   <script src="js/underscore.min.js"></script>

@@ -1,0 +1,8 @@
+<div class="icon"><img src="img/help.png"></div>
+<div class="content">
+  <%= html %>
+  <% if (type == "cssSelector") { %>
+    <span class="selector-matches"> It currently matches <%- matchCount %> element(s).</span>
+  <% } %>
+  <a class="learn-more" href="<%- url %>">more…</a>
+</div>

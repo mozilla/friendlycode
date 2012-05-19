@@ -25,6 +25,15 @@
   });
 })();
 
+// This is a simple RequireJS plugin that loads an underscore.js template.
+define("template", [], {
+  load: function(name, req, load, config) {
+    req(["text!../templates/" + name], function(text) {
+      load(_.template(text));
+    });
+  }
+});
+
 require([
   "./help",
   "./parachute",
@@ -39,10 +48,26 @@ require([
   "./ui/publish",
   "./ui/share",
   "./ui/social-media",
+  "template!help.html",
+  "template!error.html",
   "app-readiness!"
-], function(Help, Parachute, Publisher, Slowparse, TreeInspectors,
-            ParsingCodeMirror, ContextSensitiveHelp, ErrorHelp, LivePreview,
-            HistoryUI, PublishUI, ShareUI, SocialMedia) {
+], function(
+  Help,
+  Parachute,
+  Publisher,
+  Slowparse,
+  TreeInspectors,
+  ParsingCodeMirror,
+  ContextSensitiveHelp,
+  ErrorHelp,
+  LivePreview,
+  HistoryUI,
+  PublishUI,
+  ShareUI,
+  SocialMedia,
+  HelpTemplate,
+  ErrorTemplate
+) {
   function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split("&");
@@ -69,12 +94,12 @@ require([
   var cursorHelp = ContextSensitiveHelp({
     codeMirror: codeMirror,
     helpIndex: Help.Index(),
-    template: _.template($("#help-template").text()),
+    template: HelpTemplate,
     helpArea: $(".help")
   });
   var errorHelp = ErrorHelp({
     codeMirror: codeMirror,
-    template: _.template($("#error-template").text()),
+    template: ErrorTemplate,
     errorArea: $(".error")
   });
   var preview = LivePreview({
