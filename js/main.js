@@ -10,10 +10,11 @@ require([
   "./ui/live-preview",
   "./ui/history",
   "./ui/publish",
-  "./ui/share"
+  "./ui/share",
+  "./ui/social-media"
 ], function(Help, Parachute, Publisher, ParsingCodeMirror,
             ContextSensitiveHelp, ErrorHelp, LivePreview, HistoryUI,
-            PublishUI, ShareUI) {
+            PublishUI, ShareUI, SocialMedia) {
   function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split("&");
@@ -65,17 +66,17 @@ require([
         redo: $("#redo_button")
       });
       var socialMedia = SocialMedia({
-          jQuery: jQuery,
-          getURL: function() {
-            return $("#share-container .link-to-this a.view")[0].href;
-          },
-          container: $("#share-container")
+        jQuery: jQuery,
+        getURL: function() {
+          return $("#share-container .link-to-this a.view")[0].href;
+        },
+        container: $("#share-container")
       });
       var shareUI = ShareUI({
-         codeMirror: codeMirror,
-         dialog: $('#share-dialog'),
-         socialMedia: socialMedia,
-         publisher: publisher
+        codeMirror: codeMirror,
+        dialog: $('#share-dialog'),
+        socialMedia: socialMedia,
+        publisher: publisher
       });
       var pageToLoad = getQueryVariable('p') || "default";
       var parachute = Parachute(window, codeMirror, pageToLoad);
