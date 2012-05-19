@@ -1,6 +1,6 @@
 "use strict";
 
-require(["./help"], function(Help) {
+require(["./help", "./parachute"], function(Help, Parachute) {
   function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split("&");
@@ -65,7 +65,7 @@ require(["./help"], function(Help) {
          publisher: publisher
       });
       var pageToLoad = getQueryVariable('p') || "default";
-      var parachute = Parachute(window, codeMirror, pageToLoad, lscache);
+      var parachute = Parachute(window, codeMirror, pageToLoad);
 
       $("#save_button").click(function() { publishUI.saveCode(); });
       $("#share_button").click(function() { shareUI.shareCode(); });
