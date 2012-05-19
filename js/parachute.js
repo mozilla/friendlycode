@@ -1,3 +1,5 @@
+"use strict";
+
 // This helper saves the editor's data to local storage just before
 // the page unloads, and provides a method to restore it. Useful for
 // when a user accidentally refreshes/navigates away from the editor
