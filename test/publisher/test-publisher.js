@@ -1,12 +1,14 @@
-require(["publisher"], function(Publisher) {
+require([
+  "publisher",
+  "text!test/publisher/pre-publish.html",
+  "text!test/publisher/post-publish.html"
+], function(Publisher, prePublish, postPublish) {
   module("Publisher");
 
   fixDoctypeHeadBodyMunging = Publisher._fixDoctypeHeadBodyMunging;
   
   test("fixDoctypeHeadBodyMunging() works", function() {
-    var pre = $("#pre-publish").text();
-    var post = $("#post-publish").text();
-    equal(fixDoctypeHeadBodyMunging(post), pre);
+    equal(fixDoctypeHeadBodyMunging(postPublish), prePublish);
   });
 
   test("fixDoctypeHeadBodyMunging() ignores non-munged strings", function() {
