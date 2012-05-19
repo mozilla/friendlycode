@@ -44,10 +44,17 @@
 
     <script src="qunit.js"></script>
     <script>QUnit.config.autostart = false;</script>
-    <script src="../codemirror2/lib/codemirror.js"></script>
     <script src="../js/jquery.min.js"></script>
     <script src="../js/underscore.min.js"></script>
     <script src="../js/backbone.min.js"></script>
     <script data-main="test-main" src="../js/require.min.js"></script>
+    <script>
+    require.config({
+      baseUrl: "../js",
+      paths: {
+        "test": "../test"
+      }
+    });
+    </script>
   </body>
 </html>

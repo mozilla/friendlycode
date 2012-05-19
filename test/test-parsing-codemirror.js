@@ -1,6 +1,6 @@
 "use strict";
 
-require(["../js/ui/parsing-codemirror"], function(ParsingCodeMirror) {
+require(["ui/parsing-codemirror"], function(ParsingCodeMirror) {
   module("ParsingCodeMirror");
   
   function pcmTest(name, cb) {

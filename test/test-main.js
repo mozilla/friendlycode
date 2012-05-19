@@ -1,10 +1,10 @@
 require([
-  "./test-help",
-  "./test-indexable-codemirror",
-  "./test-parsing-codemirror",
-  "./test-mark-tracker",
-  "./test-live-preview",
-  "./test-publisher"
+  "test/test-help",
+  "test/test-indexable-codemirror",
+  "test/test-parsing-codemirror",
+  "test/test-mark-tracker",
+  "test/test-live-preview",
+  "test/test-publisher"
 ], function() {
   if (QUnit.config.blocking)
     QUnit.config.autostart = true;

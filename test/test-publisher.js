@@ -1,4 +1,4 @@
-require(["../js/publisher"], function(Publisher) {
+require(["publisher"], function(Publisher) {
   module("Publisher");
 
   fixDoctypeHeadBodyMunging = Publisher._fixDoctypeHeadBodyMunging;

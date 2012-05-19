@@ -1,6 +1,9 @@
 "use strict";
 
-require(["../js/ui/mark-tracker"], function(MarkTracker) {
+require([
+  "ui/mark-tracker",
+  "ui/codemirror"
+], function(MarkTracker, CodeMirror) {
   module("MarkTracker");
   
   function mtTest(name, cb) {
