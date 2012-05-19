@@ -1,6 +1,10 @@
 "use strict";
 
-require(["./help", "./parachute"], function(Help, Parachute) {
+require([
+  "./help",
+  "./parachute",
+  "./ui/parsing-codemirror"
+], function(Help, Parachute, ParsingCodeMirror) {
   function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split("&");
