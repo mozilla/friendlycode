@@ -3,7 +3,8 @@ require([
   "./test-indexable-codemirror",
   "./test-parsing-codemirror",
   "./test-mark-tracker",
-  "./test-live-preview"
+  "./test-live-preview",
+  "./test-publisher"
 ], function() {
   QUnit.start();
 });

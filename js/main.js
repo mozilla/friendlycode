@@ -3,13 +3,17 @@
 require([
   "./help",
   "./parachute",
+  "./publisher",
   "./ui/parsing-codemirror",
   "./ui/context-sensitive-help",
   "./ui/error-help",
   "./ui/live-preview",
-  "./ui/history"
-], function(Help, Parachute, ParsingCodeMirror, ContextSensitiveHelp,
-            ErrorHelp, LivePreview, HistoryUI) {
+  "./ui/history",
+  "./ui/publish",
+  "./ui/share"
+], function(Help, Parachute, Publisher, ParsingCodeMirror,
+            ContextSensitiveHelp, ErrorHelp, LivePreview, HistoryUI,
+            PublishUI, ShareUI) {
   function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split("&");
