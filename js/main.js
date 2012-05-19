@@ -3,8 +3,11 @@
 require([
   "./help",
   "./parachute",
-  "./ui/parsing-codemirror"
-], function(Help, Parachute, ParsingCodeMirror) {
+  "./ui/parsing-codemirror",
+  "./ui/context-sensitive-help",
+  "./ui/error-help"
+], function(Help, Parachute, ParsingCodeMirror, ContextSensitiveHelp,
+            ErrorHelp) {
   function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split("&");
