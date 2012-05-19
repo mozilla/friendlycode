@@ -100,8 +100,10 @@ require(["./help"], function(Help) {
       }
     
       if (pageToLoad == "default") {
-        codeMirror.setValue($("#initial-html").text().trim());
-        doneLoading();
+        jQuery.get("default-content.html", function(html) {
+          codeMirror.setValue(html.trim());
+          doneLoading();
+        }, "text");
       } else
         publishUI.loadCode(pageToLoad, doneLoading);
 
