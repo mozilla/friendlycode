@@ -1,5 +1,5 @@
 require([
-  "publisher",
+  "fc/publisher",
   "text!test/publisher/pre-publish.html",
   "text!test/publisher/post-publish.html"
 ], function(Publisher, prePublish, postPublish) {

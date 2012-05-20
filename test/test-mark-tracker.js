@@ -1,8 +1,8 @@
 "use strict";
 
 require([
-  "ui/mark-tracker",
-  "ui/codemirror"
+  "fc/ui/mark-tracker",
+  "codemirror"
 ], function(MarkTracker, CodeMirror) {
   module("MarkTracker");
   

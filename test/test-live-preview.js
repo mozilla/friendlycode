@@ -1,6 +1,6 @@
 "use strict";
 
-require(["ui/live-preview"], function(LivePreview) {
+require(["fc/ui/live-preview"], function(LivePreview) {
   module("LivePreview");
   
   function lpTest(name, cb) {

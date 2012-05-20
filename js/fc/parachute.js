@@ -9,7 +9,7 @@
 // might not want the next user to be able to see what they were just
 // working on. We're currently only saving the data for a few minutes, though,
 // so hopefully this shouldn't be that big a problem.
-define(["./lscache"], function(lscache) {
+define(["lscache"], function(lscache) {
   return function Parachute(window, codeMirror, page) {  
     // Amount of time, in minutes, to save parachute data.
     var timeLimit = 5;

@@ -2,7 +2,7 @@
 
 // A subclass of CodeMirror which adds a few methods that make it easier
 // to work with character indexes rather than {line, ch} objects.
-define(["./codemirror"], function(CodeMirror) {
+define(["codemirror"], function(CodeMirror) {
   return function IndexableCodeMirror(place, givenOptions) {
     var codeMirror = CodeMirror(place, givenOptions);
   

@@ -1,6 +1,6 @@
 "use strict";
 
-require(["ui/indexable-codemirror"], function(IndexableCodeMirror) {
+require(["fc/ui/indexable-codemirror"], function(IndexableCodeMirror) {
   module("IndexableCodeMirror");
   
   function icmTest(name, cb) {
