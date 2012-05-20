@@ -1,5 +1,6 @@
 require([
   "test/test-help",
+  "test/test-templates",
   "test/test-indexable-codemirror",
   "test/test-parsing-codemirror",
   "test/test-mark-tracker",
