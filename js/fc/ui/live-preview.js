@@ -40,11 +40,13 @@ define(function() {
   
   function LivePreview(options) {
     var self = {};
+    var codeMirror = options.codeMirror;
 
-    options.codeMirror.on("reparse", function(event) {
+    codeMirror.on("reparse", function(event) {
       if (!event.error || options.ignoreErrors) {
         // Update the preview area with the given HTML.
         var doc = options.previewArea.contents()[0];
+        var docFrag = event.document;
         var wind = doc.defaultView;
         var x = wind.pageXOffset;
         var y = wind.pageYOffset;
@@ -59,6 +61,18 @@ define(function() {
         baseTag.setAttribute('target', '_blank');
         doc.querySelector("head").appendChild(baseTag);
 
+        wind.addEventListener("mousedown", function(event) {
+          var interval = nodeToCode(event.target, docFrag);
+          if (interval) {
+            var start = codeMirror.coordsFromIndex(interval.start);
+            var end = codeMirror.coordsFromIndex(interval.end);
+            codeMirror.setSelection(start, end);
+            codeMirror.focus();
+            event.preventDefault();
+            event.stopPropagation();
+          }
+        }, true);
+        
         // TODO: If the document has images that take a while to load
         // and the previous scroll position of the document depends on
         // their dimensions being set on load, we may need to refresh
