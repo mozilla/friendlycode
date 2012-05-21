@@ -20,6 +20,24 @@ define(function() {
     return ' > ' + parts.join(' > ');
   }
   
+  function nodeToCode(node, docFrag) {
+    var root, path;
+    if (docFrag.querySelector("html") && docFrag.querySelector("body")) {
+      root = node.ownerDocument.documentElement;
+      path = "html " + pathTo(root, node);
+    } else {
+      root = node.ownerDocument.body;
+      path = pathTo(root, node).slice(3);
+    }
+    var parallelNode = docFrag.querySelector(path);
+    if (parallelNode)
+      return {
+        start: parallelNode.parseInfo.openTag.start,
+        end: parallelNode.parseInfo.closeTag.end
+      };
+    return null;
+  }
+  
   function LivePreview(options) {
     var self = {};
 
@@ -53,5 +71,6 @@ define(function() {
   };
   
   LivePreview._pathTo = pathTo;
+  LivePreview._nodeToCode = nodeToCode;
   return LivePreview;
 });

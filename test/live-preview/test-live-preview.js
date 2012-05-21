@@ -2,11 +2,16 @@
 
 require([
   "fc/ui/live-preview",
+  "../slowparse/slowparse",
   "text!test/live-preview/path-to.html"
-], function(LivePreview, pathToHTML) {
+], function(LivePreview, Slowparse, pathToHTML) {
   module("LivePreview");
   
-  function lpTest(name, cb) {
+  function lpTest(name, html, cb) {
+    if (typeof(html) == 'function') {
+      cb = html;
+      html = '<p>hi <em>there</em></p>';
+    }
     asyncTest(name, function() {
       var previewArea = $('<iframe src="../blank.html"></iframe>');
       previewArea.appendTo(document.body).css({
@@ -18,18 +23,39 @@ require([
           codeMirror: cm,
           previewArea: previewArea
         });
+        var result = Slowparse.HTML(document, html);
         cm.trigger('reparse', {
-          error: null,
-          sourceCode: '<p>hi <em>there</em></p>'
+          error: result.error,
+          sourceCode: html,
+          document: result.document
         });
         try {
-          cb(previewArea, preview, cm);
+          cb(previewArea, preview, cm, result.document, html);
         } finally {
           previewArea.remove();
         }
         start();
       });
     });
+  }
+  
+  function n2cTest(options) {
+    var desc = "in " + JSON.stringify(options.html) + ", selector " +
+               JSON.stringify(options.selector) + " ";
+    lpTest(options.name,
+      options.html,
+      function(previewArea, preview, cm, docFrag, html) {
+        var wind = previewArea.contents()[0].defaultView;
+        var p = wind.document.querySelector(options.selector);
+        if (!p)
+          throw new Error("selector doesn't map to anything");
+        var interval = LivePreview._nodeToCode(p, docFrag);
+        if (!options.expect)
+          ok(interval === null, desc + "doesn't map to any code");
+        else
+          equal(html.slice(interval.start, interval.end), options.expect,
+                desc + "maps to code " + JSON.stringify(options.expect));
+      });
   }
   
   lpTest("HTML is written into document", function(previewArea, preview, cm) {
@@ -59,6 +85,34 @@ require([
       equal(wind.pageYOffset, 6, "y scroll is preserved across refresh");
     });
     
+  n2cTest({
+    name: "nodeToCode() works on HTML w/ explicit <html> and <body>",
+    html: "<html><body><p>u</p></body></html>",
+    selector: "p",
+    expect: "<p>u</p>"
+  });
+
+  n2cTest({
+    name: "nodeToCode() works on HTML w/ no <html> and <body>",
+    html: "<p>u</p>",
+    selector: "p",
+    expect: "<p>u</p>"
+  });
+
+  n2cTest({
+    name: "nodeToCode() works on HTML w/ <html> but no <body>",
+    html: "<html><p>u</p></html>",
+    selector: "p",
+    expect: "<p>u</p>"
+  });
+
+  n2cTest({
+    name: "nodeToCode() can't map to anything from implied <html>",
+    html: "<p>hi</p>",
+    selector: "html",
+    expect: null
+  });
+
   test("pathTo() works", function() {
     var div = $('<div></div>').html(pathToHTML);
     div.find(".test-case").each(function() {
