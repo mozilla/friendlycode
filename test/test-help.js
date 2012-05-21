@@ -1,4 +1,4 @@
-(function() {
+require(["fc/help", "../slowparse/slowparse"], function(Help, Slowparse) {
   module("Help");
 
   function helpAt(index, searchString, html) {
@@ -82,4 +82,4 @@
        "Index contains MDN URL for CSS selectors");
     assertHighlightIntervals(buildIndex(html), "body", ["body"], html);
   });
-})();
+});

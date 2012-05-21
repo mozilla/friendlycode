@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="publish-url" content="http://wpm.toolness.org">
+    <meta name="blank-url" content="blank.html">
     <base target="_blank">
 
     <!-- Dynamic servers like Django sites can serve this editor at a
@@ -53,9 +54,7 @@
 
     <section id="editor" class="loading">
       <div id="source"></div>
-      <div id="preview-holder">
-        <iframe id="preview" src="blank.html"></iframe>
-      </div>
+      <div id="preview-holder"></div>
     </section>
 
     <!-- footer -->
@@ -157,83 +156,11 @@
       </div>
     </div>
     <!-- modal overlay end -->
-
-<script type="text/html" id="help-template">
-  <div class="icon"><img src="img/help.png"></div>
-  <div class="content">
-    <%= html %>
-    <% if (type == "cssSelector") { %>
-      <span class="selector-matches"> It currently matches <%- matchCount %> element(s).</span>
-    <% } %>
-    <a class="learn-more" href="<%- url %>">more…</a>
-  </div>
-</script>
-
-<script type="text/html" id="error-template">
-  <div class="icon"><img src="img/error.png"></div>
-  <div class="content">
-    <%= error %>
-  </div>
-</script>
-
-<script type="text/html" id="initial-html"><!doctype html>
-<html>
-  <head>
-  </head>
-  <body>
-<!-- Welcome! This side of the webpage is fully editable. When you make changes you'll be able to see what you're doing in the live preview panel to the right. Try changing things around and seeing what happens. -->
-    <h1>Let's remix the web! It's easy!</h1>
-
-<!-- You can change the content in between the <p> and </p> tags below, or add new tags to create new content. When you make changes, keep your eye out for things that end up highlighted in yellow and look at the area below for hints on how to fix things. -->
-    <p>Remixing the web is easier than you think. A bit of styling
-       here, an image replacement there, and suddenly a page can
-       look completely different! Give it a try with some of our
-       templates, or load your favourite site and let's get mixin'.</p>
-
-<!-- This section describes what parts of your webpage will look like using a language called CSS, which stands for Cascading Style Sheets. -->
-    <style>
-
-<!-- The following block describes style for the body of the page. It's saying that the background should be white and that there should be some space at the top before the content starts. It's also saying that the text should be very dark grey, but it's using a special format called hexadecimal. -->
-      body {
-        background-color: white;
-        color: #333;
-        padding-top: 1em;
-      }
-
-<!-- Each style block corresponds to a piece of HTML above. Can you find the piece of code that this block refers to? Try changing the color below and see what happens. -->
-      h1 {
-        color: #333;
-        font-family: Georgia;
-        text-align: center;
-      }
-      
-      p {
-        text-align: justify;
-      }
-    </style>
-  </body>
-</html>
-</script>
-
-  <script src="js/jquery.min.js"></script>
-  <script src="js/jquery.tipsy.js"></script>
-  <script src="js/underscore.min.js"></script>
-  <script src="js/backbone.min.js"></script>
-  <script src="js/lscache.js"></script>
-  <script src="codemirror2/lib/codemirror.js"></script>
-  <script src="codemirror2/mode/xml/xml.js"></script>
-  <script src="codemirror2/mode/javascript/javascript.js"></script>
-  <script src="codemirror2/mode/css/css.js"></script>
-  <script src="codemirror2/mode/htmlmixed/htmlmixed.js"></script>
-  <script src="slowparse/slowparse.js"></script>
-  <script src="slowparse/tree-inspectors.js"></script>
-  <script src="slowparse/spec/errors.jquery.js"></script>
-  <script src="js/hacktionary-data.js"></script>
-  <script src="js/help.js"></script>
-  <script src="js/editor.js"></script>
-  <script src="js/publish.js"></script>
-  <script src="js/share.js"></script>
-  <script src="js/late-socials.js"></script>
-  <script src="js/main.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.tipsy.js"></script>
+    <script src="js/underscore.min.js"></script>
+    <script src="js/backbone.min.js"></script>
+    <script src="slowparse/spec/errors.jquery.js"></script>
+    <script data-main="js/main" src="js/require.min.js"></script>
   </body>
 </html>

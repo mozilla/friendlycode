@@ -20,8 +20,7 @@
 /**
  * Creates a namespace for the lscache functions.
  */
-var lscache = function() {
-
+define(function() {
   // Prefix for all lscache keys
   var CACHE_PREFIX = 'lscache-';
 
@@ -264,4 +263,4 @@ var lscache = function() {
       }
     }
   };
-}();
+});
