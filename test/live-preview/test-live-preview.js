@@ -1,6 +1,9 @@
 "use strict";
 
-require(["fc/ui/live-preview"], function(LivePreview) {
+require([
+  "fc/ui/live-preview",
+  "text!test/live-preview/path-to.html"
+], function(LivePreview, pathToHTML) {
   module("LivePreview");
   
   function lpTest(name, cb) {
@@ -55,4 +58,22 @@ require(["fc/ui/live-preview"], function(LivePreview) {
       equal(wind.pageXOffset, 5, "x scroll is preserved across refresh");
       equal(wind.pageYOffset, 6, "y scroll is preserved across refresh");
     });
+    
+  test("pathTo() works", function() {
+    var div = $('<div></div>').html(pathToHTML);
+    div.find(".test-case").each(function() {
+      var root = this;
+
+      var expect = $(root).attr("data-expect");
+      var target = $(root).find('[data-target="true"]').get(0);
+      var actual = LivePreview._pathTo(root, target);
+      equal(actual, expect, "actual CSS path is same as expected");
+
+      var matches = $(root).find(expect);
+      if (matches.length != 1)
+        throw new Error("expected path does not uniquely identify element!");
+      if (matches.get(0) !== target)
+        throw new Error("expected path is not actually valid!");
+    });
+  });
 });

@@ -3,7 +3,24 @@
 // Displays the HTML source of a CodeMirror editor as a rendered preview
 // in an iframe.
 define(function() {
-  return function LivePreview(options) {
+  // Given a descendant of the given root element, returns a CSS
+  // selector that uniquely selects only the descendant from the
+  // root element.
+  function pathTo(root, descendant) {
+    var target = $(descendant).get(0);
+    var parts = [];
+
+    for (var node = target; node && node != root; node = node.parentNode) {
+      var n = $(node).prevAll(node.nodeName.toLowerCase()).length + 1;
+      var selector = node.nodeName.toLowerCase() + ':nth-of-type(' + n + ')';
+      parts.push(selector);
+    }
+    
+    parts.reverse();
+    return ' > ' + parts.join(' > ');
+  }
+  
+  function LivePreview(options) {
     var self = {};
 
     options.codeMirror.on("reparse", function(event) {
@@ -34,4 +51,7 @@ define(function() {
 
     return self;
   };
+  
+  LivePreview._pathTo = pathTo;
+  return LivePreview;
 });
