@@ -8,7 +8,7 @@ require(["fc/ui/live-preview"], function(LivePreview) {
       var previewArea = $('<iframe src="../blank.html"></iframe>');
       previewArea.appendTo(document.body).css({
         visibility: "hidden"
-      }).load(function() {
+      }).one("load", function() {
         var cm = {};
         _.extend(cm, Backbone.Events);
         var preview = LivePreview({
