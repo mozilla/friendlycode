@@ -43,8 +43,8 @@ define(function() {
       event.window.addEventListener("mousedown", function(event) {
         var interval = nodeToCode(event.target, docFrag);
         if (interval) {
-          var start = codeMirror.coordsFromIndex(interval.start);
-          var end = codeMirror.coordsFromIndex(interval.end);
+          var start = codeMirror.posFromIndex(interval.start);
+          var end = codeMirror.posFromIndex(interval.end);
           codeMirror.setSelection(start, end);
           codeMirror.focus();
           event.preventDefault();
