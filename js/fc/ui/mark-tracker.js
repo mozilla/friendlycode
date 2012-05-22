@@ -18,8 +18,8 @@ define(function() {
           classNames[className].push(element);
           $(element).addClass(className);
         }
-        start = codeMirror.coordsFromIndex(start);
-        end = codeMirror.coordsFromIndex(end);
+        start = codeMirror.posFromIndex(start);
+        end = codeMirror.posFromIndex(end);
         marks.push(codeMirror.markText(start, end, className));
       },
       // Clear all marks made so far and remove the class from any elements
