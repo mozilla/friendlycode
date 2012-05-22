@@ -2,44 +2,11 @@
 
 // Displays the HTML source of a CodeMirror editor as a rendered preview
 // in an iframe.
-define(function() {
-  // Given a descendant of the given root element, returns a CSS
-  // selector that uniquely selects only the descendant from the
-  // root element.
-  function pathTo(root, descendant) {
-    var target = $(descendant).get(0);
-    var parts = [];
-
-    for (var node = target; node && node != root; node = node.parentNode) {
-      var n = $(node).prevAll(node.nodeName.toLowerCase()).length + 1;
-      var selector = node.nodeName.toLowerCase() + ':nth-of-type(' + n + ')';
-      parts.push(selector);
-    }
-    
-    parts.reverse();
-    return ' > ' + parts.join(' > ');
-  }
-  
-  function nodeToCode(node, docFrag) {
-    var root, path;
-    if (docFrag.querySelector("html") && docFrag.querySelector("body")) {
-      root = node.ownerDocument.documentElement;
-      path = "html " + pathTo(root, node);
-    } else {
-      root = node.ownerDocument.body;
-      path = pathTo(root, node).slice(3);
-    }
-    var parallelNode = docFrag.querySelector(path);
-    if (parallelNode)
-      return {
-        start: parallelNode.parseInfo.openTag.start,
-        end: parallelNode.parseInfo.closeTag.end
-      };
-    return null;
-  }
-  
+define(function() {  
   function LivePreview(options) {
-    var self = {};
+    var self = {
+      codeMirror: options.codeMirror
+    };
     var codeMirror = options.codeMirror;
 
     codeMirror.on("reparse", function(event) {
@@ -61,17 +28,10 @@ define(function() {
         baseTag.setAttribute('target', '_blank');
         doc.querySelector("head").appendChild(baseTag);
 
-        wind.addEventListener("mousedown", function(event) {
-          var interval = nodeToCode(event.target, docFrag);
-          if (interval) {
-            var start = codeMirror.coordsFromIndex(interval.start);
-            var end = codeMirror.coordsFromIndex(interval.end);
-            codeMirror.setSelection(start, end);
-            codeMirror.focus();
-            event.preventDefault();
-            event.stopPropagation();
-          }
-        }, true);
+        self.trigger("refresh", {
+          window: wind,
+          documentFragment: event.document
+        });
         
         // TODO: If the document has images that take a while to load
         // and the previous scroll position of the document depends on
@@ -81,10 +41,10 @@ define(function() {
       }
     });
 
+    _.extend(self, Backbone.Events);
+    
     return self;
   };
   
-  LivePreview._pathTo = pathTo;
-  LivePreview._nodeToCode = nodeToCode;
   return LivePreview;
 });
