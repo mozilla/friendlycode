@@ -17,10 +17,10 @@ require(["fc/ui/indexable-codemirror"], function(IndexableCodeMirror) {
     });
   }
   
-  icmTest("indexFromCoords() works", function(cm, content) {
-    equal(cm.indexFromCoords({line: 0, ch: 0}), 0,
+  icmTest("indexFromPos() works", function(cm, content) {
+    equal(cm.indexFromPos({line: 0, ch: 0}), 0,
           "index of line 0, char 0 is 0");
-    equal(cm.indexFromCoords({line: 1, ch: 0}), content.indexOf("there"),
+    equal(cm.indexFromPos({line: 1, ch: 0}), content.indexOf("there"),
           "index of line 1, char 0 works");
   });
   
