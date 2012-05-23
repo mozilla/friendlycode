@@ -56,7 +56,8 @@ define("main", function(require) {
       HelpTemplate = require("template!help"),
       ErrorTemplate = require("template!error"),
       AppReady = require("appReady!"),
-      publishURL = $("meta[name='publish-url']").attr("content");
+      publishURL = $("meta[name='publish-url']").attr("content"),
+      remixURL = $("meta[name='remix-url']").attr("content");
   
   var codeMirror = ParsingCodeMirror($("#source")[0], {
     mode: "text/html",
@@ -85,10 +86,21 @@ define("main", function(require) {
     previewArea: AppReady.previewArea
   });
   var publisher = Publisher(publishURL);
+  var pageToLoad = getQueryVariable('p') || "default";
+  var remixURLTemplate = null;
+  
+  if (remixURL != "use-querystring") {
+    // A server is serving us as the custom edit URL for a web page.
+    pageToLoad = remixURL;
+    remixURLTemplate = location.protocol + "//" + location.host +
+                       "{{VIEW_URL}}/edit";
+  }
+
   var publishUI = PublishUI({
     codeMirror: codeMirror,
     publisher: publisher,
-    dialog: $("#publish-dialog")
+    dialog: $("#publish-dialog"),
+    remixURLTemplate: remixURLTemplate
   });
   var historyUI = HistoryUI({
     codeMirror: codeMirror,
@@ -108,7 +120,7 @@ define("main", function(require) {
     socialMedia: socialMedia,
     publisher: publisher
   });
-  var pageToLoad = getQueryVariable('p') || "default";
+  
   var parachute = Parachute(window, codeMirror, pageToLoad);
 
   $("#save_button").click(function() { publishUI.saveCode(); });

@@ -5,8 +5,8 @@
 define(function() {
   return function PublishUI(options) {
     var defaultRemixURL = location.protocol + "//" + location.host + 
-                          location.pathname;
-    var baseRemixURL = options.remixURL || defaultRemixURL;
+                          location.pathname + "?p={{VIEW_URL}}";
+    var baseRemixURL = options.remixURLTemplate || defaultRemixURL;
     var dlg = options.dialog;
     var codeMirror = options.codeMirror;
     var publisher = options.publisher;
@@ -39,7 +39,8 @@ define(function() {
             dlg.hide();
           } else {
             var viewURL = info.url;
-            var remixURL = baseRemixURL + '?p=' + escape(info.path);
+            var remixURL = baseRemixURL.replace("{{VIEW_URL}}",
+                                                escape(info.path));
             $(".done", dlg).fadeIn();
             $('a.view', dlg).attr('href', viewURL).text(viewURL);
             $('a.remix', dlg).attr('href', remixURL).text(remixURL);
