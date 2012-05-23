@@ -136,6 +136,7 @@ define("main", function(require) {
   $("#confirm-publication").click(function(){
     $("#confirm-dialog").hide();
     $("#publish-dialog").show();
+    publishUI.saveCode(function() { $("a.remix").text("Here"); });
   });
   $("#modal-close-button, #cancel-publication").click(function(){ 
     $(".modal-overlay").hide();

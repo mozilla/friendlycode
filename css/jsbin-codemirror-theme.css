@@ -57,7 +57,7 @@
 
 .CodeMirror span.cursor-help-highlight,
 .cursor-help-highlight {
-  background-color: rgba(0,0,200,0.5);
+  background-color: #d5ac85;
 }
 
 .CodeMirror-wrap .CodeMirror-scroll {
