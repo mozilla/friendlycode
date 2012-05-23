@@ -12,11 +12,8 @@ html, body {
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   overflow: hidden;
-  background-color: #7c9e30;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#7c9e30), to(white));
-  background-image: -webkit-linear-gradient(top, #7c9e30, white);
-  background-image: -moz-linear-gradient(top, #7c9e30, white);  
-  background-image: -o-linear-gradient(top, #7c9e30, white);
+
+  background-color: red;
 }
 
 img {
@@ -28,87 +25,206 @@ img {
   z-index: 2;
   top: 0;
 
-  background-color: #D2D2D2;
-  background-image: url("../img/embroidery-texture.png"), url("../img/furley_bg.png");
-  background-position: left top, left center;
-  background-repeat: repeat, repeat;  background-color: rgb(210,210,210);
-
-  font-family: OpenSansRegular;
-  color: #333;
+  background: #f5f5f5;
+  background-image: url("../img/header-gradient.png");
+  background-position: 0px 0px;
 
   height: 120px;    /* height value must correspond with section.top */
   width: 100%;
   margin: 0px;
   padding: 0px;
 
-  border-top: 3px solid white;
-  border-bottom: 0.5em solid #7ba127;
+  -webkit-box-shadow: 0px 5px 5px 0px rgba(233,233,233,0.5);
+  box-shadow: 0px 5px 5px 0px rgba(233,233,233,0.5);
+  
+  border-top: 2px solid white;
+  border-bottom: 1px solid #D6D6D6;
 }
 
 
 #header .logo {
+  display: inline-block;
   font-family: OpenSansLight, sans-serif;
-  font-size: 220%;
-  font-weight: 200;
-  margin-left: 2.5em;
-  margin-top: 0.5em;
+  margin-left: 15px;
+  margin-top: 10px;
+  width: 200px;
 }
 
 #header .logo a {
-  color: #7c9e30;
+  color: #27AAE1;
   text-decoration: none;
 }
 
-#header .logo a img {
+#header .logo label {
+  position: relative; 
+  height: 0px;
+  top: -3.5em;
+  left: 3.5em;
+  font-size: 90%;
+}
+
+#nav-options {
+  position: absolute;
   display: block;
-  /* EDIT LOGO INSTEAD */
-  position: relative;
-  left: -5px;
-  top: 0.2em;
+  top: 79px;
+  width: 100%;
+  height: 0px;
 }
 
+#editor-pane-nav-options {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 50%;
+  height: 100%;
+  border-right: 1px solid #D6D6D6;
+  z-index: 2;
 
-/* ------ BUTTONS AND CONTENT AREA ------ */
-
-
-#publish-box {
-  float: right;
-  position: relative;
-  top: 1em;
-  margin-right: 1em;
+  height: 41px;
 }
 
-#undo_button, #redo_button, #save_button, #share_button {
-  position: relative;
-  right: 9em;
-  top: -3em;
+#preview-pane-nav-options {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  z-index: 1;
+}
+
+#nav-options .nav-item {
+  display: table-cell;
+  border-right: 1px solid #D6D6D6;
+  height: 41px;
+  width: 90px;
+  text-align: center;
+  vertical-align: middle;
+  color: black;
+  opacity: 0.3;
+  padding: 0px 5px;
+  white-space: nowrap;
   cursor: pointer;
 }
 
-#undo_button, #redo_button {
-  opacity: 0.25;
-  pointer-events: none;
-  -moz-transition: opacity 0.5s;
-  -webkit-transition: opacity 0.5s;
-  -o-transition: opacity 0.5s;
+#nav-options .nav-item:hover {
+  opacity: 1;
 }
 
-#undo_button.enabled, #redo_button.enabled {
-  pointer-events: auto;
-  opacity: 1.0;
+#nav-options .nav-button {
+  display: inline;
+  height: 30px;
+  border-radius: 15px;
+  padding: 5px 15px;
+  margin: auto;
+  color: white;
+  margin: 0px 0.5em;
 }
 
-.button {
-  padding: 0px 1.5em;
-  text-transform: uppercase;
+#save-draft-button {
+  background-color: #00D67D;
+} 
+
+#publish-button {
+  background-color: #3A84FC;
 }
+
+
+#nav-options .nav-button:hover {
+  /* do what? */
+}
+
+#nav-options .nav-button span {
+  position: relative;
+  top: 0px;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: rgba(0,0,0,0.1);
+  margin-right: -9px;
+  background-image: url("../img/button-arrow.png");
+  background-position: 9px 5px;
+  background-repeat: no-repeat;
+
+}
+
+#nav-options .nav-item.buttons {
+  position: absolute;
+  top: 10px;
+  right: 0;
+  width: 25em;
+  opacity: 1;
+}
+
+#nav-options .nav-item.enabled {
+  opacity: 1 !important;
+  color: #000;
+}
+
+/* ------ nav button stylings ------ */
+
+#editor-nav-item {
+  background-image: url("../img/editor-icon.png");
+  background-repeat: no-repeat;
+  background-position: 20px center;
+  padding-left: 30px !important;
+}
+
+#preview-nav-item {
+  background-image: url("../img/preview-icon.png");
+  background-repeat: no-repeat;
+  background-position: 15px center;
+  padding-left: 30px !important;
+}
+
+#editor-nav-item .pane-indicator,
+#preview-nav-item .pane-indicator {
+  position: absolute;
+  background-image: url("../img/indicator-arrow.png");
+  top: 38px;
+  left: 20px;
+  width: 30px;
+  height: 17px;
+}
+
+#undo-nav-item {
+  background-image: url("../img/undo-grey.png");
+  background-repeat: no-repeat;
+  background-position: 15px center;
+  padding-left: 20px !important;
+}
+
+#redo-nav-item {
+  background-image: url("../img/redo-grey.png");
+  background-repeat: no-repeat;
+  background-position: 15px center;
+  padding-left: 20px !important;
+}
+
+#text-nav-item {
+  background-image: url("../img/text-size.png");
+  background-repeat: no-repeat;
+  background-position: 15px center;
+  padding-left: 35px !important;
+}
+
+#hints-nav-item.on:before {
+  content: "☐ ";
+}
+
+#hints-nav-item.off:before {
+  content: "☑ ";
+}
+
+
+/* ------ CONTENT AREA ------ */
 
 section {
   position: absolute;
-  top: 120px;       /* corresponds to #header.height */
+  top: 110px;       /* corresponds to #header.height */
   left: 0px;
   right: 0px;
-  bottom: 80px;    /* corresponds to 20 + footer.height */
+  bottom: 0px;    /* corresponds to 20 + footer.height */
 }
 
 #editor.loading, #editor.loading .CodeMirror-cursor {
@@ -123,39 +239,47 @@ div.editor-actions {
 }
 
 footer {
-  background-color: rgba(255,255,255,0.1);
-  border-top: 1px solid black;
-  color: #333;
+  background-color: #FFFFFF;
+  color: white;
   
-  text-align: center;
-  font-size: 11px;
+  text-align: left;
+  font-size: 110%;
   padding-top: 8px;
   padding-bottom: 12px;
   position: absolute;
 
-  height: 60px;    /* corresponds to section.bottom - 20 */
+  height: 0px;    /* corresponds to section.bottom - 20 */
   bottom: 0px;
   left: 0px;
   right: 0px;
-
-  -webkit-box-shadow: 0px -5px 10px -8px rgba(0, 0, 0, 1);
-  box-shadow: 0px -5px 10px -8px rgba(0, 0, 0, 1);
+  
+  border-top: 1px solid black;
+  opacity: 0; /* temporary solution, because the spacing depends on having a footer */
+  
 }
 
-footer a {
-  color: #e0e0e0;
-  text-decoration: none;
-}
-
-footer a:hover {
-  text-decoration: underline;
+/**
+ * The footer pin is responsible for making the footer "stay up"
+ * when pressed. If not pressed, the footer disappears when there
+ * are no errors.
+ **/
+#footer-pin {
+  position: fixed;
+  right: 60px;
+  margin-top: -30px;
+  height: 40px;
+  width: 40px;
+  background-color: #4AABE2;
+  background-image: url("../img/pin-temp.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  cursor:pointer;
 }
 
 #source {
-  /*
-  background: url("../img/editor-left-texture.png") repeat;
-  */
-  background-color: #F5F5F2;
+  background-color: #F9F9F9;
+  z-index: 1;
 }
 
 #source, #preview-holder {
@@ -201,12 +325,14 @@ footer a:hover {
 
 #preview-holder {
   right: 0px;
-  border-left: 1px solid black;
+  border-left: 1px solid #D6D6D6;
   background: white;
+  background-color: #F9F9F9;
+  padding: 10px;
 }
 
 #preview {
-  border: none;
+  border: 1px solid #D6D6D6;
   width: 100%;
   height: 100%;
 }
@@ -234,7 +360,6 @@ footer a:hover {
 .help {
   display: table-row;
   width: 100%;
-  color: #666;
 }
 
 .error p {
@@ -250,8 +375,7 @@ footer a:hover {
 
 .error .icon img,
 .help .icon img {
-  height: 3em;
-  width: 3em;
+
   margin: 1em;
   margin-left: 2em;
   vertical-align: middle;
@@ -263,17 +387,22 @@ b {
 
 .error a,
 .help a  {
-  color: rgb(0,130,255);
+  color: white;
+  font-weight: bold;
+  font-size: 120%;
 }
 
 .error strong,
 .help strong {
-  color: #7c9e30;
-  font-family: OpenSansRegular, sans-serif;	
+  color: white;
+  font-weight: bold;
+  font-size: 120%;
 }
 .error code,
 .help code {
-  color: rgb(0,130,255);
+  color: white;
+  font-weight: bold;
+  font-size: 120%;
 }
 .error em[data-highlight],
 .help em[data-highlight] {

@@ -111,8 +111,17 @@ define("main", function(require) {
   var pageToLoad = getQueryVariable('p') || "default";
   var parachute = Parachute(window, codeMirror, pageToLoad);
 
-  $("#save_button").click(function() { publishUI.saveCode(); });
-  $("#share_button").click(function() { shareUI.shareCode(); });
+  $("#save-draft-button").click(function() { publishUI.saveCode(); });
+  $("#publish-button").click(function() { shareUI.shareCode(); });
+  $("#hints-nav-item").click(function() {
+    var hints = $(this);
+    if (hints.hasClass("on")) {
+      hints.removeClass("on").addClass("off");
+    } else {
+      hints.removeClass("off").addClass("on");
+    }
+  });
+
 
   function doneLoading() {
     $("#editor").removeClass("loading");

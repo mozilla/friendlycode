@@ -11,57 +11,60 @@
          below. -->
     <base href=".">
 
-    <title>Mozilla Webpage Maker</title>
+    <title>Mozilla Thimble</title>
     <link rel="stylesheet" href="codemirror2/lib/codemirror.css">
     <link rel="stylesheet" href="css/jsbin-codemirror-theme.css">
     <link rel="stylesheet" href="css/tipsy.css">
-    <link rel="stylesheet" href="css/mozbranding.css">
-    <link rel="stylesheet" href="css/gumdrops.css">
     <link rel="stylesheet" href="css/editor.css">
     <link rel="stylesheet" href="css/modals.css">
   </head>
   <body>
+     <a href="http://www.mozilla.org/" id="tabzilla">mozilla</a>
 
     <header id="header">
-      <div class="busta">
-        <a id="tabzilla" href="http://www.mozilla.org" class="tabzilla-closed">mozilla.org</a>
-        <div class="logo">
-          <a>
-            <img src="img/mozilla-logo.png">
-            <b>W</b>EB<b>P</b>AGE <b>M</b>AKER
-          </a>
+      <div class="logo">
+        <a href="https://webmaker.org/en-US/editor">
+          <img src="img/temp-logo.png" alt="Mozilla Thimble">
+        </a>
+      </div>
+ 
+      <div id="nav-options">
+        <div id="editor-pane-nav-options">
+          <!-- editor, undo, redo, text size, hinting -->
+          <div id="editor-nav-item" class="nav-item enabled">Editor<div class="pane-indicator enabled"></div></div>
+          <div id="undo-nav-item"   class="nav-item">Undo</div>
+          <div id="redo-nav-item"   class="nav-item">Redo</div>
+          <div id="text-nav-item"   class="nav-item">Text size</div>
+          <div id="hints-nav-item"  class="nav-item on">Turn hints off</div>
+        </div>
+        <div id="preview-pane-nav-options">
+          <!-- previous, save draft, publish -->
+           <div id="preview-nav-item" class="nav-item enabled">Preview<div class="pane-indicator enabled"></div></div>
+           <div class="nav-item buttons">
+             <div id="save-draft-button" class="nav-button">Save Draft <span id="save-pulldown">&nbsp;</span></div>
+             <div id="publish-button" class="nav-button">Publish <span id="publish-pulldown">&nbsp;</span></div>
+           </div>
         </div>
       </div>
-
-      <div id="publish-box">
-          <a class="button" id="undo_button" data-restore-help="We've rescued your very recent changes to this page, but you can click this button to undo them.">Undo</a>
-          <a class="button" id="redo_button">Redo</a>
-          <!-- TODO: Until we actually implement the sharing widget,
-               we're renaming 'Save' to 'Share' and not displaying the
-               real 'Share' button. -->
-          <a class="button blue" id="save_button">Publish</a>
-          <!--
-          <a class="button" id="share_button">Share</a>
-          -->
-      </div>
-
-
-        <div id="guide-notes">
-          <div id="source-guide-note">This is your webpage's source code:</div>
-          <div id="preview-guide-note">And this is what it looks like!</div>
-        </div>
+      
     </header>
 
     <section id="editor" class="loading">
       <div id="source"></div>
-      <div id="preview-holder"></div>
+      <div id="preview-holder">
+        <iframe id="preview" src="blank.html"></iframe>
+      </div>
     </section>
 
-    <!-- footer -->
     <footer>
+    <!--
+      <div id="footer-pin"></div>
       <div class="error" class="hidden"></div>
       <div class="help" class="hidden"></div>
+    -->
     </footer>
+
+
 
     <!-- save/public modal -->
     <div id="publish-dialog" class="modal-overlay" style="display: none">
@@ -156,11 +159,20 @@
       </div>
     </div>
     <!-- modal overlay end -->
+
+
+    <!-- page script section, at the end of body to prevent them holding up the page -->
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.tipsy.js"></script>
     <script src="js/underscore.min.js"></script>
     <script src="js/backbone.min.js"></script>
     <script src="slowparse/spec/errors.jquery.js"></script>
     <script data-main="js/main" src="js/require.min.js"></script>
+
+    <!-- this COULD hold up the page, so do this absolutely last -->
+    <link rel="stylesheet" href="http://www.mozilla.org/tabzilla/media/css/tabzilla.css">
+    <link rel="stylesheet" href="css/tabzilla-overrides.css">
+    <script src="http://www.mozilla.org/tabzilla/media/js/tabzilla.js"></script>
+
   </body>
 </html>
