@@ -1,11 +1,11 @@
-
 #tabzilla-panel {
-    z-index: 999;
+    z-index: 9001;
     -webkit-box-shadow: 0px 5px 25px 0px #444;
     box-shadow: 0px 5px 25px 0px #444; 
+    border-top: 2px solid white;
 }
 
 #tabzilla {
-    z-index: 1000;
+    z-index: 9001;
     right: 6em;
 }

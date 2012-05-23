@@ -8,167 +8,156 @@
   position: absolute;
   top: 0px;
   left: 0px;
-  background-color: rgba(0,0,0,0.45); 
+  background-color: rgba(0,0,0,0.2); 
   height: 100%; 
   width: 100%;
 }
 
-.modal-box {
-  width: 700px; 
-  height: 480px; 
-  position: relative; 
-  top: 50%; 
-  left: 50%; 
-  margin-left: -350px; 
-  margin-top: -240px; 
-  background-color: #f2ebf2;
-  border-radius: 10px;
-  padding: 10px;
-  -webkit-box-shadow: 8px 8px 5px 0px #000000;
-  box-shadow: 8px 8px 5px 0px #000000;
+.thimble-modal-menu {
+  position: absolute;
+  top: 140px;
+  right: 8px;
+  width: 425px;
+  height: 145px;
+  border: 1px solid #C0C0C0;
 }
 
-.close-icon {
-  text-align: right;
-  position:relative;
-  right:-30px;
-  top:-25px;
-  cursor: pointer;
+.thimble-blue-bar {
+  background-color: #3A84FC;
 }
 
-.modal-title {
-  text-align: center;
-  color: #666; 
-  font-family: OpenSansRegular;
-  font-size: 150%;
-  letter-spacing: 1px;
+.thimble-grey-bar {
+  background-color: #F7F7F7;
 }
 
-.light-text {
-  font-family: OpenSansLight
-}
-
-.button-bar {
-  text-align: center;
-}
-
-#share-buttons {
-  padding: 0px;
-}
-
-#share-buttons li {
-  display: inline-block;
-  margin: 0.5em;
-  cursor: pointer;
-}
-
-.box-title {
-  width: 350px;
-  margin: auto;
-}
-
-.content-box {
-  width: 32s0px;
-  min-height: 100px;
-  max-height: 200px;
-  overflow: auto;
-  border: 20px solid #79a327;
-  margin: auto;
-  font-size: 80%;
-  background-color: #F6F6F6;
-  margin-top: 0.5em;
-  padding: 0.5em;
-}
-
-.content-box a {
-  font-family: OpenSansBold, sans-serif;
-  color: #556;
-  text-decoration: none;
-  font-size: 140%;
-}
-
-.modal-selections {
-  color: #666;
-  font-family: OpenSansRegular;
-}
-
-.modal-selection {
-  width: 340px;
-  margin: auto;
-  display: none;
-}
-
-#modal-source-code {
-  width: 100%;
-  min-height: 100px;
-  font-size: 90%;
-}
-
-#share-buttons a {
-  display: inline-block;
-  vertical-align: top;
-  min-width: 50px;
-  min-height: 50px;
-  line-height: 0; 
-  font-size: 0;
-  color: transparent;
-}
-
-#share-buttons a.twitter {
-  background-image: url(../img/chopped/twitter.png);
-}
-
-#share-buttons a.twitter.selected {
-  background-image: url(../img/chopped/selected/twitter.png);
-}
-
-#share-buttons a.facebook {
-  background-image: url(../img/chopped/facebook.png);
-}
-
-#share-buttons a.facebook.selected {
-  background-image: url(../img/chopped/selected/facebook.png);
-}
-
-#share-buttons a.google {
-  background-image: url(../img/chopped/google.png);
-}
-
-#share-buttons a.google.selected {
-  background-image: url(../img/chopped/selected/google.png);
-}
-
-#share-buttons a.link {
-  background-image: url(../img/chopped/link.png);
-}
-
-#share-buttons a.link.selected {
-  background-image: url(../img/chopped/selected/link.png);
-}
-
-#share-buttons a.email {
-  background-image: url(../img/chopped/email.png);
-}
-
-#share-buttons a.email.selected {
-  background-image: url(../img/chopped/selected/email.png);
-}
-
-#share-buttons a.download {
-  background-image: url(../img/chopped/download.png);
-}
-
-#share-buttons a.download.selected {
-  background-image: url(../img/chopped/selected/download.png);
-}
-
-.modal-selection.selected {
+.thimble-branding {
+  position: relative;
   display: block;
+  width: 30px;
+  height: 30px;
+  top: -15px;
+  left: 365px;
+  background-color: inherit;
+
+  -moz-transform: scale(1) rotate(45deg) translate(0px, 0px) skew(0deg, 0deg);
+  -webkit-transform: scale(1) rotate(45deg) translate(0px, 0px) skew(0deg, 0deg);
+  -o-transform: scale(1) rotate(45deg) translate(0px, 0px) skew(0deg, 0deg);
+  -ms-transform: scale(1) rotate(45deg) translate(0px, 0px) skew(0deg, 0deg);
+  transform: scale(1) rotate(45deg) translate(0px, 0px) skew(0deg, 0deg); 
+  
+  border: 1px solid #C0C0C0;
+  border-width: 1px 0px 0px 1px;
+  margin-bottom: 1.5em;
 }
 
-/* facebook needs a width override, because it reserves way too much
-   horizontal space by default (450px) that interferes with the modal. */
-#share-dialog div.fb-like span,
-#share-dialog div.fb-like span iframe {
-  width: 280px !important;
+#modal-close-button {
+  background-image: url("../img/modal-close-button.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  height: 40px;
+  position: absolute;
+  right: 25px;
+  top: 5px;
+  width: 40px;
+}
+
+.thimble-menu-content {
+  background-color: white;
+  width: 100%;
+  height: 100%;
+}
+
+.thimble-title {
+  color: #4385F6;
+  position: relative;
+  color: white;
+  top: -2em;
+  text-align: center;
+}
+
+.thimble-grey-bar .thimble-title {
+  color: black;
+  top: 0px;
+  text-align: left;
+  padding: 0.5em 1em 0px 1em;
+}
+
+.thimble-url-box {
+  background-color: #FFFFFF;
+  color: blue;
+  border: 1px solid #C0C0C0;
+  height: 30px;
+  width: 350px;
+  border-radius: 10px;
+  padding-top: 10px;
+  padding-left: 1em;
+  margin: 1em auto;
+}
+
+.thimble-url-box a {
+  color: #50A5F8;
+}
+
+.thimble-url-box a:hover {
+  color: blue;
+}
+
+.thimble-additionals {
+  color: #222;
+  text-align: justify;
+  position: relative;
+  padding: 2px 10px;
+}
+
+.thimble-grey-bar .thimble-additionals {
+  padding: 0px 1em;
+}
+
+.thimble-additionals a {
+  text-decoration: none;
+  color: #3F9A31;
+}
+
+.thimble-additionals a:hover {
+  color: #236819;
+}
+
+.confirmation-buttons {
+  text-align: center;
+  margin-top: 1.4em;
+}
+
+.confirmation-button {
+  display: inline;
+  height: 30px;
+  border-radius: 10px;
+  padding: 5px 15px;
+  margin: auto;
+  color: white;
+  margin: 0px 1em;
+  cursor: pointer;
+}
+
+.confirmation-button.yes-button {
+  background-color: #1DBF84;
+  border: 1px solid #
+} 
+
+.confirmation-button.no-button {
+  background-color: #F14D2A;
+}
+
+.confirmation-button .mark {
+  position: relative;
+  top: 0px;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 10px;
+  background-color: rgba(0,0,0,0.4);
+  color: white;
+  margin-right: -9px;
+  background-position: 9px 5px;
+  background-repeat: no-repeat;
 }

@@ -18,6 +18,10 @@ define(["./mark-tracker"], function(MarkTracker) {
         .eachErrorHighlight(function(start, end, i) {
           errorHelpMarks.mark(start, end, "highlight-" + (i+1), this);
         });
+
+      // relocated errorArea to where the error is
+      
+      // show the errorArea
       errorArea.html(template({error: errorHTML.html()})).show();
     }
   

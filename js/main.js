@@ -92,8 +92,8 @@ define("main", function(require) {
   });
   var historyUI = HistoryUI({
     codeMirror: codeMirror,
-    undo: $("#undo_button"),
-    redo: $("#redo_button")
+    undo: $("#undo-nav-item"),
+    redo: $("#redo-nav-item")
   });
   var socialMedia = SocialMedia({
     jQuery: jQuery,
@@ -111,8 +111,11 @@ define("main", function(require) {
   var pageToLoad = getQueryVariable('p') || "default";
   var parachute = Parachute(window, codeMirror, pageToLoad);
 
+/*
   $("#save-draft-button").click(function() { publishUI.saveCode(); });
   $("#publish-button").click(function() { shareUI.shareCode(); });
+*/
+
   $("#hints-nav-item").click(function() {
     var hints = $(this);
     if (hints.hasClass("on")) {
@@ -121,6 +124,19 @@ define("main", function(require) {
       hints.removeClass("off").addClass("on");
     }
   });
+  
+  // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
+  $("#publish-button").click(function(){
+    $("#confirm-dialog").show();
+  });
+  $("#confirm-publication").click(function(){
+    $("#confirm-dialog").hide();
+    $("#publish-dialog").show();
+  });
+  $("#modal-close-button, #cancel-publication").click(function(){ 
+    $(".modal-overlay").hide();
+  });
+  // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
 
 
   function doneLoading() {
