@@ -8,6 +8,7 @@ define(["./mark-tracker"], function(MarkTracker) {
     var codeMirror = options.codeMirror;
     var template = options.template;
     var helpArea = options.helpArea;
+    var relocator = options.relocator;
     var helpIndex = options.helpIndex;
     var lastEvent = null;
   
@@ -25,6 +26,11 @@ define(["./mark-tracker"], function(MarkTracker) {
   
     codeMirror.on("cursor-activity", function() {
       cursorHelpMarks.clear();
+      relocator.cleanup();
+
+      // people may not want helpful hints
+      if ($("#hints-nav-item").hasClass("off")) return;
+
       var help = helpIndex.get(codeMirror.getCursorIndex());
       if (help) {
         if (help.type == "cssSelector") {
@@ -36,10 +42,16 @@ define(["./mark-tracker"], function(MarkTracker) {
           help.matchCount = matches;
         }
         helpArea.html(template(help)).show();
+        var startMark = 999999999;
         help.highlights.forEach(function(interval) {
-          cursorHelpMarks.mark(interval.start, interval.end,
-                               "cursor-help-highlight");
+          var start = interval.start,
+              end = interval.end;
+          if (start < startMark) {
+            startMark = start;
+          }
+          cursorHelpMarks.mark(start, end, "cursor-help-highlight");
         });
+        relocator.relocate(helpArea, startMark);
       } else
         helpArea.hide();
     });

@@ -51,6 +51,7 @@ define("main", function(require) {
       LivePreview = require("fc/ui/live-preview"),
       HistoryUI = require("fc/ui/history"),
       PublishUI = require("fc/ui/publish"),
+      Relocator = require("fc/ui/relocator"),
       ShareUI = require("fc/ui/share"),
       SocialMedia = require("fc/ui/social-media"),
       HelpTemplate = require("template!help"),
@@ -69,16 +70,19 @@ define("main", function(require) {
       return Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
     }
   });
+  var relocator = Relocator(codeMirror);
   var cursorHelp = ContextSensitiveHelp({
     codeMirror: codeMirror,
     helpIndex: Help.Index(),
     template: HelpTemplate,
-    helpArea: $(".help")
+    helpArea: $(".help"),
+    relocator: relocator
   });
   var errorHelp = ErrorHelp({
     codeMirror: codeMirror,
     template: ErrorTemplate,
-    errorArea: $(".error")
+    errorArea: $(".error"),
+    relocator: relocator
   });
   var preview = LivePreview({
     codeMirror: codeMirror,
@@ -104,8 +108,8 @@ define("main", function(require) {
   });
   var historyUI = HistoryUI({
     codeMirror: codeMirror,
-    undo: $("#undo_button"),
-    redo: $("#redo_button")
+    undo: $("#undo-nav-item"),
+    redo: $("#redo-nav-item")
   });
   var socialMedia = SocialMedia({
     jQuery: jQuery,
@@ -123,8 +127,34 @@ define("main", function(require) {
   
   var parachute = Parachute(window, codeMirror, pageToLoad);
 
-  $("#save_button").click(function() { publishUI.saveCode(); });
-  $("#share_button").click(function() { shareUI.shareCode(); });
+/*
+  $("#save-draft-button").click(function() { publishUI.saveCode(); });
+  $("#publish-button").click(function() { shareUI.shareCode(); });
+*/
+
+  $("#hints-nav-item").click(function() {
+    var hints = $(this);
+    if (hints.hasClass("on")) {
+      hints.removeClass("on").addClass("off");
+    } else {
+      hints.removeClass("off").addClass("on");
+    }
+  });
+  
+  // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
+  $("#publish-button").click(function(){
+    $("#confirm-dialog").show();
+  });
+  $("#confirm-publication").click(function(){
+    $("#confirm-dialog").hide();
+    $("#publish-dialog").show();
+    publishUI.saveCode(function() { $("a.remix").text("Here"); });
+  });
+  $("#modal-close-button, #cancel-publication").click(function(){ 
+    $(".modal-overlay").hide();
+  });
+  // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
+
 
   function doneLoading() {
     $("#editor").removeClass("loading");
