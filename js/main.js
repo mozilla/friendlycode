@@ -51,6 +51,7 @@ define("main", function(require) {
       LivePreview = require("fc/ui/live-preview"),
       HistoryUI = require("fc/ui/history"),
       PublishUI = require("fc/ui/publish"),
+      Relocator = require("fc/ui/relocator"),
       ShareUI = require("fc/ui/share"),
       SocialMedia = require("fc/ui/social-media"),
       HelpTemplate = require("template!help"),
@@ -68,16 +69,19 @@ define("main", function(require) {
       return Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
     }
   });
+  var relocator = Relocator(codeMirror);
   var cursorHelp = ContextSensitiveHelp({
     codeMirror: codeMirror,
     helpIndex: Help.Index(),
     template: HelpTemplate,
-    helpArea: $(".help")
+    helpArea: $(".help"),
+    relocator: relocator
   });
   var errorHelp = ErrorHelp({
     codeMirror: codeMirror,
     template: ErrorTemplate,
-    errorArea: $(".error")
+    errorArea: $(".error"),
+    relocator: relocator
   });
   var preview = LivePreview({
     codeMirror: codeMirror,

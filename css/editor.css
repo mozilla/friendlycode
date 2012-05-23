@@ -357,8 +357,18 @@ footer {
 
 .error,
 .help {
-  display: table-row;
-  width: 100%;
+  display: block;
+  position: absolute;
+  top: 0px;
+  left: 100px;
+  
+  width: 450px;
+  height: 100px;
+  background-color: #FDFDFD;
+  border: 5px solid red;
+  margin: 10px;
+  margin-top: -10px;
+  white-space: normal;
 }
 
 .error p {
@@ -366,18 +376,24 @@ footer {
 }
 
 .error .icon,
-.help .icon,
+.help .icon {
+  display: inline-block;
+  width: 80px;
+  height: 145px;
+  border-right: 1px solid #C0C0C0;
+  text-align: center;
+  vertical-align: middle;
+}
+
 .error .content,
 .help .content {
-  display: table-cell;
+  display: inline-block;
+  width: 350px;
+  vertical-align: top;
 }
 
 .error .icon img,
 .help .icon img {
-
-  margin: 1em;
-  margin-left: 2em;
-  vertical-align: middle;
 }
 
 b {

@@ -68,7 +68,11 @@
   height: 100%;
 }
 
-
 .cm-tag {
   color: #3A85FF !important;
+}
+
+.CodeMirror-line-highlight {
+  background-color: yellow !important;
+  color: green;
 }
