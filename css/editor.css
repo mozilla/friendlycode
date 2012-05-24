@@ -175,11 +175,22 @@ img {
   padding-left: 30px !important;
 }
 
-#preview-nav-item {
+#nav-options #preview-nav-item.nav-item {
   background-image: url("../img/preview-icon.png");
   background-repeat: no-repeat;
   background-position: 15px center;
-  padding-left: 30px !important;
+  padding-left: 45px;
+  text-align: left;
+}
+
+#preview-nav-item .preview-title {
+  font-weight: bold;
+  display: none;
+}
+
+#preview-nav-item .preview-title:before {
+  content: ' for ';
+  font-weight: normal;
 }
 
 #editor-nav-item .pane-indicator,

@@ -189,6 +189,14 @@ define("main", function(require) {
     codeMirror.focus();
   }
 
+  preview.on("refresh", function(event) {
+    var title = event.window.document.title;
+    if (title.length)
+      $(".preview-title").text(title).show();
+    else
+      $(".preview-title").hide();
+  });
+  
   if (pageToLoad == "default") {
     jQuery.get("default-content.html", function(html) {
       codeMirror.setValue(html.trim());
