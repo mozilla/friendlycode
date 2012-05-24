@@ -10,10 +10,11 @@ html, body {
 }
 
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
   overflow: hidden;
 
-  background-color: red;
+  /* background-color: red; */
+  background-color: #F5F5F5;
 }
 
 img {
