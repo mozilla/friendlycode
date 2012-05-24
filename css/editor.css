@@ -107,6 +107,11 @@ img {
   cursor: pointer;
 }
 
+#nav-options #editor-nav-item.nav-item,
+#nav-options #preview-nav-item.nav-item {
+  cursor: default;
+}
+
 #nav-options .nav-item:hover {
   opacity: 1;
 }
