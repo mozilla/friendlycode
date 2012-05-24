@@ -181,13 +181,13 @@ define("main", function(require) {
       // discussion:
       //
       // https://github.com/mozilla/webpagemaker/issues/53
-      $("#undo_button").tipsy({
+      $("#undo-nav-item").tipsy({
         gravity: 'n',
         fade: true,
         trigger: 'manual',
         title: 'data-restore-help'
       }).tipsy("show");
-      setTimeout(function() { $("#undo_button").tipsy("hide"); }, 6000);
+      setTimeout(function() { $("#undo-nav-item").tipsy("hide"); }, 6000);
     } else {
       // Only save data on page unload if it's different from
       // the URL we just (hopefully) loaded.
