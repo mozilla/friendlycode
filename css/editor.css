@@ -10,7 +10,7 @@ html, body {
 }
 
 body {
-  font-family: "Myriad Pro", Helvetica, Arial, sans-serif;
+  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
   overflow: hidden;
 
   background-color: red;
