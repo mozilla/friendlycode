@@ -14,9 +14,15 @@ define(function() {
         var x = wind.pageXOffset;
         var y = wind.pageYOffset;
 
-        doc.open();
-        doc.write(event.sourceCode);
-        doc.close();
+        if (jQuery.browser.mozilla) {
+          // TODO: This is a temporary workaround for
+          // https://github.com/toolness/friendlycode/issues/19.
+          doc.documentElement.innerHTML = event.sourceCode;
+        } else {
+          doc.open();
+          doc.write(event.sourceCode);
+          doc.close();
+        }
 
         // Insert a BASE TARGET tag so that links don't open in
         // the iframe.
