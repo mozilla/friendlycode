@@ -128,6 +128,18 @@ define("main", function(require) {
       hints.removeClass("off").addClass("on");
     }
   });
+
+  // prevent CodeMirror for hijacking clicks on the help and error notices
+  $("div.help, div.error").each(function(){
+    this.onmousedown = function(event) {
+      if (event.cancelBubble) {
+        event.cancelBubble = true;
+      } else if (event.stopPropagation) {
+        event.stopPropagation();
+      }
+      return false;
+    };
+  });
   
   // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
   $("#publish-button").click(function(){
