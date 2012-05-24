@@ -4,28 +4,26 @@ require(["fc/ui/live-preview"], function(LivePreview) {
   module("LivePreview");
   
   function lpTest(name, cb) {
-    asyncTest(name, function() {
-      var previewArea = $('<iframe src="../blank.html"></iframe>');
-      previewArea.appendTo(document.body).css({
-        visibility: "hidden"
-      }).one("load", function() {
-        var cm = {};
-        _.extend(cm, Backbone.Events);
-        var preview = LivePreview({
-          codeMirror: cm,
-          previewArea: previewArea
-        });
-        cm.trigger('reparse', {
-          error: null,
-          sourceCode: '<p>hi <em>there</em></p>'
-        });
-        try {
-          cb(previewArea, preview, cm);
-        } finally {
-          previewArea.remove();
-        }
-        start();
+    test(name, function() {
+      var div = $('<div></div>').appendTo('body').css({visibility: "hidden"});
+      var cm = {};
+      _.extend(cm, Backbone.Events);
+      var preview = LivePreview({
+        codeMirror: cm,
+        previewArea: div
       });
+      cm.trigger('reparse', {
+        error: null,
+        sourceCode: '<p>hi <em>there</em></p>'
+      });
+      try {
+        var iframe = div.find("iframe");
+        if (iframe.length != 1)
+          ok(false, "preview area should contain 1 iframe");
+        cb(iframe, preview, cm);
+      } finally {
+        div.remove();
+      }
     });
   }
   
@@ -41,17 +39,22 @@ require(["fc/ui/live-preview"], function(LivePreview) {
   
   lpTest('scrolling is preserved across refresh',
     function(previewArea, preview, cm) {
+      var wind;
+      preview.on('refresh', function(event) {
+        wind = event.window;
+      });
+      
       cm.trigger('reparse', {
         error: null,
         sourceCode: '<p style="font-size: 400px">hi <em>there</em></p>'
       });
-      var wind = previewArea.contents()[0].defaultView;
       wind.scroll(5, 6);
+      var oldWind = wind;
       cm.trigger('reparse', {
         error: null,
         sourceCode: '<p style="font-size: 400px">hi <em>dood</em></p>'
       });
-      wind = previewArea.contents()[0].defaultView;
+      ok(oldWind != wind, "window changes across reparse");
       equal(wind.pageXOffset, 5, "x scroll is preserved across refresh");
       equal(wind.pageYOffset, 6, "y scroll is preserved across refresh");
     });

@@ -5,20 +5,12 @@
 //
 //  [RequireJS plugin]: http://requirejs.org/docs/plugins.html#apiload
 (function() {
-  var iframeLoaded = jQuery.Deferred();
   var errorsLoaded = jQuery.Deferred();
-  var blankURL = $("meta[name='blank-url']").attr("content");
-  var iframe = $('<iframe id="preview" src="' + blankURL + '"></iframe>');
   
   define("appReady", [], {
     load: function(name, req, load, config) {
-      jQuery.when(errorsLoaded, iframeLoaded).then(function() {
-        load({previewArea: iframe});
-      });
+      jQuery.when(errorsLoaded).then(load);
     }
-  });
-  iframe.appendTo("#preview-holder").load(function() {
-    iframeLoaded.resolve();
   });
   jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
     errorsLoaded.resolve();
@@ -87,7 +79,7 @@ define("main", function(require) {
   var preview = LivePreview({
     codeMirror: codeMirror,
     ignoreErrors: true,
-    previewArea: AppReady.previewArea
+    previewArea: $("#preview-holder")
   });
   var publisher = Publisher(publishURL);
   var pageToLoad = getQueryVariable('p') || "default";
