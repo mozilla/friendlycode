@@ -3,29 +3,41 @@
 // This class is responsible for communicating with a publishing server
 // to save and load published code.
 define(function() {
+  var myOrigin = window.location.protocol + "//" + window.location.host;
+  
   function Publisher(baseURL) {
+    // We want to support CORS for development but in production it doesn't
+    // matter because all requests will be same-origin. However, browsers
+    // that don't support CORS will barf if they're given absolute URLs to
+    // the same domain, so we want to return relative URLs in such cases.
+    function makeURL(path) {
+      if (baseURL == myOrigin)
+        return path;
+      path = baseURL + path;
+      if (!jQuery.support.cors && window.console)
+        window.console.warn("No CORS detected for request to " + path);
+      return path;
+    }
+
     return {
       baseURL: baseURL,
       loadCode: function(path, cb) {
-        var url = baseURL + path;
         jQuery.ajax({
           type: 'GET',
-          url: url,
-          crossDomain: true,
+          url: makeURL(path),
           dataType: 'text',
           error: function() {
             cb("ERROR");
           },
           success: function(data) {
-            cb(null, fixDoctypeHeadBodyMunging(data), url);
+            cb(null, fixDoctypeHeadBodyMunging(data), baseURL + path);
           }
         });
       },
       saveCode: function(data, originalURL, cb) {
         $.ajax({
           type: 'POST',
-          url: baseURL + '/api/page',
-          crossDomain: true,
+          url: makeURL('/api/page'),
           data: {
             'html': data,
             'original-url': originalURL || ''
