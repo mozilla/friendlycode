@@ -49,12 +49,13 @@
 }
 
 .cm-s-jsbin span.cm-comment {
+  font-family: Arial, Helvetica, monospace;
   background-color: white;
   color: #333;
   font-style: italic;
   font-weight: normal;
   font-size: 16px;
-  line-height: 18px;
+  line-height: 17px; /* keeping this 18 messes up alignment between gutter and lines */
 }
 
 .CodeMirror span.cursor-help-highlight,
