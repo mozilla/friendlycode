@@ -447,3 +447,7 @@ b {
   background: gray;
 }
 
+html .tipsy {
+  /* Make tipsy tooltips slightly larger than the default. */
+  font-size: 12px;
+}
