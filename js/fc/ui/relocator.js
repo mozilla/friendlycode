@@ -20,7 +20,7 @@ define(function() {
         // move the message to this line
         var _tmp = element.clone();
         element.replaceWith(_tmp);
-        $(".CodeMirror-lines").append(element);
+        $(".CodeMirror-scroll").append(element);
         _tmp.remove();
         
         // set the correct "top" value, making sure to place the element
