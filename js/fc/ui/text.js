@@ -22,10 +22,10 @@ define(function() {
     $("#text-nav-item").mouseover(function() {
       var t = $(this),
           lp = t.position().left,
-          lm = parseInt(t.css("padding-left")),
           lw = t.width(),
-          tzop = parseInt(tzo.css("padding-left"));
-      tzo.css("display","inline").css("left",(lp-lm)+"px").css("width",(lw+lm-tzop)+"px");
+          ico = $(".icon",t),
+          iw = ico.width();
+      tzo.css("display","inline").css("left", lp + "px").css("width", lw + "px");
       tzo.mouseout(function() { $(this).hide(); });
       tzo.click(function() { $(this).hide(); });
       return false;

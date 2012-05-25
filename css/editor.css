@@ -6,7 +6,6 @@ html, body {
   padding: 0px;
   height: 100%;
   color: #414244;
-  min-width: 800px;
 }
 
 body {
@@ -77,7 +76,6 @@ img {
   top: 0px;
   left: 0px;
   width: 50%;
-  min-width: 600px;
   height: 100%;
   border-right: 1px solid #D6D6D6;
   z-index: 2;
@@ -98,7 +96,6 @@ img {
   display: table-cell;
   border-right: 1px solid #D6D6D6;
   height: 41px;
-  min-width: 90px;
   text-align: center;
   vertical-align: middle;
   color: black;
@@ -181,19 +178,22 @@ img {
 
 /* ------ nav button stylings ------ */
 
-#editor-nav-item {
+#editor-nav-item .icon {
+  display: inline-block;
+  width: 30px;
+  
   background-image: url("../img/editor-icon.png");
   background-repeat: no-repeat;
-  background-position: 20px center;
-  padding-left: 30px !important;
+  background-position: center center;
 }
 
-#nav-options #preview-nav-item.nav-item {
+#preview-nav-item .icon {
+  display: inline-block;
+  width: 30px;
+  
   background-image: url("../img/preview-icon.png");
   background-repeat: no-repeat;
-  background-position: 15px center;
-  padding-left: 45px;
-  text-align: left;
+  background-position: center center;
 }
 
 #preview-nav-item .preview-title {
@@ -216,47 +216,60 @@ img {
   height: 17px;
 }
 
-#undo-nav-item {
+#undo-nav-item .icon {
+  display: inline-block;
+  width: 30px;
+  
   background-image: url("../img/undo-grey.png");
   background-repeat: no-repeat;
-  background-position: 15px center;
-  padding-left: 20px !important;
+  background-position: center center;
 }
 
-#redo-nav-item {
+#redo-nav-item .icon {
+  display: inline-block;
+  width: 30px;
+  
   background-image: url("../img/redo-grey.png");
   background-repeat: no-repeat;
-  background-position: 15px center;
-  padding-left: 20px !important;
+  background-position: center center;
 }
 
-#text-nav-item {
+#text-nav-item .icon {
+  display: inline-block;
+  width: 30px;
+
   background-image: url("../img/text-size.png");
   background-repeat: no-repeat;
-  background-position: 15px center;
-  padding-left: 35px !important;
+  background-position: center center;
 }
 
 #text-size-options {
   position: absolute;
   display: none;
-  left: 0px;
   list-style: none;
   text-align: left;
   padding-top: 14px;
 }
 
-#text-size-options li {
+#text-nav-item ul {
+  margin: 0px;
+  padding: 0px;
+  padding-top: 35px;
+}
+
+#text-nav-item li {
   width: 100%;
   background-color: white;
   border: 1px solid C0C0C0;
   border-top: none;
-  margin: 1px 0px;
-  padding: 10px 0px 10px 0px;
+  padding: 10px 0px;
 
   background-repeat: no-repeat;
   background-position: 0px center;
-  padding-left: 35px !important;
+  padding-left: 35px;
+  
+  border: 1px solid #D6D6D6;
+  margin-top: -1px;
 }
 
 #text-size-options li:hover {
