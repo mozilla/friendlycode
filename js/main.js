@@ -179,8 +179,12 @@ define("main", function(require) {
   }
   
   // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
+  codeMirror.on("change", function() {
+    var isEnabled = codeMirror.getValue().trim().length ? true : false;
+    $("#publish-button").toggleClass("enabled", isEnabled);
+  });
   $("#publish-button").click(function(){
-    $("#confirm-dialog").show();
+    if ($(this).hasClass("enabled")) $("#confirm-dialog").show();
   });
   $("#confirm-publication").click(function(){
     $("#confirm-dialog").hide();
