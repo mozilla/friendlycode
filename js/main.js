@@ -57,7 +57,12 @@ define("main", function(require) {
       HelpTemplate = require("template!help"),
       ErrorTemplate = require("template!error"),
       AppReady = require("appReady!"),
-      publishURL = $("meta[name='publish-url']").attr("content");
+      publishURL = $("meta[name='publish-url']").attr("content"),
+      Modals = require("fc/ui/modals"),
+      TextUI = require("fc/ui/text");
+
+  // non-object requirements
+  require("fc/ui/modals");
   
   var codeMirror = ParsingCodeMirror($("#source")[0], {
     mode: "text/html",
@@ -102,34 +107,35 @@ define("main", function(require) {
   var socialMedia = SocialMedia({
     jQuery: jQuery,
     getURL: function() {
-      return $("#share-container .link-to-this a.view")[0].href;
+      return $("#publication-result a.view")[0].href;
     },
-    container: $("#share-container")
+    container: $("#share-result")
   });
-  var shareUI = ShareUI({
-    codeMirror: codeMirror,
-    dialog: $('#share-dialog'),
-    socialMedia: socialMedia,
-    publisher: publisher
+  var modals = Modals({
+    publishUI: publishUI,
+    socialMedia: socialMedia
+  });
+  var textUI = TextUI({
+    codeMirror: codeMirror
   });
   var pageToLoad = getQueryVariable('p') || "default";
   var parachute = Parachute(window, codeMirror, pageToLoad);
 
-/*
-  $("#save-draft-button").click(function() { publishUI.saveCode(); });
-  $("#publish-button").click(function() { shareUI.shareCode(); });
-*/
 
+
+  // make hints on/off actually work
   $("#hints-nav-item").click(function() {
     var hints = $(this);
     if (hints.hasClass("on")) {
       hints.removeClass("on").addClass("off");
+      // make sure to hide the help, in case it's active when this option's selected
+      $("div.help").hide();
     } else {
       hints.removeClass("off").addClass("on");
     }
   });
 
-  // prevent CodeMirror for hijacking clicks on the help and error notices
+  // prevent CodeMirror from hijacking clicks on the help and error notices
   $("div.help, div.error").each(function(){
     this.onmousedown = function(event) {
       if (event.cancelBubble) {
@@ -140,21 +146,6 @@ define("main", function(require) {
       return false;
     };
   });
-  
-  // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
-  $("#publish-button").click(function(){
-    $("#confirm-dialog").show();
-  });
-  $("#confirm-publication").click(function(){
-    $("#confirm-dialog").hide();
-    $("#publish-dialog").show();
-    publishUI.saveCode(function() { $("a.remix").text("Here"); });
-  });
-  $("#modal-close-button, #cancel-publication").click(function(){ 
-    $(".modal-overlay").hide();
-  });
-  // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
-
 
   function doneLoading() {
     $("#editor").removeClass("loading");

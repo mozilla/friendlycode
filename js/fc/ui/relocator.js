@@ -26,11 +26,11 @@ define(function() {
         // set the correct "top" value, making sure to place the element
         // below the error if it'd otherwise disappear from the top of
         // the content area due to close-to-zero placement.
-        var topValue = (linePre.position().top - element.height());
+        var topValue = (linePre.position().top - element.height() - 20);
         if (topValue < 0) {
           topValue = linePre.position().top + 50;
         }
-        element.css("top", topValue + "px");
+        element.css("top", topValue + "px").css("left", $(".CodeMirror-gutter").width()+"px");
       }
     };
   };
