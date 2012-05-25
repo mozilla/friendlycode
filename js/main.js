@@ -82,21 +82,75 @@ define("main", function(require) {
     previewArea: $("#preview-holder")
   });
   var publisher = Publisher(publishURL);
-  var pageToLoad = getQueryVariable('p') || "default";
-  var remixURLTemplate = null;
   
-  if (remixURL != "use-querystring") {
-    // A server is serving us as the custom edit URL for a web page.
-    pageToLoad = remixURL;
-    remixURLTemplate = location.protocol + "//" + location.host +
-                       "{{VIEW_URL}}/edit";
-  }
+  var currentPage = {
+    path: null,
+    defaultPath: "default",
+    remixTemplate: location.protocol + "//" + location.host + 
+                   location.pathname + "#{{VIEW_URL}}",
+    cache: {},
+    change: function(newPath) {
+      function triggerLoad() {
+        if (self.path != newPath) {
+          // Oops, another page change has already been requested.
+          return;
+        }
+        codeMirror.setValue(self.cache[self.path]);
+        self.trigger("load");
+      }
 
+      var self = this;
+
+      if (!newPath)
+        newPath = self.defaultPath;
+
+      self.trigger("before-change");
+      self.path = newPath;
+      self.trigger("change");
+
+      if (self.path in self.cache) {
+        triggerLoad();
+      } else {
+        if (self.path == "default") {
+          jQuery.get("default-content.html", function(html) {
+            self.cache[self.path] = html;
+            triggerLoad();
+          }, "text");
+        } else
+          publisher.loadCode(self.path, function(err, data, url) {
+            if (err)
+              // TODO: Put nicer error here.
+              alert('Sorry, an error occurred while trying to get ' +
+                    'the page.');
+            else {
+              self.cache[self.path] = data;
+              triggerLoad();
+            }
+          });
+      }
+    },
+    remixURL: function(path) {
+      return this.remixTemplate.replace("{{VIEW_URL}}", escape(path));
+    }
+  };
+  _.extend(currentPage, Backbone.Events);
+
+  if (remixURL != "use-url-hash") {
+    // A server is serving us as the custom edit URL for a web page.
+    currentPage.defaultPath = remixURL;
+    currentPage.remixTemplate = location.protocol + "//" + location.host +
+                                "{{VIEW_URL}}/edit";
+  }
+  
+  $(window).on("hashchange", function() {
+    currentPage.change(window.location.hash.slice(1));
+  });
+  
   var publishUI = PublishUI({
     codeMirror: codeMirror,
     publisher: publisher,
     dialog: $("#publish-dialog"),
-    remixURLTemplate: remixURLTemplate
+    currentPage: currentPage
   });
   var historyUI = HistoryUI({
     codeMirror: codeMirror,
@@ -110,14 +164,14 @@ define("main", function(require) {
     },
     container: $("#share-container")
   });
-  var shareUI = ShareUI({
-    codeMirror: codeMirror,
-    dialog: $('#share-dialog'),
-    socialMedia: socialMedia,
-    publisher: publisher
-  });
+  //var shareUI = ShareUI({
+  //  codeMirror: codeMirror,
+  //  dialog: $('#share-dialog'),
+  //  socialMedia: socialMedia,
+  //  publisher: publisher
+  //});
   
-  var parachute = Parachute(window, codeMirror, pageToLoad);
+  var parachute = Parachute(window, codeMirror, currentPage);
 
 /*
   $("#save-draft-button").click(function() { publishUI.saveCode(); });
@@ -152,15 +206,22 @@ define("main", function(require) {
   $("#confirm-publication").click(function(){
     $("#confirm-dialog").hide();
     $("#publish-dialog").show();
-    publishUI.saveCode(function() { $("a.remix").text("Here"); });
+    publishUI.saveCode(function(viewURL, remixURL, path, code) {
+      $("a.remix").text("Here");
+      currentPage.cache[path] = code;
+      window.location.hash = "#" + path;
+    });
   });
   $("#modal-close-button, #cancel-publication").click(function(){ 
     $(".modal-overlay").hide();
   });
   // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
 
-
-  function doneLoading() {
+  currentPage.on("change", function() {
+    $("#editor").addClass("loading");
+  });
+  
+  currentPage.on("load", function() {
     $("#editor").removeClass("loading");
     codeMirror.clearHistory();
     historyUI.refresh();
@@ -187,7 +248,7 @@ define("main", function(require) {
     }
     codeMirror.reparse();
     codeMirror.focus();
-  }
+  });
 
   preview.on("refresh", function(event) {
     var title = event.window.document.title;
@@ -197,13 +258,7 @@ define("main", function(require) {
       $(".preview-title").hide();
   });
   
-  if (pageToLoad == "default") {
-    jQuery.get("default-content.html", function(html) {
-      codeMirror.setValue(html.trim());
-      doneLoading();
-    }, "text");
-  } else
-    publishUI.loadCode(pageToLoad, doneLoading);
+  $(window).trigger("hashchange");
 
   return {
     codeMirror: codeMirror,

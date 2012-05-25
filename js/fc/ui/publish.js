@@ -4,48 +4,32 @@
 // code.
 define(function() {
   return function PublishUI(options) {
-    var defaultRemixURL = location.protocol + "//" + location.host + 
-                          location.pathname + "?p={{VIEW_URL}}";
-    var baseRemixURL = options.remixURLTemplate || defaultRemixURL;
+    var currentPage = options.currentPage;
     var dlg = options.dialog;
     var codeMirror = options.codeMirror;
     var publisher = options.publisher;
-    var currURL;
 
     dlg.find('.close-icon').click(function(){ dlg.hide(); });
 
     return {
-      loadCode: function(path, cb) {
-        publisher.loadCode(path, function(err, data, url) {
-          if (err)
-            // TODO: Put nicer error here.
-            alert('Sorry, an error occurred while trying to get ' +
-                  'the page. :(');
-          else {
-            codeMirror.setValue(data);
-            currURL = url;
-          }
-          cb();
-        });
-      },
       saveCode: function(callback) {
         var code = codeMirror.getValue();
+        var absoluteURL = publisher.baseURL + currentPage.path;
         dlg.show();
         $(".done", dlg).hide();
-        publisher.saveCode(code, currURL, function(err, info) {
+        publisher.saveCode(code, absoluteURL, function(err, info) {
           if (err) {
             // TODO: Put nicer error here.
             alert("Sorry, an error occurred while trying to publish. :(");
             dlg.hide();
           } else {
             var viewURL = info.url;
-            var remixURL = baseRemixURL.replace("{{VIEW_URL}}",
-                                                escape(info.path));
+            var remixURL = currentPage.remixURL(info.path);
             $(".done", dlg).fadeIn();
             $('a.view', dlg).attr('href', viewURL).text(viewURL);
             $('a.remix', dlg).attr('href', remixURL).text(remixURL);
             if (callback) {
-              callback(viewURL, remixURL);
+              callback(viewURL, remixURL, info.path, code);
             }
           }
         });

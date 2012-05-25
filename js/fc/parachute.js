@@ -10,14 +10,26 @@
 // working on. We're currently only saving the data for a few minutes, though,
 // so hopefully this shouldn't be that big a problem.
 define(["lscache"], function(lscache) {
-  return function Parachute(window, codeMirror, page) {  
+  return function Parachute(window, codeMirror, currentPage) {  
+    currentPage.on("load", function() {
+      key = prefix + currentPage.path;
+    });
+    currentPage.on("change", function() {
+      key = null;
+    });
+    currentPage.on("before-change", function() {
+      self.save();
+    });
+    
     // Amount of time, in minutes, to save parachute data.
     var timeLimit = 5;
     var prefix = "FRIENDLYCODE_PARACHUTE_DATA_";
-    var key = prefix + page;
+    var key = null;
     var originalData = codeMirror.getValue();
     var self = {
       restore: function() {
+        if (!key)
+          return false;
         var saved = lscache.get(key);
         if (saved) {
           if (saved == codeMirror.getValue()) {
@@ -32,7 +44,7 @@ define(["lscache"], function(lscache) {
         return false;
       },
       save: function() {
-        if (codeMirror.getValue() != originalData)
+        if (key && codeMirror.getValue() != originalData)
           lscache.set(key, codeMirror.getValue(), timeLimit);
       },
       refresh: function() {
