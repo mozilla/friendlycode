@@ -20,8 +20,13 @@ define(function() {
     /**
      * modal dialog interaction sequence
      */
+    codeMirror.on("change", function() {
+      var isEnabled = codeMirror.getValue().trim().length ? true : false;
+      $("#publish-button").toggleClass("enabled", isEnabled);
+    });
+    
     $("#publish-button").click(function(){
-      $("#confirm-dialog").show();
+      if ($(this).hasClass("enabled")) $("#confirm-dialog").show();
     });
 
     // CONFIRM DIALOG IS IN MAIN.JS FOR THE MOMENT DUE TO

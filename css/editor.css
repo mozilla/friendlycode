@@ -131,10 +131,22 @@ img {
   background-color: #00D67D;
 } 
 
-#publish-button {
-  background-color: #3A84FC;
+#preview-pane-nav-options > div.nav-item.buttons {
+  cursor: default;
 }
 
+#publish-button {
+  background-color: #3A84FC;
+  opacity: 0.4;
+  -moz-transition: opacity 1s;
+  -webkit-transition: opacity 1s;
+  -o-transition: opacity 1s;
+}
+
+#publish-button.enabled {
+  opacity: 1.0;
+  cursor: pointer;
+}
 
 #nav-options .nav-button:hover {
   /* do what? */
