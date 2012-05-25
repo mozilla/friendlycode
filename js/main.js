@@ -21,17 +21,6 @@
 // purposes. Other parts of our code should never cite this module
 // as a dependency.
 define("main", function(require) {
-  function getQueryVariable(variable) {
-    var query = window.location.search.substring(1);
-    var vars = query.split("&");
-    for (var i = 0; i < vars.length; i++) {
-      var pair = vars[i].split("=");
-      if (pair[0] == variable) {
-        return unescape(pair[1]);
-      }
-    }
-  }
-
   var Help = require("fc/help"),
       Parachute = require("fc/parachute"),
       Publisher = require("fc/publisher"),
@@ -50,7 +39,7 @@ define("main", function(require) {
       ErrorTemplate = require("template!error"),
       AppReady = require("appReady!"),
       publishURL = $("meta[name='publish-url']").attr("content"),
-      remixURL = $("meta[name='remix-url']").attr("content");
+      pageToLoad = $("meta[name='remix-url']").attr("content");
   
   var codeMirror = ParsingCodeMirror($("#source")[0], {
     mode: "text/html",
@@ -82,15 +71,17 @@ define("main", function(require) {
     previewArea: $("#preview-holder")
   });
   var publisher = Publisher(publishURL);
-  var pageToLoad = getQueryVariable('p') || "default";
   var remixURLTemplate = null;
   
-  if (remixURL != "use-querystring") {
+  if (pageToLoad) {
     // A server is serving us as the custom edit URL for a web page.
-    pageToLoad = remixURL;
     remixURLTemplate = location.protocol + "//" + location.host +
                        "{{VIEW_URL}}/edit";
   }
+  // If a URL hash is specified, it should override anything provided by
+  // a server.
+  if (window.location.hash.slice(1))
+    pageToLoad = window.location.hash.slice(1);
 
   var publishUI = PublishUI({
     codeMirror: codeMirror,
@@ -118,7 +109,8 @@ define("main", function(require) {
   });
   
   var parachute = Parachute(window, codeMirror, pageToLoad);
-
+  var supportsPushState = window.history.pushState ? true : false;
+  
 /*
   $("#save-draft-button").click(function() { publishUI.saveCode(); });
   $("#publish-button").click(function() { shareUI.shareCode(); });
@@ -145,33 +137,45 @@ define("main", function(require) {
     };
   });
   
-  window.addEventListener("popstate", function(event) {
+  window.addEventListener("hashchange", function(event) {
     // We don't currently support dynamically changing the URL
     // without a full page reload, unfortunately, so just trigger a
     // reload if the user clicked the 'back' button after we pushed
     // a new URL to it.
-    if (!event.state || event.state.pageToLoad != pageToLoad)
+    var newPageToLoad = window.location.hash.slice(1);
+    if (newPageToLoad != pageToLoad)
       window.location.reload();
   }, false);
+  
+  if (supportsPushState)
+    window.addEventListener("popstate", function(event) {
+      // We don't currently support dynamically changing the URL
+      // without a full page reload, unfortunately, so just trigger a
+      // reload if the user clicked the 'back' button after we pushed
+      // a new URL to it.
+      if (!event.state || event.state.pageToLoad != pageToLoad)
+        window.location.reload();
+    }, false);
   
   function onPostPublish(url, newPageToLoad) {
     // If the browser supports history.pushState, set the URL to
     // be the new URL to remix the page they just published, so they
     // can share/bookmark the URL and it'll be what they expect it
     // to be.
-    if (window.history.pushState) {
-      pageToLoad = newPageToLoad;
-      // If the user clicks their back button, we don't want to show
-      // them the page they just published--we want to show them the
-      // page the current page is based on.
-      parachute.clearCurrentPage();
-      parachute.changePage(pageToLoad);
-      // It's possible that the server sanitized some stuff that the
-      // user will be confused by, so save the new state of the page
-      // to be what they expect it to be, just in case.
-      parachute.save();
+    pageToLoad = newPageToLoad;
+    // If the user clicks their back button, we don't want to show
+    // them the page they just published--we want to show them the
+    // page the current page is based on.
+    parachute.clearCurrentPage();
+    parachute.changePage(pageToLoad);
+    // It's possible that the server sanitized some stuff that the
+    // user will be confused by, so save the new state of the page
+    // to be what they expect it to be, just in case.
+    parachute.save();
+    if (supportsPushState)
       window.history.pushState({pageToLoad: pageToLoad}, "", url);
-    }
+    else
+      window.location.hash = "#" + pageToLoad;
   }
   
   // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
@@ -229,7 +233,7 @@ define("main", function(require) {
       $(".preview-title").hide();
   });
   
-  if (pageToLoad == "default") {
+  if (!pageToLoad) {
     jQuery.get("default-content.html", function(html) {
       codeMirror.setValue(html.trim());
       doneLoading();

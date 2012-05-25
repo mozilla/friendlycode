@@ -5,7 +5,7 @@
 define(function() {
   return function PublishUI(options) {
     var defaultRemixURL = location.protocol + "//" + location.host + 
-                          location.pathname + "?p={{VIEW_URL}}";
+                          location.pathname + "#{{VIEW_URL}}";
     var baseRemixURL = options.remixURLTemplate || defaultRemixURL;
     var dlg = options.dialog;
     var codeMirror = options.codeMirror;
