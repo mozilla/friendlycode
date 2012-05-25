@@ -145,6 +145,35 @@ define("main", function(require) {
     };
   });
   
+  window.addEventListener("popstate", function(event) {
+    // We don't currently support dynamically changing the URL
+    // without a full page reload, unfortunately, so just trigger a
+    // reload if the user clicked the 'back' button after we pushed
+    // a new URL to it.
+    if (!event.state || event.state.pageToLoad != pageToLoad)
+      window.location.reload();
+  }, false);
+  
+  function onPostPublish(url, newPageToLoad) {
+    // If the browser supports history.pushState, set the URL to
+    // be the new URL to remix the page they just published, so they
+    // can share/bookmark the URL and it'll be what they expect it
+    // to be.
+    if (window.history.pushState) {
+      pageToLoad = newPageToLoad;
+      // If the user clicks their back button, we don't want to show
+      // them the page they just published--we want to show them the
+      // page the current page is based on.
+      parachute.clearCurrentPage();
+      parachute.changePage(pageToLoad);
+      // It's possible that the server sanitized some stuff that the
+      // user will be confused by, so save the new state of the page
+      // to be what they expect it to be, just in case.
+      parachute.save();
+      window.history.pushState({pageToLoad: pageToLoad}, "", url);
+    }
+  }
+  
   // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
   $("#publish-button").click(function(){
     $("#confirm-dialog").show();
@@ -152,7 +181,10 @@ define("main", function(require) {
   $("#confirm-publication").click(function(){
     $("#confirm-dialog").hide();
     $("#publish-dialog").show();
-    publishUI.saveCode(function() { $("a.remix").text("Here"); });
+    publishUI.saveCode(function(viewURL, remixURL, path) {
+      $("a.remix").text("Here");
+      onPostPublish(remixURL, path);
+    });
   });
   $("#modal-close-button, #cancel-publication").click(function(){ 
     $(".modal-overlay").hide();

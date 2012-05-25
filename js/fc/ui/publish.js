@@ -44,8 +44,13 @@ define(function() {
             $(".done", dlg).fadeIn();
             $('a.view', dlg).attr('href', viewURL).text(viewURL);
             $('a.remix', dlg).attr('href', remixURL).text(remixURL);
+
+            // The user is now effectively remixing the page they just
+            // published.
+            currURL = viewURL;
+
             if (callback) {
-              callback(viewURL, remixURL);
+              callback(viewURL, remixURL, info.path);
             }
           }
         });
