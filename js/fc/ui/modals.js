@@ -3,7 +3,8 @@
 define(function() {
 
   return function(options) {
-    var publishUI = options.publishUI,
+    var codeMirror = options.codeMirror,
+        publishUI = options.publishUI,
         socialMedia = options.socialMedia;
 
     /**

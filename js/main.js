@@ -104,6 +104,7 @@ define("main", function(require) {
     container: $("#share-result")
   });
   var modals = Modals({
+    codeMirror: codeMirror,
     publishUI: publishUI,
     socialMedia: socialMedia
   });
