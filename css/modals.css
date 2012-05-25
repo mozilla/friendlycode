@@ -141,7 +141,6 @@
 
 .confirmation-button.yes-button {
   background-color: #1DBF84;
-  border: 1px solid #
 } 
 
 .confirmation-button.no-button {
@@ -158,6 +157,14 @@
   background-color: rgba(0,0,0,0.4);
   color: white;
   margin-right: -9px;
-  background-position: 9px 5px;
   background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.confirmation-button.yes-button .mark {
+  background-image: url("../img/yes.png");
+}
+
+.confirmation-button.no-button .mark {
+  background-image: url("../img/no.png");
 }

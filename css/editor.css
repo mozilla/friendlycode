@@ -10,10 +10,11 @@ html, body {
 }
 
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
   overflow: hidden;
 
-  background-color: red;
+  /* background-color: red; */
+  background-color: #F5F5F5;
 }
 
 img {
@@ -365,10 +366,18 @@ footer {
   width: 450px;
   height: 100px;
   background-color: #FDFDFD;
-  border: 5px solid red;
+  border: 5px solid #D6D6D6;
   margin: 10px;
   margin-top: -10px;
   white-space: normal;
+}
+
+.error {
+  border: 5px solid red;
+}
+
+.help {
+  border: 5px solid rgb(0,130,255);
 }
 
 .error p {
@@ -379,7 +388,7 @@ footer {
 .help .icon {
   display: inline-block;
   width: 80px;
-  height: 145px;
+  height: 100px;
   border-right: 1px solid #C0C0C0;
   text-align: center;
   vertical-align: middle;
@@ -388,8 +397,10 @@ footer {
 .error .content,
 .help .content {
   display: inline-block;
-  width: 350px;
+  width: 362px;
+  height: 100px;
   vertical-align: top;
+  overflow: auto;
 }
 
 .error .icon img,
@@ -402,22 +413,21 @@ b {
 
 .error a,
 .help a  {
-  color: white;
+  color: rgb(0,130,255);
   font-weight: bold;
-  font-size: 120%;
 }
 
 .error strong,
 .help strong {
-  color: white;
+  color: rgb(0,130,255);
   font-weight: bold;
-  font-size: 120%;
+  font-size: 110%;
 }
 .error code,
 .help code {
-  color: white;
+  color: rgb(0,130,255);
   font-weight: bold;
-  font-size: 120%;
+  font-size: 110%;
 }
 .error em[data-highlight],
 .help em[data-highlight] {

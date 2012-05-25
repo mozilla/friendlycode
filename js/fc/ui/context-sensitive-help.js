@@ -27,6 +27,10 @@ define(["./mark-tracker"], function(MarkTracker) {
     codeMirror.on("cursor-activity", function() {
       cursorHelpMarks.clear();
       relocator.cleanup();
+
+      // people may not want helpful hints
+      if ($("#hints-nav-item").hasClass("off")) return;
+
       var help = helpIndex.get(codeMirror.getCursorIndex());
       if (help) {
         if (help.type == "cssSelector") {

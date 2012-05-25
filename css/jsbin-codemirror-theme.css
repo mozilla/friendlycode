@@ -49,15 +49,18 @@
 }
 
 .cm-s-jsbin span.cm-comment {
+  font-family: Arial, Helvetica, monospace;
   background-color: white;
   color: #333;
   font-style: italic;
   font-weight: normal;
+  font-size: 16px;
+  line-height: 17px; /* keeping this 18 messes up alignment between gutter and lines */
 }
 
 .CodeMirror span.cursor-help-highlight,
 .cursor-help-highlight {
-  background-color: rgba(0,0,200,0.5);
+  background-color: #d5ac85;
 }
 
 .CodeMirror-wrap .CodeMirror-scroll {
