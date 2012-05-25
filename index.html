@@ -31,28 +31,32 @@
       <div id="nav-options">
         <div id="editor-pane-nav-options">
           <!-- editor, undo, redo, text size, hinting -->
-          <div id="editor-nav-item" class="nav-item enabled">Editor<div class="pane-indicator enabled"></div></div>
-          <div id="undo-nav-item"   class="nav-item"
-               data-restore-help="We've rescued your very recent changes to this page, but you can click this button to undo them.">Undo</div>
-          <div id="redo-nav-item"   class="nav-item">Redo</div>
-          <div id="text-nav-item"   class="nav-item">Text size
-
-          <ul id="text-size-options">
-            <li data-size="small">Small</li>
-            <li data-size="normal">Normal</li>
-            <li data-size="large">Large</li>
-          </ul>
-
+          <div id="editor-nav-item" class="nav-item enabled">
+            <span class="icon">&nbsp;</span>Editor
+            <div class="pane-indicator enabled"></div>
+          </div>
+          <div id="undo-nav-item" class="nav-item"
+               data-restore-help="We've rescued your very recent changes to this page, but you can click this button to undo them.">
+               <span class="icon">&nbsp;</span>Undo</div>
+          <div id="redo-nav-item" class="nav-item">
+            <span class="icon">&nbsp;</span>Redo
+          </div>
+          <div id="text-nav-item" class="nav-item">
+            <span class="icon">&nbsp;</span> Text size
+            <ul id="text-size-options">
+              <li data-size="small">Small</li>
+              <li data-size="normal">Normal</li>
+              <li data-size="large">Large</li>
+            </ul>
           </div>
           <div id="hints-nav-item"  class="nav-item on">Turn hints off</div>
         </div>
         <div id="preview-pane-nav-options">
           <!-- previous, save draft, publish -->
-           <div id="preview-nav-item" class="nav-item enabled">Preview<span class="preview-title"></span><div class="pane-indicator enabled"></div></div>
+           <div id="preview-nav-item" class="nav-item enabled">
+             <span class="icon">&nbsp;</span>Preview<span class="preview-title"></span><div class="pane-indicator enabled"></div>
+           </div>
            <div class="nav-item buttons">
-             <!--
-             <div id="save-draft-button" class="nav-button">Save Draft <span id="save-pulldown">&nbsp;</span></div>
-             -->
              <div id="publish-button" class="nav-button">Publish <span id="publish-pulldown">&nbsp;</span></div>
            </div>
         </div>
