@@ -23,7 +23,7 @@
 
     <header id="header">
       <div class="logo">
-        <a href="https://webmaker.org/en-US/editor">
+        <a href="/">
           <img src="img/temp-logo.png" alt="Mozilla Thimble">
         </a>
       </div>
@@ -35,7 +35,15 @@
           <div id="undo-nav-item"   class="nav-item"
                data-restore-help="We've rescued your very recent changes to this page, but you can click this button to undo them.">Undo</div>
           <div id="redo-nav-item"   class="nav-item">Redo</div>
-          <div id="text-nav-item"   class="nav-item">Text size</div>
+          <div id="text-nav-item"   class="nav-item">Text size
+
+          <ul id="text-size-options">
+            <li data-size="small">Small</li>
+            <li data-size="normal">Normal</li>
+            <li data-size="large">Large</li>
+          </ul>
+
+          </div>
           <div id="hints-nav-item"  class="nav-item on">Turn hints off</div>
         </div>
         <div id="preview-pane-nav-options">
@@ -91,19 +99,41 @@
       <div class="thimble-modal-menu thimble-grey-bar ">
         <div class="thimble-branding"></div>
         <div id="modal-close-button">&nbsp;</div>   
-        <div class="thimble-menu-content"> 
-           <div id="publication-result">
-             <!-- PUBLISH YOUR WORK -->
+        <div class="thimble-menu-content">
+           <!-- SHARE YOUR WORK -->
+           <div id="share-result" class="accordion collapsed">
+             <div class="thimble-title" id="share-trigger">Share this via...</div>
+             <div class="thimble-additionals">
+               <ul>
+                 <li data-medium="twitter">Twitter</li>
+                 <li data-medium="google">Google+</li>
+                 <li data-medium="facebook">Facebook</li>
+               </ul>
+             </div>
+           </div>
+           <!-- SHARE YOUR WORK -->
+
+           <!-- PUBLISH YOUR WORK -->
+           <div id="publication-result" class="accordion">
              <div class="thimble-title">Grab the url for your webpage:</div>
              <div class="thimble-url-box">
                <a href="#" class="view">[we're busy publishing your page...]</a>
              </div>
-             <div id="copy-to-clipboard>"</div>
              <div class="thimble-additionals">
-               <a href="#" class="remix">Here</a> is the link to edit your published page
+               Copy this link by right clicking on it and selecting "copy link location".
              </div>
-             <!-- PUBLISH YOUR WORK -->
            </div>
+           
+           <div id="remix-it" class="accordion collapsed">
+             <div class="thimble-title">Get the link to edit your published page:</div>
+             <div class="thimble-url-box">
+               <a href="#" class="remix">[we're busy publishing your page...]</a>
+             </div>
+             <div class="thimble-additionals">
+               Copy this link by right clicking on it and selecting "copy link location".
+             </div>
+           </div>
+           <!-- PUBLISH YOUR WORK -->
         </div>
       </div>
     </div>

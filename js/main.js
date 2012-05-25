@@ -39,7 +39,9 @@ define("main", function(require) {
       ErrorTemplate = require("template!error"),
       AppReady = require("appReady!"),
       publishURL = $("meta[name='publish-url']").attr("content"),
-      pageToLoad = $("meta[name='remix-url']").attr("content");
+      pageToLoad = $("meta[name='remix-url']").attr("content"),
+      Modals = require("fc/ui/modals"),
+      TextUI = require("fc/ui/text");
   
   var codeMirror = ParsingCodeMirror($("#source")[0], {
     mode: "text/html",
@@ -97,35 +99,35 @@ define("main", function(require) {
   var socialMedia = SocialMedia({
     jQuery: jQuery,
     getURL: function() {
-      return $("#share-container .link-to-this a.view")[0].href;
+      return $("#publication-result a.view")[0].href;
     },
-    container: $("#share-container")
+    container: $("#share-result")
   });
-  var shareUI = ShareUI({
+  var modals = Modals({
     codeMirror: codeMirror,
-    dialog: $('#share-dialog'),
-    socialMedia: socialMedia,
-    publisher: publisher
+    publishUI: publishUI,
+    socialMedia: socialMedia
+  });
+  var textUI = TextUI({
+    codeMirror: codeMirror
   });
   
   var parachute = Parachute(window, codeMirror, pageToLoad);
   var supportsPushState = window.history.pushState ? true : false;
-  
-/*
-  $("#save-draft-button").click(function() { publishUI.saveCode(); });
-  $("#publish-button").click(function() { shareUI.shareCode(); });
-*/
 
+  // make hints on/off actually work
   $("#hints-nav-item").click(function() {
     var hints = $(this);
     if (hints.hasClass("on")) {
       hints.removeClass("on").addClass("off");
+      // make sure to hide the help, in case it's active when this option's selected
+      $("div.help").hide();
     } else {
       hints.removeClass("off").addClass("on");
     }
   });
 
-  // prevent CodeMirror for hijacking clicks on the help and error notices
+  // prevent CodeMirror from hijacking clicks on the help and error notices
   $("div.help, div.error").each(function(){
     this.onmousedown = function(event) {
       if (event.cancelBubble) {
@@ -179,13 +181,6 @@ define("main", function(require) {
   }
   
   // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
-  codeMirror.on("change", function() {
-    var isEnabled = codeMirror.getValue().trim().length ? true : false;
-    $("#publish-button").toggleClass("enabled", isEnabled);
-  });
-  $("#publish-button").click(function(){
-    if ($(this).hasClass("enabled")) $("#confirm-dialog").show();
-  });
   $("#confirm-publication").click(function(){
     $("#confirm-dialog").hide();
     $("#publish-dialog").show();
@@ -194,11 +189,7 @@ define("main", function(require) {
       onPostPublish(remixURL, path);
     });
   });
-  $("#modal-close-button, #cancel-publication").click(function(){ 
-    $(".modal-overlay").hide();
-  });
   // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
-
 
   function doneLoading() {
     $("#editor").removeClass("loading");
