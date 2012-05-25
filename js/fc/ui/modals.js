@@ -10,12 +10,10 @@ define(function() {
      * Add accordion behaviour to the publication dialog.
      */
     var accordion = $(".thimble-menu-content div.accordion");
-
     var clickHandler = function(item) {
       accordion.addClass("collapsed");
       $(item).removeClass("collapsed");
     }
-
     accordion.click(function() { clickHandler(this); });
 
 
@@ -26,11 +24,8 @@ define(function() {
       $("#confirm-dialog").show();
     });
 
-    $("#confirm-publication").click(function(){
-      $("#confirm-dialog").hide();
-      publishUI.saveCode();
-      $("#publish-dialog").show();
-    });
+    // CONFIRM DIALOG IS IN MAIN.JS FOR THE MOMENT DUE TO
+    // ITS NEED TO CALL A PUBLICATION CALLBACK IN MAIN
 
     $("#modal-close-button, #cancel-publication").click(function(){ 
       $(".modal-overlay").hide();

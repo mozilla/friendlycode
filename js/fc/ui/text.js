@@ -11,7 +11,7 @@ define(function() {
      * when we mouseover any not-text-size options,
      * hide the text sizing selection menu.
      */
-    $(".nav-item").mouseover(function() {
+    $("#header").mouseover(function() {
       tzo.hide(); 
     });
 
@@ -28,6 +28,7 @@ define(function() {
       tzo.css("display","inline").css("left",(lp-lm)+"px").css("width",(lw+lm-tzop)+"px");
       tzo.mouseout(function() { $(this).hide(); });
       tzo.click(function() { $(this).hide(); });
+      return false;
     });
 
 
