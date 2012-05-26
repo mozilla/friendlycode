@@ -42,7 +42,8 @@ define([
     if (parallelNode)
       result = {
         start: parallelNode.parseInfo.openTag.start,
-        end: parallelNode.parseInfo.closeTag.end
+        end: parallelNode.parseInfo.closeTag.end,
+        contentStart: parallelNode.parseInfo.openTag.end
       };
     if (origDocFrag != docFrag) {
       for (i = 0; i < htmlNode.childNodes.length; i++)
@@ -62,11 +63,14 @@ define([
         if (interval) {
           var start = codeMirror.posFromIndex(interval.start);
           var end = codeMirror.posFromIndex(interval.end);
+          var contentStart = codeMirror.posFromIndex(interval.contentStart);
           var startCoords = codeMirror.charCoords(start, "local");
           codeMirror.scrollTo(startCoords.x, startCoords.y);
           marks.clear();
           marks.mark(interval.start, interval.end,
                      "preview-to-editor-highlight");
+          codeMirror.setCursor(contentStart);
+          codeMirror.focus();
           event.preventDefault();
           event.stopPropagation();
         }
