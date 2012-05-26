@@ -19,21 +19,34 @@ define(function() {
   }
   
   function nodeToCode(node, docFrag) {
-    var root, path;
-    if (docFrag.querySelector("html") && docFrag.querySelector("body")) {
+    var root, i;
+    var htmlNode = docFrag.querySelector("html");
+    var origDocFrag = docFrag;
+    if (htmlNode && docFrag.querySelector("body")) {
       root = node.ownerDocument.documentElement;
-      path = "html " + pathTo(root, node);
     } else {
+      if (!htmlNode) {
+        docFrag = document.createDocumentFragment();
+        htmlNode = document.createElement("html");
+        docFrag.appendChild(htmlNode);
+        for (i = 0; i < origDocFrag.childNodes.length; i++)
+          htmlNode.appendChild(origDocFrag.childNodes[i]);
+      }
       root = node.ownerDocument.body;
-      path = pathTo(root, node).slice(3);
     }
+    var path = "html " + pathTo(root, node);
     var parallelNode = docFrag.querySelector(path);
+    var result = null;
     if (parallelNode)
-      return {
+      result = {
         start: parallelNode.parseInfo.openTag.start,
         end: parallelNode.parseInfo.closeTag.end
       };
-    return null;
+    if (origDocFrag != docFrag) {
+      for (i = 0; i < htmlNode.childNodes.length; i++)
+        origDocFrag.appendChild(htmlNode.childNodes[i]);
+    }
+    return result;
   }
 
   function PreviewToEditorMapping(livePreview) {
