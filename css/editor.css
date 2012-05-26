@@ -531,3 +531,7 @@ html .tipsy {
   /* Make tipsy tooltips slightly larger than the default. */
   font-size: 12px;
 }
+
+.preview-to-editor-highlight {
+  background: rgba(0, 0, 255, 0.2);
+}

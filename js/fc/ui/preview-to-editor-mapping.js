@@ -1,6 +1,8 @@
 "use strict";
 
-define(function() {
+define([
+  "./mark-tracker"
+], function(MarkTracker) {
   // Given a descendant of the given root element, returns a CSS
   // selector that uniquely selects only the descendant from the
   // root element.
@@ -51,15 +53,20 @@ define(function() {
 
   function PreviewToEditorMapping(livePreview) {
     var codeMirror = livePreview.codeMirror;
+    var marks = MarkTracker(codeMirror);
     livePreview.on("refresh", function(event) {
       var docFrag = event.documentFragment;
+      marks.clear();
       event.window.addEventListener("mousedown", function(event) {
         var interval = nodeToCode(event.target, docFrag);
         if (interval) {
           var start = codeMirror.posFromIndex(interval.start);
           var end = codeMirror.posFromIndex(interval.end);
-          codeMirror.setSelection(start, end);
-          codeMirror.focus();
+          var startCoords = codeMirror.charCoords(start, "local");
+          codeMirror.scrollTo(startCoords.x, startCoords.y);
+          marks.clear();
+          marks.mark(interval.start, interval.end,
+                     "preview-to-editor-highlight");
           event.preventDefault();
           event.stopPropagation();
         }
