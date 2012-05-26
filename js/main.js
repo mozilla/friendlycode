@@ -113,7 +113,9 @@ define("main", function(require) {
   });
   
   var parachute = Parachute(window, codeMirror, pageToLoad);
-  var supportsPushState = window.history.pushState ? true : false;
+  
+  // TODO: This is a very temporary workaround for #39.
+  var supportsPushState = false;//window.history.pushState ? true : false;
 
   // make hints on/off actually work
   $("#hints-nav-item").click(function() {
