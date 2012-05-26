@@ -41,8 +41,23 @@ define("main", function(require) {
       publishURL = $("meta[name='publish-url']").attr("content"),
       pageToLoad = $("meta[name='remix-url']").attr("content"),
       Modals = require("fc/ui/modals"),
-      TextUI = require("fc/ui/text");
-  
+      TextUI = require("fc/ui/text"),
+      supportsPushState = window.history.pushState ? true : false,
+      remixURLTemplate = null;
+
+  if (pageToLoad) {
+    // A server is serving us as the custom edit URL for a web page.
+    remixURLTemplate = location.protocol + "//" + location.host +
+                       "{{VIEW_URL}}/edit";
+  }
+  // If a URL hash is specified, it should override anything provided by
+  // a server.
+  if (window.location.hash.slice(1))
+    pageToLoad = window.location.hash.slice(1);
+
+  if (supportsPushState)
+    window.history.replaceState({pageToLoad: pageToLoad}, "", location.href);
+    
   var codeMirror = ParsingCodeMirror($("#source")[0], {
     mode: "text/html",
     theme: "jsbin",
@@ -73,18 +88,6 @@ define("main", function(require) {
     previewArea: $("#preview-holder")
   });
   var publisher = Publisher(publishURL);
-  var remixURLTemplate = null;
-  
-  if (pageToLoad) {
-    // A server is serving us as the custom edit URL for a web page.
-    remixURLTemplate = location.protocol + "//" + location.host +
-                       "{{VIEW_URL}}/edit";
-  }
-  // If a URL hash is specified, it should override anything provided by
-  // a server.
-  if (window.location.hash.slice(1))
-    pageToLoad = window.location.hash.slice(1);
-
   var publishUI = PublishUI({
     codeMirror: codeMirror,
     publisher: publisher,
@@ -111,11 +114,7 @@ define("main", function(require) {
   var textUI = TextUI({
     codeMirror: codeMirror
   });
-  
   var parachute = Parachute(window, codeMirror, pageToLoad);
-  
-  // TODO: This is a very temporary workaround for #39.
-  var supportsPushState = false;//window.history.pushState ? true : false;
 
   // make hints on/off actually work
   $("#hints-nav-item").click(function() {
@@ -157,7 +156,11 @@ define("main", function(require) {
       // without a full page reload, unfortunately, so just trigger a
       // reload if the user clicked the 'back' button after we pushed
       // a new URL to it.
-      if (!event.state || event.state.pageToLoad != pageToLoad)
+      //
+      // Also, for some reason Webkit is sending a spurious popstate with
+      // state == null on page load, so we want to check that it's
+      // non-null first (see #39).
+      if (event.state && event.state.pageToLoad != pageToLoad)
         window.location.reload();
     }, false);
   
