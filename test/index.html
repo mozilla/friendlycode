@@ -9,8 +9,12 @@
     (function() {
       var base = document.querySelector("base[href]");
       var a = document.createElement("a");
-      a.setAttribute("href", "..");
-      base.setAttribute("href", a.href);
+      a.setAttribute("href", "");
+      if (a.href == location.href) {
+        // The host browser clearly isn't paying attention to our base tag.
+        a.setAttribute("href", "..");
+        base.setAttribute("href", a.href);
+      }
     })();
     </script>
     <link rel="stylesheet" href="test/qunit.css">

@@ -2,7 +2,7 @@
 
 define([
   "fc/ui/live-preview",
-  "../../slowparse/slowparse"
+  "slowparse/slowparse"
 ], function(LivePreview, Slowparse) {
   module("LivePreview");
   
