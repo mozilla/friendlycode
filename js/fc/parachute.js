@@ -38,6 +38,13 @@ define(["lscache"], function(lscache) {
       refresh: function() {
         originalData = codeMirror.getValue();
       },
+      clearCurrentPage: function() {
+        lscache.remove(key);
+      },
+      changePage: function(newPage) {
+        page = newPage;
+        key = prefix + page;
+      },
       destroyAll: function() {
         window.removeEventListener("beforeunload", self.save, true);
         lscache.flush();

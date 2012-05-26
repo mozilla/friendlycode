@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html>
-  </head>
+  <head>
     <meta charset="utf-8">
     <base href="..">
     <title>Friendlycode Test Suite</title>
+    <script>
+    // IE9 really wants base hrefs to be absolute URLs, so we'll do that...
+    (function() {
+      var base = document.querySelector("base[href]");
+      var a = document.createElement("a");
+      a.setAttribute("href", "..");
+      base.setAttribute("href", a.href);
+    })();
+    </script>
     <link rel="stylesheet" href="test/qunit.css">
   </head>
 

@@ -19,30 +19,48 @@
 .cm-s-jsbin span.cm-attribute {color: #994500;}
 
 .CodeMirror {
-  font-family: Arial, "Arial Unicode", Menlo, Monaco, consolas, monospace;
-  font-size: 12px;
-  line-height: 1.2em;
+  font-family: Arial, Helvetica, monospace;
+  font-weight: 200;
 }
 
+.CodeMirror .CodeMirror-lines {
+  font-family: Arial, Helvetica, monospace;
+  color: #333;
+  font-size: 16px;
+  line-height: 18px;
+}
+
+.CodeMirror textarea {
+  font-family: Arial, Helvetica, monospace;
+  font-size: 16px;
+  line-height: 18px;
+}
 
 .CodeMirror-gutter {
-  background-color: #b9b8b3;
+  background-color: #EEEEEE !important;
+  padding-right: 3px;
 }
 
 .CodeMirror-gutter-text {
-  color: #FCFCFC;
+  font-family: Menlo, Monaco, consolas, monospace;
+  color: #A9A9A9;
+  font-size: 12px;
+  line-height: 18px;
 }
 
 .cm-s-jsbin span.cm-comment {
+  font-family: Arial, Helvetica, monospace;
   background-color: white;
-  color: black;
+  color: #333;
   font-style: italic;
-  font-weight: bold;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 17px; /* keeping this 18 messes up alignment between gutter and lines */
 }
 
 .CodeMirror span.cursor-help-highlight,
 .cursor-help-highlight {
-  background-color: white;
+  background-color: #d5ac85;
 }
 
 .CodeMirror-wrap .CodeMirror-scroll {
@@ -51,4 +69,13 @@
 
 .CodeMirror-scroll.cm-s-jsbin {
   height: 100%;
+}
+
+.cm-tag {
+  color: #3A85FF !important;
+}
+
+.CodeMirror-line-highlight {
+  background-color: yellow !important;
+  color: green;
 }

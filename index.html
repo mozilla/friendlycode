@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="remix-url" content="">
     <meta name="publish-url" content="http://wpm.toolness.org">
-    <meta name="blank-url" content="blank.html">
     <base target="_blank">
 
     <!-- Dynamic servers like Django sites can serve this editor at a
@@ -11,156 +11,153 @@
          below. -->
     <base href=".">
 
-    <title>Mozilla Webpage Maker</title>
+    <title>Mozilla Thimble</title>
     <link rel="stylesheet" href="codemirror2/lib/codemirror.css">
     <link rel="stylesheet" href="css/jsbin-codemirror-theme.css">
     <link rel="stylesheet" href="css/tipsy.css">
-    <link rel="stylesheet" href="css/mozbranding.css">
-    <link rel="stylesheet" href="css/gumdrops.css">
     <link rel="stylesheet" href="css/editor.css">
     <link rel="stylesheet" href="css/modals.css">
   </head>
   <body>
+     <a href="http://www.mozilla.org/" id="tabzilla">mozilla</a>
 
     <header id="header">
-      <div class="busta">
-        <a id="tabzilla" href="http://www.mozilla.org" class="tabzilla-closed">mozilla.org</a>
-        <div class="logo">
-          <a>
-            <img src="img/mozilla-logo.png">
-            <b>W</b>EB<b>P</b>AGE <b>M</b>AKER
-          </a>
+      <div class="logo">
+        <a href="/">
+          <img src="img/temp-logo.png" alt="Mozilla Thimble">
+        </a>
+      </div>
+ 
+      <div id="nav-options">
+        <div id="editor-pane-nav-options">
+          <!-- editor, undo, redo, text size, hinting -->
+          <div id="editor-nav-item" class="nav-item enabled">
+            <span class="icon">&nbsp;</span>Editor
+            <div class="pane-indicator enabled"></div>
+          </div>
+          <div id="undo-nav-item" class="nav-item"
+               data-restore-help="We've rescued your very recent changes to this page, but you can click this button to undo them.">
+               <span class="icon">&nbsp;</span>Undo</div>
+          <div id="redo-nav-item" class="nav-item">
+            <span class="icon">&nbsp;</span>Redo
+          </div>
+          <div id="text-nav-item" class="nav-item">
+            <span class="icon">&nbsp;</span> Text size
+            <ul id="text-size-options">
+              <li data-size="small">Small</li>
+              <li data-size="normal">Normal</li>
+              <li data-size="large">Large</li>
+            </ul>
+          </div>
+          <div id="hints-nav-item"  class="nav-item on">Turn hints off</div>
+        </div>
+        <div id="preview-pane-nav-options">
+          <!-- previous, save draft, publish -->
+           <div id="preview-nav-item" class="nav-item enabled">
+             <span class="icon">&nbsp;</span>Preview<span class="preview-title"></span><div class="pane-indicator enabled"></div>
+           </div>
+           <div class="nav-item buttons">
+             <div id="publish-button" class="nav-button">Publish <span id="publish-pulldown">&nbsp;</span></div>
+           </div>
         </div>
       </div>
-
-      <div id="publish-box">
-          <a class="button" id="undo_button" data-restore-help="We've rescued your very recent changes to this page, but you can click this button to undo them.">Undo</a>
-          <a class="button" id="redo_button">Redo</a>
-          <!-- TODO: Until we actually implement the sharing widget,
-               we're renaming 'Save' to 'Share' and not displaying the
-               real 'Share' button. -->
-          <a class="button blue" id="save_button">Publish</a>
-          <!--
-          <a class="button" id="share_button">Share</a>
-          -->
-      </div>
-
-
-        <div id="guide-notes">
-          <div id="source-guide-note">This is your webpage's source code:</div>
-          <div id="preview-guide-note">And this is what it looks like!</div>
-        </div>
+      
     </header>
 
     <section id="editor" class="loading">
       <div id="source"></div>
       <div id="preview-holder"></div>
-    </section>
-
-    <!-- footer -->
-    <footer>
+      <!-- used for code hints and error reporting -->
       <div class="error" class="hidden"></div>
       <div class="help" class="hidden"></div>
+    </section>
+
+    <footer>
     </footer>
 
-    <!-- save/public modal -->
-    <div id="publish-dialog" class="modal-overlay" style="display: none">
-      <div class="modal-box">
-        <div class="close-icon"><img src="img/temp-icon.png"></div>
+ 
+    <!-- save/publish modal dialogs -->
+    <div id="confirm-dialog" class="modal-overlay" style="display: none;">
+      <div class="thimble-modal-menu thimble-blue-bar">
+        <div class="thimble-branding"></div>
+        <div class="thimble-menu-content">
+           <div id="publication-confirmation">
+             <!-- CONFIRM PUBLICATION -->           
+             <div class="thimble-title">Are you sure you want to publish your project to the web?</div>
+             <div class="thimble-additionals">
+               When you click the publish button it means your page will be visible
+               to everyone on the web. If you're sure you want to publish to the web, click "yes", otherwise
+               click "no".
+               <div class="confirmation-buttons">
+                 <span id="confirm-publication" class="confirmation-button yes-button">Yes <span class="mark">&nbsp;</span></span>
+                 <span id="cancel-publication" class="confirmation-button no-button">No <span class="mark">&nbsp;</span></span>
+               </div>
+             </div>
+             <!-- CONFIRM PUBLICATION -->           
+           </div>
+         </div>
+       </div>
+     </div>
+     
+    <div id="publish-dialog" class="modal-overlay" style="display: none;">
+      <div class="thimble-modal-menu thimble-grey-bar ">
+        <div class="thimble-branding"></div>
+        <div id="modal-close-button">&nbsp;</div>   
+        <div class="thimble-menu-content">
+           <!-- SHARE YOUR WORK -->
+           <div id="share-result" class="accordion collapsed">
+             <div class="thimble-title" id="share-trigger">Share this via...</div>
+             <div class="thimble-additionals">
+               <ul>
+                 <li data-medium="twitter">Twitter</li>
+                 <li data-medium="google">Google+</li>
+                 <li data-medium="facebook">Facebook</li>
+               </ul>
+             </div>
+           </div>
+           <!-- SHARE YOUR WORK -->
 
-        <div class="modal-title">
-          <strong>Hold on</strong>
-          <span class="light-text">we're saving your thing.</span>
-        </div>
-
-        <div class="modal-selection done">
-          <p>Ok, we're done.</p>
-          <div class="content-box">
-            <p>View your HTML page at:</p>
-            <p><a class="view" href="" target="_blank"></a></p>
-            <p>Remix your HTML page at:</p>
-            <p><a class="remix" href="" target="_blank"></a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- end of save/public modal dialog -->
-
-    <!-- modal overlay (not a template) -->
-    <div id="share-dialog" class="modal-overlay" style="display: none">
-      <div class="modal-box">
-        <div class="close-icon"><img src="img/temp-icon.png"></div>
-
-        <div class="modal-title">
-          <strong>choose</strong>
-          <span class="light-text">how you want to share:</span>
-        </div>
-
-        <div class="button-bar">
-          <ul id="share-buttons">
-            <li><a data-id="twitter-widget" class="twitter">Share with Twitter</a></li>
-            <li><a data-id="facebook-widget" class="facebook">Share with Facebook</a></li>
-            <li><a data-id="google-widget" class="google">Share with Google+</a></li>
-            <li><a data-id="link-to-this" class="link">Embed as Link</a></li>
-            <li><a data-id="download-code" class="download">Download Code</a></li>
-            <li><a data-id="mail-this" class="email">Email to a Friend</a></li>
-          </ul>
-        </div>
-
-        <div class="modal-selections" id="share-container">
-          <!-- twitter, facebook and goolge+ use socialshare -->
-          <div class="modal-selection facebook-widget">
-            Share your work on Facebook!
-            <div class="content-box facebook">
-              <a href="">Click here for the facebook like button</a>
-            </div>
-          </div>
-          <div class="modal-selection google-widget">
-            Share your work through Google!
-            <div class="content-box google">
-              <a href="">Click here for the Google+ button</a>
-            </div>
-          </div>
-          <div class="modal-selection twitter-widget">
-            Share your work via Twitter!
-            <div class="content-box twitter">
-              <a href="">Click here for the tweet button</a>
-            </div>
-          </div>
-
-          <div class="modal-selection link-to-this">
-            get the link for your page
-            <div class="content-box" id="quick-save">
-              <div class="done">
-                your link is: <a href="" class="view">here</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="modal-selection download-code">
-            get the source code for your page:
-            <div class="content-box">
-              <pre id="modal-source-code" readonly>
-              </pre>
-            </div>
-          </div>
-
-          <div class="modal-selection mail-this">
-            mail this to a friend
-            <div class="content-box">
-              <a href="" class="mailto">Click here to let a friend know about your remix!</a>
-            </div>
-          </div>
-
+           <!-- PUBLISH YOUR WORK -->
+           <div id="publication-result" class="accordion">
+             <div class="thimble-title">Grab the url for your webpage:</div>
+             <div class="thimble-url-box">
+               <a href="#" class="view">[we're busy publishing your page...]</a>
+             </div>
+             <div class="thimble-additionals">
+               Copy this link by right clicking on it and selecting "copy link location".
+             </div>
+           </div>
+           
+           <div id="remix-it" class="accordion collapsed">
+             <div class="thimble-title">Get the link to edit your published page:</div>
+             <div class="thimble-url-box">
+               <a href="#" class="remix">[we're busy publishing your page...]</a>
+             </div>
+             <div class="thimble-additionals">
+               Copy this link by right clicking on it and selecting "copy link location".
+             </div>
+           </div>
+           <!-- PUBLISH YOUR WORK -->
         </div>
       </div>
     </div>
-    <!-- modal overlay end -->
+    <!-- end of save/publish modal dialogs -->
+
+
+    <!-- page script section, at the end of body to prevent them holding up the page -->
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.tipsy.js"></script>
     <script src="js/underscore.min.js"></script>
     <script src="js/backbone.min.js"></script>
     <script src="slowparse/spec/errors.jquery.js"></script>
     <script data-main="js/main" src="js/require.min.js"></script>
+
+    <!-- this COULD hold up the page, so do this absolutely last -->
+    <script type="text/javascript" src="http://use.typekit.com/qjh6hdg.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link rel="stylesheet" href="http://www.mozilla.org/tabzilla/media/css/tabzilla.css">
+    <link rel="stylesheet" href="css/tabzilla-overrides.css">
+    <script src="http://www.mozilla.org/tabzilla/media/js/tabzilla.js"></script>
+
   </body>
 </html>
