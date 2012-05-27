@@ -49,6 +49,13 @@ require([
   });
 
   n2cTest({
+    name: "nodeToCode() works on void element",
+    html: '<html><img id="foo"></html>',
+    selector: "img",
+    expect: '<img id="foo">'
+  });
+
+  n2cTest({
     name: "nodeToCode() can't map to anything from implied <html>",
     html: "<p>hi</p>",
     selector: "html",

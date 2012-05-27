@@ -39,12 +39,15 @@ define([
     var path = "html " + pathTo(root, node);
     var parallelNode = docFrag.querySelector(path);
     var result = null;
-    if (parallelNode)
+    if (parallelNode) {
+      var pi = parallelNode.parseInfo;
+      var isVoidElement = !pi.closeTag;
       result = {
-        start: parallelNode.parseInfo.openTag.start,
-        end: parallelNode.parseInfo.closeTag.end,
-        contentStart: parallelNode.parseInfo.openTag.end
+        start: pi.openTag.start,
+        end: isVoidElement ? pi.openTag.end : pi.closeTag.end,
+        contentStart: isVoidElement ? pi.openTag.start : pi.openTag.end
       };
+    }
     if (origDocFrag != docFrag) {
       for (i = 0; i < htmlNode.childNodes.length; i++)
         origDocFrag.appendChild(htmlNode.childNodes[i]);
