@@ -326,6 +326,10 @@ img {
   margin-top: -1px;
 }
 
+#text-size-options li.selected {
+  background-color: #F4F4F4;
+}
+
 #text-size-options li:hover {
   background-color: rgb(200,235,255);
 }
