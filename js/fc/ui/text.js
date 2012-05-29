@@ -71,7 +71,7 @@ define(function() {
         // refesh code mirror
         codeMirror.refresh();
         // update localstorage
-        if (supports_local_storage()) { localStorage["ThimbleTextSize"] = size; }
+        if (supportsLocalStorage()) { localStorage["ThimbleTextSize"] = size; }
         // mark text size in drop-down
         $("#text-nav-item li").removeClass("selected");
         $("#text-nav-item li[data-size="+size+"]").addClass("selected");
