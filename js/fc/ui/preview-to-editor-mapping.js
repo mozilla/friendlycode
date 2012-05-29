@@ -21,6 +21,11 @@ define([
   }
   
   function nodeToCode(node, docFrag) {
+    var tagName = node.tagName.toLowerCase();
+    if (tagName === "html" || tagName === "body") {
+      return false;
+    }
+
     var root, i;
     var htmlNode = docFrag.querySelector("html");
     var origDocFrag = docFrag;
@@ -58,10 +63,13 @@ define([
   function PreviewToEditorMapping(livePreview) {
     var codeMirror = livePreview.codeMirror;
     var marks = MarkTracker(codeMirror);
+    var codeMirrorArea = $(".CodeMirror-lines")[0];
+    codeMirrorArea.addEventListener("mouseup", marks.clear, false);
     livePreview.on("refresh", function(event) {
       var docFrag = event.documentFragment;
       marks.clear();
       event.window.addEventListener("mousedown", function(event) {
+        marks.clear();
         var interval = nodeToCode(event.target, docFrag);
         if (interval) {
           var start = codeMirror.posFromIndex(interval.start);
@@ -69,10 +77,8 @@ define([
           var contentStart = codeMirror.posFromIndex(interval.contentStart);
           var startCoords = codeMirror.charCoords(start, "local");
           codeMirror.scrollTo(startCoords.x, startCoords.y);
-          marks.clear();
           marks.mark(interval.start, interval.end,
                      "preview-to-editor-highlight");
-          codeMirror.setCursor(contentStart);
           codeMirror.focus();
           event.preventDefault();
           event.stopPropagation();
