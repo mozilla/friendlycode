@@ -10,7 +10,7 @@ define(function() {
      * Check is local storage is supported, and if so, whether
      * the font size has already been stored previously.
      */
-    var supports_local_storage = function() {
+    var supportsLocalStorage = function() {
       try {
         return 'localStorage' in window && window['localStorage'] !== null;
       } catch (e) {
@@ -82,7 +82,7 @@ define(function() {
     /**
      * If there is a thimble text size set, trigger it.
      */
-    if (supports_local_storage()) {
+    if (supportsLocalStorage()) {
       if (typeof localStorage["ThimbleTextSize"] !== "undefined") {
         var textSize = localStorage["ThimbleTextSize"];
         $("#text-nav-item li[data-size="+textSize+"]").click();
