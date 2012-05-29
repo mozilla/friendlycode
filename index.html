@@ -35,13 +35,14 @@
             <span class="icon">&nbsp;</span>Editor
             <div class="pane-indicator enabled"></div>
           </div>
-          <div id="undo-nav-item" class="nav-item"
-               data-restore-help="We've rescued your very recent changes to this page, but you can click this button to undo them.">
+          <div id="undo-nav-item" class="nav-item responsive"
+               data-restore-help="We've rescued your very recent changes to this page, but you can click this button to undo them."
+               title="Undo changes">
                <span class="icon">&nbsp;</span>Undo</div>
-          <div id="redo-nav-item" class="nav-item">
+          <div id="redo-nav-item" class="nav-item responsive" title="Redo changes">
             <span class="icon">&nbsp;</span>Redo
           </div>
-          <div id="text-nav-item" class="nav-item">
+          <div id="text-nav-item" class="nav-item responsive" title="Change text size">
             <span class="icon">&nbsp;</span> Text size
             <ul id="text-size-options">
               <li data-size="small">Small</li>
@@ -49,7 +50,7 @@
               <li data-size="large">Large</li>
             </ul>
           </div>
-          <div id="hints-nav-item"  class="nav-item on">Turn hints off</div>
+          <div id="hints-nav-item"  class="nav-item on" title="Disable HTML and CSS hints and suggestions">Turn hints off</div>
         </div>
         <div id="preview-pane-nav-options">
           <!-- previous, save draft, publish -->
