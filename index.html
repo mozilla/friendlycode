@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+  <script type="text/javascript" src="l10n.js"></script>
+  <link rel="resource" type="application/l10n" href="friendlyCode.properties" />
     <meta charset="utf-8">
     <meta name="remix-url" content="">
     <meta name="publish-url" content="http://wpm.toolness.org">
@@ -31,20 +33,23 @@
       <div id="nav-options">
         <div id="editor-pane-nav-options">
           <!-- editor, undo, redo, text size, hinting -->
-          <div id="editor-nav-item" class="nav-item enabled">
+          <div id="editor-nav-item" data-l10n-id="editor" class="nav-item enabled">
             <span class="icon">&nbsp;</span>Editor
             <div class="pane-indicator enabled"></div>
           </div>
-          <div id="undo-nav-item" class="nav-item"
+          <div id="undo-nav-item" data-l10n-id="rescuedUndo" class="nav-item" 
                data-restore-help="We've rescued your very recent changes to this page, but you can click this button to undo them.">
-               <span class="icon">&nbsp;</span>Undo</div>
+               <span class="icon">&nbsp;</span>
+               <span data-l10n-id="rescuedUndoSpan">Undo</span>
+               </div>
           <div id="redo-nav-item" class="nav-item">
-            <span class="icon">&nbsp;</span>Redo
+            <span class="icon">&nbsp;</span>
+            <span data-l10n-id="rescuedRedoSpan">Redo</span>
           </div>
           <div id="text-nav-item" class="nav-item">
             <span class="icon">&nbsp;</span> Text size
             <ul id="text-size-options">
-              <li data-size="small">Small</li>
+              <li data-size="small" data-l10n-id="smallTextSize">Small</li>
               <li data-size="normal">Normal</li>
               <li data-size="large">Large</li>
             </ul>
