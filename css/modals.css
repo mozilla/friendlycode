@@ -39,11 +39,11 @@
   left: 365px;
   background-color: inherit;
 
-  -moz-transform: scale(1) rotate(45deg) translate(0px, 0px) skew(0deg, 0deg);
-  -webkit-transform: scale(1) rotate(45deg) translate(0px, 0px) skew(0deg, 0deg);
-  -o-transform: scale(1) rotate(45deg) translate(0px, 0px) skew(0deg, 0deg);
-  -ms-transform: scale(1) rotate(45deg) translate(0px, 0px) skew(0deg, 0deg);
-  transform: scale(1) rotate(45deg) translate(0px, 0px) skew(0deg, 0deg); 
+  -moz-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg); 
   
   border: 1px solid #C0C0C0;
   border-width: 1px 0px 0px 1px;
