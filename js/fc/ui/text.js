@@ -35,7 +35,7 @@ define(function() {
           lw = t.width(),
           ico = $(".icon",t),
           iw = ico.width();
-      tzo.css("display","inline").css("left", lp + "px").css("width", lw + "px");
+      tzo.css("display","inline").css("left", (lp-1) + "px").css("top","7px").css("width", lw + "px");
       tzo.mouseout(function() { $(this).hide(); });
       tzo.click(function() { $(this).hide(); });
       return false;
@@ -49,8 +49,12 @@ define(function() {
           size = t.attr("data-size"),
           base = (size==="small" ? 12 : size==="normal" ? 16 : 22),
           height = base * 1.125,
-          cheight = height - 1;
-          
+          cheight = height - 1,
+          lp = parseInt($("#text-nav-item li").css("padding-left")),
+          bwidth = 1;
+      
+      t.css("width", (t.width() - lp + 2*bwidth + 1) + "px");
+      
       var fn = function() {
         // remove old fontsize stylesheet
         var stylesheets = document.getElementsByTagName("style"), s, len=stylesheets.length, stylesheet;
