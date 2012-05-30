@@ -19,21 +19,22 @@
 .cm-s-jsbin span.cm-attribute {color: #994500;}
 
 .CodeMirror {
-  font-family: Arial, Helvetica, monospace;
+  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
   font-weight: 200;
+  font-size: 14px;
 }
 
 .CodeMirror .CodeMirror-lines {
-  font-family: Arial, Helvetica, monospace;
+  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
   color: #333;
-  font-size: 16px;
-  line-height: 18px;
+  font-size: 14px;
+  line-height: 16px;
 }
 
 .CodeMirror textarea {
-  font-family: Arial, Helvetica, monospace;
-  font-size: 16px;
-  line-height: 18px;
+  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 16px;
 }
 
 .CodeMirror-gutter {
@@ -48,14 +49,18 @@
   line-height: 18px;
 }
 
+.cm-s-jsbin span.cm-meta {
+  color: #999999;
+}
+
 .cm-s-jsbin span.cm-comment {
-  font-family: Arial, Helvetica, monospace;
+  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
   background-color: white;
   color: #333;
   font-style: italic;
   font-weight: normal;
-  font-size: 16px;
-  line-height: 17px; /* keeping this 18 messes up alignment between gutter and lines */
+  font-size: 14px;
+  line-height: 15px; /* needs to be a little less than the standard line-height to align on multi-line wrapped content */
 }
 
 .CodeMirror span.cursor-help-highlight,

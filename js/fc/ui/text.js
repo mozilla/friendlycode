@@ -5,6 +5,13 @@ define(function() {
   return function(options) {
     var codeMirror = options.codeMirror;
     var tzo = $("#text-size-options");
+    
+    /**
+     * established font sizes
+     */
+    var smallSize = 12,
+        normalSize = 14,
+        largeSize = 18;
 
     var smallSize = 12,
         normalSize = 16,
