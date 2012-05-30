@@ -35,7 +35,7 @@ define(function() {
         class: "twitter",
         id: "twitter-wjs",
         src: "http://platform.twitter.com/widgets.js",
-        html: "<a href='https://twitter.com/share'class='twitter-share-button' data-url='"+urlPlaceHolder+"' data-via='Mozilla' data-count='none'>Tweet</a>"
+        html: "<a href='https://twitter.com/share'class='twitter-share-button' data-text='Check out the #MozThimble page I just made: ' data-url='"+urlPlaceHolder+"' data-via='Mozilla' data-count='none'>Tweet</a>"
       },
 
       /**
