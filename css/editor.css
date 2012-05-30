@@ -101,11 +101,13 @@ img {
 }
 
 @media screen and (max-width: 960px) {
-  #nav-options .responsive {
+  #nav-options .responsive,
+  #nav-options .responsive:hover,
+  #nav-options .nav-item.responsive.enabled {
     max-width: 30px;
     overflow: hidden;
     background-position: center center;
-    color: transparent;
+    color: transparent !important;
   }
   #nav-options .nav-item ul,
   #nav-options .nav-item ul li {
