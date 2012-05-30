@@ -60,6 +60,9 @@ img {
 }
 
 #nav-options {
+  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+
   position: absolute;
   display: block;
   top: 79px;
@@ -96,6 +99,7 @@ img {
   color: black;
   opacity: 0.3;
   padding: 0px 5px;
+  padding-right: 2em;
   white-space: nowrap;
   cursor: pointer;
 }
@@ -184,7 +188,7 @@ img {
   padding: 5px 15px;
   margin: auto;
   color: white;
-  margin: 0px 0.5em;
+  margin: 0 0.5em 0 0.7em;
 }
 
 #save-draft-button {
@@ -236,13 +240,23 @@ img {
 
 /* ------ nav button stylings ------ */
 
-#editor-nav-item .icon {
+#editor-nav-item,
+#preview-nav-item {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+#editor-nav-item .icon,
+#preview-nav-item .icon {
   display: inline-block;
   width: 30px;
-  
-  background-image: url("../img/editor-icon.png");
   background-repeat: no-repeat;
   background-position: center center;
+  margin-right: 1em;
+}
+
+#editor-nav-item .icon {
+  background-image: url("../img/editor-icon.png");
 }
 
 #nav-options #editor-nav-item.nav-item.enabled {
@@ -250,12 +264,7 @@ img {
 }
 
 #preview-nav-item .icon {
-  display: inline-block;
-  width: 30px;
-  
   background-image: url("../img/preview-icon.png");
-  background-repeat: no-repeat;
-  background-position: center center;
 }
 
 #nav-options #preview-nav-item.nav-item.enabled {

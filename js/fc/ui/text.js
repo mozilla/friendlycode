@@ -51,9 +51,10 @@ define(function() {
           height = base * 1.125,
           cheight = height - 1,
           lp = parseInt($("#text-nav-item li").css("padding-left")),
+          rp = parseInt($("#text-nav-item li").css("padding-right")), 
           bwidth = 1;
       
-      t.css("width", (t.width() - lp + 2*bwidth + 1) + "px");
+      t.css("width", (t.width()) + "px");
       
       var fn = function() {
         // remove old fontsize stylesheet
