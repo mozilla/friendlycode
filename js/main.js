@@ -190,7 +190,6 @@ define("main", function(require) {
     $("#confirm-dialog").hide();
     $("#publish-dialog").show();
     publishUI.saveCode(function(viewURL, remixURL, path) {
-      $("a.remix").text("Here");
       onPostPublish(remixURL, path);
     });
   });
