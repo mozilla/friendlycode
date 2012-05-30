@@ -88,7 +88,7 @@ define("main", function(require) {
     ignoreErrors: true,
     previewArea: $("#preview-holder")
   });
-  var previewToEditorMapping = PreviewToEditorMapping(preview);
+  var previewToEditorMapping = PreviewToEditorMapping(preview, $(".CodeMirror-lines"));
   var publisher = Publisher(publishURL);
   var publishUI = PublishUI({
     codeMirror: codeMirror,

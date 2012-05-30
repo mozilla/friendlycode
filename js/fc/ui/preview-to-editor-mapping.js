@@ -9,10 +9,12 @@ define([
   function pathTo(root, descendant) {
     var target = $(descendant).get(0);
     var parts = [];
+    var node, nodeName, n, selector;
 
-    for (var node = target; node && node != root; node = node.parentNode) {
-      var n = $(node).prevAll(node.nodeName.toLowerCase()).length + 1;
-      var selector = node.nodeName.toLowerCase() + ':nth-of-type(' + n + ')';
+    for (node = target; node && node != root; node = node.parentNode) {
+      nodeName = node.nodeName.toLowerCase();
+      n = $(node).prevAll(nodeName).length + 1;
+      selector = nodeName + ':nth-of-type(' + n + ')';
       parts.push(selector);
     }
     
@@ -60,15 +62,14 @@ define([
     return result;
   }
 
-  function PreviewToEditorMapping(livePreview) {
+  function PreviewToEditorMapping(livePreview, codeMirrorAreas) {
     var codeMirror = livePreview.codeMirror;
     var marks = MarkTracker(codeMirror);
-    var codeMirrorArea = $(".CodeMirror-lines")[0];
-    codeMirrorArea.addEventListener("mouseup", marks.clear, false);
+    codeMirrorAreas.on("mouseup", marks.clear);
     livePreview.on("refresh", function(event) {
       var docFrag = event.documentFragment;
       marks.clear();
-      event.window.addEventListener("mousedown", function(event) {
+      $(event.window).on("mousedown", function(event) {
         marks.clear();
         var interval = nodeToCode(event.target, docFrag);
         if (interval) {
@@ -83,7 +84,7 @@ define([
           event.preventDefault();
           event.stopPropagation();
         }
-      }, true);
+      });
     });
   }
   
