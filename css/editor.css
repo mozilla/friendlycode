@@ -160,8 +160,19 @@ img {
   cursor: default;
 }
 
+#nav-options .nav-item.enabled,
 #nav-options .nav-item:hover {
   opacity: 1;
+  color: #3D59FE;
+}
+
+#nav-options .nav-item ul li {
+  opacity: 1;
+  color: #666;
+}
+
+#nav-options .nav-item ul li:hover {
+  color: #666;
 }
 
 #nav-options .nav-button {
@@ -221,11 +232,6 @@ img {
   opacity: 1;
 }
 
-#nav-options .nav-item.enabled {
-  opacity: 1 !important;
-  color: #000;
-}
-
 /* ------ nav button stylings ------ */
 
 #editor-nav-item .icon {
@@ -237,6 +243,10 @@ img {
   background-position: center center;
 }
 
+#nav-options #editor-nav-item.nav-item.enabled {
+  color: black;
+}
+
 #preview-nav-item .icon {
   display: inline-block;
   width: 30px;
@@ -244,6 +254,10 @@ img {
   background-image: url("../img/preview-icon.png");
   background-repeat: no-repeat;
   background-position: center center;
+}
+
+#nav-options #preview-nav-item.nav-item.enabled {
+  color: black;
 }
 
 #preview-nav-item .preview-title {
@@ -275,6 +289,11 @@ img {
   background-position: center center;
 }
 
+#undo-nav-item.enabled .icon,
+#undo-nav-item:hover .icon {
+  background-image: url("../img/undo-blue.png");
+}
+
 #redo-nav-item .icon {
   display: inline-block;
   width: 30px;
@@ -284,6 +303,11 @@ img {
   background-position: center center;
 }
 
+#redo-nav-item.enabled .icon,
+#redo-nav-item:hover .icon {
+  background-image: url("../img/redo-blue.png");
+}
+
 #text-nav-item .icon {
   display: inline-block;
   width: 30px;
@@ -291,6 +315,10 @@ img {
   background-image: url("../img/text-size.png");
   background-repeat: no-repeat;
   background-position: center center;
+}
+
+#text-nav-item:hover .icon {
+  background-image: url("../img/text-size-blue.png");
 }
 
 #text-size-options {
