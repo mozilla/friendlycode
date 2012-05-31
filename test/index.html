@@ -9,8 +9,12 @@
     (function() {
       var base = document.querySelector("base[href]");
       var a = document.createElement("a");
-      a.setAttribute("href", "..");
-      base.setAttribute("href", a.href);
+      a.setAttribute("href", "");
+      if (a.href == location.href) {
+        // The host browser clearly isn't paying attention to our base tag.
+        a.setAttribute("href", "..");
+        base.setAttribute("href", a.href);
+      }
     })();
     </script>
     <link rel="stylesheet" href="test/qunit.css">
@@ -45,7 +49,8 @@
       "test/test-parsing-codemirror",
       "test/test-mark-tracker",
       "test/test-live-preview",
-      "test/publisher/test-publisher"
+      "test/publisher/test-publisher",
+      "test/preview-to-editor-mapping/test-preview-to-editor-mapping"
     ], function() {
       if (QUnit.config.blocking)
         QUnit.config.autostart = true;
