@@ -79,3 +79,7 @@
   background-color: yellow !important;
   color: green;
 }
+
+.CodeMirror span.preview-to-editor-highlight {
+  background-color: rgba(50,100,255,0.3);
+}
