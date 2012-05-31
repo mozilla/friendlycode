@@ -6,7 +6,7 @@
 //  [RequireJS plugin]: http://requirejs.org/docs/plugins.html#apiload
 (function() {
   var errorsLoaded = jQuery.Deferred();
-  
+
   define("appReady", [], {
     load: function(name, req, load, config) {
       jQuery.when(errorsLoaded).then(load);
@@ -58,7 +58,7 @@ define("main", function(require) {
 
   if (supportsPushState)
     window.history.replaceState({pageToLoad: pageToLoad}, "", location.href);
-    
+
   var codeMirror = ParsingCodeMirror($("#source")[0], {
     mode: "text/html",
     theme: "jsbin",
@@ -141,7 +141,7 @@ define("main", function(require) {
       return false;
     };
   });
-  
+
   window.addEventListener("hashchange", function(event) {
     // We don't currently support dynamically changing the URL
     // without a full page reload, unfortunately, so just trigger a
@@ -151,7 +151,7 @@ define("main", function(require) {
     if (newPageToLoad != pageToLoad)
       window.location.reload();
   }, false);
-  
+
   if (supportsPushState)
     window.addEventListener("popstate", function(event) {
       // We don't currently support dynamically changing the URL
@@ -165,7 +165,7 @@ define("main", function(require) {
       if (event.state && event.state.pageToLoad != pageToLoad)
         window.location.reload();
     }, false);
-  
+
   function onPostPublish(url, newPageToLoad) {
     // If the browser supports history.pushState, set the URL to
     // be the new URL to remix the page they just published, so they
@@ -186,7 +186,7 @@ define("main", function(require) {
     else
       window.location.hash = "#" + pageToLoad;
   }
-  
+
   // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
   $("#confirm-publication").click(function(){
     $("#confirm-dialog").hide();
@@ -233,12 +233,44 @@ define("main", function(require) {
     else
       $(".preview-title").hide();
   });
-  
+
+
+  var currentLanguage = window.navigator.userLanguage || window.navigator.language,
+      defaultLanguage = 'en';
+  /**
+   * Fetch content from remote URL
+   *
+   * @param {Array}    list      Array of URLs to try. Will try the first one
+   *                             then the second if the first doesn't exists…
+   * @param {Function} onSuccess function to call on success
+   */
+  function getContent(list, onSuccess) {
+    if (list.length > 0) {
+      jQuery.ajax({
+        url: list[0] + '.html',
+        success: onSuccess,
+        dataType: 'text',
+        statusCode: {
+          404: function () {
+            getContent(list.slice(1), onSuccess);
+          }
+        }
+      });
+    }
+  }
+  function getContentList(page) {
+
+    return [
+      'contents/' + page + '.' + currentLanguage,
+      'contents/' + page + '.' + defaultLanguage,
+      'contents/' + page
+    ];
+  }
   if (!pageToLoad) {
-    jQuery.get("default-content.html", function(html) {
+    getContent(getContentList('default-content'), function (html) {
       codeMirror.setValue(html.trim());
       doneLoading();
-    }, "text");
+    });
   } else
     publishUI.loadCode(pageToLoad, doneLoading);
 
