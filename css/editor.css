@@ -60,6 +60,9 @@ img {
 }
 
 #nav-options {
+  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+
   position: absolute;
   display: block;
   top: 79px;
@@ -89,18 +92,18 @@ img {
 
 #nav-options .nav-item {
   display: table-cell;
-  border-right: 1px solid #D6D6D6;
   height: 41px;
   text-align: center;
   vertical-align: middle;
   color: black;
   opacity: 0.3;
   padding: 0px 5px;
+  padding-right: 2em;
   white-space: nowrap;
   cursor: pointer;
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 940px) {
   #nav-options .responsive,
   #nav-options .responsive:hover,
   #nav-options .nav-item.responsive.enabled {
@@ -119,34 +122,42 @@ img {
   #nav-options .nav-item {
     border: none;
   }
-  #editor-nav-item {
-    border-right: 1px solid #D6D6D6 !important;
-  }
-  #preview-nav-item {
-    border-right: 1px solid #D6D6D6 !important;
-  }
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 755px) {
   #editor-pane-nav-options {
     border: none;
   }
   #preview-pane-nav-options {
-   left: 60%;
+   left: 65%;
+  }
+  #preview-nav-item .icon {
+    margin-right: 0px !important;
   }
   #preview-nav-item {
     border-left: 1px solid #D6D6D6 !important;
     border-right: 1px solid #D6D6D6 !important;
+    padding-right: 10px !important;
   }
   #nav-options .nav-item.buttons {
-    right: 18% !important;
+    right: 30% !important;
+  }
+  #hints-nav-item {
+    margin-left: 0px !important;
+    left: 300px !important;
   }
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 590px) {
   #editor-nav-item.nav-item,
   #preview-nav-item.nav-item {
     display: none !important;
+  }
+  #hints-nav-item {
+    left: 180px !important;
+  }
+  #tabzilla {
+    right: 16% !important;
   }
 }
 
@@ -184,7 +195,7 @@ img {
   padding: 5px 15px;
   margin: auto;
   color: white;
-  margin: 0px 0.5em;
+  margin: 0 0.5em 0 0.7em;
 }
 
 #save-draft-button {
@@ -236,13 +247,23 @@ img {
 
 /* ------ nav button stylings ------ */
 
-#editor-nav-item .icon {
+#editor-nav-item,
+#preview-nav-item {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+#editor-nav-item .icon,
+#preview-nav-item .icon {
   display: inline-block;
   width: 30px;
-  
-  background-image: url("../img/editor-icon.png");
   background-repeat: no-repeat;
   background-position: center center;
+  margin-right: 1em;
+}
+
+#editor-nav-item .icon {
+  background-image: url("../img/editor-icon.png");
 }
 
 #nav-options #editor-nav-item.nav-item.enabled {
@@ -250,12 +271,7 @@ img {
 }
 
 #preview-nav-item .icon {
-  display: inline-block;
-  width: 30px;
-  
   background-image: url("../img/preview-icon.png");
-  background-repeat: no-repeat;
-  background-position: center center;
 }
 
 #nav-options #preview-nav-item.nav-item.enabled {
@@ -312,7 +328,7 @@ img {
 
 #text-nav-item .icon {
   display: inline-block;
-  width: 30px;
+  width: 40px;
 
   background-image: url("../img/text-size.png");
   background-repeat: no-repeat;
@@ -338,15 +354,15 @@ img {
 }
 
 #text-nav-item li {
-  width: 100%;
   background-color: white;
   border: 1px solid C0C0C0;
   border-top: none;
-  padding: 10px 0px;
+  padding: 10px;
 
   background-repeat: no-repeat;
   background-position: 0px center;
-  padding-left: 35px;
+  padding-left: 40px;
+  width: 60px;
   
   border: 1px solid #D6D6D6;
   margin-top: -1px;
@@ -362,20 +378,35 @@ img {
 
 #text-size-options li[data-size=small] {
   background-image: url("../img/text-size-small.png");
+  font-size: 12px; /* MUST sync up with values used in fc/ui/text.js */
 }
 #text-size-options li[data-size=normal] {
   background-image: url("../img/text-size-normal.png");
+  font-size: 16px; /* MUST sync up with values used in fc/ui/text.js */
 }
 #text-size-options li[data-size=large] {
   background-image: url("../img/text-size-large.png");
+  font-size: 22px; /* MUST sync up with values used in fc/ui/text.js */
+}
+
+#hints-nav-item {
+  left: 100%;
+  margin-left: -90px;
+  position: absolute;
+  top: 12px;
+  
+  color: blue !important;
+  opacity: 1 !important;
 }
 
 #hints-nav-item.on:before {
-  content: "☐ ";
+  content: "☑ ";
+  color: black !important;
 }
 
 #hints-nav-item.off:before {
-  content: "☑ ";
+  content: "☐ ";
+  color: black !important;
 }
 
 
