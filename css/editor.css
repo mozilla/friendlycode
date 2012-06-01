@@ -293,7 +293,7 @@ img {
   position: absolute;
   background-image: url("../img/indicator-arrow.png");
   top: 38px;
-  left: 20px;
+  left: 16px;
   width: 30px;
   height: 17px;
 }
@@ -545,101 +545,6 @@ footer {
 
 #source:hover .CodeMirror-gutter {
   opacity: 1.0;
-}
-
-/* ------ ERRORS AND HELP MESSAGE STYLING ------ */
-
-.error,
-.help {
-  display: block;
-  position: absolute;
-  top: 0px;
-  left: 100px;
-  
-  width: 450px;
-  height: 100px;
-  background-color: #FDFDFD;
-  border: 5px solid #D6D6D6;
-  margin: 10px;
-  padding: 4px;
-  margin-top: -10px;
-  white-space: normal;
-}
-
-.error {
-  border: 5px solid red;
-}
-
-.help {
-  border: 5px solid rgb(0,130,255);
-}
-
-.error p {
-  display: inline;
-}
-
-.error .icon,
-.help .icon {
-  display: inline-block;
-  width: 80px;
-  height: 100px;
-  border-right: 1px solid #C0C0C0;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.error .content,
-.help .content {
-  display: inline-block;
-  width: 362px;
-  height: 100px;
-  vertical-align: top;
-  overflow: auto;
-}
-
-.error .icon img,
-.help .icon img {
-}
-
-b {
-  font-family: OpenSansRegular, sans-serif;
-}
-
-.error a,
-.help a  {
-  color: rgb(0,130,255);
-  font-weight: bold;
-}
-
-.error strong,
-.help strong {
-  color: rgb(0,130,255);
-  font-weight: bold;
-  font-size: 110%;
-}
-.error code,
-.help code {
-  color: rgb(0,130,255);
-  font-weight: bold;
-  font-size: 110%;
-}
-.error em[data-highlight],
-.help em[data-highlight] {
-  color: rgb(0,130,255);
-}
-
-.error em.highlight-1,
-.help em.highlight-1,
-.CodeMirror span.highlight-1 {
-  color: black;
-  background: yellow;
-}
-
-.error em.highlight-2,
-.help em.highlight-2,
-.CodeMirror span.highlight-2 {
-  color: white;
-  background: gray;
 }
 
 html .tipsy {

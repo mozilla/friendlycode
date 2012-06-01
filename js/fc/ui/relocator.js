@@ -12,11 +12,16 @@ define(function() {
     
       // relocate an element to inside CodeMirror, pointing "at" the line for startMark
       relocate: function(element, startMark) {
+        this.cleanup();
+
         // find the line position for the start mark
         var cmLocation = codeMirror.posFromIndex(startMark);
         var linePre = $($('.CodeMirror-gutter-text pre')[cmLocation.line]);
         linePre.addClass("CodeMirror-line-highlight");
 
+        var contentPre = $($('.CodeMirror-lines pre')[cmLocation.line+2]);
+        contentPre.addClass("CodeMirror-line-highlight");
+        
         // move the message to this line
         var _tmp = element.clone();
         element.replaceWith(_tmp);

@@ -65,7 +65,9 @@
 
 .CodeMirror span.cursor-help-highlight,
 .cursor-help-highlight {
+  /*
   background-color: #d5ac85;
+  */
 }
 
 .CodeMirror-wrap .CodeMirror-scroll {
@@ -80,11 +82,31 @@
   color: #3A85FF !important;
 }
 
-.CodeMirror-line-highlight {
-  background-color: yellow !important;
-  color: green;
+.CodeMirror-gutter-text .CodeMirror-line-highlight {
+  color: white;
+
+  margin: -3px;
+  border: 3px solid transparent;
+  margin: -3px;
+
+  border-right: none;
+  padding-right: 12px;
+  margin-right: -12px;
+
+  background-image: url("../img/line-arrow.png");
+  background-position: right;
+  background-repeat: no-repeat;
 }
 
+.CodeMirror-lines .CodeMirror-line-highlight {
+  background-color: #EEEEEE;
+  margin-left: -3em;
+  padding-left: 3em;
+}
+
+.CodeMirror-gutter {
+  opacity: 1 !important;
+}
 .CodeMirror span.preview-to-editor-highlight {
   background-color: rgba(50,100,255,0.3);
 }

@@ -125,6 +125,7 @@ define("main", function(require) {
       hints.removeClass("on").addClass("off");
       // make sure to hide the help, in case it's active when this option's selected
       $("div.help").hide();
+      relocator.cleanup();
     } else {
       hints.removeClass("off").addClass("on");
     }

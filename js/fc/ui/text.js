@@ -94,10 +94,11 @@ define(function() {
      * If there is a thimble text size set, trigger it.
      */
     if (supportsLocalStorage()) {
+      var textSize = "normal";
       if (typeof localStorage["ThimbleTextSize"] !== "undefined") {
-        var textSize = localStorage["ThimbleTextSize"];
-        $("#text-nav-item li[data-size="+textSize+"]").click();
+        textSize = localStorage["ThimbleTextSize"];
       }
+      $("#text-nav-item li[data-size="+textSize+"]").click();
     }
   };
 });

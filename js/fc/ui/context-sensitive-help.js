@@ -17,16 +17,17 @@ define(["./mark-tracker"], function(MarkTracker) {
   
     codeMirror.on("reparse", function(event) {
       lastEvent = event;
+      relocator.cleanup();
       helpIndex.clear();
-      if (event.error)
+      if (event.error) {
         helpArea.hide();
-      else
+      } else {
         helpIndex.build(event.document, event.sourceCode);
+      }
     });
   
     codeMirror.on("cursor-activity", function() {
       cursorHelpMarks.clear();
-      relocator.cleanup();
 
       // people may not want helpful hints
       if ($("#hints-nav-item").hasClass("off")) return;
@@ -52,8 +53,9 @@ define(["./mark-tracker"], function(MarkTracker) {
           cursorHelpMarks.mark(start, end, "cursor-help-highlight");
         });
         relocator.relocate(helpArea, startMark);
-      } else
+      } else {
         helpArea.hide();
+      }
     });
   
     return self;
