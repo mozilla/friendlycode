@@ -61,6 +61,14 @@
            <div id="preview-nav-item" class="nav-item enabled">
              <span class="icon">&nbsp;</span><span data-l10n-id="previewSpan">Preview</span><span class="preview-title"></span><div class="pane-indicator enabled"></div>
            </div>
+             <div class="nav-item responsive">
+               <span data-l10n-id="langSelection">language selection</span>
+               <select onchange="document.webL10n.getLanguage().setCode(this.value || this.options[this.selectedIndex].text);">
+                 <option disabled selected> </option>
+                 <option>en</option>
+                 <option>fr</option>
+               </select>
+             </div>
            <div class="nav-item buttons">
              <div id="publish-button" class="nav-button" data-l10n-id="publishButton">Publish<span id="publish-pulldown">&nbsp;</span></div>
            </div>
