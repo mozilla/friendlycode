@@ -6,6 +6,10 @@ define(function() {
     var codeMirror = options.codeMirror;
     var tzo = $("#text-size-options");
 
+    var smallSize = 12,
+        normalSize = 16,
+        largeSize = 22;
+
     /**
      * Check is local storage is supported, and if so, whether
      * the font size has already been stored previously.
@@ -31,11 +35,8 @@ define(function() {
      */
     $("#text-nav-item").mouseover(function() {
       var t = $(this),
-          lp = t.position().left,
-          lw = t.width(),
-          ico = $(".icon",t),
-          iw = ico.width();
-      tzo.css("display","inline").css("left", (lp-1) + "px").css("top","7px").css("width", lw + "px");
+          lp = t.position().left;
+      tzo.css("display","inline").css("left", (lp-1) + "px").css("top","7px");
       tzo.mouseout(function() { $(this).hide(); });
       tzo.click(function() { $(this).hide(); });
       return false;
@@ -47,14 +48,12 @@ define(function() {
     $("#text-nav-item li").each(function() {
       var t = $(this),
           size = t.attr("data-size"),
-          base = (size==="small" ? 12 : size==="normal" ? 16 : 22),
+          base = (size==="small" ? smallSize : size==="normal" ? normalSize : largeSize),
           height = base * 1.125,
           cheight = height - 1,
           lp = parseInt($("#text-nav-item li").css("padding-left")),
           rp = parseInt($("#text-nav-item li").css("padding-right")), 
           bwidth = 1;
-      
-      t.css("width", (t.width()) + "px");
       
       var fn = function() {
         // remove old fontsize stylesheet
