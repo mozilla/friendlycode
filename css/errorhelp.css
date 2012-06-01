@@ -19,6 +19,8 @@
   border: 1px solid rgb(193,193,193);
   -webkit-box-shadow: 0px 0px 5px 1px #C1C1C1;
   box-shadow: 0px 0px 5px 1px #C1C1C1;
+  
+  z-index: 1;
 }
 
 
@@ -42,8 +44,8 @@
 .error .content,
 .help .content {
   display: inline-block;
-  width: 355px;  /* 450 - 80 for icon - 10 for twice the padding - 5 to make sure there's not overlap */
-  height: 100%;
+  width: 78%;
+  height: 90%;
   vertical-align: top;
   overflow: auto;
   padding: 5px;
@@ -99,14 +101,26 @@ b {
 }
 
 .error .down-arrow,
-.help .down-arrow {
-  position: relative;
+.help .down-arrow,
+.error .up-arrow,
+.help .up-arrow {
+  position: absolute;
   display: block;
   width: 40px;
   height: 23px;
-  background-image: url("../img/hint-down-arrow.png");
   background-repeat: no-repeat;
   background-position: center center;
-  top: -6px;
   left: 50%;
+}
+
+.error .down-arrow,
+.help .down-arrow {
+  top: 138px;
+  background-image: url("../img/hint-down-arrow.png");
+}
+
+.error .up-arrow,
+.help .up-arrow {
+  top: -22px;
+  background-image: url("../img/hint-up-arrow.png");
 }

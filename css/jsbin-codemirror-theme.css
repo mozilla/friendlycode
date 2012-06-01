@@ -55,10 +55,9 @@
 
 .cm-s-jsbin span.cm-comment {
   font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
-  background-color: white;
   color: #333;
   font-style: italic;
-  font-weight: normal;
+  font-weight: bold;
   font-size: 14px;
   line-height: 15px; /* needs to be a little less than the standard line-height to align on multi-line wrapped content */
 }
