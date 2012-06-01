@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="css/opensans/stylesheet.css">
     <link rel="stylesheet" href="css/editor.css">
     <link rel="stylesheet" href="css/modals.css">
+    <!-- Translations -->
+    <link rel="resource" type="application/l10n" href="friendlyCode.properties" />
   </head>
   <body>
      <a href="http://www.mozilla.org/" id="tabzilla">mozilla</a>
@@ -28,42 +30,43 @@
           <img src="img/thimble-logo.png" alt="Mozilla Thimble">
         </a>
       </div>
- 
+
       <div id="nav-options">
         <div id="editor-pane-nav-options">
           <!-- editor, undo, redo, text size, hinting -->
-          <div id="editor-nav-item" class="nav-item enabled">
+          <div id="editor-nav-item" data-l10n-id="editor" class="nav-item enabled">
             <span class="icon">&nbsp;</span>Editor
             <div class="pane-indicator enabled"></div>
           </div>
           <div id="undo-nav-item" class="nav-item responsive"
                data-restore-help="We've rescued your very recent changes to this page, but you can click this button to undo them."
+               data-l10n-id="rescuedUndo"
                title="Undo changes">
                <span class="icon">&nbsp;</span>Undo</div>
-          <div id="redo-nav-item" class="nav-item responsive" title="Redo changes">
+          <div id="redo-nav-item" class="nav-item responsive" title="Redo changes" data-l10n-id="rescuedRedo">
             <span class="icon">&nbsp;</span>Redo
           </div>
-          <div id="text-nav-item" class="nav-item responsive" title="Change text size">
+          <div id="text-nav-item" class="nav-item responsive" title="Change text size" data-l10n-id="textSize">
             <span class="icon">&nbsp;</span> Text size
             <ul id="text-size-options">
-              <li data-size="small">Small</li>
-              <li data-size="normal">Normal</li>
-              <li data-size="large">Large</li>
+              <li data-size="small" data-l10n-id="smallTextSize">Small</li>
+              <li data-size="normal" data-l10n-id="normalTextSize">Normal</li>
+              <li data-size="large" data-l10n-id="largeTextSize">Large</li>
             </ul>
           </div>
-          <div id="hints-nav-item"  class="nav-item on" title="Disable HTML and CSS hints and suggestions">Turn hints off</div>
+          <div id="hints-nav-item" class="nav-item on" title="Disable HTML and CSS hints and suggestions" data-l10n-id="turnHintsOff">Turn hints off</div>
         </div>
         <div id="preview-pane-nav-options">
           <!-- previous, save draft, publish -->
            <div id="preview-nav-item" class="nav-item enabled">
-             <span class="icon">&nbsp;</span>Preview<span class="preview-title"></span><div class="pane-indicator enabled"></div>
+             <span class="icon">&nbsp;</span><span data-l10n-id="previewSpan">Preview</span><span class="preview-title"></span><div class="pane-indicator enabled"></div>
            </div>
            <div class="nav-item buttons">
-             <div id="publish-button" class="nav-button">Publish <span id="publish-pulldown">&nbsp;</span></div>
+             <div id="publish-button" class="nav-button" data-l10n-id="publishButton">Publish<span id="publish-pulldown">&nbsp;</span></div>
            </div>
         </div>
       </div>
-      
+
     </header>
 
     <section id="editor" class="loading">
@@ -77,38 +80,38 @@
     <footer>
     </footer>
 
- 
+
     <!-- save/publish modal dialogs -->
     <div id="confirm-dialog" class="modal-overlay" style="display: none;">
       <div class="thimble-modal-menu thimble-blue-bar">
         <div class="thimble-branding"></div>
         <div class="thimble-menu-content">
            <div id="publication-confirmation">
-             <!-- CONFIRM PUBLICATION -->           
-             <div class="thimble-title">Are you sure you want to publish your project to the web?</div>
-             <div class="thimble-additionals">
+             <!-- CONFIRM PUBLICATION -->
+             <div data-l10n-id="confirmPublish" class="thimble-title" >Are you sure you want to publish your project to the web?</div>
+             <div data-l10n-id="confirmPublishMore" class="thimble-additionals">
                When you click the publish button it means your page will be visible
                to everyone on the web. If you're sure you want to publish to the web, click "yes", otherwise
                click "no".
                <div class="confirmation-buttons">
-                 <span id="confirm-publication" class="confirmation-button yes-button">Yes <span class="mark">&nbsp;</span></span>
-                 <span id="cancel-publication" class="confirmation-button no-button">No <span class="mark">&nbsp;</span></span>
+                 <span id="confirm-publication" data-l10n-id="yesButton" class="confirmation-button yes-button">Yes <span class="mark">&nbsp;</span></span>
+                 <span id="cancel-publication" data-l10n-id="noButton" class="confirmation-button no-button">No <span class="mark">&nbsp;</span></span>
                </div>
              </div>
-             <!-- CONFIRM PUBLICATION -->           
+             <!-- CONFIRM PUBLICATION -->
            </div>
          </div>
        </div>
      </div>
-     
+
     <div id="publish-dialog" class="modal-overlay" style="display: none;">
       <div class="thimble-modal-menu thimble-grey-bar ">
         <div class="thimble-branding"></div>
-        <div id="modal-close-button">&nbsp;</div>   
+        <div id="modal-close-button">&nbsp;</div>
         <div class="thimble-menu-content">
            <!-- SHARE YOUR WORK -->
            <div id="share-result" class="accordion collapsed">
-             <div class="thimble-title" id="share-trigger">Share this via...</div>
+             <div class="thimble-title" id="share-trigger" data-l10n-id="shareThisVia" >Share this via...</div>
              <div class="thimble-additionals">
                <ul>
                  <li data-medium="twitter">Twitter</li>
@@ -121,21 +124,21 @@
 
            <!-- PUBLISH YOUR WORK -->
            <div id="publication-result" class="accordion">
-             <div class="thimble-title">Grab the URL for your webpage:</div>
+             <div class="thimble-title" data-l10n-id="grabURL" >Grab the url for your webpage:</div>
              <div class="thimble-url-box">
-               <a href="#" class="view">[we're busy publishing your page...]</a>
+               <a href="#" data-l10n-id="busyPublishing" class="view">[we're busy publishing your page...]</a>
              </div>
-             <div class="thimble-additionals">
+             <div data-l10n-id="copyThisLink" class="thimble-additionals">
                Copy this link by right clicking on it and selecting "copy link location".
              </div>
            </div>
-           
+
            <div id="remix-it" class="accordion collapsed">
-             <div class="thimble-title">Get the link to edit your published page:</div>
+             <div class="thimble-title" data-l10n-id="getTheLink">Get the link to edit your published page:</div>
              <div class="thimble-url-box">
-               <a href="#" class="remix">[we're busy publishing your page...]</a>
+               <a href="#" data-l10n-id="busyPublishing" class="remix">[we're busy publishing your page...]</a>
              </div>
-             <div class="thimble-additionals">
+             <div data-l10n-id="copyThisLink" class="thimble-additionals">
                Copy this link by right clicking on it and selecting "copy link location".
              </div>
            </div>
@@ -147,6 +150,7 @@
 
 
     <!-- page script section, at the end of body to prevent them holding up the page -->
+    <script type="text/javascript" src="js/webL10n/l10n.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.tipsy.js"></script>
     <script src="js/underscore.min.js"></script>
