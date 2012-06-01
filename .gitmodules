@@ -1,3 +1,6 @@
 [submodule "slowparse"]
 	path = slowparse
 	url = git://github.com/toolness/slowparse.git
+[submodule "js/webL10n"]
+	path = js/webL10n
+	url = https://github.com/fabi1cazenave/webL10n.git
