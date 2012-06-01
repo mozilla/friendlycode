@@ -30,6 +30,7 @@ define("main", function(require) {
       ContextSensitiveHelp = require("fc/ui/context-sensitive-help"),
       ErrorHelp = require("fc/ui/error-help"),
       LivePreview = require("fc/ui/live-preview"),
+      PreviewToEditorMapping = require("fc/ui/preview-to-editor-mapping"),
       HistoryUI = require("fc/ui/history"),
       PublishUI = require("fc/ui/publish"),
       Relocator = require("fc/ui/relocator"),
@@ -87,6 +88,7 @@ define("main", function(require) {
     ignoreErrors: true,
     previewArea: $("#preview-holder")
   });
+  var previewToEditorMapping = PreviewToEditorMapping(preview, $(".CodeMirror-lines"));
   var publisher = Publisher(publishURL);
   var publishUI = PublishUI({
     codeMirror: codeMirror,

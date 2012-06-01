@@ -1,9 +1,16 @@
 "use strict";
 
-require(["fc/ui/live-preview"], function(LivePreview) {
+define([
+  "fc/ui/live-preview",
+  "slowparse/slowparse"
+], function(LivePreview, Slowparse) {
   module("LivePreview");
   
-  function lpTest(name, cb) {
+  function lpTest(name, html, cb) {
+    if (typeof(html) == 'function') {
+      cb = html;
+      html = '<p>hi <em>there</em></p>';
+    }
     test(name, function() {
       var div = $('<div></div>').appendTo('body').css({visibility: "hidden"});
       var cm = {};
@@ -12,15 +19,19 @@ require(["fc/ui/live-preview"], function(LivePreview) {
         codeMirror: cm,
         previewArea: div
       });
+      var result = Slowparse.HTML(document, html);
       cm.trigger('reparse', {
         error: null,
-        sourceCode: '<p>hi <em>there</em></p>'
+        sourceCode: html,
+        document: result.document
       });
       try {
         var iframe = div.find("iframe");
         if (iframe.length != 1)
           ok(false, "preview area should contain 1 iframe");
-        cb(iframe, preview, cm);
+        if (!iframe[0].contentWindow)
+          ok(false, "iframe contentWindow should be non-null");
+        cb(iframe, preview, cm, result.document, html);
       } finally {
         div.remove();
       }
@@ -35,6 +46,22 @@ require(["fc/ui/live-preview"], function(LivePreview) {
   
   lpTest('<base target="_blank"> inserted', function(previewArea) {
     equal($('base[target="_blank"]', previewArea.contents()).length, 1);
+  });
+  
+  lpTest("refresh event is triggered", function(previewArea, preview, cm) {
+    var refreshTriggered = false;
+    equal(preview.codeMirror, cm, "codeMirror property exists");
+    preview.on("refresh", function(event) {
+      equal(event.documentFragment, "blop", "documentFragment is passed");
+      ok(event.window, "window is passed");
+      refreshTriggered = true;
+    });
+    cm.trigger('reparse', {
+      error: null,
+      sourceCode: '',
+      document: "blop"
+    });
+    ok(refreshTriggered, "refresh event is triggered");
   });
   
   lpTest('scrolling is preserved across refresh',
@@ -58,4 +85,8 @@ require(["fc/ui/live-preview"], function(LivePreview) {
       equal(wind.pageXOffset, 5, "x scroll is preserved across refresh");
       equal(wind.pageYOffset, 6, "y scroll is preserved across refresh");
     });
+  
+  return {
+    lpTest: lpTest
+  };
 });

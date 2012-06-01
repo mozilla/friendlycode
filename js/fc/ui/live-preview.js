@@ -3,14 +3,16 @@
 // Displays the HTML source of a CodeMirror editor as a rendered preview
 // in an iframe.
 define(function() {
-  return function LivePreview(options) {
-    var self = {},
+  function LivePreview(options) {
+    var self = {codeMirror: options.codeMirror},
+        codeMirror = options.codeMirror,
         iframe;
-    
-    options.codeMirror.on("reparse", function(event) {
+
+    codeMirror.on("reparse", function(event) {
       if (!event.error || options.ignoreErrors) {
         var x = 0,
             y = 0,
+            docFrag = event.document,
             doc, wind;
         
         if (iframe) {
@@ -37,7 +39,7 @@ define(function() {
         var baseTag = doc.createElement('base');
         baseTag.setAttribute('target', '_blank');
         doc.querySelector("head").appendChild(baseTag);
-
+        
         // TODO: If the document has images that take a while to load
         // and the previous scroll position of the document depends on
         // their dimensions being set on load, we may need to refresh
@@ -45,7 +47,8 @@ define(function() {
         wind.scroll(x, y);
         
         self.trigger("refresh", {
-          window: wind
+          window: wind,
+          documentFragment: event.document
         });
       }
     });
@@ -53,4 +56,6 @@ define(function() {
     _.extend(self, Backbone.Events);
     return self;
   };
+  
+  return LivePreview;
 });
