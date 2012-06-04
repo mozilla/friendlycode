@@ -4,8 +4,6 @@
 define(function() {
   return function Relocator(codeMirror, codeMirrorScrollArea) {
 
-    window.console.log(codeMirrorScrollArea);
-
     var relocator = {
       // called any time the codemirror source code area is scrolled
       scrollFunction: function() {},
