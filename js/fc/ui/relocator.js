@@ -58,7 +58,7 @@ define(function() {
         });
 
         // Get its parent-indicated top position, and make
-        // the hint box match this  hintmarker position
+        // the hint box match this hintmarker position
         topValue = hintMarker.position().top;
         element.css({
           "top": topValue + "px",
@@ -70,7 +70,7 @@ define(function() {
         // it looks like the hint box scrolls along with the code.
         this.scrollFunction = function() {
           var topval = hintMarker.position().top;
-          element.css("top",topval + "px");
+          element.css("top", topval + "px");
         };
       }
     };
