@@ -3,12 +3,19 @@
 define(function() {
 
   return function(options) {
-    var codeMirror = options.codeMirror;
-    var tzo = $("#text-size-options");
+    var codeMirror = options.codeMirror,
+        helpArea = options.helpArea,
+        errorArea = options.errorArea,
+        relocator = options.relocator;
 
+    var tzo = $("#text-size-options");
+    
+    /**
+     * established font sizes - note: must correspond to editor.css [data-size=...] rules
+     */
     var smallSize = 12,
-        normalSize = 16,
-        largeSize = 22;
+        normalSize = 14,
+        largeSize = 18;
 
     /**
      * Check is local storage is supported, and if so, whether
@@ -79,6 +86,10 @@ define(function() {
         // mark text size in drop-down
         $("#text-nav-item li").removeClass("selected");
         $("#text-nav-item li[data-size="+size+"]").addClass("selected");
+        // hide any help/error messages when the font changes
+        helpArea.hide();
+        errorArea.hide();
+        relocator.cleanup();
       }
       t.click(fn);
     });
@@ -87,10 +98,11 @@ define(function() {
      * If there is a thimble text size set, trigger it.
      */
     if (supportsLocalStorage()) {
+      var textSize = "normal";
       if (typeof localStorage["ThimbleTextSize"] !== "undefined") {
-        var textSize = localStorage["ThimbleTextSize"];
-        $("#text-nav-item li[data-size="+textSize+"]").click();
+        textSize = localStorage["ThimbleTextSize"];
       }
+      $("#text-nav-item li[data-size="+textSize+"]").click();
     }
   };
 });

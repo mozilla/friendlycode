@@ -29,7 +29,6 @@ define(["./mark-tracker"], function(MarkTracker) {
   
     codeMirror.on("reparse", function(event) {
       errorHelpMarks.clear();
-      relocator.cleanup();
       if (event.error) {
         reportError(event.error);
       } else { 

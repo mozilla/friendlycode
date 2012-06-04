@@ -1,0 +1,126 @@
+/* ------ ERRORS AND HELP MESSAGE STYLING ------ */
+
+.error,
+.help {
+  display: block;
+  position: absolute;
+  top: 0px;
+  left: 100px;
+  
+  width: 450px;
+  height: 130px;
+  background-color: #FDFDFD;
+  border: 5px solid #D6D6D6;
+  margin: 10px;
+  padding: 4px;
+  margin-top: -10px;
+  white-space: normal;
+
+  border: 1px solid rgb(193,193,193);
+  -webkit-box-shadow: 0px 0px 5px 1px #C1C1C1;
+  box-shadow: 0px 0px 5px 1px #C1C1C1;
+  
+  z-index: 1;
+}
+
+
+.error p {
+  display: inline;
+}
+
+.error .icon,
+.help .icon {
+  display: inline-block;
+  width: 80px;
+  height: 100%;
+  border-right: 1px solid #C0C0C0;
+  text-align: center;
+  vertical-align: middle;
+  
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.error .content,
+.help .content {
+  display: inline-block;
+  width: 78%;
+  height: 90%;
+  vertical-align: top;
+  overflow: auto;
+  padding: 5px;
+}
+
+.error .icon {
+  background-image: url("../img/error.png");
+}
+.help .icon {
+  background-image: url("../img/help.png");
+}
+
+b {
+  font-family: OpenSansRegular, sans-serif;
+}
+
+.error a,
+.help a  {
+  color: #FF2A04;
+  font-weight: bold;
+}
+
+.error strong,
+.help strong {
+  color: #FF2A04;
+  font-weight: bold;
+  font-size: 110%;
+}
+
+.error code,
+.help code {
+  color: #FF2A04;
+  font-weight: bold;
+  font-size: 110%;
+}
+
+.error em[data-highlight],
+.help em[data-highlight] {
+  color: #FF2A04;
+}
+
+.error em.highlight-1,
+.help em.highlight-1,
+.CodeMirror span.highlight-1 {
+  background: yellow;
+}
+
+.error em.highlight-2,
+.help em.highlight-2,
+.CodeMirror span.highlight-2 {
+  color: white;
+  background: orange;
+}
+
+.error .down-arrow,
+.help .down-arrow,
+.error .up-arrow,
+.help .up-arrow {
+  position: absolute;
+  display: block;
+  width: 40px;
+  height: 23px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  left: 50%;
+}
+
+.error .down-arrow,
+.help .down-arrow {
+  top: 138px;
+  background-image: url("../img/hint-down-arrow.png");
+}
+
+.error .up-arrow,
+.help .up-arrow {
+  top: -22px;
+  background-image: url("../img/hint-up-arrow.png");
+}

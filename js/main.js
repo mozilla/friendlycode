@@ -70,17 +70,19 @@ define("main", function(require) {
     }
   });
   var relocator = Relocator(codeMirror);
+  var helpArea = $(".help");
   var cursorHelp = ContextSensitiveHelp({
     codeMirror: codeMirror,
     helpIndex: Help.Index(),
     template: HelpTemplate,
-    helpArea: $(".help"),
+    helpArea: helpArea,
     relocator: relocator
   });
+  var errorArea =  $(".error");
   var errorHelp = ErrorHelp({
     codeMirror: codeMirror,
     template: ErrorTemplate,
-    errorArea: $(".error"),
+    errorArea: errorArea,
     relocator: relocator
   });
   var preview = LivePreview({
@@ -114,7 +116,10 @@ define("main", function(require) {
     socialMedia: socialMedia
   });
   var textUI = TextUI({
-    codeMirror: codeMirror
+    codeMirror: codeMirror,
+    helpArea: helpArea,
+    errorArea: errorArea,
+    relocator: relocator
   });
   var parachute = Parachute(window, codeMirror, pageToLoad);
 
@@ -125,6 +130,7 @@ define("main", function(require) {
       hints.removeClass("on").addClass("off");
       // make sure to hide the help, in case it's active when this option's selected
       $("div.help").hide();
+      relocator.cleanup();
     } else {
       hints.removeClass("off").addClass("on");
     }
