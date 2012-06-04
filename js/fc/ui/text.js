@@ -11,15 +11,11 @@ define(function() {
     var tzo = $("#text-size-options");
     
     /**
-     * established font sizes
+     * established font sizes - note: must correspond to editor.css [data-size=...] rules
      */
     var smallSize = 12,
         normalSize = 14,
         largeSize = 18;
-
-    var smallSize = 12,
-        normalSize = 16,
-        largeSize = 22;
 
     /**
      * Check is local storage is supported, and if so, whether

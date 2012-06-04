@@ -382,11 +382,11 @@ img {
 }
 #text-size-options li[data-size=normal] {
   background-image: url("../img/text-size-normal.png");
-  font-size: 16px; /* MUST sync up with values used in fc/ui/text.js */
+  font-size: 14px; /* MUST sync up with values used in fc/ui/text.js */
 }
 #text-size-options li[data-size=large] {
   background-image: url("../img/text-size-large.png");
-  font-size: 22px; /* MUST sync up with values used in fc/ui/text.js */
+  font-size: 18px; /* MUST sync up with values used in fc/ui/text.js */
 }
 
 #hints-nav-item {
