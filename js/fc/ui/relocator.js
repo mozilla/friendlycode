@@ -3,7 +3,7 @@
 // code will relocate an error or help message to near where the error actually is in CodeMirror.
 define(function() {
   return function Relocator(codeMirror, codeMirrorScrollArea) {
-  
+
     window.console.log(codeMirrorScrollArea);
 
     var relocator = {
@@ -16,7 +16,7 @@ define(function() {
         $(".help .up-arrow, help. .down-arrow, .error .up-arrow, .error .down-arrow").hide();
         this.scrollFunction = function() {};
       },
-    
+
       // relocate an element to inside CodeMirror, pointing "at" the line for startMark
       relocate: function(element, startMark) {
         this.cleanup();
@@ -34,7 +34,7 @@ define(function() {
         // move the message to this line
         var _tmp = hintMarker.clone();
         hintMarker.replaceWith(_tmp);
-        $(".CodeMirror-scroll").append(hintMarker);
+        codeMirrorScrollArea.append(hintMarker);
         _tmp.remove();
 
         // set the correct "top" value, making sure to place the element
@@ -42,22 +42,29 @@ define(function() {
         // the content area due to close-to-zero placement.
         var baseValue = linePre.position().top - element.height() - 20,
             topValue = baseValue;
-        
+
         if (topValue < 0) {
           topValue = linePre.position().top + 50;
           $(".up-arrow",$(element)).show();
         } else {
           $(".down-arrow",$(element)).show();
         }
+        var gutterWidth = $(".CodeMirror-gutter").width();
 
         // Place hintmarker at the right height
-        hintMarker.css("top", topValue + "px").css("left", $(".CodeMirror-gutter").width()+"px");
+        hintMarker.css({
+          "top": topValue + "px",
+          "left": gutterWidth + "px"
+        });
 
         // Get its parent-indicated top position, and make
-        // the hint box match this  hintmarker position        
+        // the hint box match this  hintmarker position
         topValue = hintMarker.position().top;
-        element.css("top", topValue + "px").css("left", $(".CodeMirror-gutter").width()+"px");
-        
+        element.css({
+          "top": topValue + "px",
+          "left": gutterWidth + "px"
+        });
+
         // Now, whenever the codemirror scroll area is scrolled, set
         // the hint height to match the hint marker's height so that
         // it looks like the hint box scrolls along with the code.
@@ -72,4 +79,3 @@ define(function() {
     return relocator;
   };
 });
-  
