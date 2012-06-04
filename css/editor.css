@@ -207,6 +207,8 @@ img {
 }
 
 #publish-button {
+  position: relative;
+  top: 2px;
   background-color: #3A84FC;
   opacity: 0.4;
   -moz-transition: opacity 1s;
@@ -225,7 +227,7 @@ img {
 
 #nav-options .nav-button span {
   position: relative;
-  top: 0px;
+  top: -2px;
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -395,7 +397,7 @@ img {
   position: absolute;
   top: 12px;
   
-  color: blue !important;
+  color: #3D59FE !important;
   opacity: 1 !important;
 }
 

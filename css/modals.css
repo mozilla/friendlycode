@@ -39,11 +39,20 @@
   left: 365px;
   background-color: inherit;
 
+  -moz-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
   transform: rotate(45deg); 
   
   border: 1px solid #C0C0C0;
   border-width: 1px 0px 0px 1px;
   margin-bottom: 1.5em;
+}
+
+/* make the top padding 'disappear' for greybar content */
+.thimble-grey-bar .thimble-branding {
+  position: absolute;
 }
 
 #modal-close-button {
@@ -56,6 +65,11 @@
   right: 25px;
   top: 5px;
   width: 40px;
+  z-index: 3;
+}
+
+.thimble-grey-bar #modal-close-button {
+  top: 0px;
 }
 
 .thimble-menu-content {
@@ -67,8 +81,12 @@
   position: relative;
   top: -2em;
   text-align: center;
-  
-  background-color: rgba(0,130,255,0.2);
+
+  font-weight: bold;
+  font-family: "Myriad Pro", "myriad-pro";
+  font-size: 14px;
+
+  background-color: inherit;
   color: black;
 }
 
@@ -76,8 +94,17 @@
   color: white;
 }
 
+.thimble-grey-bar .thimble-title {
+  top: 0px;
+  text-align: left;
+  padding: 1em 1em 0.5em 0em;
+  padding-left: 0px;
+}
+
+
 .thimble-title:before {
   content: "▾ ";
+  padding-left: 1em;
 }
 
 #confirm-dialog .thimble-title:before {
@@ -85,30 +112,22 @@
 }
 
 .collapsed .thimble-title {
-  color: white;
-  background-color: rgb(0,130,255);
-
+  color: #0087AE;
+  background-color: #F5F5F5;
   vertical-align: middle;
   cursor: pointer;
 }
 
-.thimble-grey-bar .thimble-title {
-  top: 0px;
-  text-align: left;
-  padding: 0.25em 1em;
-  padding-left: 0px;
-}
-
 .thimble-url-box {
   background-color: #FFFFFF;
+  border: 1px solid #A0A0A0;
+  border-radius: 5px 5px 5px 5px;
   color: blue;
-  border: 1px solid #C0C0C0;
   height: 25px;
-  width: 350px;
-  border-radius: 10px;
-  padding-top: 5px;
+  margin: 0 auto 1em;
   padding-left: 1em;
-  margin: 1em auto;
+  padding-top: 5px;
+  width: 320px;
 }
 
 .thimble-url-box a {
@@ -151,8 +170,6 @@
 .collapsed .thimble-url-box {
   display: none;
 }
-
-
 
 .thimble-grey-bar .thimble-additionals {
   padding: 0px 1em;
@@ -202,7 +219,7 @@
   background-color: rgba(0,0,0,0.4);
   color: white;
   margin-right: -9px;
-  background-repeat: no-repeat;
+  background-repeat: repeat-x;
   background-position: center center;
 }
 
@@ -214,7 +231,18 @@
   background-image: url("../img/no.png");
 }
 
-
 .accordion {
+  background-color:inherit;
+}
+
+.accordion.collapsed + .accordion.collapsed{
   border-top: 1px solid #D6D6D6;
+}
+.accordion + .accordion .thimble-title {
+  background-image: url("../img/modal-open-background.png");
+  background-repeat: repeat-x;
+  background-position: top left;
+}
+.accordion + .accordion.collapsed .thimble-title {
+  background-image: none;
 }
