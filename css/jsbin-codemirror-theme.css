@@ -28,13 +28,13 @@
   font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
   color: #333;
   font-size: 14px;
-  line-height: 16px;
+  line-height: 15.75px;
 }
 
 .CodeMirror textarea {
   font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
   font-size: 14px;
-  line-height: 16px;
+  line-height: 15.75px;
 }
 
 .CodeMirror-gutter {
@@ -46,7 +46,7 @@
   font-family: Menlo, Monaco, consolas, monospace;
   color: #A9A9A9;
   font-size: 12px;
-  line-height: 18px;
+  line-height: 15.75px;
 }
 
 .cm-s-jsbin span.cm-meta {
@@ -58,8 +58,7 @@
   color: #333;
   font-style: italic;
   font-weight: bold;
-  font-size: 14px;
-  line-height: 15px; /* needs to be a little less than the standard line-height to align on multi-line wrapped content */
+  line-height: 15.75px; /* needs to be a little less than the standard line-height to align on multi-line wrapped content */
 }
 
 .CodeMirror span.cursor-help-highlight,
