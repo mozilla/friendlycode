@@ -6,7 +6,7 @@ html, body {
 }
 
 body {
-  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
+  font-family: "myriad-pro", Helvetica, Arial, sans-serif;
   overflow: hidden;
 
   /* background-color: red; */
@@ -60,7 +60,7 @@ img {
 }
 
 #nav-options {
-  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
+  font-family: "myriad-pro", Helvetica, Arial, sans-serif;
   font-size: 12px;
 
   position: absolute;
@@ -192,10 +192,10 @@ img {
   display: inline;
   height: 30px;
   border-radius: 15px;
-  padding: 5px 15px;
+  padding:  6px 20px 4px 15px;
   margin: auto;
   color: white;
-  margin: 0 0.5em 0 0.7em;
+  top: 0px;
 }
 
 #save-draft-button {
@@ -210,33 +210,22 @@ img {
   position: relative;
   top: 2px;
   background-color: #3A84FC;
+  background-image: url("../img/publish-button-right.png"), url("../img/publish-button-left.png");
+  background-repeat: no-repeat, no-repeat;
+  background-position: top right, top left;
+  
   opacity: 0.4;
   -moz-transition: opacity 1s;
   -webkit-transition: opacity 1s;
   -o-transition: opacity 1s;
+  
+  font-size: 16px;
+  font-weight: bold;
 }
 
 #publish-button.enabled {
   opacity: 1.0;
   cursor: pointer;
-}
-
-#nav-options .nav-button:hover {
-  /* do what? */
-}
-
-#nav-options .nav-button span {
-  position: relative;
-  top: -2px;
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
-  background-color: rgba(0,0,0,0.1);
-  margin-right: -9px;
-  background-image: url("../img/button-arrow.png");
-  background-position: 9px 5px;
-  background-repeat: no-repeat;
 }
 
 #nav-options .nav-item.buttons {

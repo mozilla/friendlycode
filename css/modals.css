@@ -83,7 +83,7 @@
   text-align: center;
 
   font-weight: bold;
-  font-family: "Myriad Pro", "myriad-pro";
+  font-family: "myriad-pro", sans-serif;
   font-size: 14px;
 
   background-color: inherit;
@@ -112,8 +112,8 @@
 }
 
 .collapsed .thimble-title {
-  color: #0087AE;
-  background-color: #F5F5F5;
+  color: white;
+  background-color: #3A84FC;
   vertical-align: middle;
   cursor: pointer;
 }
@@ -140,7 +140,7 @@
 
 .thimble-additionals {
   color: #222;
-  text-align: justify;
+  text-align: left;
   position: relative;
   padding: 2px 10px;
 }
@@ -186,29 +186,34 @@
 
 .confirmation-buttons {
   text-align: center;
-  margin-top: 1.4em;
+  margin-top: 1em;
+  margin-bottom: 0.75em;
   height: 2em;
 }
 
 .confirmation-button {
-  display: inline;
-  height: 30px;
-  border-radius: 10px;
-  padding: 5px 15px;
-  margin: auto;
+  background-repeat: no-repeat;
   color: white;
-  margin: 0px 1em;
   cursor: pointer;
+  display: inline-block;
+  font-family: Arial;
+  font-weight: 700;
+  font-size: 14px;
+  height: 30px;
+  padding-top: 7px;
+  text-indent: -20px;
+  width: 60px;
+  margin: 0px 1em;
 }
 
 .confirmation-button.yes-button {
-  background-color: #1DBF84;
+  background-image: url("../img/yes.png");
 } 
 
 .confirmation-button.no-button {
-  background-color: #F14D2A;
+  background-image: url("../img/no.png");
 }
-
+/*
 .confirmation-button .mark {
   position: relative;
   top: 0px;
@@ -219,7 +224,7 @@
   background-color: rgba(0,0,0,0.4);
   color: white;
   margin-right: -9px;
-  background-repeat: repeat-x;
+  background-repeat: no-repeat;
   background-position: center center;
 }
 
@@ -230,6 +235,7 @@
 .confirmation-button.no-button .mark {
   background-image: url("../img/no.png");
 }
+*/
 
 .accordion {
   background-color:inherit;
