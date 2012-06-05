@@ -86,7 +86,7 @@ define(function() {
     // Set up the onscroll and onresize handling. Note that the
     // function(){...} wrappers are needed to prevent early binding.
     codeMirrorScrollArea.on("scroll", function() { relocator.scrollFunction(); });
-    $(window).resize( function() { relocator.resizeFunction(); });
+    $(window).on("resize", function() { relocator.resizeFunction(); });
 
     return relocator;
   };
