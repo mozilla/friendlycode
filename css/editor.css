@@ -296,10 +296,11 @@ img {
 #preview-nav-item .pane-indicator {
   position: absolute;
   background-image: url("../img/indicator-arrow.png");
+  background-repeat: no-repeat;
   top: 38px;
-  left: 16px;
-  width: 30px;
-  height: 17px;
+  left: 18px;
+  width: 25px;
+  height: 25px;
 }
 
 #undo-nav-item .icon {
