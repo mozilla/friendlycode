@@ -1,4 +1,4 @@
-html, body {
+fhtml, body {
   margin: 0px;
   padding: 0px;
   height: 100%;
@@ -384,7 +384,7 @@ img {
   left: 100%;
   margin-left: -90px;
   position: absolute;
-  top: 12px;
+  top: 13px;
   
   color: #3D59FE !important;
   opacity: 1 !important;
