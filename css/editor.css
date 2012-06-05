@@ -1,3 +1,16 @@
+/*
+
+  A note on fonts: we use a typekit-supplied version of Adobe's
+  Myriad Pro, which can be slightly different from the various
+  versions of Myriad Pro that people may have installed because
+  they use Adobe products. In order to prevent version collision
+  we actively do not use "font-family: "Myriad Pro", "myriad-pro", ..."
+  because this will prefer the local version over the remote
+  version, against which the design was validated. If you want
+  to optimise the CSS's font usage, please bear this in mind.
+
+*/
+
 html, body {
   margin: 0px;
   padding: 0px;
@@ -6,7 +19,7 @@ html, body {
 }
 
 body {
-  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
+  font-family: "myriad-pro", Helvetica, Arial, sans-serif;
   overflow: hidden;
 
   /* background-color: red; */
@@ -33,7 +46,7 @@ img {
 
   -webkit-box-shadow: 0px 5px 5px 0px rgba(233,233,233,0.5);
   box-shadow: 0px 5px 5px 0px rgba(233,233,233,0.5);
-  
+
   border-top: 2px solid white;
   border-bottom: 1px solid #D6D6D6;
 }
@@ -52,7 +65,7 @@ img {
 }
 
 #header .logo label {
-  position: relative; 
+  position: relative;
   height: 0px;
   top: -3.5em;
   left: 3.5em;
@@ -60,7 +73,7 @@ img {
 }
 
 #nav-options {
-  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
+  font-family: "myriad-pro", Helvetica, Arial, sans-serif;
   font-size: 12px;
 
   position: absolute;
@@ -192,49 +205,40 @@ img {
   display: inline;
   height: 30px;
   border-radius: 15px;
-  padding: 5px 15px;
+  padding: 6px 20px 4px 15px;
   margin: auto;
   color: white;
-  margin: 0 0.5em 0 0.7em;
+  top: 0px;
 }
 
 #save-draft-button {
   background-color: #00D67D;
-} 
+}
 
 #preview-pane-nav-options > div.nav-item.buttons {
   cursor: default;
 }
 
 #publish-button {
+  position: relative;
+  top: 2px;
   background-color: #3A84FC;
+  background-image: url("../img/publish-button-right.png"), url("../img/publish-button-left.png");
+  background-repeat: no-repeat, no-repeat;
+  background-position: top right, top left;
+
   opacity: 0.4;
   -moz-transition: opacity 1s;
   -webkit-transition: opacity 1s;
   -o-transition: opacity 1s;
+
+  font-size: 16px;
+  font-weight: bold;
 }
 
 #publish-button.enabled {
   opacity: 1.0;
   cursor: pointer;
-}
-
-#nav-options .nav-button:hover {
-  /* do what? */
-}
-
-#nav-options .nav-button span {
-  position: relative;
-  top: 0px;
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
-  background-color: rgba(0,0,0,0.1);
-  margin-right: -9px;
-  background-image: url("../img/button-arrow.png");
-  background-position: 9px 5px;
-  background-repeat: no-repeat;
 }
 
 #nav-options .nav-item.buttons {
@@ -301,7 +305,7 @@ img {
 #undo-nav-item .icon {
   display: inline-block;
   width: 30px;
-  
+
   background-image: url("../img/undo-grey.png");
   background-repeat: no-repeat;
   background-position: center center;
@@ -315,7 +319,7 @@ img {
 #redo-nav-item .icon {
   display: inline-block;
   width: 30px;
-  
+
   background-image: url("../img/redo-grey.png");
   background-repeat: no-repeat;
   background-position: center center;
@@ -363,7 +367,7 @@ img {
   background-position: 0px center;
   padding-left: 40px;
   width: 60px;
-  
+
   border: 1px solid #D6D6D6;
   margin-top: -1px;
 }
@@ -393,9 +397,9 @@ img {
   left: 100%;
   margin-left: -90px;
   position: absolute;
-  top: 12px;
-  
-  color: blue !important;
+  top: 13px;
+
+  color: #3D59FE !important;
   opacity: 1 !important;
 }
 
@@ -434,7 +438,7 @@ div.editor-actions {
 footer {
   background-color: #FFFFFF;
   color: white;
-  
+
   text-align: left;
   font-size: 110%;
   padding-top: 8px;
@@ -445,10 +449,10 @@ footer {
   bottom: 0px;
   left: 0px;
   right: 0px;
-  
+
   border-top: 1px solid black;
   opacity: 0; /* temporary solution, because the spacing depends on having a footer */
-  
+
 }
 
 /**

@@ -30,7 +30,7 @@
           <img src="img/thimble-logo.png" alt="Mozilla Thimble">
         </a>
       </div>
- 
+
       <div id="nav-options">
         <div id="editor-pane-nav-options">
           <!-- editor, undo, redo, text size, hinting -->
@@ -65,7 +65,7 @@
            </div>
         </div>
       </div>
-      
+
     </header>
 
     <section id="editor" class="loading">
@@ -82,38 +82,39 @@
     <footer>
     </footer>
 
- 
+
     <!-- save/publish modal dialogs -->
     <div id="confirm-dialog" class="modal-overlay" style="display: none;">
       <div class="thimble-modal-menu thimble-blue-bar">
         <div class="thimble-branding"></div>
         <div class="thimble-menu-content">
            <div id="publication-confirmation">
-             <!-- CONFIRM PUBLICATION -->           
+             <!-- CONFIRM PUBLICATION -->
              <div class="thimble-title">Are you sure you want to publish your project to the web?</div>
              <div class="thimble-additionals">
-               When you click the publish button it means your page will be visible
-               to everyone on the web. If you're sure you want to publish to the web, click "yes", otherwise
-               click "no".
+               When you click the publish button it means your page will be visible to everyone on the web.
+               Do you still want to publish to the web?
                <div class="confirmation-buttons">
-                 <span id="confirm-publication" class="confirmation-button yes-button">Yes <span class="mark">&nbsp;</span></span>
-                 <span id="cancel-publication" class="confirmation-button no-button">No <span class="mark">&nbsp;</span></span>
+                 <span id="confirm-publication" class="confirmation-button yes-button">Yes</span>
+                 <span id="cancel-publication" class="confirmation-button no-button">No</span>
                </div>
              </div>
-             <!-- CONFIRM PUBLICATION -->           
+             <!-- CONFIRM PUBLICATION -->
            </div>
          </div>
        </div>
      </div>
-     
+
     <div id="publish-dialog" class="modal-overlay" style="display: none;">
-      <div class="thimble-modal-menu thimble-grey-bar ">
-        <div class="thimble-branding"></div>
-        <div id="modal-close-button">&nbsp;</div>   
+      <div class="thimble-modal-menu thimble-grey-bar">
         <div class="thimble-menu-content">
+           <div id="modal-close-button">&nbsp;</div>
            <!-- SHARE YOUR WORK -->
            <div id="share-result" class="accordion collapsed">
-             <div class="thimble-title" id="share-trigger">Share this via...</div>
+             <div class="thimble-title" id="share-trigger">
+               <div class="thimble-branding"></div>
+               Share this via...
+             </div>
              <div class="thimble-additionals">
                <ul>
                  <li data-medium="twitter">Twitter</li>
@@ -126,23 +127,19 @@
 
            <!-- PUBLISH YOUR WORK -->
            <div id="publication-result" class="accordion">
-             <div class="thimble-title">Grab the URL for your webpage:</div>
+             <div class="thimble-title">Copy and paste the url for your webpage</div>
              <div class="thimble-url-box">
                <a href="#" class="view">[we're busy publishing your page...]</a>
              </div>
-             <div class="thimble-additionals">
-               Copy this link by right clicking on it and selecting "copy link location".
-             </div>
+             <div class="thimble-additionals"></div>
            </div>
-           
+
            <div id="remix-it" class="accordion collapsed">
-             <div class="thimble-title">Get the link to edit your published page:</div>
+             <div class="thimble-title">Grab the link to edit your published webpage</div>
              <div class="thimble-url-box">
                <a href="#" class="remix">[we're busy publishing your page...]</a>
              </div>
-             <div class="thimble-additionals">
-               Copy this link by right clicking on it and selecting "copy link location".
-             </div>
+             <div class="thimble-additionals">&nbsp;</div>
            </div>
            <!-- PUBLISH YOUR WORK -->
         </div>
