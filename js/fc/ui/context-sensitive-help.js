@@ -55,6 +55,7 @@ define(["./mark-tracker"], function(MarkTracker) {
         relocator.relocate(helpArea, startMark);
       } else {
         helpArea.hide();
+        relocator.cleanup();
       }
     });
   
