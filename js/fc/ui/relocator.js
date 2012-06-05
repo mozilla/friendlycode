@@ -8,6 +8,9 @@ define(function() {
       // called any time the codemirror source code area is scrolled
       scrollFunction: function() {},
 
+      // called any time the browser window is resized
+      resizeFunction: function() {},
+
       // clear old markings
       cleanup: function() {
         $(".CodeMirror-line-highlight").removeClass("CodeMirror-line-highlight");
@@ -70,10 +73,21 @@ define(function() {
           var topval = hintMarker.position().top;
           element.css("top", topval + "px");
         };
+
+        // Whenever the window is resized, we should get rid of the
+        // currently active hint, hiding it and cleaning up. 
+        this.resizeFunction = function() {
+          element.hide();
+          this.cleanup();
+        };
       }
     };
 
+    // Set up the onscroll and onresize handling. Note that the
+    // function(){...} wrappers are needed to prevent early binding.
     codeMirrorScrollArea.on("scroll", function() { relocator.scrollFunction(); });
+    $(window).on("resize", function() { relocator.resizeFunction(); });
+
     return relocator;
   };
 });
