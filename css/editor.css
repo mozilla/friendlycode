@@ -528,6 +528,7 @@ footer {
   border: 1px solid #D6D6D6;
   width: 100%;
   height: 100%;
+  background-color: white;
 }
 
 #source .CodeMirror, #source .CodeMirror-scroll {
