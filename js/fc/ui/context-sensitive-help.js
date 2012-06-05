@@ -11,10 +11,10 @@ define(["./mark-tracker"], function(MarkTracker) {
     var relocator = options.relocator;
     var helpIndex = options.helpIndex;
     var lastEvent = null;
-  
+
     // Keep track of context-sensitive help highlighting.
     var cursorHelpMarks = MarkTracker(codeMirror);
-  
+
     codeMirror.on("reparse", function(event) {
       lastEvent = event;
       relocator.cleanup();
@@ -25,7 +25,7 @@ define(["./mark-tracker"], function(MarkTracker) {
         helpIndex.build(event.document, event.sourceCode);
       }
     });
-  
+
     codeMirror.on("cursor-activity", function() {
       cursorHelpMarks.clear();
 
@@ -33,32 +33,34 @@ define(["./mark-tracker"], function(MarkTracker) {
       if ($("#hints-nav-item").hasClass("off")) return;
 
       var help = helpIndex.get(codeMirror.getCursorIndex());
-      if (help) {
-        if (help.type == "cssSelector") {
-          // TODO: Because we're looking at the generated document fragment and
-          // not an actual HTML document, implied elements like <body> may not
-          // be captured here.
-          var selector = help.highlights[0].value;
-          var matches = lastEvent.document.querySelectorAll(selector).length;
-          help.matchCount = matches;
-        }
-        helpArea.html(template(help)).show();
-        var startMark = 999999999;
-        help.highlights.forEach(function(interval) {
-          var start = interval.start,
-              end = interval.end;
-          if (start < startMark) {
-            startMark = start;
-          }
-          cursorHelpMarks.mark(start, end, "cursor-help-highlight");
-        });
-        relocator.relocate(helpArea, startMark);
-      } else {
+
+      if (!help) {
         helpArea.hide();
         relocator.cleanup();
+        return;
       }
+
+      if (help.type == "cssSelector") {
+        // TODO: Because we're looking at the generated document fragment and
+        // not an actual HTML document, implied elements like <body> may not
+        // be captured here.
+        var selector = help.highlights[0].value;
+        var matches = lastEvent.document.querySelectorAll(selector).length;
+        help.matchCount = matches;
+      }
+      helpArea.html(template(help)).show();
+      var startMark = 999999999;
+      help.highlights.forEach(function(interval) {
+        var start = interval.start,
+            end = interval.end;
+        if (start < startMark) {
+          startMark = start;
+        }
+        cursorHelpMarks.mark(start, end, "cursor-help-highlight");
+      });
+      relocator.relocate(helpArea, startMark);
     });
-  
+
     return self;
   };
 });
