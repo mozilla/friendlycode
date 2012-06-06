@@ -51,11 +51,8 @@ define(function() {
           // Facebook needs additional help, because it needs
           // to be told that it has to refresh its button, rather
           // than simply reloading.
-          if (medium === "facebook") {
-            var undef;
-            if (FB !== undef && FB.XFBML !== undef && FB.XFBML.parse !== undef) {
-              FB.XFBML.parse();
-            }
+          if (medium === "facebook" && FB && FB.XFBML && FB.XFBML.parse) {
+            FB.XFBML.parse();
           }
         }
       });
