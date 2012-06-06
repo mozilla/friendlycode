@@ -108,8 +108,7 @@ img {
   height: 41px;
   text-align: center;
   vertical-align: middle;
-  color: black;
-  opacity: 0.3;
+  color: gray;
   padding: 0px 5px;
   padding-right: 2em;
   white-space: nowrap;
@@ -188,14 +187,11 @@ img {
   font-size: 16px;
 }
 
-#nav-options .nav-item.enabled,
 #nav-options .nav-item:hover {
-  opacity: 1;
   color: #3D59FE;
 }
 
 #nav-options .nav-item ul li {
-  opacity: 1;
   color: #666;
 }
 
@@ -248,7 +244,6 @@ img {
   top: 10px;
   right: 0;
   width: 7em;
-  opacity: 1;
 }
 
 /* ------ nav button stylings ------ */
@@ -305,6 +300,16 @@ img {
   height: 25px;
 }
 
+#undo-nav-item,
+#redo-nav-item {
+  visibility: hidden;
+}
+
+#undo-nav-item.enabled,
+#redo-nav-item.enabled {
+  visibility: visible;
+}
+
 #undo-nav-item .icon {
   display: inline-block;
   width: 30px;
@@ -314,7 +319,6 @@ img {
   background-position: center center;
 }
 
-#undo-nav-item.enabled .icon,
 #undo-nav-item:hover .icon {
   background-image: url("../img/undo-blue.png");
 }
@@ -328,7 +332,6 @@ img {
   background-position: center center;
 }
 
-#redo-nav-item.enabled .icon,
 #redo-nav-item:hover .icon {
   background-image: url("../img/redo-blue.png");
 }
@@ -401,9 +404,6 @@ img {
   margin-left: -100px;
   position: absolute;
   top: 13px;
-
-  color: #3D59FE !important;
-  opacity: 1 !important;
 }
 
 #hints-nav-item .checkbox {
