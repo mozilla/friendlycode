@@ -36,8 +36,10 @@ define(["./mark-tracker"], function(MarkTracker) {
       var help = helpIndex.get(cursorIndex);
 
       if (!help) {
-        helpArea.hide();
-        relocator.cleanup();
+        if (helpArea.is(":visible")) {
+          helpArea.hide();
+          relocator.cleanup();
+        }
         return;
       }
 
