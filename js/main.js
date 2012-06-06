@@ -125,7 +125,7 @@ define("main", function(require) {
 
   // make hints on/off actually work
   $("#hints-nav-item").click(function() {
-    var hints = $(".checkbox",$(this));
+    var hints = $(".checkbox", this);
     if (hints.hasClass("on")) {
       hints.removeClass("on").addClass("off");
       // make sure to hide the help, in case it's active when this option's selected
