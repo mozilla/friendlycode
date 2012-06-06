@@ -21,8 +21,10 @@ define(function() {
         class: "facebook",
         id: "facebook-jssdk",
         src: "http://connect.facebook.net/en_US/all.js#xfbml=1&appId=1",
-        html: "<div id='fb-root'></div><div class='fb-like' data-href='"+urlPlaceHolder+"' data-send='false' data-show-faces='false' data-font='tahoma'></div>"
+        html: "<div class='fb-like' data-href='"+urlPlaceHolder+"' data-send='false' data-action='recommend' data-layout='button_count' data-show-faces='false' data-font='tahoma'></div>"
       },
+
+
 
       google: {
         class: "google",

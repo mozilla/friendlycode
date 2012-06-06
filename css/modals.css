@@ -154,7 +154,7 @@
 
 .thimble-additionals ul li {
   display: table-cell;
-  vertical-align: top;
+  vertical-align: middle;
   padding: 0px 5px;
 }
 
