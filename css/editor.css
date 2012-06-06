@@ -112,8 +112,21 @@ img {
   padding: 0px 5px;
   padding-right: 2em;
   white-space: nowrap;
-  cursor: pointer;
+  cursor: default;
   font-size: 14px;
+  opacity: 0.33;
+  -moz-transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+}
+
+#nav-options .nav-item.enabled {
+  cursor: pointer;
+  opacity: 1.0;
+}
+
+#nav-options .nav-item.enabled:hover {
+  color: #3D59FE;
 }
 
 @media screen and (max-width: 980px) {
@@ -181,16 +194,6 @@ img {
   }
 }
 
-#nav-options #editor-nav-item.nav-item,
-#nav-options #preview-nav-item.nav-item {
-  cursor: default;
-  font-size: 16px;
-}
-
-#nav-options .nav-item:hover {
-  color: #3D59FE;
-}
-
 #nav-options .nav-item ul li {
   color: #666;
 }
@@ -248,10 +251,12 @@ img {
 
 /* ------ nav button stylings ------ */
 
-#editor-nav-item,
-#preview-nav-item {
+#nav-options #editor-nav-item,
+#nav-options #preview-nav-item {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
+  opacity: 1.0;
+  color: black;
 }
 
 #editor-nav-item .icon,
@@ -267,16 +272,8 @@ img {
   background-image: url("../img/editor-icon.png");
 }
 
-#nav-options #editor-nav-item.nav-item.enabled {
-  color: black;
-}
-
 #preview-nav-item .icon {
   background-image: url("../img/preview-icon.png");
-}
-
-#nav-options #preview-nav-item.nav-item.enabled {
-  color: black;
 }
 
 #preview-nav-item .preview-title {
@@ -300,16 +297,6 @@ img {
   height: 25px;
 }
 
-#undo-nav-item,
-#redo-nav-item {
-  visibility: hidden;
-}
-
-#undo-nav-item.enabled,
-#redo-nav-item.enabled {
-  visibility: visible;
-}
-
 #undo-nav-item .icon {
   display: inline-block;
   width: 30px;
@@ -319,7 +306,7 @@ img {
   background-position: center center;
 }
 
-#undo-nav-item:hover .icon {
+#undo-nav-item.enabled:hover .icon {
   background-image: url("../img/undo-blue.png");
 }
 
@@ -332,7 +319,7 @@ img {
   background-position: center center;
 }
 
-#redo-nav-item:hover .icon {
+#redo-nav-item.enabled:hover .icon {
   background-image: url("../img/redo-blue.png");
 }
 
@@ -345,7 +332,7 @@ img {
   background-position: center center;
 }
 
-#text-nav-item:hover .icon {
+#text-nav-item.enabled:hover .icon {
   background-image: url("../img/text-size-blue.png");
 }
 
