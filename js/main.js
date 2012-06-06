@@ -196,6 +196,7 @@ define("main", function(require) {
   // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
   $("#confirm-publication").click(function(){
     $("#confirm-dialog").hide();
+    modals.resetPublishModal();
     $("#publish-dialog").show();
     publishUI.saveCode(function(viewURL, remixURL, path) {
       onPostPublish(remixURL, path);
