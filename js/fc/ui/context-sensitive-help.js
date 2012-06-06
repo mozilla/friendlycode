@@ -32,7 +32,8 @@ define(["./mark-tracker"], function(MarkTracker) {
       // people may not want helpful hints
       if ($("#hints-nav-item").hasClass("off")) return;
 
-      var help = helpIndex.get(codeMirror.getCursorIndex());
+      var cursorIndex = codeMirror.getCursorIndex();
+      var help = helpIndex.get(cursorIndex);
 
       if (!help) {
         helpArea.hide();
@@ -49,16 +50,18 @@ define(["./mark-tracker"], function(MarkTracker) {
         help.matchCount = matches;
       }
       helpArea.html(template(help)).show();
-      var startMark = 999999999;
+      var startMark = null;
       help.highlights.forEach(function(interval) {
         var start = interval.start,
             end = interval.end;
-        if (start < startMark) {
+        // Show the help message closest to the highlight that
+        // encloses the current cursor position.
+        if (start <= cursorIndex && end >= cursorIndex)
           startMark = start;
-        }
         cursorHelpMarks.mark(start, end, "cursor-help-highlight");
       });
-      relocator.relocate(helpArea, startMark);
+      if (startMark !== null)
+        relocator.relocate(helpArea, startMark);
     });
 
     return self;
