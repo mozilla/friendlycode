@@ -5,7 +5,7 @@
 define(function() {
   var myOrigin = window.location.protocol + "//" + window.location.host;
   
-  function Publisher(baseURL) {
+  function Publisher(baseURL, csrfToken) {
     // We want to support CORS for development but in production it doesn't
     // matter because all requests will be same-origin. However, browsers
     // that don't support CORS will barf if they're given absolute URLs to
@@ -35,6 +35,9 @@ define(function() {
         });
       },
       saveCode: function(data, originalURL, cb) {
+        var headers = {};
+        if (csrfToken)
+          headers['X-CSRFToken'] = csrfToken;
         $.ajax({
           type: 'POST',
           url: makeURL('/api/page'),
@@ -43,6 +46,7 @@ define(function() {
             'original-url': originalURL || ''
           },
           dataType: 'text',
+          headers: headers,
           error: function() {
             cb("ERROR");
           },

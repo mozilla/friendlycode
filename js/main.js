@@ -41,6 +41,7 @@ define("main", function(require) {
       AppReady = require("appReady!"),
       publishURL = $("meta[name='publish-url']").attr("content"),
       pageToLoad = $("meta[name='remix-url']").attr("content"),
+      csrfToken = $("meta[name='csrf-token']").attr("content"),
       Modals = require("fc/ui/modals"),
       TextUI = require("fc/ui/text"),
       supportsPushState = window.history.pushState ? true : false,
@@ -91,7 +92,7 @@ define("main", function(require) {
     previewArea: $("#preview-holder")
   });
   var previewToEditorMapping = PreviewToEditorMapping(preview, $(".CodeMirror-lines"));
-  var publisher = Publisher(publishURL);
+  var publisher = Publisher(publishURL, csrfToken);
   var publishUI = PublishUI({
     codeMirror: codeMirror,
     publisher: publisher,
