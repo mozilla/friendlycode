@@ -23,11 +23,6 @@ define([
   }
   
   function nodeToCode(node, docFrag) {
-    var tagName = node.tagName.toLowerCase();
-    if (tagName === "html" || tagName === "body") {
-      return false;
-    }
-
     var root, i;
     var htmlNode = docFrag.querySelector("html");
     var origDocFrag = docFrag;
@@ -71,7 +66,10 @@ define([
       marks.clear();
       $(event.window).on("mousedown", function(event) {
         marks.clear();
-        var interval = nodeToCode(event.target, docFrag);
+        var tagName = event.target.tagName.toLowerCase();
+        var interval = null;
+        if (tagName !== "html" && tagName !== "body")
+          interval = nodeToCode(event.target, docFrag);
         if (interval) {
           var start = codeMirror.posFromIndex(interval.start);
           var end = codeMirror.posFromIndex(interval.end);
