@@ -1,7 +1,6 @@
 "use strict";
 
 define(function() {
-
   return function(options) {
     var codeMirror = options.codeMirror,
         publishUI = options.publishUI,
@@ -75,8 +74,27 @@ define(function() {
         if (!element.hasClass("hotloaded") && medium && socialMedia[medium]) {
           socialMedia.hotLoad($, element, socialMedia[medium]);
           element.addClass("hotloaded");
+          // Facebook needs additional help, because it needs
+          // to be told that it has to refresh its button, rather
+          // than simply reloading.
+          if (medium === "facebook" && FB && FB.XFBML && FB.XFBML.parse) {
+            FB.XFBML.parse();
+          }
         }
       });
     });
+    
+    return {
+      /**
+       * Reset the publish modal dialog
+       */
+      resetPublishModal: function() {
+        $("script#twitter-wjs, script#google-plus, script#facebook-jssdk").remove();
+        $("a.view, a.remix").text("[we're busy publishing your page...]");
+        $(".accordion").addClass("collapsed");
+        $("#publication-result").removeClass("collapsed");
+        $("#share-result .thimble-additionals").html("<ul><li data-medium='twitter'>Twitter</li><li data-medium='google'>Google+</li><li data-medium='facebook'>Facebook</li></ul>");
+      }
+    }
   };
 });
