@@ -41,11 +41,13 @@ define("main", function(require) {
       AppReady = require("appReady!"),
       publishURL = $("meta[name='publish-url']").attr("content"),
       pageToLoad = $("meta[name='remix-url']").attr("content"),
+      deploymentType = $("meta[name='deployment-type']").attr("content"),
       Modals = require("fc/ui/modals"),
       TextUI = require("fc/ui/text"),
       supportsPushState = window.history.pushState ? true : false,
       remixURLTemplate = null;
 
+  $("html").addClass("deployment-type-" + deploymentType);
   if (pageToLoad) {
     // A server is serving us as the custom edit URL for a web page.
     remixURLTemplate = location.protocol + "//" + location.host +

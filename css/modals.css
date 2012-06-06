@@ -186,8 +186,15 @@
   color: #236819;
 }
 
-#confirm-dialog .error-warning {
+#confirm-dialog .error-warning,
+#confirm-dialog .development-note {
   display: none;
+}
+
+html.deployment-type-development #confirm-dialog .development-note {
+  display: block;
+  padding-bottom: 1em;
+  color: blue;
 }
 
 #confirm-dialog.has-errors .error-warning {
