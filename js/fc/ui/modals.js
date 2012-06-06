@@ -26,6 +26,11 @@ define(function() {
       $("#publish-button").toggleClass("enabled", isEnabled);
     });
     
+    codeMirror.on("reparse", function(event) {
+      var hasErrors = event.error ? true : false;
+      $("#confirm-dialog").toggleClass("has-errors", hasErrors);
+    });
+    
     $("#publish-button").click(function(){
       if ($(this).hasClass("enabled")) $("#confirm-dialog").show();
     });

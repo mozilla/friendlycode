@@ -184,6 +184,16 @@
   color: #236819;
 }
 
+#confirm-dialog .error-warning {
+  display: none;
+}
+
+#confirm-dialog.has-errors .error-warning {
+  display: block;
+  padding-bottom: 1em;
+  color: red;
+}
+
 .confirmation-buttons {
   text-align: center;
   margin-top: 1em;
