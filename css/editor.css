@@ -114,9 +114,10 @@ img {
   padding-right: 2em;
   white-space: nowrap;
   cursor: pointer;
+  font-size: 14px;
 }
 
-@media screen and (max-width: 940px) {
+@media screen and (max-width: 980px) {
   #nav-options .responsive,
   #nav-options .responsive:hover,
   #nav-options .nav-item.responsive.enabled {
@@ -137,7 +138,7 @@ img {
   }
 }
 
-@media screen and (max-width: 755px) {
+@media screen and (max-width: 785px) {
   #editor-pane-nav-options {
     border: none;
   }
@@ -157,11 +158,11 @@ img {
   }
   #hints-nav-item {
     margin-left: 0px !important;
-    left: 300px !important;
+    left: 310px !important;
   }
 }
 
-@media screen and (max-width: 590px) {
+@media screen and (max-width: 620px) {
   #editor-nav-item.nav-item,
   #preview-nav-item.nav-item {
     display: none !important;
@@ -184,6 +185,7 @@ img {
 #nav-options #editor-nav-item.nav-item,
 #nav-options #preview-nav-item.nav-item {
   cursor: default;
+  font-size: 16px;
 }
 
 #nav-options .nav-item.enabled,
@@ -396,7 +398,7 @@ img {
 
 #hints-nav-item {
   left: 100%;
-  margin-left: -90px;
+  margin-left: -100px;
   position: absolute;
   top: 13px;
 
@@ -404,14 +406,22 @@ img {
   opacity: 1 !important;
 }
 
-#hints-nav-item.on:before {
-  content: "☑ ";
-  color: black !important;
+#hints-nav-item .checkbox {
+  display: inline-block;
+  border: 1px solid grey;
+  border-radius: 2px;
+  background-color: white;
+  background-image: url("../img/checkbox-gradient.png");
+  background-repeat: repeat-x;
+  background-position: left center;
+  color: black;
+  width: 10px;
+  height: 10px;
+  line-height: 10px;
 }
 
-#hints-nav-item.off:before {
-  content: "☐ ";
-  color: black !important;
+#hints-nav-item .checkbox.off {
+  color: transparent;
 }
 
 
