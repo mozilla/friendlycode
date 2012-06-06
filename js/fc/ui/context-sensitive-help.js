@@ -30,7 +30,7 @@ define(["./mark-tracker"], function(MarkTracker) {
       cursorHelpMarks.clear();
 
       // people may not want helpful hints
-      if ($("#hints-nav-item").hasClass("off")) return;
+      if ($("#hints-nav-item .checkbox").hasClass("off")) return;
 
       var cursorIndex = codeMirror.getCursorIndex();
       var help = helpIndex.get(cursorIndex);

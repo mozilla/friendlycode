@@ -80,7 +80,8 @@
 .thimble-title {
   position: relative;
   top: -2em;
-  text-align: center;
+  text-align: left;
+  padding-left: 5px;
 
   font-weight: bold;
   font-family: "myriad-pro", sans-serif;
@@ -102,7 +103,7 @@
 }
 
 
-.thimble-title:before {
+.thimble-grey-bar .thimble-title:before {
   content: "▾ ";
   padding-left: 1em;
 }
@@ -127,7 +128,7 @@
   margin: 0 auto 1em;
   padding-left: 1em;
   padding-top: 5px;
-  width: 320px;
+  width: 370px;
 }
 
 .thimble-url-box a {
@@ -143,6 +144,7 @@
   text-align: left;
   position: relative;
   padding: 2px 10px;
+  font-size: 14px;
 }
 
 .thimble-additionals ul {
