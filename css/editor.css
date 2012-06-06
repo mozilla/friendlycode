@@ -108,13 +108,25 @@ img {
   height: 41px;
   text-align: center;
   vertical-align: middle;
-  color: black;
-  opacity: 0.3;
+  color: gray;
   padding: 0px 5px;
   padding-right: 2em;
   white-space: nowrap;
-  cursor: pointer;
+  cursor: default;
   font-size: 14px;
+  opacity: 0.33;
+  -moz-transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+}
+
+#nav-options .nav-item.enabled {
+  cursor: pointer;
+  opacity: 1.0;
+}
+
+#nav-options .nav-item.enabled:hover {
+  color: #3D59FE;
 }
 
 @media screen and (max-width: 980px) {
@@ -182,20 +194,7 @@ img {
   }
 }
 
-#nav-options #editor-nav-item.nav-item,
-#nav-options #preview-nav-item.nav-item {
-  cursor: default;
-  font-size: 16px;
-}
-
-#nav-options .nav-item.enabled,
-#nav-options .nav-item:hover {
-  opacity: 1;
-  color: #3D59FE;
-}
-
 #nav-options .nav-item ul li {
-  opacity: 1;
   color: #666;
 }
 
@@ -248,15 +247,16 @@ img {
   top: 10px;
   right: 0;
   width: 7em;
-  opacity: 1;
 }
 
 /* ------ nav button stylings ------ */
 
-#editor-nav-item,
-#preview-nav-item {
+#nav-options #editor-nav-item,
+#nav-options #preview-nav-item {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
+  opacity: 1.0;
+  color: black;
 }
 
 #editor-nav-item .icon,
@@ -272,16 +272,8 @@ img {
   background-image: url("../img/editor-icon.png");
 }
 
-#nav-options #editor-nav-item.nav-item.enabled {
-  color: black;
-}
-
 #preview-nav-item .icon {
   background-image: url("../img/preview-icon.png");
-}
-
-#nav-options #preview-nav-item.nav-item.enabled {
-  color: black;
 }
 
 #preview-nav-item .preview-title {
@@ -314,8 +306,7 @@ img {
   background-position: center center;
 }
 
-#undo-nav-item.enabled .icon,
-#undo-nav-item:hover .icon {
+#undo-nav-item.enabled:hover .icon {
   background-image: url("../img/undo-blue.png");
 }
 
@@ -328,8 +319,7 @@ img {
   background-position: center center;
 }
 
-#redo-nav-item.enabled .icon,
-#redo-nav-item:hover .icon {
+#redo-nav-item.enabled:hover .icon {
   background-image: url("../img/redo-blue.png");
 }
 
@@ -342,7 +332,7 @@ img {
   background-position: center center;
 }
 
-#text-nav-item:hover .icon {
+#text-nav-item.enabled:hover .icon {
   background-image: url("../img/text-size-blue.png");
 }
 
@@ -401,9 +391,6 @@ img {
   margin-left: -100px;
   position: absolute;
   top: 13px;
-
-  color: #3D59FE !important;
-  opacity: 1 !important;
 }
 
 #hints-nav-item .checkbox {
