@@ -15,15 +15,17 @@ define(function() {
      * When someone clicks on the darkening-overlay, rather
      * than the modal dialog, close the modal dialog again.
      */
-    $(".modal-overlay").click(function() { $(this).hide(); });
-    // intercept and block for clicks inside the modal
-    $(".modal-overlay div").click(function() { return false; });
-   
+    $(".modal-overlay").click(function(event) { 
+      if (event.target === this) { 
+        $(this).hide(); 
+      }
+    });
+
     /**
      * The escape key should univerally close modal dialogs
      */ 
-    $(document).keyup(function(e) {
-      if (e.keyCode == 27) {
+    $(document).keyup(function(event) {
+      if (event.keyCode == 27) {
         hideModals();
       }
     });
