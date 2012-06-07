@@ -13,7 +13,6 @@
   border: 5px solid #D6D6D6;
   margin: 10px;
   padding: 4px;
-  margin-top: -10px;
   white-space: normal;
 
   border: 1px solid rgb(193,193,193);
@@ -22,13 +21,6 @@
   
   z-index: 1;
 }
-
-.hintmarker {
-  position: absolute;
-  width: 0px;
-  height: 0px;
-}
-
 
 .error p {
   display: inline;
