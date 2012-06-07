@@ -561,3 +561,21 @@ html .tipsy {
   /* Make tipsy tooltips slightly larger than the default. */
   font-size: 12px;
 }
+
+.error-widget {
+  position: absolute;
+  background: red;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 18px !important;
+  cursor: pointer;
+}
+
+.error-widget:before {
+  content: '?';
+}
+
+.error-widget:hover {
+  background: firebrick;
+}

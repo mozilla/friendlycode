@@ -12,7 +12,8 @@ define(["./mark-tracker"], function(MarkTracker) {
 
     // Keep track of error highlighting.
     var errorHelpMarks = MarkTracker(codeMirror, relocator);
-  
+    var widget = null;
+    
     // Report the given Slowparse error.
     function reportError(error) {
       var startMark = 999999999;
@@ -24,11 +25,24 @@ define(["./mark-tracker"], function(MarkTracker) {
           errorHelpMarks.mark(start, end, "highlight-" + (i+1), this);
         });
       errorArea.html(template({error: errorHTML.html()})).show();
+      errorArea.hide();
+      widget = $('<div class="error-widget"></div>');
+      widget.click(function() {
+        errorArea.fadeToggle();
+        codeMirror.focus();
+        return false;
+      });
+      codeMirror.addWidget(codeMirror.posFromIndex(startMark), widget[0], false);
+      window.widget = widget[0];
       relocator.relocate(errorArea, startMark);
     }
   
     codeMirror.on("reparse", function(event) {
       errorHelpMarks.clear();
+      if (widget) {
+        widget.remove();
+        widget = null;
+      }
       if (event.error) {
         reportError(event.error);
       } else { 
