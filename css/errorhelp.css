@@ -1,5 +1,18 @@
 /* ------ ERRORS AND HELP MESSAGE STYLING ------ */
 
+html .flipped {
+  margin-top: -180px;
+}
+
+html .help:not(.flipped) .up-arrow,
+html .error:not(.flipped) .up-arrow {
+  display: block;
+}
+
+html .flipped .down-arrow {
+  display: block;
+}
+
 .error,
 .help {
   display: block;
@@ -12,6 +25,7 @@
   background-color: #FDFDFD;
   border: 5px solid #D6D6D6;
   margin: 10px;
+  margin-top: 20px;
   padding: 4px;
   white-space: normal;
 
@@ -103,7 +117,7 @@ b {
 .error .up-arrow,
 .help .up-arrow {
   position: absolute;
-  display: block;
+  display: none;
   width: 40px;
   height: 23px;
   background-repeat: no-repeat;

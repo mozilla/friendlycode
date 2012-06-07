@@ -6,6 +6,15 @@ define(function() {
     var lastLine = null;
     var lastElement = null;
     
+    function maybeFlipElement() {
+      var coords = codeMirror.charCoords({line: lastLine, ch: 0}, "local");
+      var bottomChar = {line: codeMirror.lineCount(), ch: 0};
+      var bottomCoords = codeMirror.charCoords(bottomChar, "local");
+      var height = lastElement.height();
+      var isPointingDown = coords.yBot + height > bottomCoords.yBot;
+      lastElement.toggleClass("flipped", isPointingDown);
+    }
+    
     var relocator = {
       // clear old markings
       cleanup: function() {
@@ -16,7 +25,6 @@ define(function() {
         }
         if (lastElement) {
           lastElement.hide();
-          $(".up-arrow, .down-arrow", lastElement).hide();
           lastElement = null;
         }
       },
@@ -28,12 +36,11 @@ define(function() {
 
         // find the line position for the start mark
         lastLine = codeMirror.posFromIndex(startMark).line;
-        var coords = codeMirror.charCoords({line: lastLine, ch: 0}, "local");
         codeMirror.setLineClass(lastLine, null, "CodeMirror-line-highlight");
         codeMirror.setMarker(lastLine, null, "CodeMirror-line-highlight");
         lastElement.show();
-        $(".up-arrow", lastElement).show();
         codeMirror.addWidget({line: lastLine, ch: 0}, lastElement[0], false);
+        maybeFlipElement();
       }
     };
 
