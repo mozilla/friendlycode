@@ -4,6 +4,7 @@
 define(function() {
   return function Relocator(codeMirror, codeMirrorScrollArea) {
     var lastLine = null;
+    var lastElement = null;
     
     var relocator = {
       // clear old markings
@@ -13,22 +14,26 @@ define(function() {
           codeMirror.clearMarker(lastLine);
           lastLine = null;
         }
-        $(".help .up-arrow, help. .down-arrow, .error .up-arrow, .error .down-arrow").hide();
+        if (lastElement) {
+          lastElement.hide();
+          $(".up-arrow, .down-arrow", lastElement).hide();
+          lastElement = null;
+        }
       },
 
       // relocate an element to inside CodeMirror, pointing "at" the line for startMark
       relocate: function(element, startMark) {
         this.cleanup();
+        lastElement = $(element);
 
         // find the line position for the start mark
         lastLine = codeMirror.posFromIndex(startMark).line;
         var coords = codeMirror.charCoords({line: lastLine, ch: 0}, "local");
-        var linePre = $($('.CodeMirror-gutter-text pre')[lastLine]);
         codeMirror.setLineClass(lastLine, null, "CodeMirror-line-highlight");
         codeMirror.setMarker(lastLine, null, "CodeMirror-line-highlight");
-
-        $(".up-arrow", element).show();
-        codeMirror.addWidget({line: lastLine, ch: 0}, $(element)[0], false);
+        lastElement.show();
+        $(".up-arrow", lastElement).show();
+        codeMirror.addWidget({line: lastLine, ch: 0}, lastElement[0], false);
       }
     };
 
