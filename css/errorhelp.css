@@ -20,7 +20,7 @@ html .flipped .down-arrow {
   top: 0px;
   left: 100px;
   
-  width: 450px;
+  width: 80%;
   height: 130px;
   background-color: #FDFDFD;
   border: 5px solid #D6D6D6;
@@ -43,7 +43,7 @@ html .flipped .down-arrow {
 .error .icon,
 .help .icon {
   display: inline-block;
-  width: 80px;
+  width: 20%;
   height: 100%;
   border-right: 1px solid #C0C0C0;
   text-align: center;
@@ -51,6 +51,9 @@ html .flipped .down-arrow {
   
   background-position: center center;
   background-repeat: no-repeat;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .error .content,
@@ -61,6 +64,9 @@ html .flipped .down-arrow {
   vertical-align: top;
   overflow: auto;
   padding: 5px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .error .icon {
