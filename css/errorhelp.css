@@ -72,6 +72,8 @@ html .flipped .down-arrow {
   vertical-align: top;
   overflow: auto;
   padding: 5px;
+  font-size: 14px;
+  line-height: 16px;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;

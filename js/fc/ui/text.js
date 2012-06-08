@@ -13,9 +13,10 @@ define(function() {
     /**
      * established font sizes - note: must correspond to editor.css [data-size=...] rules
      */
-    var smallSize = 12,
-        normalSize = 14,
-        largeSize = 18;
+    var smallSize = 10,
+        normalSize = 12,
+        largeSize = 14,
+        LINE_HEIGHT_FACTOR = 1.33;
 
     /**
      * Check is local storage is supported, and if so, whether
@@ -56,7 +57,7 @@ define(function() {
       var t = $(this),
           size = t.attr("data-size"),
           base = (size==="small" ? smallSize : size==="normal" ? normalSize : largeSize),
-          height = base * 1.125,
+          height = base * LINE_HEIGHT_FACTOR,
           cheight = height - 1,
           lp = parseInt($("#text-nav-item li").css("padding-left")),
           rp = parseInt($("#text-nav-item li").css("padding-right")), 
