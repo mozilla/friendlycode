@@ -398,7 +398,8 @@ img {
   left: 100%;
   margin-left: -100px;
   position: absolute;
-  top: 13px;
+  top: 11px;
+  color: #3D59FE !important;
 }
 
 #hints-nav-item .checkbox {
@@ -413,6 +414,16 @@ img {
   width: 10px;
   height: 10px;
   line-height: 10px;
+
+  font-family: OpenSymbolCropped;
+  font-size: 21px;
+  line-height: 9px;
+  vertical-align: middle;
+}
+
+#hints-nav-item .checkbox-label {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 #hints-nav-item .checkbox.off {
