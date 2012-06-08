@@ -6,8 +6,8 @@
   z-index: 2000;
   display: block;
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   background-color: rgba(0,0,0,0.2); 
   height: 100%; 
   width: 100%;
@@ -46,7 +46,7 @@
   transform: rotate(45deg); 
   
   border: 1px solid #C0C0C0;
-  border-width: 1px 0px 0px 1px;
+  border-width: 1px 0 0 1px;
   margin-bottom: 1.5em;
 }
 
@@ -69,7 +69,7 @@
 }
 
 .thimble-grey-bar #modal-close-button {
-  top: 0px;
+  top: 0;
 }
 
 .thimble-menu-content {
@@ -96,10 +96,10 @@
 }
 
 .thimble-grey-bar .thimble-title {
-  top: 0px;
+  top: 0;
   text-align: left;
-  padding: 1em 1em 0.5em 0em;
-  padding-left: 0px;
+  padding: 1em 1em 0.5em 0;
+  padding-left: 0;
 }
 
 
@@ -150,14 +150,14 @@
 .thimble-additionals ul {
   list-style: none;
   text-align: center;
-  margin: 1em 0px;
-  padding: 0px;
+  margin: 1em 0;
+  padding: 0;
 }
 
 .thimble-additionals ul li {
   display: table-cell;
   vertical-align: middle;
-  padding: 0px 5px;
+  padding: 0 5px;
 }
 
 .collapsed .thimble-title:before {
@@ -174,7 +174,7 @@
 }
 
 .thimble-grey-bar .thimble-additionals {
-  padding: 0px 1em;
+  padding: 0 1em;
 }
 
 .thimble-additionals a {
@@ -222,7 +222,7 @@ html.deployment-type-development #confirm-dialog .development-note {
   padding-top: 7px;
   text-indent: -20px;
   width: 60px;
-  margin: 0px 1em;
+  margin: 0 1em;
 }
 
 .confirmation-button.yes-button {
@@ -232,29 +232,6 @@ html.deployment-type-development #confirm-dialog .development-note {
 .confirmation-button.no-button {
   background-image: url("../img/no.png");
 }
-/*
-.confirmation-button .mark {
-  position: relative;
-  top: 0px;
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  border-radius: 10px;
-  background-color: rgba(0,0,0,0.4);
-  color: white;
-  margin-right: -9px;
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-
-.confirmation-button.yes-button .mark {
-  background-image: url("../img/yes.png");
-}
-
-.confirmation-button.no-button .mark {
-  background-image: url("../img/no.png");
-}
-*/
 
 .accordion {
   background-color:inherit;

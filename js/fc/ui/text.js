@@ -82,7 +82,11 @@ define(function() {
         // refesh code mirror
         codeMirror.refresh();
         // update localstorage
-        if (supportsLocalStorage()) { localStorage["ThimbleTextSize"] = size; }
+        if (supportsLocalStorage()) try {
+          // TODO: Consider using lscache here, as it automatically deals
+          // w/ edge cases like out-of-space exceptions.
+          localStorage["ThimbleTextSize"] = size;
+        } catch (e) { /* Out of storage space, no big deal. */ }
         // mark text size in drop-down
         $("#text-nav-item li").removeClass("selected");
         $("#text-nav-item li[data-size="+size+"]").addClass("selected");
@@ -94,14 +98,11 @@ define(function() {
       t.click(fn);
     });
     
-    /**
-     * If there is a thimble text size set, trigger it.
-     */
-    if (supportsLocalStorage()) {
-      if (typeof localStorage["ThimbleTextSize"] !== "undefined") {
-        var textSize = localStorage["ThimbleTextSize"];
-        $("#text-nav-item li[data-size="+textSize+"]").click();
-      }
-    }
+    var defaultSize = "normal";
+    var lastSize = supportsLocalStorage() && localStorage["ThimbleTextSize"];
+    if (lastSize && $("#text-nav-item li[data-size="+lastSize+"]").length)
+      defaultSize = lastSize;
+    
+    $("#text-nav-item li[data-size="+defaultSize+"]").click();
   };
 });
