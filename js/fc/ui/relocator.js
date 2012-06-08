@@ -6,7 +6,7 @@ define(function() {
     var lastPos = null;
     var lastElement = null;
     
-    function maybeFlipElement() {
+    function flipElementIfNeeded() {
       var coords = codeMirror.charCoords(lastPos, "local");
       var bottomChar = {line: codeMirror.lineCount(), ch: 0};
       var bottomCoords = codeMirror.charCoords(bottomChar, "local");
@@ -46,7 +46,7 @@ define(function() {
         $(".up-arrow, .down-arrow", lastElement).css({
           left: codeMirror.charCoords(lastPos, "local").x + "px"
         });
-        maybeFlipElement();
+        flipElementIfNeeded();
       }
     };
 
