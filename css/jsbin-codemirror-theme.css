@@ -35,7 +35,21 @@
    * constraints of CodeMirror. For more information, see
    * https://github.com/marijnh/CodeMirror2/issues/571. */
   font-family: MenschRegular, Menlo, Monaco, consolas, monospace;
-  /* Font size is set in js/fc/ui/test.js. */
+}
+
+.CodeMirror.size-small {
+  font-size: 10px;
+  line-height: 12px;
+}
+
+.CodeMirror.size-normal {
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.CodeMirror.size-large {
+  font-size: 14px;
+  line-height: 18px;
 }
 
 .CodeMirror .CodeMirror-lines {

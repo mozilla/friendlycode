@@ -8,15 +8,8 @@ define(function() {
         errorArea = options.errorArea,
         relocator = options.relocator;
 
-    var tzo = $("#text-size-options");
-    
-    /**
-     * established font sizes - note: must correspond to editor.css [data-size=...] rules
-     */
-    var smallSize = 10,
-        normalSize = 12,
-        largeSize = 14,
-        LINE_HEIGHT_FACTOR = 1.33;
+    var tzo = $("#text-size-options"),
+        sizeNames = [];
 
     /**
      * Check is local storage is supported, and if so, whether
@@ -55,35 +48,24 @@ define(function() {
      */
     $("#text-nav-item li").each(function() {
       var t = $(this),
-          size = t.attr("data-size"),
-          base = (size==="small" ? smallSize : size==="normal" ? normalSize : largeSize),
-          height = base * LINE_HEIGHT_FACTOR,
-          cheight = height - 1,
-          lp = parseInt($("#text-nav-item li").css("padding-left")),
-          rp = parseInt($("#text-nav-item li").css("padding-right")), 
-          bwidth = 1;
+          size = t.attr("data-size");
+      
+      sizeNames.push(size);
       
       var fn = function() {
-        // remove old fontsize stylesheet
-        var stylesheets = document.getElementsByTagName("style"), s, len=stylesheets.length, stylesheet;
-        for (s=0; s<len; s++) {
-          stylesheet = stylesheets[s];
-          if (stylesheet.id && stylesheet.id === "cmFontSizeOverride") {
-            document.head.removeChild(stylesheet);
-            break;
-          }
-        }
-        // create new fontsize stylesheet
-        stylesheet = document.createElement("style");
-        stylesheet.id = "cmFontSizeOverride";
-        stylesheet.innerHTML = " /* source code font size: "+size+" */\n";
-        stylesheet.innerHTML += ".CodeMirror div, .CodeMirror pre { font-size: "+base+"px; line-height: "+height+"px; }\n";
-        stylesheet.innerHTML += ".cm-s-jsbin span.cm-comment { font-size: "+base+"px; line-height: "+cheight+"px; }\n";
-        document.head.appendChild(stylesheet);
-        // refesh code mirror
+        sizeNames.forEach(function(sizeName) {
+          var enabled = (sizeName == size),
+              wrapper = $(codeMirror.getWrapperElement());
+          wrapper.toggleClass("size-" + sizeName, enabled);
+        });
         codeMirror.refresh();
         // update localstorage
-        if (supportsLocalStorage()) { localStorage["ThimbleTextSize"] = size; }
+        if (supportsLocalStorage())
+          // TODO: Consider using lscache here, as it automatically deals
+          // w/ edge cases like out-of-space exceptions.
+          try {
+            localStorage["ThimbleTextSize"] = size;
+          } catch (e) { /* Out of storage space, no big deal. */ }
         // mark text size in drop-down
         $("#text-nav-item li").removeClass("selected");
         $("#text-nav-item li[data-size="+size+"]").addClass("selected");
@@ -95,14 +77,12 @@ define(function() {
       t.click(fn);
     });
     
-    /**
-     * If there is a thimble text size set, trigger it.
-     */
-    if (supportsLocalStorage()) {
-      if (typeof localStorage["ThimbleTextSize"] !== "undefined") {
-        var textSize = localStorage["ThimbleTextSize"];
-        $("#text-nav-item li[data-size="+textSize+"]").click();
-      }
-    }
+    var defaultSize = $("#text-nav-item li[data-size-default]")
+      .attr("data-size");
+    var lastSize = supportsLocalStorage() && localStorage["ThimbleTextSize"];
+    if (lastSize && $("#text-nav-item li[data-size="+lastSize+"]").length)
+      defaultSize = lastSize;
+    
+    $("#text-nav-item li[data-size="+defaultSize+"]").click();
   };
 });
