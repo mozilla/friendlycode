@@ -225,6 +225,7 @@ img {
 
 #preview-pane-nav-options > div.nav-item.buttons {
   cursor: default;
+  opacity: 1.0;
 }
 
 #publish-button {

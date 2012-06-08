@@ -72,17 +72,7 @@
 
 .CodeMirror-gutter-text .CodeMirror-line-highlight {
   color: white;
-
-  border: 2px solid transparent;
-  margin: -2px;
-
-  border-right: none;
-  padding-right: 12px;
-  margin-right: -12px;
-
-  background-image: url("../img/line-arrow.png");
-  background-position: right;
-  background-repeat: no-repeat;
+  background: red;
 }
 
 .CodeMirror-lines .CodeMirror-line-highlight {

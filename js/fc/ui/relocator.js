@@ -3,90 +3,52 @@
 // code will relocate an error or help message to near where the error actually is in CodeMirror.
 define(function() {
   return function Relocator(codeMirror, codeMirrorScrollArea) {
-
+    var lastPos = null;
+    var lastElement = null;
+    
+    function flipElementIfNeeded() {
+      var coords = codeMirror.charCoords(lastPos, "local");
+      var bottomChar = {line: codeMirror.lineCount(), ch: 0};
+      var bottomCoords = codeMirror.charCoords(bottomChar, "local");
+      var height = lastElement.height();
+      var isPointingDown = coords.yBot + height > bottomCoords.yBot;
+      lastElement.toggleClass("flipped", isPointingDown);
+    }
+    
     var relocator = {
-      // called any time the codemirror source code area is scrolled
-      scrollFunction: function() {},
-
-      // called any time the browser window is resized
-      resizeFunction: function() {},
-
       // clear old markings
       cleanup: function() {
-        $(".CodeMirror-line-highlight").removeClass("CodeMirror-line-highlight");
-        $(".help .up-arrow, help. .down-arrow, .error .up-arrow, .error .down-arrow").hide();
-        this.scrollFunction = function() {};
+        if (lastPos) {
+          codeMirror.setLineClass(lastPos.line, null, null);
+          codeMirror.clearMarker(lastPos.line);
+          lastPos = null;
+        }
+        if (lastElement) {
+          lastElement.hide();
+          lastElement = null;
+        }
       },
 
       // relocate an element to inside CodeMirror, pointing "at" the line for startMark
       relocate: function(element, startMark) {
         this.cleanup();
+        lastElement = $(element);
 
-        // find the line position for the start mark
-        var cmLocation = codeMirror.posFromIndex(startMark);
-        var linePre = $($('.CodeMirror-gutter-text pre')[cmLocation.line]);
-        linePre.addClass("CodeMirror-line-highlight");
-
-        var contentPre = $($('.CodeMirror-lines pre')[cmLocation.line+2]);
-        contentPre.addClass("CodeMirror-line-highlight");
-
-        var hintMarker = $(".hintmarker");
-
-        // move the message to this line
-        var _tmp = hintMarker.clone();
-        hintMarker.replaceWith(_tmp);
-        codeMirrorScrollArea.append(hintMarker);
-        _tmp.remove();
-
-        // set the correct "top" value, making sure to place the element
-        // below the error if it'd otherwise disappear from the top of
-        // the content area due to close-to-zero placement.
-        var baseValue = linePre.position().top - element.height() - 20,
-            topValue = baseValue;
-
-        if (topValue < 0) {
-          topValue = linePre.position().top + 50;
-          $(".up-arrow",$(element)).show();
-        } else {
-          $(".down-arrow",$(element)).show();
-        }
-        var gutterWidth = $(".CodeMirror-gutter").width();
-
-        // Place hintmarker at the right height
-        hintMarker.css({
-          "top": topValue + "px",
-          "left": gutterWidth + "px"
+        // find the line and character position for the start mark. We want
+        // both because the line may actually span multiple screen lines due
+        // to soft-wrapping, so we want to make sure that we point at
+        // the right one.
+        lastPos = codeMirror.posFromIndex(startMark);
+        codeMirror.setLineClass(lastPos.line, null, "CodeMirror-line-highlight");
+        codeMirror.setMarker(lastPos.line, null, "CodeMirror-line-highlight");
+        lastElement.show();
+        codeMirror.addWidget(lastPos, lastElement[0], false);
+        $(".up-arrow, .down-arrow", lastElement).css({
+          left: codeMirror.charCoords(lastPos, "local").x + "px"
         });
-
-        // Get its parent-indicated top position, and make
-        // the hint box match this hintmarker position
-        topValue = hintMarker.position().top;
-        element.css({
-          "top": topValue + "px",
-          "left": gutterWidth + "px"
-        });
-
-        // Now, whenever the codemirror scroll area is scrolled, set
-        // the hint height to match the hint marker's height so that
-        // it looks like the hint box scrolls along with the code.
-        this.scrollFunction = function() {
-          var topval = hintMarker.position().top;
-          element.css("top", topval + "px");
-        };
-
-        // Whenever the window is resized, we should get rid of the
-        // currently active hint, hiding it and cleaning up. 
-        this.resizeFunction = function() {
-          element.hide();
-          this.cleanup();
-        };
+        flipElementIfNeeded();
       }
     };
-
-    // Set up the onscroll and onresize handling. Note that the
-    // function(){...} wrappers are needed to prevent early binding.
-    codeMirrorScrollArea.on("scroll", function() { relocator.scrollFunction(); });
-    $(window).on("resize", function() { relocator.resizeFunction(); });
 
     return relocator;
   };
