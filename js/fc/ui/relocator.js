@@ -43,6 +43,9 @@ define(function() {
         codeMirror.setMarker(lastPos.line, null, "CodeMirror-line-highlight");
         lastElement.show();
         codeMirror.addWidget(lastPos, lastElement[0], false);
+        $(".up-arrow, .down-arrow", lastElement).css({
+          left: codeMirror.charCoords(lastPos, "local").x + "px"
+        });
         maybeFlipElement();
       }
     };
