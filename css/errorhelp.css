@@ -35,6 +35,7 @@ html .flipped .down-arrow {
   border: 1px solid rgb(193,193,193);
   -webkit-box-shadow: 0px 0px 5px 1px #C1C1C1;
   box-shadow: 0px 0px 5px 1px #C1C1C1;
+  font-family: "myriad-pro", Helvetica, Arial, sans-serif;
   
   z-index: 1000;
   
