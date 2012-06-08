@@ -1,34 +1,47 @@
 /* ------ ERRORS AND HELP MESSAGE STYLING ------ */
 
+html .flipped {
+  margin-top: -180px;
+}
+
+html .help:not(.flipped) .up-arrow,
+html .error:not(.flipped) .up-arrow {
+  display: block;
+}
+
+html .flipped .down-arrow {
+  display: block;
+}
+
 .error,
 .help {
   display: block;
   position: absolute;
-  top: 0px;
-  left: 100px;
   
-  width: 450px;
-  height: 130px;
+  /* Force the left side of the message to be on the left side of the
+   * editing area. CodeMirror.addWidget() will set the left side on the
+   * style attribute of the widget to be where the relevant character is,
+   * and we want to override that. */
+  left: 0px !important;
+
+  width: 97%;
+  height: 140px;
   background-color: #FDFDFD;
-  border: 5px solid #D6D6D6;
   margin: 10px;
+  margin-top: 20px;
   padding: 4px;
-  margin-top: -10px;
   white-space: normal;
 
   border: 1px solid rgb(193,193,193);
   -webkit-box-shadow: 0px 0px 5px 1px #C1C1C1;
   box-shadow: 0px 0px 5px 1px #C1C1C1;
   
-  z-index: 1;
+  z-index: 1000;
+  
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
-
-.hintmarker {
-  position: absolute;
-  width: 0px;
-  height: 0px;
-}
-
 
 .error p {
   display: inline;
@@ -37,7 +50,7 @@
 .error .icon,
 .help .icon {
   display: inline-block;
-  width: 80px;
+  width: 20%;
   height: 100%;
   border-right: 1px solid #C0C0C0;
   text-align: center;
@@ -45,6 +58,9 @@
   
   background-position: center center;
   background-repeat: no-repeat;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .error .content,
@@ -55,6 +71,9 @@
   vertical-align: top;
   overflow: auto;
   padding: 5px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .error .icon {
@@ -111,12 +130,12 @@ b {
 .error .up-arrow,
 .help .up-arrow {
   position: absolute;
-  display: block;
+  display: none;
   width: 40px;
   height: 23px;
   background-repeat: no-repeat;
   background-position: center center;
-  left: 50%;
+  padding-left: 20px;
 }
 
 .error .down-arrow,
