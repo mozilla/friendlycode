@@ -71,7 +71,7 @@ define("main", function(require) {
       return Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
     }
   });
-  var relocator = Relocator(codeMirror, $(".CodeMirror-scroll"));
+  var relocator = Relocator(codeMirror);
   var helpArea = $(".help");
   var cursorHelp = ContextSensitiveHelp({
     codeMirror: codeMirror,
