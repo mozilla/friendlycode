@@ -80,11 +80,6 @@
   color: #3A85FF !important;
 }
 
-.CodeMirror-gutter-text .CodeMirror-line-highlight {
-  color: white;
-  background: red;
-}
-
 .CodeMirror-lines .CodeMirror-line-highlight {
   background-color: #EEEEEE;
   margin-left: -3em;

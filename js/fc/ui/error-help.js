@@ -24,7 +24,7 @@ define(["./mark-tracker"], function(MarkTracker) {
           errorHelpMarks.mark(start, end, "highlight-" + (i+1), this);
         });
       errorArea.html(template({error: errorHTML.html()})).show();
-      relocator.relocate(errorArea, startMark);
+      relocator.relocate(errorArea, startMark, "error");
     }
   
     codeMirror.on("reparse", function(event) {

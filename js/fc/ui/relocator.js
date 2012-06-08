@@ -30,7 +30,7 @@ define(function() {
       },
 
       // relocate an element to inside CodeMirror, pointing "at" the line for startMark
-      relocate: function(element, startMark) {
+      relocate: function(element, startMark, type) {
         this.cleanup();
         lastElement = $(element);
 
@@ -40,7 +40,7 @@ define(function() {
         // the right one.
         lastPos = codeMirror.posFromIndex(startMark);
         codeMirror.setLineClass(lastPos.line, null, "CodeMirror-line-highlight");
-        codeMirror.setMarker(lastPos.line, null, "CodeMirror-line-highlight");
+        codeMirror.setMarker(lastPos.line, null, "gutter-highlight-" + type);
         lastElement.show();
         codeMirror.addWidget(lastPos, lastElement[0], false);
         $(".up-arrow, .down-arrow", lastElement).css({

@@ -87,29 +87,45 @@ b {
   font-family: OpenSansRegular, sans-serif;
 }
 
+.CodeMirror-gutter-text .gutter-highlight-error {
+  color: white;
+  background: #FF2A04;
+}
+
+.error a,
+.error strong,
+.error code,
+.error em[data-highlight] {
+  color: #FF2A04;
+}
+
+.CodeMirror-gutter-text .gutter-highlight-help {
+  color: white;
+  background: #FF9933;
+}
+
+.help a,
+.help strong,
+.help code,
+.help em[data-highlight] {
+  color: #FF9933;
+}
+
 .error a,
 .help a  {
-  color: #FF2A04;
   font-weight: bold;
 }
 
 .error strong,
 .help strong {
-  color: #FF2A04;
   font-weight: bold;
   font-size: 110%;
 }
 
 .error code,
 .help code {
-  color: #FF2A04;
   font-weight: bold;
   font-size: 110%;
-}
-
-.error em[data-highlight],
-.help em[data-highlight] {
-  color: #FF2A04;
 }
 
 .error em.highlight-1,

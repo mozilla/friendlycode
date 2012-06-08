@@ -63,7 +63,7 @@ define(["./mark-tracker"], function(MarkTracker) {
         cursorHelpMarks.mark(start, end, "cursor-help-highlight");
       });
       if (startMark !== null)
-        relocator.relocate(helpArea, startMark);
+        relocator.relocate(helpArea, startMark, "help");
     });
 
     return self;
