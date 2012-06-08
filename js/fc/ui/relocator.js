@@ -3,11 +3,11 @@
 // code will relocate an error or help message to near where the error actually is in CodeMirror.
 define(function() {
   return function Relocator(codeMirror, codeMirrorScrollArea) {
-    var lastLine = null;
+    var lastPos = null;
     var lastElement = null;
     
     function maybeFlipElement() {
-      var coords = codeMirror.charCoords({line: lastLine, ch: 0}, "local");
+      var coords = codeMirror.charCoords(lastPos, "local");
       var bottomChar = {line: codeMirror.lineCount(), ch: 0};
       var bottomCoords = codeMirror.charCoords(bottomChar, "local");
       var height = lastElement.height();
@@ -18,10 +18,10 @@ define(function() {
     var relocator = {
       // clear old markings
       cleanup: function() {
-        if (lastLine) {
-          codeMirror.setLineClass(lastLine, null, null);
-          codeMirror.clearMarker(lastLine);
-          lastLine = null;
+        if (lastPos) {
+          codeMirror.setLineClass(lastPos.line, null, null);
+          codeMirror.clearMarker(lastPos.line);
+          lastPos = null;
         }
         if (lastElement) {
           lastElement.hide();
@@ -34,12 +34,15 @@ define(function() {
         this.cleanup();
         lastElement = $(element);
 
-        // find the line position for the start mark
-        lastLine = codeMirror.posFromIndex(startMark).line;
-        codeMirror.setLineClass(lastLine, null, "CodeMirror-line-highlight");
-        codeMirror.setMarker(lastLine, null, "CodeMirror-line-highlight");
+        // find the line and character position for the start mark. We want
+        // both because the line may actually span multiple screen lines due
+        // to soft-wrapping, so we want to make sure that we point at
+        // the right one.
+        lastPos = codeMirror.posFromIndex(startMark);
+        codeMirror.setLineClass(lastPos.line, null, "CodeMirror-line-highlight");
+        codeMirror.setMarker(lastPos.line, null, "CodeMirror-line-highlight");
         lastElement.show();
-        codeMirror.addWidget({line: lastLine, ch: 0}, lastElement[0], false);
+        codeMirror.addWidget(lastPos, lastElement[0], false);
         maybeFlipElement();
       }
     };

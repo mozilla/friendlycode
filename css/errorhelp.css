@@ -17,10 +17,14 @@ html .flipped .down-arrow {
 .help {
   display: block;
   position: absolute;
-  top: 0px;
-  left: 100px;
   
-  width: 80%;
+  /* Force the left side of the message to be on the left side of the
+   * editing area. CodeMirror.addWidget() will set the left side on the
+   * style attribute of the widget to be where the relevant character is,
+   * and we want to override that. */
+  left: 0px !important;
+
+  width: 97%;
   height: 130px;
   background-color: #FDFDFD;
   border: 5px solid #D6D6D6;
@@ -33,7 +37,11 @@ html .flipped .down-arrow {
   -webkit-box-shadow: 0px 0px 5px 1px #C1C1C1;
   box-shadow: 0px 0px 5px 1px #C1C1C1;
   
-  z-index: 1;
+  z-index: 1000;
+  
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .error p {
