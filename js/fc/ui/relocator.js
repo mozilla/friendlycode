@@ -2,7 +2,7 @@
 
 // code will relocate an error or help message to near where the error actually is in CodeMirror.
 define(function() {
-  return function Relocator(codeMirror, codeMirrorScrollArea) {
+  return function Relocator(codeMirror) {
     var lastPos = null;
     var lastElement = null;
     

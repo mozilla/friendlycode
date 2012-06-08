@@ -34,7 +34,6 @@ define("main", function(require) {
       HistoryUI = require("fc/ui/history"),
       PublishUI = require("fc/ui/publish"),
       Relocator = require("fc/ui/relocator"),
-      ShareUI = require("fc/ui/share"),
       SocialMedia = require("fc/ui/social-media"),
       HelpTemplate = require("template!help"),
       ErrorTemplate = require("template!error"),
@@ -71,7 +70,7 @@ define("main", function(require) {
       return Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
     }
   });
-  var relocator = Relocator(codeMirror, $(".CodeMirror-scroll"));
+  var relocator = Relocator(codeMirror);
   var helpArea = $(".help");
   var cursorHelp = ContextSensitiveHelp({
     codeMirror: codeMirror,
