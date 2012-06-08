@@ -383,15 +383,15 @@ img {
 
 #text-size-options li[data-size=small] {
   background-image: url("../img/text-size-small.png");
-  font-size: 12px; /* MUST sync up with values used in fc/ui/text.js */
+  font-size: 12px;
 }
 #text-size-options li[data-size=normal] {
   background-image: url("../img/text-size-normal.png");
-  font-size: 14px; /* MUST sync up with values used in fc/ui/text.js */
+  font-size: 14px;
 }
 #text-size-options li[data-size=large] {
   background-image: url("../img/text-size-large.png");
-  font-size: 18px; /* MUST sync up with values used in fc/ui/text.js */
+  font-size: 18px;
 }
 
 #hints-nav-item {

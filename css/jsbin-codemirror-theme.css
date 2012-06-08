@@ -18,23 +18,42 @@
 .cm-s-jsbin span.cm-tag {color: #881280;}
 .cm-s-jsbin span.cm-attribute {color: #994500;}
 
+/* Font via http://robey.lag.net/2010/06/21/mensch-font.html */
+@font-face {
+  font-family: 'MenschRegular';
+  src: url('../fonts/mensch-webfont.eot');
+  src: url('../fonts/mensch-webfont.eot?#iefix') format('eot'),
+       url('../fonts/mensch-webfont.woff') format('woff'),
+       url('../fonts/mensch-webfont.ttf') format('truetype'),
+       url('../fonts/mensch-webfont.svg#webfont0UwCC656') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .CodeMirror {
-  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
-  font-weight: 200;
+  /* At the time of this writing, font family must be monospaced due to
+   * constraints of CodeMirror. For more information, see
+   * https://github.com/marijnh/CodeMirror2/issues/571. */
+  font-family: MenschRegular, Menlo, Monaco, consolas, monospace;
+}
+
+.CodeMirror.size-small {
+  font-size: 10px;
+  line-height: 12px;
+}
+
+.CodeMirror.size-normal {
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.CodeMirror.size-large {
   font-size: 14px;
+  line-height: 18px;
 }
 
 .CodeMirror .CodeMirror-lines {
-  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
   color: #333;
-  font-size: 14px;
-  line-height: 15.75px;
-}
-
-.CodeMirror textarea {
-  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 15.75px;
 }
 
 .CodeMirror-gutter {
@@ -43,10 +62,7 @@
 }
 
 .CodeMirror-gutter-text {
-  font-family: Menlo, Monaco, consolas, monospace;
   color: #A9A9A9;
-  font-size: 12px;
-  line-height: 15.75px;
 }
 
 .cm-s-jsbin span.cm-meta {
@@ -54,11 +70,7 @@
 }
 
 .cm-s-jsbin span.cm-comment {
-  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
-  color: #333;
-  font-style: italic;
-  font-weight: bold;
-  line-height: 15.75px; /* needs to be a little less than the standard line-height to align on multi-line wrapped content */
+  color: gray;
 }
 
 .CodeMirror span.cursor-help-highlight,
