@@ -137,6 +137,7 @@
   padding-left: 1em;
   padding-top: 5px;
   width: 370px;
+  overflow: hidden;
 }
 
 .thimble-url-box a {
