@@ -6,10 +6,20 @@
 //  [RequireJS plugin]: http://requirejs.org/docs/plugins.html#apiload
 (function() {
   var errorsLoaded = jQuery.Deferred();
+  var typekitFinished = jQuery.Deferred();
   
+  function finishTypekit() { typekitFinished.resolve(); }
+  
+  try {
+    Typekit.load({
+      active: finishTypekit,
+      inactive: finishTypekit
+    });
+  } catch(e) { finishTypekit(); }
+
   define("appReady", [], {
     load: function(name, req, load, config) {
-      jQuery.when(errorsLoaded).then(load);
+      jQuery.when(errorsLoaded, typekitFinished).then(load);
     }
   });
   jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
