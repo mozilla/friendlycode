@@ -11,6 +11,7 @@ define(["./mark-tracker"], function(MarkTracker) {
     var relocator = options.relocator;
     var helpIndex = options.helpIndex;
     var lastEvent = null;
+    var timeout = null;
 
     // Keep track of context-sensitive help highlighting.
     var cursorHelpMarks = MarkTracker(codeMirror);
@@ -25,23 +26,9 @@ define(["./mark-tracker"], function(MarkTracker) {
         helpIndex.build(event.document, event.sourceCode);
       }
     });
-
-    codeMirror.on("cursor-activity", function() {
+    
+    function showHelp(cursorIndex, help) {
       cursorHelpMarks.clear();
-
-      // people may not want helpful hints
-      if ($("#hints-nav-item .checkbox").hasClass("off")) return;
-
-      var cursorIndex = codeMirror.getCursorIndex();
-      var help = helpIndex.get(cursorIndex);
-
-      if (!help) {
-        if (helpArea.is(":visible")) {
-          helpArea.hide();
-          relocator.cleanup();
-        }
-        return;
-      }
 
       if (help.type == "cssSelector") {
         // TODO: Because we're looking at the generated document fragment and
@@ -51,6 +38,7 @@ define(["./mark-tracker"], function(MarkTracker) {
         var matches = lastEvent.document.querySelectorAll(selector).length;
         help.matchCount = matches;
       }
+      var oldOffset = helpArea.offset();
       helpArea.html(template(help)).show();
       var startMark = null;
       help.highlights.forEach(function(interval) {
@@ -62,8 +50,37 @@ define(["./mark-tracker"], function(MarkTracker) {
           startMark = start;
         cursorHelpMarks.mark(start, end, "cursor-help-highlight");
       });
-      if (startMark !== null)
+      if (startMark !== null) {
         relocator.relocate(helpArea, startMark, "help");
+        var newOffset = helpArea.offset();
+        if (newOffset.top != oldOffset.top ||
+            newOffset.left != oldOffset.left) {
+          helpArea.hide();
+          helpArea.fadeIn();
+        }
+      }
+    }
+
+    codeMirror.on("cursor-activity", function() {
+      clearTimeout(timeout);
+
+      // people may not want helpful hints
+      if ($("#hints-nav-item .checkbox").hasClass("off")) return;
+
+      var cursorIndex = codeMirror.getCursorIndex();
+      var help = helpIndex.get(cursorIndex);
+
+      if (!help) {
+        if (helpArea.is(":visible")) {
+          cursorHelpMarks.clear();
+          helpArea.hide();
+          relocator.cleanup();
+        }
+        return;
+      } else
+        timeout = setTimeout(function() {
+          showHelp(cursorIndex, help);
+        }, 250);
     });
 
     return self;
