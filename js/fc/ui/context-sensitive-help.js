@@ -12,6 +12,7 @@ define(["./mark-tracker"], function(MarkTracker) {
     var helpIndex = options.helpIndex;
     var lastEvent = null;
     var timeout = null;
+    var lastHelp = null;
 
     // Keep track of context-sensitive help highlighting.
     var cursorHelpMarks = MarkTracker(codeMirror);
@@ -70,17 +71,20 @@ define(["./mark-tracker"], function(MarkTracker) {
       var cursorIndex = codeMirror.getCursorIndex();
       var help = helpIndex.get(cursorIndex);
 
-      if (!help) {
-        if (helpArea.is(":visible")) {
-          cursorHelpMarks.clear();
-          helpArea.hide();
-          relocator.cleanup();
-        }
+      if (JSON.stringify(help) == lastHelp)
         return;
-      } else
+
+      cursorHelpMarks.clear();
+      helpArea.hide();
+      relocator.cleanup();
+      
+      if (help)
         timeout = setTimeout(function() {
+          lastHelp = JSON.stringify(help);
           showHelp(cursorIndex, help);
         }, 250);
+      else
+        lastHelp = null;
     });
 
     return self;
