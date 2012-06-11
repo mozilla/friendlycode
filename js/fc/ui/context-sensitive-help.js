@@ -18,14 +18,11 @@ define(["./mark-tracker"], function(MarkTracker) {
     var cursorHelpMarks = MarkTracker(codeMirror);
 
     codeMirror.on("reparse", function(event) {
+      clearHelp();
       lastEvent = event;
-      relocator.cleanup();
       helpIndex.clear();
-      if (event.error) {
-        helpArea.hide();
-      } else {
+      if (!event.error)
         helpIndex.build(event.document, event.sourceCode);
-      }
     });
     
     function showHelp(cursorIndex, help) {
@@ -62,15 +59,24 @@ define(["./mark-tracker"], function(MarkTracker) {
       }
     }
 
-    codeMirror.on("change", function() {
+    function clearHelp() {
       clearTimeout(timeout);
-    });
+      lastHelp = null;
+      cursorHelpMarks.clear();
+      helpArea.hide();
+      relocator.cleanup();
+    }
     
+    codeMirror.on("change", clearHelp);
     codeMirror.on("cursor-activity", function() {
-      clearTimeout(timeout);
-
       // people may not want helpful hints
       if ($("#hints-nav-item .checkbox").hasClass("off")) return;
+
+      // If the editor widget doesn't have input focus, this event
+      // was likely triggered through some programmatic manipulation rather
+      // than manual cursor movement, so don't bother displaying a hint.
+      if (!$(codeMirror.getWrapperElement()).hasClass("CodeMirror-focused"))
+        return;
 
       var cursorIndex = codeMirror.getCursorIndex();
       var help = helpIndex.get(cursorIndex);
@@ -78,17 +84,12 @@ define(["./mark-tracker"], function(MarkTracker) {
       if (JSON.stringify(help) == lastHelp)
         return;
 
-      cursorHelpMarks.clear();
-      helpArea.hide();
-      relocator.cleanup();
-      
+      clearHelp();
       if (help)
         timeout = setTimeout(function() {
           lastHelp = JSON.stringify(help);
           showHelp(cursorIndex, help);
         }, 250);
-      else
-        lastHelp = null;
     });
 
     return self;
