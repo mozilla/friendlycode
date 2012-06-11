@@ -28,7 +28,9 @@ define(["./mark-tracker"], function(MarkTracker) {
     var template = options.template;
     var errorArea = options.errorArea;
     var relocator = options.relocator;
-
+    var timeout = null;
+    var ERROR_DISPLAY_DELAY = 1000;
+    
     // Keep track of error highlighting.
     var errorHelpMarks = MarkTracker(codeMirror, relocator);
   
@@ -50,14 +52,20 @@ define(["./mark-tracker"], function(MarkTracker) {
         });
       });
       relocator.relocate(errorArea, startMark, "error");
+      errorArea.hide().fadeIn();
     }
   
-    codeMirror.on("reparse", function(event) {
+    codeMirror.on("change", function(event) {
       errorHelpMarks.clear();
+      errorArea.hide();
+    });
+
+    codeMirror.on("reparse", function(event) {
+      clearTimeout(timeout);
       if (event.error) {
-        reportError(event.error);
-      } else { 
-        errorArea.hide();
+        timeout = setTimeout(function() {
+          reportError(event.error);
+        }, ERROR_DISPLAY_DELAY);
       }
     });
     return self;
