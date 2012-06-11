@@ -61,13 +61,6 @@
   line-height: 15.75px; /* needs to be a little less than the standard line-height to align on multi-line wrapped content */
 }
 
-.CodeMirror span.cursor-help-highlight,
-.cursor-help-highlight {
-  /*
-  background-color: #d5ac85;
-  */
-}
-
 .CodeMirror-wrap .CodeMirror-scroll {
   overflow: hidden;
 }
