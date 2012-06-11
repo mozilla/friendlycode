@@ -26,6 +26,12 @@
   background-color: gray;
 }
 
+.thimble-question-bar .thimble-title {
+  color: white;
+  font-size: 18px;
+  text-align: center;
+}
+
 .thimble-grey-bar {
   background-color: #F7F7F7;
 }
@@ -89,10 +95,6 @@
 
   background-color: inherit;
   color: black;
-}
-
-.thimble-question-bar .thimble-title {
-  color: white;
 }
 
 .thimble-grey-bar .thimble-title {
@@ -186,6 +188,11 @@
   color: #236819;
 }
 
+#confirm-dialog .public-warning {
+  text-align: center;
+  padding-bottom: 1em;
+}
+
 #confirm-dialog .error-warning,
 #confirm-dialog .development-note {
   display: none;
@@ -194,7 +201,8 @@
 html.deployment-type-development #confirm-dialog .development-note {
   display: block;
   padding-bottom: 1em;
-  color: blue;
+  color: gray;
+  font-style: italic;
 }
 
 #confirm-dialog.has-errors .error-warning {
@@ -223,6 +231,14 @@ html.deployment-type-development #confirm-dialog .development-note {
   text-indent: -20px;
   width: 60px;
   margin: 0 1em;
+  opacity: 0.75;
+  -moz-transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+}
+
+.confirmation-button:hover {
+  opacity: 1.0;
 }
 
 .confirmation-button.yes-button {
