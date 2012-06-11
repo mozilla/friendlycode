@@ -22,8 +22,8 @@
   border: 1px solid #C0C0C0;
 }
 
-.thimble-blue-bar {
-  background-color: #3A84FC;
+.thimble-question-bar {
+  background-color: gray;
 }
 
 .thimble-grey-bar {
@@ -91,7 +91,7 @@
   color: black;
 }
 
-.thimble-blue-bar .thimble-title {
+.thimble-question-bar .thimble-title {
   color: white;
 }
 
