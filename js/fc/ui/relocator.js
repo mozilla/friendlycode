@@ -11,7 +11,9 @@ define(function() {
       var bottomChar = {line: codeMirror.lineCount(), ch: 0};
       var bottomCoords = codeMirror.charCoords(bottomChar, "local");
       var height = lastElement.height();
-      var isPointingDown = coords.yBot + height > bottomCoords.yBot;
+      var bottom = Math.max(bottomCoords.yBot,
+                            $(codeMirror.getScrollerElement()).height());
+      var isPointingDown = coords.yBot + height > bottom;
       lastElement.toggleClass("flipped", isPointingDown);
     }
     
