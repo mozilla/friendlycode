@@ -12,8 +12,6 @@ define(function() {
     var publisher = options.publisher;
     var currURL;
 
-    dlg.find('.close-icon').click(function(){ dlg.hide(); });
-
     return {
       loadCode: function(path, cb) {
         publisher.loadCode(path, function(err, data, url) {
@@ -30,8 +28,6 @@ define(function() {
       },
       saveCode: function(callback) {
         var code = codeMirror.getValue();
-        dlg.show();
-        $(".done", dlg).hide();
         publisher.saveCode(code, currURL, function(err, info) {
           if (err) {
             // TODO: Put nicer error here.
@@ -41,7 +37,6 @@ define(function() {
             var viewURL = info.url;
             var remixURL = baseRemixURL.replace("{{VIEW_URL}}",
                                                 escape(info.path));
-            $(".done", dlg).fadeIn();
             $('a.view', dlg).attr('href', viewURL).text(viewURL);
             $('a.remix', dlg).attr('href', remixURL).text(remixURL);
 

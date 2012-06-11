@@ -7,7 +7,7 @@ define(function() {
         socialMedia = options.socialMedia;
 
     var hideModals = function() {
-      $(".modal-overlay").hide();
+      $(".modal-overlay").fadeOut();
     }
 
     /**
@@ -16,7 +16,7 @@ define(function() {
      */
     $(".modal-overlay").click(function(event) { 
       if (event.target === this) { 
-        $(this).hide(); 
+        $(this).fadeOut(); 
       }
     });
 
@@ -53,7 +53,7 @@ define(function() {
     });
     
     $("#publish-button").click(function(){
-      if ($(this).hasClass("enabled")) $("#confirm-dialog").show();
+      if ($(this).hasClass("enabled")) $("#confirm-dialog").fadeIn();
     });
 
     // CONFIRM DIALOG IS IN MAIN.JS FOR THE MOMENT DUE TO

@@ -206,11 +206,21 @@ define("main", function(require) {
   
   // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
   $("#confirm-publication").click(function(){
-    $("#confirm-dialog").hide();
+    // Start the actual publishing process, so that hopefully by the
+    // time the transition has finished, the user's page is published.
     modals.resetPublishModal();
-    $("#publish-dialog").show();
     publishUI.saveCode(function(viewURL, remixURL, path) {
       onPostPublish(remixURL, path);
+    });
+    // We want the dialogs to transition while the page-sized translucent
+    // overlay stays in place. Because each dialog has its own overlay,
+    // however, this is a bit tricky. Eventually we might want to move
+    // to a DOM structure where each modal dialog shares the same overlay.
+    $("#confirm-dialog .thimble-modal-menu").slideUp(function() {
+      $(this).show();
+      $("#confirm-dialog").hide();
+      $("#publish-dialog").show();
+      $("#publish-dialog .thimble-modal-menu").hide().slideDown();
     });
   });
   // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD

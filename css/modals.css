@@ -3,7 +3,7 @@
  */
 
 .modal-overlay {
-  z-index: 2000;
+  z-index: 10000;
   display: block;
   position: absolute;
   top: 0;
