@@ -23,11 +23,12 @@
 }
 
 .thimble-question-bar {
-  background-color: gray;
+  background-color: #505050;
 }
 
 .thimble-question-bar .thimble-title {
   color: white;
+  background: inherit;
   font-size: 18px;
   text-align: center;
 }
@@ -93,9 +94,9 @@
   font-family: "myriad-pro", sans-serif;
   font-size: 14px;
 
-  background-color: inherit;
+  background-color: #3A84FC;
   
-  color: black;
+  color: white;
 }
 
 .thimble-grey-bar .thimble-title {
@@ -123,7 +124,7 @@
 }
 
 .collapsed .thimble-title:hover {
-  background-color: #3A84FC;
+  background-color: #505050;
 }
 
 .thimble-url-box {
@@ -132,7 +133,7 @@
   border-radius: 5px 5px 5px 5px;
   color: blue;
   height: 25px;
-  margin: 0 auto 1em;
+  margin: 10px auto 1em;
   padding-left: 1em;
   padding-top: 5px;
   width: 370px;
@@ -264,14 +265,6 @@ html.deployment-type-development #confirm-dialog .development-note {
   background-color:inherit;
 }
 
-.accordion.collapsed + .accordion.collapsed{
+.accordion + .accordion {
   border-top: 1px solid #D6D6D6;
-}
-.accordion + .accordion .thimble-title {
-  background-image: url("../img/modal-open-background.png");
-  background-repeat: repeat-x;
-  background-position: top left;
-}
-.accordion + .accordion.collapsed .thimble-title {
-  background-image: none;
 }
