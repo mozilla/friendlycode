@@ -15,12 +15,13 @@ define(["./mark-tracker"], function(MarkTracker) {
   
     // Report the given Slowparse error.
     function reportError(error) {
-      var startMark = 999999999;
+      var startMark = null;
       var errorHTML = $("<div></div>").fillError(error)
         .eachErrorHighlight(function(start, end, i) {
-          if (start < startMark) {
+          // Point the error message's arrow at the first occurrence of
+          // the word "here" in the error message.
+          if (startMark === null)
             startMark = start;
-          }
           errorHelpMarks.mark(start, end, "highlight-" + (i+1), this);
         });
       errorArea.html(template({error: errorHTML.html()})).show();
