@@ -69,6 +69,8 @@ define(["./mark-tracker"], function(MarkTracker) {
     
     codeMirror.on("change", clearHelp);
     codeMirror.on("cursor-activity", function() {
+      clearTimeout(timeout);
+      
       // people may not want helpful hints
       if ($("#hints-nav-item .checkbox").hasClass("off")) return;
 
