@@ -27,9 +27,9 @@ require(["fc/help", "slowparse/slowparse"], function(Help, Slowparse) {
   
   test("Index.clear() works", function() {
     var index = buildIndex('<p>hi</p>');
-    ok(index.get(0));
+    ok(index.get(1));
     index.clear();
-    equal(index.get(0), undefined);
+    equal(index.get(1), undefined);
   });
   
   test("Index.get() returns undefined when in text node", function() {
@@ -39,14 +39,14 @@ require(["fc/help", "slowparse/slowparse"], function(Help, Slowparse) {
   test("Index.get() returns help for HTML elements", function() {
     var html = '<p>he<br>llo</p>';
     var index = buildIndex(html);
-    var help = helpAt(index, "<p>", html);
+    var help = helpAt(index, "p>h", html);
     
     ok(help.html.match(/paragraph/i),
        "Index contains HTML help from hacktionary");
     equal(help.url, Help.MDN_URLS.html + 'p',
           "Index contains MDN URL for HTML elements");
-    assertHighlightIntervals(index, "<p>", ["<p>", "</p>"], html);
-    assertHighlightIntervals(index, "<br>", ["<br>"], html);
+    assertHighlightIntervals(index, "p>h", ["<p>", "</p>"], html);
+    assertHighlightIntervals(index, "br>", ["<br>"], html);
   });
 
   test("Index.get() returns help for <h1> thru <h6>", function() {
@@ -55,7 +55,7 @@ require(["fc/help", "slowparse/slowparse"], function(Help, Slowparse) {
     var index = buildIndex(html);
     
     ["<h1>", "<h2>", "<h3>", "<h4>", "<H5>", "<h6>"].forEach(function(hTag) {
-      ok(helpAt(index, hTag, html).html.match(/heading/i));
+      ok(helpAt(index, hTag.slice(1), html).html.match(/heading/i));
     });
   });
   

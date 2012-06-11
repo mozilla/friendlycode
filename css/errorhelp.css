@@ -128,17 +128,45 @@ b {
   font-size: 110%;
 }
 
-.error em.highlight-1,
-.help em.highlight-1,
-.CodeMirror span.highlight-1 {
-  background: yellow;
+.error em.highlight-1 {
+  color: inherit;
+  font-style: normal;
 }
 
-.error em.highlight-2,
-.help em.highlight-2,
+.CodeMirror span.highlight-1,
 .CodeMirror span.highlight-2 {
-  color: white;
-  background: orange;
+  background: rgba(255, 0, 0, 0.05) !important;
+}
+
+.CodeMirror span.cursor-help-highlight,
+.cursor-help-highlight {
+  background-color: rgba(255, 160, 0, 0.2);
+}
+
+.error em.highlight-2 {
+  text-decoration: underline;
+  cursor: pointer;
+  font-style: normal;
+}
+
+.CodeMirror .cursor-pointer {
+  display: absolute;
+  font-size: 40px;
+  margin-left: -20px;
+  margin-top: 10px;
+  padding-top: 0px;
+  font-weight: bold;
+  z-index: 2000;
+  color: #FF2A04;
+  text-shadow:
+    -2px -2px 0 white,
+    2px -2px 0 white,
+    -2px 2px 0 white,
+    2px 2px 0 white;
+}
+
+.cursor-pointer:before {
+  content: '▲';
 }
 
 .error .down-arrow,

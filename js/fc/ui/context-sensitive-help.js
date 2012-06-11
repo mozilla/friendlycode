@@ -11,44 +11,28 @@ define(["./mark-tracker"], function(MarkTracker) {
     var relocator = options.relocator;
     var helpIndex = options.helpIndex;
     var lastEvent = null;
+    var timeout = null;
+    var lastHelp = null;
     
     // The escape key should close hints 
     $(document).keyup(function(event) {
-      if (event.keyCode == 27) {
-        helpArea.hide();
-      }
+      if (event.keyCode == 27)
+        clearHelp();
     });
 
     // Keep track of context-sensitive help highlighting.
     var cursorHelpMarks = MarkTracker(codeMirror);
 
     codeMirror.on("reparse", function(event) {
+      clearHelp();
       lastEvent = event;
-      relocator.cleanup();
       helpIndex.clear();
-      if (event.error) {
-        helpArea.hide();
-      } else {
+      if (!event.error)
         helpIndex.build(event.document, event.sourceCode);
-      }
     });
-
-    codeMirror.on("cursor-activity", function() {
+    
+    function showHelp(cursorIndex, help) {
       cursorHelpMarks.clear();
-
-      // people may not want helpful hints
-      if ($("#hints-nav-item .checkbox").hasClass("off")) return;
-
-      var cursorIndex = codeMirror.getCursorIndex();
-      var help = helpIndex.get(cursorIndex);
-
-      if (!help) {
-        if (helpArea.is(":visible")) {
-          helpArea.hide();
-          relocator.cleanup();
-        }
-        return;
-      }
 
       if (help.type == "cssSelector") {
         // TODO: Because we're looking at the generated document fragment and
@@ -58,6 +42,7 @@ define(["./mark-tracker"], function(MarkTracker) {
         var matches = lastEvent.document.querySelectorAll(selector).length;
         help.matchCount = matches;
       }
+      var oldOffset = helpArea.offset();
       helpArea.html(template(help)).show();
       var startMark = null;
       help.highlights.forEach(function(interval) {
@@ -69,8 +54,50 @@ define(["./mark-tracker"], function(MarkTracker) {
           startMark = start;
         cursorHelpMarks.mark(start, end, "cursor-help-highlight");
       });
-      if (startMark !== null)
+      if (startMark !== null) {
         relocator.relocate(helpArea, startMark, "help");
+        var newOffset = helpArea.offset();
+        if (newOffset.top != oldOffset.top ||
+            newOffset.left != oldOffset.left) {
+          helpArea.hide();
+          helpArea.fadeIn();
+        }
+      }
+    }
+
+    function clearHelp() {
+      clearTimeout(timeout);
+      lastHelp = null;
+      cursorHelpMarks.clear();
+      helpArea.hide();
+      relocator.cleanup();
+    }
+    
+    codeMirror.on("change", clearHelp);
+    codeMirror.on("cursor-activity", function() {
+      clearTimeout(timeout);
+      
+      // people may not want helpful hints
+      if ($("#hints-nav-item .checkbox").hasClass("off")) return;
+
+      // If the editor widget doesn't have input focus, this event
+      // was likely triggered through some programmatic manipulation rather
+      // than manual cursor movement, so don't bother displaying a hint.
+      if (!$(codeMirror.getWrapperElement()).hasClass("CodeMirror-focused"))
+        return;
+
+      var cursorIndex = codeMirror.getCursorIndex();
+      var help = helpIndex.get(cursorIndex);
+
+      if (JSON.stringify(help) == lastHelp)
+        return;
+
+      clearHelp();
+      if (help)
+        timeout = setTimeout(function() {
+          lastHelp = JSON.stringify(help);
+          showHelp(cursorIndex, help);
+        }, 250);
     });
 
     return self;
