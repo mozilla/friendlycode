@@ -62,6 +62,10 @@ define(["./mark-tracker"], function(MarkTracker) {
       }
     }
 
+    codeMirror.on("change", function() {
+      clearTimeout(timeout);
+    });
+    
     codeMirror.on("cursor-activity", function() {
       clearTimeout(timeout);
 
