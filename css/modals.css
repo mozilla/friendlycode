@@ -94,6 +94,7 @@
   font-size: 14px;
 
   background-color: inherit;
+  
   color: black;
 }
 
@@ -116,9 +117,13 @@
 
 .collapsed .thimble-title {
   color: white;
-  background-color: #3A84FC;
+  background-color: gray;
   vertical-align: middle;
   cursor: pointer;
+}
+
+.collapsed .thimble-title:hover {
+  background-color: #3A84FC;
 }
 
 .thimble-url-box {
@@ -166,13 +171,19 @@
   content: "▸ ";
 }
 
-
-.collapsed .thimble-additionals {
-  display: none;
+.accordion-content {
+  overflow: hidden;
+  -moz-transition: height 0.5s;
+  -webkit-transition: height 0.5s;
+  -o-transition: height 0.5s;
 }
 
-.collapsed .thimble-url-box {
-  display: none;
+.collapsed .accordion-content {
+  height: 0;
+}
+
+div.accordion:not(.collapsed) .accordion-content {
+  height: 50px;
 }
 
 .thimble-grey-bar .thimble-additionals {
