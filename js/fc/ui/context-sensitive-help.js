@@ -11,6 +11,13 @@ define(["./mark-tracker"], function(MarkTracker) {
     var relocator = options.relocator;
     var helpIndex = options.helpIndex;
     var lastEvent = null;
+    
+    // The escape key should close hints 
+    $(document).keyup(function(event) {
+      if (event.keyCode == 27) {
+        helpArea.hide();
+      }
+    });
 
     // Keep track of context-sensitive help highlighting.
     var cursorHelpMarks = MarkTracker(codeMirror);
