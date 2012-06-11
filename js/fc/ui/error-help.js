@@ -10,6 +10,13 @@ define(["./mark-tracker"], function(MarkTracker) {
     var errorArea = options.errorArea;
     var relocator = options.relocator;
 
+    // The escape key should close error help 
+    $(document).keyup(function(event) {
+      if (event.keyCode == 27) {
+        errorArea.hide();
+      }
+    });
+
     // Keep track of error highlighting.
     var errorHelpMarks = MarkTracker(codeMirror, relocator);
   
