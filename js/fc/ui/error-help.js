@@ -55,13 +55,16 @@ define(["./mark-tracker"], function(MarkTracker) {
       errorArea.hide().fadeIn();
     }
   
-    codeMirror.on("change", function(event) {
+    function clearError() {
+      clearTimeout(timeout);
       errorHelpMarks.clear();
       errorArea.hide();
-    });
-
+      relocator.cleanup();
+    }
+    
+    codeMirror.on("change", clearError);
     codeMirror.on("reparse", function(event) {
-      clearTimeout(timeout);
+      clearError();
       if (event.error) {
         timeout = setTimeout(function() {
           reportError(event.error);
