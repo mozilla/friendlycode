@@ -79,12 +79,14 @@ define(["./hacktionary-data"], function(HacktionaryData) {
     if (pi) {
       if (pi.openTag) {
         tagInfo.highlights.push(pi.openTag);
-        for (i = pi.openTag.start; i < pi.openTag.end; i++)
+        for (i = pi.openTag.start + 1;
+             i < pi.openTag.start + element.nodeName.length + 1;
+             i++)
           helpIndex[i] = tagInfo;
       }
       if (pi.closeTag) {
         tagInfo.highlights.push(pi.closeTag);
-        for (i = pi.closeTag.start; i < pi.closeTag.end; i++)
+        for (i = pi.closeTag.start + 1; i < pi.closeTag.end - 1; i++)
           helpIndex[i] = tagInfo;
       }
     }
