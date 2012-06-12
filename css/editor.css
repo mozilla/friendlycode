@@ -64,14 +64,6 @@ img {
   text-decoration: none;
 }
 
-#header .logo label {
-  position: relative;
-  height: 0;
-  top: -3.5em;
-  left: 3.5em;
-  font-size: 90%;
-}
-
 #nav-options {
   font-family: "myriad-pro", Helvetica, Arial, sans-serif;
   font-size: 12px;
@@ -217,10 +209,6 @@ img {
   margin: auto;
   color: white;
   top: 0;
-}
-
-#save-draft-button {
-  background-color: #00D67D;
 }
 
 #preview-pane-nav-options > div.nav-item.buttons {
@@ -451,45 +439,6 @@ div.editor-actions {
   top: 20px;
 }
 
-footer {
-  background-color: #FFFFFF;
-  color: white;
-
-  text-align: left;
-  font-size: 110%;
-  padding-top: 8px;
-  padding-bottom: 12px;
-  position: absolute;
-
-  height: 0;    /* corresponds to section.bottom - 20 */
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  border-top: 1px solid black;
-  opacity: 0; /* temporary solution, because the spacing depends on having a footer */
-
-}
-
-/**
- * The footer pin is responsible for making the footer "stay up"
- * when pressed. If not pressed, the footer disappears when there
- * are no errors.
- **/
-#footer-pin {
-  position: fixed;
-  right: 60px;
-  margin-top: -30px;
-  height: 40px;
-  width: 40px;
-  background-color: #4AABE2;
-  background-image: url("../img/pin-temp.png");
-  background-position: center center;
-  background-repeat: no-repeat;
-  border-radius: 10px;
-  cursor:pointer;
-}
-
 #source {
   background-color: #F9F9F9;
   z-index: 1;
@@ -504,37 +453,6 @@ footer {
   bottom: 0;
   top: 10px;
 }
-
-
-#source-guide-note, #preview-guide-note {
-  font-family: Georgia;
-  text-align: center;
-  font-size: 120%;
-  height: 25px;
-  width: 40%;
-  margin: 5px;
-  background-color: rgb(255,255,150);
-  border: 1px solid black;
-  /*border-width: 0 0 1px 0;*/
-  padding-top: 0.3em;
-  line-height: 1em;
-  color: #006;
-  background-color: rgb(255,250,150);
-  z-index: 1000000;
-}
-
-#source-guide-note {
-  position: fixed;
-  top: 95px;
-  left: 5%;
-}
-
-#preview-guide-note {
-  position: fixed;
-  bottom: 60px;
-  right: 5%;
-}
-
 
 #preview-holder {
   right: 0;
@@ -556,17 +474,6 @@ footer {
   overflow: auto;
 }
 
-#source .CodeMirror-gutter {
-  background-color: rgba(0, 0, 0, 0.1);
-  opacity: 0.0;
-  -moz-transition: opacity 0.25s;
-  -webkit-transition: opacity 0.25s;
-  -o-transition: opacity 0.25s;
-}
-
-#source:hover .CodeMirror-gutter {
-  opacity: 1.0;
-}
 
 html .tipsy {
   /* Make tipsy tooltips slightly larger than the default. */
