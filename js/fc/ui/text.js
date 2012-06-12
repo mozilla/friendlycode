@@ -81,6 +81,8 @@ define(function() {
         document.head.appendChild(stylesheet);
         // refesh code mirror
         codeMirror.refresh();
+        // reparse as well, in case there were any errors
+        codeMirror.reparse();
         // update localstorage
         if (supportsLocalStorage()) try {
           // TODO: Consider using lscache here, as it automatically deals
