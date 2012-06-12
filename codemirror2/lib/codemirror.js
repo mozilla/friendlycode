@@ -1582,6 +1582,18 @@ var CodeMirror = (function() {
                 spanAffectsWrapping.test(line.text.slice(ch - 1, ch + 1));
       measure.innerHTML = "<pre>" + line.getHTML(makeTab, ch, tempId, wbr) + "</pre>";
       var elt = document.getElementById(tempId);
+      if (!elt) {
+        // Temporary workaround for:
+        // https://github.com/mozilla/webpagemaker/issues/394
+        if (window.console) {
+          if (window.console.warn)
+            window.console.warn("elt is null for ch " + ch + " of line " +
+                                JSON.stringify(line.text));
+          if (window.console.trace)
+            window.console.trace();
+        }
+        return {top: 0, left: 0};
+      }
       var top = elt.offsetTop, left = elt.offsetLeft;
       // Older IEs report zero offsets for spans directly after a wrap
       if (ie && top == 0 && left == 0) {
