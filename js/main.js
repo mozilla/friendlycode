@@ -226,7 +226,7 @@ define("main", function(require) {
   // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
 
   function doneLoading() {
-    $("#editor").removeClass("loading");
+    $("body").removeClass("loading");
     codeMirror.clearHistory();
     historyUI.refresh();
     if (parachute.restore()) {
