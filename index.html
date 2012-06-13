@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="css/errorhelp.css">
     <link rel="stylesheet" href="css/modals.css">
   </head>
-  <body>
+  <body class="loading">
      <a href="http://www.mozilla.org/" id="tabzilla">mozilla</a>
 
     <header id="header">
@@ -34,6 +34,9 @@
       </div>
 
       <div id="nav-options">
+        <div id="loading-message">
+          Loading&hellip;
+        </div>
         <div id="editor-pane-nav-options">
           <!-- editor, undo, redo, text size, hinting -->
           <div id="editor-nav-item" class="nav-item">
@@ -71,7 +74,7 @@
     </header>
 
 
-    <section id="editor" class="loading">
+    <section id="editor">
       <!-- source code and live preview sections -->
       <div id="source"></div>
       <div id="preview-holder"></div>
@@ -169,6 +172,7 @@
 
 
     <!-- page script section, at the end of body to prevent them holding up the page -->
+    <script>document.body.className += " html-loaded";</script>
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.tipsy.js"></script>
     <script src="js/underscore.min.js"></script>
