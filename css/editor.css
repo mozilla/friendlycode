@@ -454,6 +454,18 @@ body.loading #loading-message {
   font-family: sans-serif;
   background: url(../img/throbber.gif);
   background-repeat: no-repeat;
+  opacity: 0;
+  -moz-transition: opacity 4s;
+  -webkit-transition: opacity 4s;
+  -o-transition: opacity 4s;
+}
+
+body.loading.html-loaded #loading-message {
+  /* Slowly fade-in the loading message, so that users on really slow
+   * connections will see it, but users on fast connections won't
+   * see the distracting flicker of a loading message that only shows
+   * itself for a split-second. */
+  opacity: 1;
 }
 
 div.editor-actions {
