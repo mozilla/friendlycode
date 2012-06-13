@@ -54,7 +54,8 @@ define("main", function(require) {
       Modals = require("fc/ui/modals"),
       TextUI = require("fc/ui/text"),
       supportsPushState = window.history.pushState ? true : false,
-      remixURLTemplate = null;
+      remixURLTemplate = null,
+      ready = jQuery.Deferred();
 
   $("html").addClass("deployment-type-" + deploymentType);
   if (pageToLoad) {
@@ -252,6 +253,7 @@ define("main", function(require) {
     }
     codeMirror.reparse();
     codeMirror.focus();
+    ready.resolve();
   }
 
   preview.on("refresh", function(event) {
@@ -272,6 +274,7 @@ define("main", function(require) {
 
   return {
     codeMirror: codeMirror,
-    parachute: parachute
+    parachute: parachute,
+    ready: ready
   };
 });
