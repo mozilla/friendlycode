@@ -36,7 +36,8 @@ require([], function() {
   appTest("publish works", function(window, start) {
     var $ = window.jQuery;
     var publishURL = $('meta[name="publish-url"]').attr("content");
-
+    var url = window.location.href;
+    
     // Inject a fake ajax transport handler so we get called instead
     // of a real Ajax request being made to the publishing server.
     $.ajaxTransport("+*", function(options, originalOptions, jqXHR) {
@@ -45,7 +46,6 @@ require([], function() {
           equal(originalOptions.type, "POST", "request is POST");
           equal(originalOptions.url, publishURL + "/api/page",
                 "request URL is correct");
-          console.log(originalOptions);
           equal(originalOptions.dataType, "text",
                 "expected response type is text");
           equal(originalOptions.data.html, "<p>hi</p>",
@@ -62,6 +62,9 @@ require([], function() {
              "remix URL text contains '/lol'");
           ok(remix.attr("href").indexOf("/lol") != -1,
             "remix URL href contains '/lol'");
+          ok(window.location.href != url &&
+             window.location.href.indexOf("/lol") != -1,
+             "editor URL is different from before and contains '/lol'");
           start();
         }
       };
