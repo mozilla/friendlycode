@@ -3,11 +3,7 @@
 define(function() {
 
   return function(options) {
-    var codeMirror = options.codeMirror,
-        helpArea = options.helpArea,
-        errorArea = options.errorArea,
-        relocator = options.relocator;
-
+    var codeMirror = options.codeMirror;
     var tzo = $("#text-size-options");
     
     /**
@@ -92,10 +88,6 @@ define(function() {
         // mark text size in drop-down
         $("#text-nav-item li").removeClass("selected");
         $("#text-nav-item li[data-size="+size+"]").addClass("selected");
-        // hide any help/error messages when the font changes
-        helpArea.hide();
-        errorArea.hide();
-        relocator.cleanup();
       }
       t.click(fn);
     });

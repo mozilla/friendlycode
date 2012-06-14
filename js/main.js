@@ -128,10 +128,7 @@ define("main", function(require) {
     socialMedia: socialMedia
   });
   var textUI = TextUI({
-    codeMirror: codeMirror,
-    helpArea: helpArea,
-    errorArea: errorArea,
-    relocator: relocator
+    codeMirror: codeMirror
   });
   var parachute = Parachute(window, codeMirror, pageToLoad);
 
