@@ -1,9 +1,13 @@
 "use strict";
 
-define(function() {
+define(["lscache"], function(lscache) {
+  // Amount of time, in minutes, to store text size setting.
+  var CACHE_TIME_LIMIT = 9000;
+  var DEFAULT_CACHE_KEY = "ThimbleTextSize";
 
   return function(options) {
     var codeMirror = options.codeMirror;
+    var cacheKey = options.cacheKey || DEFAULT_CACHE_KEY;
     var tzo = $("#text-size-options");
     
     /**
@@ -12,18 +16,6 @@ define(function() {
     var smallSize = 12,
         normalSize = 14,
         largeSize = 18;
-
-    /**
-     * Check is local storage is supported, and if so, whether
-     * the font size has already been stored previously.
-     */
-    var supportsLocalStorage = function() {
-      try {
-        return 'localStorage' in window && window['localStorage'] !== null;
-      } catch (e) {
-        return false;
-      }
-    };
 
     /**
      * when we mouseover any not-text-size options,
@@ -79,12 +71,7 @@ define(function() {
         codeMirror.refresh();
         // reparse as well, in case there were any errors
         codeMirror.reparse();
-        // update localstorage
-        if (supportsLocalStorage()) try {
-          // TODO: Consider using lscache here, as it automatically deals
-          // w/ edge cases like out-of-space exceptions.
-          localStorage["ThimbleTextSize"] = size;
-        } catch (e) { /* Out of storage space, no big deal. */ }
+        lscache.set(cacheKey, size, CACHE_TIME_LIMIT);
         // mark text size in drop-down
         $("#text-nav-item li").removeClass("selected");
         $("#text-nav-item li[data-size="+size+"]").addClass("selected");
@@ -93,7 +80,7 @@ define(function() {
     });
     
     var defaultSize = "normal";
-    var lastSize = supportsLocalStorage() && localStorage["ThimbleTextSize"];
+    var lastSize = lscache.get(cacheKey);
     if (lastSize && $("#text-nav-item li[data-size="+lastSize+"]").length)
       defaultSize = lastSize;
     
