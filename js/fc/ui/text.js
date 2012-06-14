@@ -18,6 +18,11 @@ define(["lscache"], function(lscache) {
         normalSize = 14,
         largeSize = 18;
 
+    function menuItem(size) {
+      var item = $("li[data-size=" + size + "]", menu);
+      return item.length ? item : null;
+    }
+    
     /**
      * Show or hide the font size drop-down menu
      */
@@ -64,15 +69,15 @@ define(["lscache"], function(lscache) {
       lscache.set(cacheKey, size, CACHE_TIME_LIMIT);
       // mark text size in drop-down
       $("li", menu).removeClass("selected");
-      $("li[data-size="+size+"]", menu).addClass("selected");
+      $(this).addClass("selected");
       menu.hide();
     });
     
     var defaultSize = $("li[data-default-size]", menu).attr("data-size");
     var lastSize = lscache.get(cacheKey);
-    if (lastSize && $("li[data-size="+lastSize+"]", menu).length)
+    if (lastSize && menuItem(lastSize))
       defaultSize = lastSize;
     
-    $("li[data-size="+defaultSize+"]", menu).click();
+    menuItem(defaultSize).click();
   };
 });
