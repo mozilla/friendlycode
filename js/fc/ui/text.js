@@ -71,7 +71,7 @@ define(["lscache"], function(lscache) {
       t.click(fn);
     });
     
-    var defaultSize = "normal";
+    var defaultSize = $("li[data-default-size]", menu).attr("data-size");
     var lastSize = lscache.get(cacheKey);
     if (lastSize && $("li[data-size="+lastSize+"]", menu).length)
       defaultSize = lastSize;
