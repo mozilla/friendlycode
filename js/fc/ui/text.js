@@ -34,41 +34,38 @@ define(["lscache"], function(lscache) {
     /**
      * bind the resize behaviour to the various text resize options
      */
-    $("li", menu).each(function() {
+    $("li", menu).click(function() {
       var t = $(this),
           size = t.attr("data-size"),
           base = (size==="small" ? smallSize : size==="normal" ? normalSize : largeSize),
           height = base * 1.125,
           cheight = height - 1;
       
-      var fn = function() {
-        // remove old fontsize stylesheet
-        var stylesheets = document.getElementsByTagName("style"), s, len=stylesheets.length, stylesheet;
-        for (s=0; s<len; s++) {
-          stylesheet = stylesheets[s];
-          if (stylesheet.id && stylesheet.id === "cmFontSizeOverride") {
-            document.head.removeChild(stylesheet);
-            break;
-          }
+      // remove old fontsize stylesheet
+      var stylesheets = document.getElementsByTagName("style"), s, len=stylesheets.length, stylesheet;
+      for (s=0; s<len; s++) {
+        stylesheet = stylesheets[s];
+        if (stylesheet.id && stylesheet.id === "cmFontSizeOverride") {
+          document.head.removeChild(stylesheet);
+          break;
         }
-        // create new fontsize stylesheet
-        stylesheet = document.createElement("style");
-        stylesheet.id = "cmFontSizeOverride";
-        stylesheet.innerHTML = " /* source code font size: "+size+" */\n";
-        stylesheet.innerHTML += ".CodeMirror div, .CodeMirror pre { font-size: "+base+"px; line-height: "+height+"px; }\n";
-        stylesheet.innerHTML += ".cm-s-jsbin span.cm-comment { font-size: "+base+"px; line-height: "+cheight+"px; }\n";
-        document.head.appendChild(stylesheet);
-        // refesh code mirror
-        codeMirror.refresh();
-        // reparse as well, in case there were any errors
-        codeMirror.reparse();
-        lscache.set(cacheKey, size, CACHE_TIME_LIMIT);
-        // mark text size in drop-down
-        $("li", menu).removeClass("selected");
-        $("li[data-size="+size+"]", menu).addClass("selected");
-        menu.hide();
       }
-      t.click(fn);
+      // create new fontsize stylesheet
+      stylesheet = document.createElement("style");
+      stylesheet.id = "cmFontSizeOverride";
+      stylesheet.innerHTML = " /* source code font size: "+size+" */\n";
+      stylesheet.innerHTML += ".CodeMirror div, .CodeMirror pre { font-size: "+base+"px; line-height: "+height+"px; }\n";
+      stylesheet.innerHTML += ".cm-s-jsbin span.cm-comment { font-size: "+base+"px; line-height: "+cheight+"px; }\n";
+      document.head.appendChild(stylesheet);
+      // refesh code mirror
+      codeMirror.refresh();
+      // reparse as well, in case there were any errors
+      codeMirror.reparse();
+      lscache.set(cacheKey, size, CACHE_TIME_LIMIT);
+      // mark text size in drop-down
+      $("li", menu).removeClass("selected");
+      $("li[data-size="+size+"]", menu).addClass("selected");
+      menu.hide();
     });
     
     var defaultSize = $("li[data-default-size]", menu).attr("data-size");
