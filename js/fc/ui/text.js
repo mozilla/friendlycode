@@ -11,13 +11,6 @@ define(["lscache"], function(lscache) {
     var cacheKey = options.cacheKey || DEFAULT_CACHE_KEY;
     var menu = navItem.find("ul");
     
-    /**
-     * established font sizes - note: must correspond to editor.css [data-size=...] rules
-     */
-    var smallSize = 12,
-        normalSize = 14,
-        largeSize = 18;
-
     function menuItem(size) {
       var item = $("li[data-size=" + size + "]", menu);
       return item.length ? item : null;
@@ -41,27 +34,10 @@ define(["lscache"], function(lscache) {
      */
     $("li", menu).click(function() {
       var t = $(this),
-          size = t.attr("data-size"),
-          base = (size==="small" ? smallSize : size==="normal" ? normalSize : largeSize),
-          height = base * 1.125,
-          cheight = height - 1;
+          size = t.attr("data-size");
       
-      // remove old fontsize stylesheet
-      var stylesheets = document.getElementsByTagName("style"), s, len=stylesheets.length, stylesheet;
-      for (s=0; s<len; s++) {
-        stylesheet = stylesheets[s];
-        if (stylesheet.id && stylesheet.id === "cmFontSizeOverride") {
-          document.head.removeChild(stylesheet);
-          break;
-        }
-      }
-      // create new fontsize stylesheet
-      stylesheet = document.createElement("style");
-      stylesheet.id = "cmFontSizeOverride";
-      stylesheet.innerHTML = " /* source code font size: "+size+" */\n";
-      stylesheet.innerHTML += ".CodeMirror div, .CodeMirror pre { font-size: "+base+"px; line-height: "+height+"px; }\n";
-      stylesheet.innerHTML += ".cm-s-jsbin span.cm-comment { font-size: "+base+"px; line-height: "+cheight+"px; }\n";
-      document.head.appendChild(stylesheet);
+      $(codeMirror.getWrapperElement()).attr("data-size", size);
+      
       // refesh code mirror
       codeMirror.refresh();
       // reparse as well, in case there were any errors
