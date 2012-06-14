@@ -7,8 +7,9 @@ define(["lscache"], function(lscache) {
 
   return function(options) {
     var codeMirror = options.codeMirror;
+    var navItem = options.navItem;
     var cacheKey = options.cacheKey || DEFAULT_CACHE_KEY;
-    var tzo = $("#text-size-options");
+    var menu = navItem.find("ul");
     
     /**
      * established font sizes - note: must correspond to editor.css [data-size=...] rules
@@ -18,37 +19,27 @@ define(["lscache"], function(lscache) {
         largeSize = 18;
 
     /**
-     * when we mouseover any not-text-size options,
-     * hide the text sizing selection menu.
-     */
-    $("#header").mouseover(function() {
-      tzo.hide(); 
-    });
-
-    /**
      * Show or hide the font size drop-down menu
      */
-    $("#text-nav-item").mouseover(function() {
+    navItem.hover(function() {
       var t = $(this),
           lp = t.position().left;
-      tzo.css("display","inline").css("left", (lp-1) + "px").css("top","7px");
-      tzo.mouseout(function() { $(this).hide(); });
-      tzo.click(function() { $(this).hide(); });
+      menu.css("display","inline")
+        .css("left", (lp-1) + "px").css("top","7px");
       return false;
+    }, function() {
+      menu.hide();
     });
 
     /**
      * bind the resize behaviour to the various text resize options
      */
-    $("#text-nav-item li").each(function() {
+    $("li", menu).each(function() {
       var t = $(this),
           size = t.attr("data-size"),
           base = (size==="small" ? smallSize : size==="normal" ? normalSize : largeSize),
           height = base * 1.125,
-          cheight = height - 1,
-          lp = parseInt($("#text-nav-item li").css("padding-left")),
-          rp = parseInt($("#text-nav-item li").css("padding-right")), 
-          bwidth = 1;
+          cheight = height - 1;
       
       var fn = function() {
         // remove old fontsize stylesheet
@@ -73,17 +64,18 @@ define(["lscache"], function(lscache) {
         codeMirror.reparse();
         lscache.set(cacheKey, size, CACHE_TIME_LIMIT);
         // mark text size in drop-down
-        $("#text-nav-item li").removeClass("selected");
-        $("#text-nav-item li[data-size="+size+"]").addClass("selected");
+        $("li", menu).removeClass("selected");
+        $("li[data-size="+size+"]", menu).addClass("selected");
+        menu.hide();
       }
       t.click(fn);
     });
     
     var defaultSize = "normal";
     var lastSize = lscache.get(cacheKey);
-    if (lastSize && $("#text-nav-item li[data-size="+lastSize+"]").length)
+    if (lastSize && $("li[data-size="+lastSize+"]", menu).length)
       defaultSize = lastSize;
     
-    $("#text-nav-item li[data-size="+defaultSize+"]").click();
+    $("li[data-size="+defaultSize+"]", menu).click();
   };
 });

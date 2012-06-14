@@ -128,7 +128,8 @@ define("main", function(require) {
     socialMedia: socialMedia
   });
   var textUI = TextUI({
-    codeMirror: codeMirror
+    codeMirror: codeMirror,
+    navItem: $("#text-nav-item")
   });
   var parachute = Parachute(window, codeMirror, pageToLoad);
 
