@@ -18,25 +18,22 @@ define(function() {
      */
     var self = {
       facebook: {
-        class: "facebook",
         id: "facebook-jssdk",
-        src: "http://connect.facebook.net/en_US/all.js#xfbml=1&appId=1",
+        src: "//connect.facebook.net/en_US/all.js#xfbml=1&appId=1",
         html: "<div class='fb-like' data-href='"+urlPlaceHolder+"' data-send='false' data-action='recommend' data-layout='button_count' data-show-faces='false' data-font='tahoma'></div>"
       },
 
 
 
       google: {
-        class: "google",
         id: "google-plus",
-        src: "https://apis.google.com/js/plusone.js",
+        src: "//apis.google.com/js/plusone.js",
         html: "<g:plusone annotation='none' href='"+urlPlaceHolder+"'></g:plusone>"
       },
 
       twitter: {
-        class: "twitter",
         id: "twitter-wjs",
-        src: "http://platform.twitter.com/widgets.js",
+        src: "//platform.twitter.com/widgets.js",
         html: "<a href='https://twitter.com/share'class='twitter-share-button' data-text='Check out the #MozThimble page I just made: ' data-url='"+urlPlaceHolder+"' data-via='Mozilla' data-count='none'>Tweet</a>"
       },
 
