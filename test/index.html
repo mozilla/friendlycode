@@ -60,5 +60,10 @@
         QUnit.start();
     });
     </script>
+
+    <script>
+    if (location.search.match(/externalreporter=1/))
+      document.write('<script src="/externalreporter.js"></' + 'script>');
+    </script>
   </body>
 </html>
