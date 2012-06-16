@@ -18,7 +18,7 @@ define(function() {
           if (err)
             // TODO: Put nicer error here.
             alert('Sorry, an error occurred while trying to get ' +
-                  'the page. :(');
+                  'the page. ');
           else {
             codeMirror.setValue(data);
             currURL = url;
@@ -31,7 +31,7 @@ define(function() {
         publisher.saveCode(code, currURL, function(err, info) {
           if (err) {
             // TODO: Put nicer error here.
-            alert("Sorry, an error occurred while trying to publish. :(");
+            alert("Sorry, an error occurred while trying to publish. " + err.responseText);
             dlg.hide();
           } else {
             var viewURL = info.url;
