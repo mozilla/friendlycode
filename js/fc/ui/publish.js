@@ -17,8 +17,8 @@ define(function() {
       loadCode: function(path, cb) {
         publisher.loadCode(path, function(err, data, url) {
           if (err) {
-            dlg.hide();
             $(".error-text",error).text('Sorry, an error occurred while trying to get the page.');
+            dlg.stop().hide();
             error.show();
           } else {
             codeMirror.setValue(data);
@@ -31,9 +31,10 @@ define(function() {
         var code = codeMirror.getValue();
         publisher.saveCode(code, currURL, function(err, info) {
           if (err) {
-            dlg.hide();
             $(".error-text",error).text("Sorry, an error occurred while trying to publish. " + err.responseText);
+            dlg.stop().hide();
             error.show();
+            dlg.hide();
           } else {
             var viewURL = info.url;
             var remixURL = baseRemixURL.replace("{{VIEW_URL}}",

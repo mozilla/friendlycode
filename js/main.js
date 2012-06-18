@@ -210,8 +210,11 @@ define("main", function(require) {
     $("#confirm-dialog .thimble-modal-menu").slideUp(function() {
       $(this).show();
       $("#confirm-dialog").hide();
-      $("#publish-dialog").show();
-      $("#publish-dialog .thimble-modal-menu").hide().slideDown();
+      // suppress publish dialog if an error occurred
+      if ($("#error-dialog:hidden") !== 0) {
+        $("#publish-dialog").show();
+        $("#publish-dialog .thimble-modal-menu").hide().slideDown();
+      }
     });
   });
   // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
