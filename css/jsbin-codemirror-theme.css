@@ -85,3 +85,42 @@
 .CodeMirror span.preview-to-editor-highlight {
   background-color: rgba(50,100,255,0.3);
 }
+
+/* Text size: small */
+
+.CodeMirror[data-size="small"] div,
+.CodeMirror[data-size="small"] pre {
+  font-size: 12px;
+  line-height: 13.5px;
+}
+
+.CodeMirror[data-size="small"] .cm-s-jsbin span.cm-comment {
+  font-size: 12px;
+  line-height: 12.5px;
+}
+
+/* Text size: normal */
+
+.CodeMirror[data-size="normal"] div,
+.CodeMirror[data-size="normal"] pre {
+  font-size: 14px;
+  line-height: 15.75px;
+}
+
+.CodeMirror[data-size="normal"] .cm-s-jsbin span.cm-comment {
+  font-size: 14px;
+  line-height: 14.75px;
+}
+
+/* Text size: large */
+
+.CodeMirror[data-size="large"] div,
+.CodeMirror[data-size="large"] pre {
+  font-size: 18px;
+  line-height: 20.25px;
+}
+
+.CodeMirror[data-size="large"] .cm-s-jsbin span.cm-comment {
+  font-size: 18px;
+  line-height: 19.25px;
+}

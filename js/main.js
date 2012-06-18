@@ -129,9 +129,7 @@ define("main", function(require) {
   });
   var textUI = TextUI({
     codeMirror: codeMirror,
-    helpArea: helpArea,
-    errorArea: errorArea,
-    relocator: relocator
+    navItem: $("#text-nav-item")
   });
   var parachute = Parachute(window, codeMirror, pageToLoad);
 
