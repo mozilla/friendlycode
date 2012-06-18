@@ -1,4 +1,4 @@
-require([], function() {
+require(["lscache"], function(lscache) {
   module("app");
 
   function appTest(name, cb) {
@@ -10,6 +10,7 @@ require([], function() {
     });
 
     asyncTest(name, function() {
+      lscache.flush();
       iframe.appendTo("body").load(function() {
         var wind = iframe.contents()[0].defaultView;
         wind.require(["main"], function(main) {
