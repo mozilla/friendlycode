@@ -211,7 +211,7 @@ define("main", function(require) {
       $(this).show();
       $("#confirm-dialog").hide();
       // suppress publish dialog if an error occurred
-      if ($("#error-dialog:hidden") !== 0) {
+      if ($("#error-dialog:hidden").length !== 0) {
         $("#publish-dialog").show();
         $("#publish-dialog .thimble-modal-menu").hide().slideDown();
       }
