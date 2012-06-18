@@ -10,6 +10,7 @@ define(["lscache"], function(lscache) {
     var navItem = options.navItem;
     var cacheKey = options.cacheKey || DEFAULT_CACHE_KEY;
     var menu = navItem.find("ul");
+    var menuItems = menu.find("li");
     
     function menuItem(size) {
       var item = $("li[data-size=" + size + "]", menu);
@@ -32,7 +33,7 @@ define(["lscache"], function(lscache) {
     /**
      * bind the resize behaviour to the various text resize options
      */
-    $("li", menu).click(function() {
+    menuItems.click(function() {
       var t = $(this),
           size = t.attr("data-size");
       
@@ -44,7 +45,7 @@ define(["lscache"], function(lscache) {
       codeMirror.reparse();
       lscache.set(cacheKey, size, CACHE_TIME_LIMIT);
       // mark text size in drop-down
-      $("li", menu).removeClass("selected");
+      menuItems.removeClass("selected");
       $(this).addClass("selected");
       menu.hide();
     });
