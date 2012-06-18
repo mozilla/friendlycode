@@ -108,6 +108,7 @@ define("main", function(require) {
     codeMirror: codeMirror,
     publisher: publisher,
     dialog: $("#publish-dialog"),
+    error: $("#error-dialog"),
     remixURLTemplate: remixURLTemplate
   });
   var historyUI = HistoryUI({
