@@ -8,6 +8,7 @@ define(function() {
                           location.pathname + "#{{VIEW_URL}}";
     var baseRemixURL = options.remixURLTemplate || defaultRemixURL;
     var dlg = options.dialog;
+    var error = options.error;
     var codeMirror = options.codeMirror;
     var publisher = options.publisher;
     var currURL;
@@ -15,11 +16,11 @@ define(function() {
     return {
       loadCode: function(path, cb) {
         publisher.loadCode(path, function(err, data, url) {
-          if (err)
-            // TODO: Put nicer error here.
-            alert('Sorry, an error occurred while trying to get ' +
+          if (err) {
+            dlg.hide();
+            error.text('Sorry, an error occurred while trying to get ' +
                   'the page. :(');
-          else {
+          } else {
             codeMirror.setValue(data);
             currURL = url;
           }
@@ -30,9 +31,8 @@ define(function() {
         var code = codeMirror.getValue();
         publisher.saveCode(code, currURL, function(err, info) {
           if (err) {
-            // TODO: Put nicer error here.
-            alert("Sorry, an error occurred while trying to publish. :(");
             dlg.hide();
+            error.text("Sorry, an error occurred while trying to publish. :(");
           } else {
             var viewURL = info.url;
             var remixURL = baseRemixURL.replace("{{VIEW_URL}}",
