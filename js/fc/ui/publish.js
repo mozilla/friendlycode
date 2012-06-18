@@ -18,8 +18,7 @@ define(function() {
         publisher.loadCode(path, function(err, data, url) {
           if (err) {
             dlg.hide();
-            $(".error-text",error).text('Sorry, an error occurred while trying to get ' +
-                  'the page. :(');
+            $(".error-text",error).text('Sorry, an error occurred while trying to get the page.');
             error.show();
           } else {
             codeMirror.setValue(data);
@@ -33,7 +32,7 @@ define(function() {
         publisher.saveCode(code, currURL, function(err, info) {
           if (err) {
             dlg.hide();
-            $(".error-text",error).text("Sorry, an error occurred while trying to publish. :(");
+            $(".error-text",error).text("Sorry, an error occurred while trying to publish. " + err.responseText);
             error.show();
           } else {
             var viewURL = info.url;
