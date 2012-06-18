@@ -13,6 +13,26 @@
   width: 100%;
 }
 
+.thimble-error {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  height: 200px;
+  margin-top: -125px;
+  margin-left: -200px;
+  background-color: white;
+}
+
+.thimble-error .thimble-title {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  padding-top: 0.5em;
+  height: 1.5em;
+  border: 1px solid #C0C0C0;
+}
+
 .thimble-modal-menu {
   position: absolute;
   top: 140px;

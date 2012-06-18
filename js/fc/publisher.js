@@ -26,8 +26,8 @@ define(function() {
           type: 'GET',
           url: makeURL(path),
           dataType: 'text',
-          error: function() {
-            cb("ERROR");
+          error: function(data) {
+            cb(data);
           },
           success: function(data) {
             cb(null, fixDoctypeHeadBodyMunging(data), baseURL + path);
@@ -43,8 +43,8 @@ define(function() {
             'original-url': originalURL || ''
           },
           dataType: 'text',
-          error: function() {
-            cb("ERROR");
+          error: function(data) {
+            cb(data);
           },
           success: function(data) {
             cb(null, {path: data, url: baseURL + data});
