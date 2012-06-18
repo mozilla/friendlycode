@@ -2,7 +2,7 @@ require(["lscache"], function(lscache) {
   module("app");
 
   function appTest(name, cb) {
-    var iframe = $('<iframe src="index.html"></iframe>');
+    var iframe = $('<iframe src="index.html?notypekit=1"></iframe>');
     iframe.css({
       visibility: "hidden",
       width: "800px",

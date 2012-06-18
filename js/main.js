@@ -146,17 +146,6 @@ define("main", function(require) {
     }
   });
 
-  // prevent CodeMirror from hijacking clicks on the help and error notices
-  $("div.help, div.error").each(function(){
-    this.onmousedown = function(event) {
-      if (event.cancelBubble) {
-        event.cancelBubble = true;
-      } else if (event.stopPropagation) {
-        event.stopPropagation();
-      }
-      return false;
-    };
-  });
   
   window.addEventListener("hashchange", function(event) {
     // We don't currently support dynamically changing the URL

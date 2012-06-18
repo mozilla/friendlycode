@@ -7,13 +7,15 @@
     <script>
     // IE9 really wants base hrefs to be absolute URLs, so we'll do that...
     (function() {
-      var base = document.querySelector("base[href]");
-      var a = document.createElement("a");
-      a.setAttribute("href", "");
-      if (a.href == location.href) {
-        // The host browser clearly isn't paying attention to our base tag.
-        a.setAttribute("href", "..");
-        base.setAttribute("href", a.href);
+      try {
+        var base = document.querySelector("base[href]");
+        var pathRE = /(.*)\/test\/(index\.html)?$/;
+        var match = location.pathname.match(pathRE);
+        var pathname = match[1] ? match[1] : "";
+        var href = location.protocol + "//" + location.host + pathname + "/";
+        base.setAttribute("href", href);
+      } catch (e) {
+        alert("ERROR setting base href: " + e);
       }
     })();
     </script>
@@ -59,6 +61,11 @@
       else
         QUnit.start();
     });
+    </script>
+
+    <script>
+    if (location.search.match(/externalreporter=1/))
+      document.write('<script src="/externalreporter.js"></' + 'script>');
     </script>
   </body>
 </html>
