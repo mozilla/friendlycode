@@ -42,7 +42,6 @@ define("main", function(require) {
       LivePreview = require("fc/ui/live-preview"),
       PreviewToEditorMapping = require("fc/ui/preview-to-editor-mapping"),
       HistoryUI = require("fc/ui/history"),
-      PublishUI = require("fc/ui/publish"),
       Relocator = require("fc/ui/relocator"),
       HelpTemplate = require("template!help"),
       ErrorTemplate = require("template!error"),
@@ -61,7 +60,12 @@ define("main", function(require) {
     // A server is serving us as the custom edit URL for a web page.
     remixURLTemplate = location.protocol + "//" + location.host +
                        "{{VIEW_URL}}/edit";
+  } else {
+    // Base the edit URLs off a hash on the current page.
+    remixURLTemplate = location.protocol + "//" + location.host + 
+                       location.pathname + "#{{VIEW_URL}}";
   }
+  
   // If a URL hash is specified, it should override anything provided by
   // a server.
   if (window.location.hash.slice(1))
@@ -104,13 +108,6 @@ define("main", function(require) {
   });
   var previewToEditorMapping = PreviewToEditorMapping(preview, $(".CodeMirror-lines"));
   var publisher = Publisher(publishURL);
-  var publishUI = PublishUI({
-    codeMirror: codeMirror,
-    publisher: publisher,
-    dialog: $("#publish-dialog"),
-    error: $("#error-dialog"),
-    remixURLTemplate: remixURLTemplate
-  });
   var historyUI = HistoryUI({
     codeMirror: codeMirror,
     undo: $("#undo-nav-item"),
@@ -118,7 +115,10 @@ define("main", function(require) {
   });
   var modals = Modals({
     codeMirror: codeMirror,
-    publishUI: publishUI
+    publisher: publisher,
+    dialog: $("#publish-dialog"),
+    error: $("#error-dialog"),
+    remixURLTemplate: remixURLTemplate
   });
   var textUI = TextUI({
     codeMirror: codeMirror,
@@ -150,7 +150,7 @@ define("main", function(require) {
         window.location.reload();
     }, false);
   
-  publishUI.on("publish", function(info) {
+  modals.on("publish", function(info) {
     // If the browser supports history.pushState, set the URL to
     // be the new URL to remix the page they just published, so they
     // can share/bookmark the URL and it'll be what they expect it
@@ -215,7 +215,15 @@ define("main", function(require) {
       doneLoading();
     }, "text");
   } else
-    publishUI.loadCode(pageToLoad, doneLoading);
+    publisher.loadCode(pageToLoad, function(err, data, url) {
+      if (err) {
+        alert('Sorry, an error occurred while trying to get the page.');
+      } else {
+        codeMirror.setValue(data);
+        modals.setCurrentURL(url);
+        doneLoading();
+      }
+    });
 
   return {
     codeMirror: codeMirror,

@@ -6,6 +6,11 @@ define([
   return function(options) {
     var codeMirror = options.codeMirror,
         publishUI = options.publishUI,
+        publisher = options.publisher,
+        baseRemixURL = options.remixURLTemplate,
+        publishDialog = options.publishDialog,
+        error = options.error,
+        currURL = null,
         socialMedia = SocialMedia();
 
     var hideModals = function() {
@@ -89,7 +94,32 @@ define([
       
       // Start the actual publishing process, so that hopefully by the
       // time the transition has finished, the user's page is published.
-      publishUI.saveCode();
+      var code = codeMirror.getValue();
+      publisher.saveCode(code, currURL, function(err, info) {
+        if (err) {
+          var text = "Sorry, an error occurred while trying to publish. " +
+                     err.responseText;
+          $(".error-text", error).text(text);
+          publishDialog.stop().hide();
+          error.show();
+        } else {
+          var viewURL = info.url;
+          var remixURL = baseRemixURL.replace("{{VIEW_URL}}",
+                                              escape(info.path));
+          $('a.view', publishDialog).attr('href', viewURL).text(viewURL);
+          $('a.remix', publishDialog).attr('href', remixURL).text(remixURL);
+
+          // The user is now effectively remixing the page they just
+          // published.
+          currURL = viewURL;
+
+          self.trigger("publish", {
+            viewURL: viewURL,
+            remixURL: remixURL,
+            path: info.path
+          });
+        }
+      });
 
       // We want the dialogs to transition while the page-sized translucent
       // overlay stays in place. Because each dialog has its own overlay,
@@ -106,6 +136,13 @@ define([
       });
     });
     
-    return {};
+    var self = {
+      setCurrentURL: function(url) {
+        currURL = url;
+      }
+    };
+    
+    _.extend(self, Backbone.Events);
+    return self;
   };
 });
