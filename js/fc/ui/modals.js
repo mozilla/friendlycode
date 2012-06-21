@@ -58,9 +58,6 @@ define([
       if ($(this).hasClass("enabled")) $("#confirm-dialog").fadeIn();
     });
 
-    // CONFIRM DIALOG IS IN MAIN.JS FOR THE MOMENT DUE TO
-    // ITS NEED TO CALL A PUBLICATION CALLBACK IN MAIN.JS
-
     $("#modal-close-button, #cancel-publication").click(function(){ 
       hideModals();
     });
