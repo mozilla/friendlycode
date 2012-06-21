@@ -118,11 +118,9 @@ define("main", function(require) {
     redo: $("#redo-nav-item")
   });
   var socialMedia = SocialMedia({
-    jQuery: jQuery,
     getURL: function() {
       return $("#publication-result a.view")[0].href;
     },
-    container: $("#share-result")
   });
   var modals = Modals({
     codeMirror: codeMirror,

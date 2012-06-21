@@ -72,7 +72,7 @@ define(function() {
         var element = $(this),
              medium = element.attr("data-medium");
         if (!element.hasClass("hotloaded") && medium && socialMedia[medium]) {
-          socialMedia.hotLoad($, element, socialMedia[medium]);
+          socialMedia.hotLoad(element[0], socialMedia[medium]);
           element.addClass("hotloaded");
         }
       });

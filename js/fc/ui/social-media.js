@@ -8,8 +8,6 @@
  */
 define(function() {
   return function SocialMedia(options) {
-    var $ = options.jQuery;
-    var parent = options.container;
     var getURL = options.getURL;
     var urlPlaceHolder = "__URL__PLACE__HOLDER__";
 
@@ -52,14 +50,15 @@ define(function() {
        * then late-loading the script required for
        * the medium to load up its functionality.
        */
-      hotLoad:  function($, element, socialMedium) {
+      hotLoad:  function(element, socialMedium) {
         var oldScript = document.getElementById(socialMedium.id);
         if (oldScript)
           oldScript.parentNode.removeChild(oldScript);
         // TODO: Should we escape the return value of getURL()? It's likely
         // to not contain any characters that need escaping, and its value
         // is trusted, but we may still want to do it.
-        element.html(socialMedium.html.replace(urlPlaceHolder, getURL()));
+        var html = socialMedium.html.replace(urlPlaceHolder, getURL());
+        element.innerHTML = html;
         (function(document, id, src, url) {
           var script = document.createElement("script");
           script.type = "text/javascript";
