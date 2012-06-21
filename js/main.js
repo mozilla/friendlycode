@@ -88,7 +88,8 @@ define("main", function(require) {
     helpIndex: Help.Index(),
     template: HelpTemplate,
     helpArea: helpArea,
-    relocator: relocator
+    relocator: relocator,
+    checkbox: $("#hints-nav-item")
   });
   var errorArea =  $(".error");
   var errorHelp = ErrorHelp({
@@ -133,20 +134,6 @@ define("main", function(require) {
     navItem: $("#text-nav-item")
   });
   var parachute = Parachute(window, codeMirror, pageToLoad);
-
-  // make hints on/off actually work
-  $("#hints-nav-item").click(function() {
-    var hints = $(".checkbox", this);
-    if (hints.hasClass("on")) {
-      hints.removeClass("on").addClass("off");
-      // make sure to hide the help, in case it's active when this option's selected
-      $("div.help").hide();
-      relocator.cleanup();
-    } else {
-      hints.removeClass("off").addClass("on");
-    }
-  });
-
   
   window.addEventListener("hashchange", function(event) {
     // We don't currently support dynamically changing the URL
