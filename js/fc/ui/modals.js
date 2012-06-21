@@ -30,6 +30,21 @@ define([
     $("[data-close-modal]", modals).click(hideModals);
   }
   
+  function makeSharingHotLoader(options) {
+    return function hotLoadEventHandler() {
+      var socialMedia = options.socialMedia,
+          urlToShare = options.urlToShare;
+      $("li[data-medium]", this).each(function() {
+        var element = $(this),
+            medium = element.attr("data-medium");
+        if (!element.hasClass("hotloaded") && socialMedia[medium]) {
+          socialMedia.hotLoad(element[0], socialMedia[medium], urlToShare);
+          element.addClass("hotloaded");
+        }
+      });
+    };
+  }
+
   return function(options) {
     var codeMirror = options.codeMirror,
         publishUI = options.publishUI,
@@ -74,29 +89,12 @@ define([
     publishButton.click(function(){
       if ($(this).hasClass("enabled")) confirmDialog.fadeIn();
     });
-
-    /**
-     * Late-loading for social media.
-     */
-    shareResult.click(function() {
-      // TODO: We should probably delay here if publishing is still
-      // in-progress, since we don't yet have a URL to share!
-      var mediaList = $("li", shareResult);
-      var urlToShare = viewLink[0].href;
-      mediaList.each(function() {
-        var element = $(this),
-             medium = element.attr("data-medium");
-        if (!element.hasClass("hotloaded") && medium && socialMedia[medium]) {
-          socialMedia.hotLoad(element[0], socialMedia[medium], urlToShare);
-          element.addClass("hotloaded");
-        }
-      });
-    });
     
     $("#confirm-publication", confirmDialog).click(function(){
       // Reset the publish modal.
       viewLink.html(origViewHTML);
       remixLink.html(origRemixHTML);
+      shareResult.unbind('.hotLoad');
       $(".accordion", publishDialog).addClass("collapsed");
       $("#publication-result", publishDialog).removeClass("collapsed");
       $(".thimble-additionals", shareResult).html(origShareHTML);
@@ -117,6 +115,16 @@ define([
                                               escape(info.path));
           viewLink.attr('href', viewURL).text(viewURL);
           remixLink.attr('href', remixURL).text(remixURL);
+          
+          shareResult.bind('click.hotLoad', makeSharingHotLoader({
+            urlToShare: viewURL,
+            socialMedia: socialMedia
+          }));
+
+          // If the user has selected the sharing accordion while
+          // we were publishing, hot-load the sharing UI immediately.
+          if (!shareResult.hasClass("collapsed"))
+            shareResult.click();
 
           // The user is now effectively remixing the page they just
           // published.
