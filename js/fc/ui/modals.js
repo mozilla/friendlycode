@@ -58,8 +58,6 @@ define([
         viewLink = $("a.view", publishDialog),
         remixLink = $("a.remix", publishDialog),
         accordions = $("div.accordion", publishDialog),
-        origViewHTML = viewLink.html(),
-        origRemixHTML = remixLink.html(),
         origShareHTML = $(".thimble-additionals", shareResult).html(),
         currURL = null,
         socialMedia = SocialMedia();
@@ -92,12 +90,11 @@ define([
     
     $("#confirm-publication", confirmDialog).click(function(){
       // Reset the publish modal.
-      viewLink.html(origViewHTML);
-      remixLink.html(origRemixHTML);
       shareResult.unbind('.hotLoad');
       $(".accordion", publishDialog).addClass("collapsed");
       $("#publication-result", publishDialog).removeClass("collapsed");
       $(".thimble-additionals", shareResult).html(origShareHTML);
+      publishDialog.addClass("is-publishing");
       
       // Start the actual publishing process, so that hopefully by the
       // time the transition has finished, the user's page is published.
@@ -130,6 +127,7 @@ define([
           // published.
           currURL = viewURL;
 
+          publishDialog.removeClass("is-publishing");
           self.trigger("publish", {
             viewURL: viewURL,
             remixURL: remixURL,
