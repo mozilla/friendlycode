@@ -19,7 +19,7 @@ define(function() {
       error.show();
     }
     
-    return {
+    var self = {
       loadCode: function(path, cb) {
         publisher.loadCode(path, function(err, data, url) {
           if (err) {
@@ -31,7 +31,7 @@ define(function() {
           cb();
         });
       },
-      saveCode: function(callback) {
+      saveCode: function() {
         var code = codeMirror.getValue();
         publisher.saveCode(code, currURL, function(err, info) {
           if (err) {
@@ -48,12 +48,17 @@ define(function() {
             // published.
             currURL = viewURL;
 
-            if (callback) {
-              callback(viewURL, remixURL, info.path);
-            }
+            self.trigger("publish", {
+              viewURL: viewURL,
+              remixURL: remixURL,
+              path: info.path
+            });
           }
         });
       }
     };
+    
+    _.extend(self, Backbone.Events);
+    return self;
   };
 });

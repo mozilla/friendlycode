@@ -83,16 +83,32 @@ define([
       });
     });
     
-    return {
-      /**
-       * Reset the publish modal dialog
-       */
-      resetPublishModal: function() {
-        $("a.view, a.remix").text("[we're busy publishing your page...]");
-        $(".accordion").addClass("collapsed");
-        $("#publication-result").removeClass("collapsed");
-        $("#share-result .thimble-additionals").html("<ul><li data-medium='twitter'>Twitter</li><li data-medium='google'>Google+</li><li data-medium='facebook'>Facebook</li></ul>");
-      }
-    }
+    $("#confirm-publication").click(function(){
+      // Reset the publish modal.
+      $("a.view, a.remix").text("[we're busy publishing your page...]");
+      $(".accordion").addClass("collapsed");
+      $("#publication-result").removeClass("collapsed");
+      $("#share-result .thimble-additionals").html("<ul><li data-medium='twitter'>Twitter</li><li data-medium='google'>Google+</li><li data-medium='facebook'>Facebook</li></ul>");
+      
+      // Start the actual publishing process, so that hopefully by the
+      // time the transition has finished, the user's page is published.
+      publishUI.saveCode();
+
+      // We want the dialogs to transition while the page-sized translucent
+      // overlay stays in place. Because each dialog has its own overlay,
+      // however, this is a bit tricky. Eventually we might want to move
+      // to a DOM structure where each modal dialog shares the same overlay.
+      $("#confirm-dialog .thimble-modal-menu").slideUp(function() {
+        $(this).show();
+        $("#confirm-dialog").hide();
+        // suppress publish dialog if an error occurred
+        if ($("#error-dialog:hidden").length !== 0) {
+          $("#publish-dialog").show();
+          $("#publish-dialog .thimble-modal-menu").hide().slideDown();
+        }
+      });
+    });
+    
+    return {};
   };
 });

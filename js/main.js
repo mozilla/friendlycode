@@ -150,12 +150,12 @@ define("main", function(require) {
         window.location.reload();
     }, false);
   
-  function onPostPublish(url, newPageToLoad) {
+  publishUI.on("publish", function(info) {
     // If the browser supports history.pushState, set the URL to
     // be the new URL to remix the page they just published, so they
     // can share/bookmark the URL and it'll be what they expect it
     // to be.
-    pageToLoad = newPageToLoad;
+    pageToLoad = info.path;
     // If the user clicks their back button, we don't want to show
     // them the page they just published--we want to show them the
     // page the current page is based on.
@@ -166,35 +166,11 @@ define("main", function(require) {
     // to be what they expect it to be, just in case.
     parachute.save();
     if (supportsPushState)
-      window.history.pushState({pageToLoad: pageToLoad}, "", url);
+      window.history.pushState({pageToLoad: pageToLoad}, "", info.remixURL);
     else
       window.location.hash = "#" + pageToLoad;
-  }
-  
-  // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
-  $("#confirm-publication").click(function(){
-    // Start the actual publishing process, so that hopefully by the
-    // time the transition has finished, the user's page is published.
-    modals.resetPublishModal();
-    publishUI.saveCode(function(viewURL, remixURL, path) {
-      onPostPublish(remixURL, path);
-    });
-    // We want the dialogs to transition while the page-sized translucent
-    // overlay stays in place. Because each dialog has its own overlay,
-    // however, this is a bit tricky. Eventually we might want to move
-    // to a DOM structure where each modal dialog shares the same overlay.
-    $("#confirm-dialog .thimble-modal-menu").slideUp(function() {
-      $(this).show();
-      $("#confirm-dialog").hide();
-      // suppress publish dialog if an error occurred
-      if ($("#error-dialog:hidden").length !== 0) {
-        $("#publish-dialog").show();
-        $("#publish-dialog .thimble-modal-menu").hide().slideDown();
-      }
-    });
   });
-  // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
-
+  
   function doneLoading() {
     $("body").removeClass("loading");
     codeMirror.clearHistory();
