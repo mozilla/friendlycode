@@ -34,7 +34,6 @@ define(function() {
             $(".error-text",error).text("Sorry, an error occurred while trying to publish. " + err.responseText);
             dlg.stop().hide();
             error.show();
-            dlg.hide();
           } else {
             var viewURL = info.url;
             var remixURL = baseRemixURL.replace("{{VIEW_URL}}",
