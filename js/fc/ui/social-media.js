@@ -53,6 +53,9 @@ define(function() {
        * the medium to load up its functionality.
        */
       hotLoad:  function($, element, socialMedium) {
+        var oldScript = document.getElementById(socialMedium.id);
+        if (oldScript)
+          oldScript.parentNode.removeChild(oldScript);
         // TODO: Should we escape the return value of getURL()? It's likely
         // to not contain any characters that need escaping, and its value
         // is trusted, but we may still want to do it.

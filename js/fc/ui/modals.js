@@ -83,7 +83,6 @@ define(function() {
        * Reset the publish modal dialog
        */
       resetPublishModal: function() {
-        $("script#twitter-wjs, script#google-plus, script#facebook-jssdk").remove();
         $("a.view, a.remix").text("[we're busy publishing your page...]");
         $(".accordion").addClass("collapsed");
         $("#publication-result").removeClass("collapsed");
