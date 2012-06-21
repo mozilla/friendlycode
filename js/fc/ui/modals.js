@@ -9,19 +9,26 @@ define([
         publisher = options.publisher,
         baseRemixURL = options.remixURLTemplate,
         publishDialog = options.publishDialog,
-        error = options.error,
+        confirmDialog = options.confirmDialog,
+        publishButton = options.publishButton,
+        errorDialog = options.errorDialog,
+        shareResult = $("#share-result", publishDialog),
+        viewLink = $("a.view", publishDialog),
+        remixLink = $("a.remix", publishDialog),
         currURL = null,
         socialMedia = SocialMedia();
 
+    var modals = publishDialog.add(confirmDialog).add(errorDialog);
+    
     var hideModals = function() {
-      $(".modal-overlay").fadeOut();
+      modals.fadeOut();
     }
 
     /**
      * When someone clicks on the darkening-overlay, rather
      * than the modal dialog, close the modal dialog again.
      */
-    $(".modal-overlay").click(function(event) { 
+    modals.click(function(event) { 
       if (event.target === this) { 
         $(this).fadeOut(); 
       }
@@ -39,7 +46,7 @@ define([
     /**
      * Add accordion behaviour to the publication dialog.
      */
-    var accordion = $(".thimble-menu-content div.accordion");
+    var accordion = $(".thimble-menu-content div.accordion", publishDialog);
     var clickHandler = function(item) {
       accordion.addClass("collapsed");
       $(item).removeClass("collapsed");
@@ -51,30 +58,31 @@ define([
      */
     codeMirror.on("change", function() {
       var isEnabled = codeMirror.getValue().trim().length ? true : false;
-      $("#publish-button").toggleClass("enabled", isEnabled);
+      publishButton.toggleClass("enabled", isEnabled);
     });
     
     codeMirror.on("reparse", function(event) {
       var hasErrors = event.error ? true : false;
-      $("#confirm-dialog").toggleClass("has-errors", hasErrors);
+      confirmDialog.toggleClass("has-errors", hasErrors);
     });
     
-    $("#publish-button").click(function(){
-      if ($(this).hasClass("enabled")) $("#confirm-dialog").fadeIn();
+    publishButton.click(function(){
+      if ($(this).hasClass("enabled")) confirmDialog.fadeIn();
     });
 
-    $("#modal-close-button, #cancel-publication").click(function(){ 
-      hideModals();
-    });
+    $("#modal-close-button", publishDialog)
+      .add("#cancel-publication", confirmDialog).click(function(){ 
+        hideModals();
+      });
 
     /**
      * Late-loading for social media
      */
-    $("#share-result").click(function() {
+    shareResult.click(function() {
       // TODO: We should probably delay here if publishing is still
       // in-progress, since we don't yet have a URL to share!
-      var mediaList = $("#share-result li");
-      var urlToShare = $("#publication-result a.view")[0].href;
+      var mediaList = $("li", shareResult);
+      var urlToShare = viewLink[0].href;
       mediaList.each(function() {
         var element = $(this),
              medium = element.attr("data-medium");
@@ -84,13 +92,18 @@ define([
         }
       });
     });
-    
-    $("#confirm-publication").click(function(){
+
+    var origViewHTML = viewLink.html();
+    var origRemixHTML = remixLink.html();
+    var origShareHTML = $(".thimble-additionals", shareResult).html();
+
+    $("#confirm-publication", confirmDialog).click(function(){
       // Reset the publish modal.
-      $("a.view, a.remix").text("[we're busy publishing your page...]");
-      $(".accordion").addClass("collapsed");
-      $("#publication-result").removeClass("collapsed");
-      $("#share-result .thimble-additionals").html("<ul><li data-medium='twitter'>Twitter</li><li data-medium='google'>Google+</li><li data-medium='facebook'>Facebook</li></ul>");
+      viewLink.html(origViewHTML);
+      remixLink.html(origRemixHTML);
+      $(".accordion", publishDialog).addClass("collapsed");
+      $("#publication-result", publishDialog).removeClass("collapsed");
+      $(".thimble-additionals", shareResult).html(origShareHTML);
       
       // Start the actual publishing process, so that hopefully by the
       // time the transition has finished, the user's page is published.
@@ -99,15 +112,15 @@ define([
         if (err) {
           var text = "Sorry, an error occurred while trying to publish. " +
                      err.responseText;
-          $(".error-text", error).text(text);
+          $(".error-text", errorDialog).text(text);
           publishDialog.stop().hide();
-          error.show();
+          errorDialog.show();
         } else {
           var viewURL = info.url;
           var remixURL = baseRemixURL.replace("{{VIEW_URL}}",
                                               escape(info.path));
-          $('a.view', publishDialog).attr('href', viewURL).text(viewURL);
-          $('a.remix', publishDialog).attr('href', remixURL).text(remixURL);
+          viewLink.attr('href', viewURL).text(viewURL);
+          remixLink.attr('href', remixURL).text(remixURL);
 
           // The user is now effectively remixing the page they just
           // published.
@@ -125,13 +138,13 @@ define([
       // overlay stays in place. Because each dialog has its own overlay,
       // however, this is a bit tricky. Eventually we might want to move
       // to a DOM structure where each modal dialog shares the same overlay.
-      $("#confirm-dialog .thimble-modal-menu").slideUp(function() {
+      $(".thimble-modal-menu", confirmDialog).slideUp(function() {
         $(this).show();
-        $("#confirm-dialog").hide();
+        confirmDialog.hide();
         // suppress publish dialog if an error occurred
-        if ($("#error-dialog:hidden").length !== 0) {
-          $("#publish-dialog").show();
-          $("#publish-dialog .thimble-modal-menu").hide().slideDown();
+        if (errorDialog.filter(":hidden").length !== 0) {
+          publishDialog.show();
+          $(".thimble-modal-menu", publishDialog).hide().slideDown();
         }
       });
     });

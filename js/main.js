@@ -116,8 +116,10 @@ define("main", function(require) {
   var modals = Modals({
     codeMirror: codeMirror,
     publisher: publisher,
+    confirmDialog: $("#confirm-dialog"),
     publishDialog: $("#publish-dialog"),
-    error: $("#error-dialog"),
+    errorDialog: $("#error-dialog"),
+    publishButton: $("#publish-button"),
     remixURLTemplate: remixURLTemplate
   });
   var textUI = TextUI({
