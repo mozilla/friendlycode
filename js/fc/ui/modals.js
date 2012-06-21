@@ -98,7 +98,8 @@ define([
       
       // Start the actual publishing process, so that hopefully by the
       // time the transition has finished, the user's page is published.
-      var code = codeMirror.getValue();
+      var code = codeMirror.getValue(),
+          publishErrorOccurred = false;
       publisher.saveCode(code, currURL, function(err, info) {
         if (err) {
           var text = "Sorry, an error occurred while trying to publish. " +
@@ -106,6 +107,7 @@ define([
           $(".error-text", errorDialog).text(text);
           publishDialog.stop().hide();
           errorDialog.show();
+          publishErrorOccurred = true;
         } else {
           var viewURL = info.url;
           var remixURL = baseRemixURL.replace("{{VIEW_URL}}",
@@ -143,8 +145,7 @@ define([
       $(".thimble-modal-menu", confirmDialog).slideUp(function() {
         $(this).show();
         confirmDialog.hide();
-        // suppress publish dialog if an error occurred
-        if (errorDialog.filter(":hidden").length !== 0) {
+        if (!publishErrorOccurred) {
           publishDialog.show();
           $(".thimble-modal-menu", publishDialog).hide().slideDown();
         }
