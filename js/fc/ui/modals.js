@@ -3,23 +3,7 @@
 define([
   "./social-media"
 ], function(SocialMedia) {
-  return function(options) {
-    var codeMirror = options.codeMirror,
-        publishUI = options.publishUI,
-        publisher = options.publisher,
-        baseRemixURL = options.remixURLTemplate,
-        publishDialog = options.publishDialog,
-        confirmDialog = options.confirmDialog,
-        publishButton = options.publishButton,
-        errorDialog = options.errorDialog,
-        shareResult = $("#share-result", publishDialog),
-        viewLink = $("a.view", publishDialog),
-        remixLink = $("a.remix", publishDialog),
-        currURL = null,
-        socialMedia = SocialMedia();
-
-    var modals = publishDialog.add(confirmDialog).add(errorDialog);
-    
+  function activateModalBehaviors(modals) {
     var hideModals = function() {
       modals.fadeOut();
     }
@@ -42,7 +26,29 @@ define([
         hideModals();
       }
     });
+    
+    $("[data-close-modal]", modals).click(hideModals);
+  }
+  
+  return function(options) {
+    var codeMirror = options.codeMirror,
+        publishUI = options.publishUI,
+        publisher = options.publisher,
+        baseRemixURL = options.remixURLTemplate,
+        publishDialog = options.publishDialog,
+        confirmDialog = options.confirmDialog,
+        publishButton = options.publishButton,
+        errorDialog = options.errorDialog,
+        shareResult = $("#share-result", publishDialog),
+        viewLink = $("a.view", publishDialog),
+        remixLink = $("a.remix", publishDialog),
+        currURL = null,
+        socialMedia = SocialMedia();
 
+    var modals = publishDialog.add(confirmDialog).add(errorDialog);
+    
+    activateModalBehaviors(modals);
+    
     /**
      * Add accordion behaviour to the publication dialog.
      */
@@ -69,11 +75,6 @@ define([
     publishButton.click(function(){
       if ($(this).hasClass("enabled")) confirmDialog.fadeIn();
     });
-
-    $("#modal-close-button", publishDialog)
-      .add("#cancel-publication", confirmDialog).click(function(){ 
-        hideModals();
-      });
 
     /**
      * Late-loading for social media
