@@ -42,6 +42,7 @@ define([
         shareResult = $("#share-result", publishDialog),
         viewLink = $("a.view", publishDialog),
         remixLink = $("a.remix", publishDialog),
+        accordions = $("div.accordion", publishDialog),
         currURL = null,
         socialMedia = SocialMedia();
 
@@ -52,12 +53,10 @@ define([
     /**
      * Add accordion behaviour to the publication dialog.
      */
-    var accordion = $(".thimble-menu-content div.accordion", publishDialog);
-    var clickHandler = function(item) {
-      accordion.addClass("collapsed");
-      $(item).removeClass("collapsed");
-    }
-    accordion.click(function() { clickHandler(this); });
+    accordions.click(function() {
+      accordions.addClass("collapsed");
+      $(this).removeClass("collapsed");
+    });
 
     /**
      * modal dialog interaction sequence
