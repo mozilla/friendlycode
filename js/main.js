@@ -116,7 +116,7 @@ define("main", function(require) {
   var modals = Modals({
     codeMirror: codeMirror,
     publisher: publisher,
-    dialog: $("#publish-dialog"),
+    publishDialog: $("#publish-dialog"),
     error: $("#error-dialog"),
     remixURLTemplate: remixURLTemplate
   });
