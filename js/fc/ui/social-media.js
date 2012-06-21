@@ -20,7 +20,15 @@ define(function() {
       facebook: {
         id: "facebook-jssdk",
         src: "//connect.facebook.net/en_US/all.js#xfbml=1&appId=1",
-        html: "<div class='fb-like' data-href='"+urlPlaceHolder+"' data-send='false' data-action='recommend' data-layout='button_count' data-show-faces='false' data-font='tahoma'></div>"
+        html: "<div class='fb-like' data-href='"+urlPlaceHolder+"' data-send='false' data-action='recommend' data-layout='button_count' data-show-faces='false' data-font='tahoma'></div>",
+        afterHotLoad: function() {
+          // Facebook needs additional help, because it needs
+          // to be told that it has to refresh its button, rather
+          // than simply reloading.
+          if (typeof(FB) == "object" && FB.XFBML && FB.XFBML.parse) {
+            FB.XFBML.parse();
+          }
+        }
       },
 
 
@@ -56,6 +64,8 @@ define(function() {
           script.src = src;
           document.head.appendChild(script);
         }(document, socialMedium.id, socialMedium.src));
+        if (socialMedium.afterHotLoad)
+          socialMedium.afterHotLoad();
       }
     };
 

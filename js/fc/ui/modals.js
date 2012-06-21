@@ -74,12 +74,6 @@ define(function() {
         if (!element.hasClass("hotloaded") && medium && socialMedia[medium]) {
           socialMedia.hotLoad($, element, socialMedia[medium]);
           element.addClass("hotloaded");
-          // Facebook needs additional help, because it needs
-          // to be told that it has to refresh its button, rather
-          // than simply reloading.
-          if (medium === "facebook" && FB && FB.XFBML && FB.XFBML.parse) {
-            FB.XFBML.parse();
-          }
         }
       });
     });
