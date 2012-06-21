@@ -13,13 +13,17 @@ define(function() {
     var publisher = options.publisher;
     var currURL;
 
+    function alert(text) {
+      $(".error-text", error).text(text);
+      dlg.stop().hide();
+      error.show();
+    }
+    
     return {
       loadCode: function(path, cb) {
         publisher.loadCode(path, function(err, data, url) {
           if (err) {
-            $(".error-text",error).text('Sorry, an error occurred while trying to get the page.');
-            dlg.stop().hide();
-            error.show();
+            alert('Sorry, an error occurred while trying to get the page.');
           } else {
             codeMirror.setValue(data);
             currURL = url;
@@ -31,9 +35,8 @@ define(function() {
         var code = codeMirror.getValue();
         publisher.saveCode(code, currURL, function(err, info) {
           if (err) {
-            $(".error-text",error).text("Sorry, an error occurred while trying to publish. " + err.responseText);
-            dlg.stop().hide();
-            error.show();
+            alert("Sorry, an error occurred while trying to publish. " +
+                  err.responseText);
           } else {
             var viewURL = info.url;
             var remixURL = baseRemixURL.replace("{{VIEW_URL}}",
