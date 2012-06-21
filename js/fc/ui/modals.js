@@ -43,6 +43,9 @@ define([
         viewLink = $("a.view", publishDialog),
         remixLink = $("a.remix", publishDialog),
         accordions = $("div.accordion", publishDialog),
+        origViewHTML = viewLink.html(),
+        origRemixHTML = remixLink.html(),
+        origShareHTML = $(".thimble-additionals", shareResult).html(),
         currURL = null,
         socialMedia = SocialMedia();
 
@@ -50,22 +53,19 @@ define([
     
     activateModalBehaviors(modals);
     
-    /**
-     * Add accordion behaviour to the publication dialog.
-     */
+    // Add accordion behaviour to the publication dialog.
     accordions.click(function() {
       accordions.addClass("collapsed");
       $(this).removeClass("collapsed");
     });
 
-    /**
-     * modal dialog interaction sequence
-     */
+    // If the editor has no content, disable the publish button.
     codeMirror.on("change", function() {
       var isEnabled = codeMirror.getValue().trim().length ? true : false;
       publishButton.toggleClass("enabled", isEnabled);
     });
     
+    // If the user's code has errors, warn them before publishing.
     codeMirror.on("reparse", function(event) {
       var hasErrors = event.error ? true : false;
       confirmDialog.toggleClass("has-errors", hasErrors);
@@ -76,7 +76,7 @@ define([
     });
 
     /**
-     * Late-loading for social media
+     * Late-loading for social media.
      */
     shareResult.click(function() {
       // TODO: We should probably delay here if publishing is still
@@ -92,11 +92,7 @@ define([
         }
       });
     });
-
-    var origViewHTML = viewLink.html();
-    var origRemixHTML = remixLink.html();
-    var origShareHTML = $(".thimble-additionals", shareResult).html();
-
+    
     $("#confirm-publication", confirmDialog).click(function(){
       // Reset the publish modal.
       viewLink.html(origViewHTML);
