@@ -44,7 +44,6 @@ define("main", function(require) {
       HistoryUI = require("fc/ui/history"),
       PublishUI = require("fc/ui/publish"),
       Relocator = require("fc/ui/relocator"),
-      SocialMedia = require("fc/ui/social-media"),
       HelpTemplate = require("template!help"),
       ErrorTemplate = require("template!error"),
       AppReady = require("appReady!"),
@@ -117,15 +116,9 @@ define("main", function(require) {
     undo: $("#undo-nav-item"),
     redo: $("#redo-nav-item")
   });
-  var socialMedia = SocialMedia({
-    getURL: function() {
-      return $("#publication-result a.view")[0].href;
-    },
-  });
   var modals = Modals({
     codeMirror: codeMirror,
-    publishUI: publishUI,
-    socialMedia: socialMedia
+    publishUI: publishUI
   });
   var textUI = TextUI({
     codeMirror: codeMirror,

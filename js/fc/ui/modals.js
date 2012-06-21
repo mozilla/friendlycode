@@ -1,10 +1,12 @@
 "use strict";
 
-define(function() {
+define([
+  "./social-media"
+], function(SocialMedia) {
   return function(options) {
     var codeMirror = options.codeMirror,
         publishUI = options.publishUI,
-        socialMedia = options.socialMedia;
+        socialMedia = SocialMedia();
 
     var hideModals = function() {
       $(".modal-overlay").fadeOut();
@@ -67,12 +69,15 @@ define(function() {
      * Late-loading for social media
      */
     $("#share-result").click(function() {
+      // TODO: We should probably delay here if publishing is still
+      // in-progress, since we don't yet have a URL to share!
       var mediaList = $("#share-result li");
+      var urlToShare = $("#publication-result a.view")[0].href;
       mediaList.each(function() {
         var element = $(this),
              medium = element.attr("data-medium");
         if (!element.hasClass("hotloaded") && medium && socialMedia[medium]) {
-          socialMedia.hotLoad(element[0], socialMedia[medium]);
+          socialMedia.hotLoad(element[0], socialMedia[medium], urlToShare);
           element.addClass("hotloaded");
         }
       });
