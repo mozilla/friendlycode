@@ -2,7 +2,7 @@
 
 // Provides context-sensitive help for a ParsingCodeMirror based on
 // the current cursor position.
-define(["./mark-tracker"], function(MarkTracker) {
+define(["fc/ui/mark-tracker"], function(MarkTracker) {
   return function ContextSensitiveHelp(options) {
     var self = {};
     var codeMirror = options.codeMirror;
