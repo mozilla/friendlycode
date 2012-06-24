@@ -32,10 +32,12 @@ require.config({
   }
 });
 
+
 // All of this module's exports are only being exposed for debugging
 // purposes. Other parts of our code should never cite this module
 // as a dependency.
 define('main', [
+  "appReady!",
   'jquery-tipsy',
   'jquery-slowparse',
   'underscore',
@@ -52,10 +54,10 @@ define('main', [
   "fc/ui/publish",
   "fc/ui/relocator",
   "fc/ui/social-media",
-//  "appReady!",
   "fc/ui/modals",
   "fc/ui/text"
 ],function (
+  AppReady,
   $,
   _$,
   _,
@@ -72,7 +74,6 @@ define('main', [
   PublishUI,
   Relocator,
   SocialMedia,
-//  AppReady,
   Modals,
   TextUI
 ) {
@@ -84,32 +85,6 @@ define('main', [
       remixURLTemplate = null,
       ready = jQuery.Deferred();
 
-  // This is a simple [RequireJS plugin][] that waits for a few resources
-  // to load before we execute any of the app's main logic.
-  //
-  //  [RequireJS plugin]: http://requirejs.org/docs/plugins.html#apiload
-  (function() {
-    var errorsLoaded = jQuery.Deferred();
-    var typekitFinished = jQuery.Deferred();
-  
-    function finishTypekit() { typekitFinished.resolve(); }
-  
-    try {
-      Typekit.load({
-        active: finishTypekit,
-        inactive: finishTypekit
-      });
-    } catch(e) { finishTypekit(); }
-
-    define("appReady", [], {
-      load: function(name, req, load, config) {
-        jQuery.when(errorsLoaded, typekitFinished).then(load);
-      }
-    });
-    jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
-      errorsLoaded.resolve();
-    });
-  })();
 
   $("html").addClass("deployment-type-" + deploymentType);
   if (pageToLoad) {
