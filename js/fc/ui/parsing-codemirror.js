@@ -3,7 +3,7 @@
 // A subclass of IndexableCodeMirror which continuously re-parses
 // the code in its editor. Also adds a Backbone.Events interface
 // for extension points to hook into.
-define(["./indexable-codemirror"], function(IndexableCodeMirror) {
+define(["fc/ui/indexable-codemirror"], function(IndexableCodeMirror) {
   return function ParsingCodeMirror(place, givenOptions) {
     // Called whenever content of the editor area changes.
     function reparse() {
