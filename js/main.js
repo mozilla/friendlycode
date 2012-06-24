@@ -23,7 +23,6 @@ require.config({
     }
   },
   paths: {
-    slowparse: 'slowparse',
     jquery: 'jquery.min',
     'jquery-tipsy': 'jquery.tipsy',
     'jquery-slowparse': '../slowparse/spec/errors.jquery',
