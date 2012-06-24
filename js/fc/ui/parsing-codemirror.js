@@ -3,12 +3,22 @@
 // A subclass of IndexableCodeMirror which continuously re-parses
 // the code in its editor. Also adds a Backbone.Events interface
 // for extension points to hook into.
-define(["fc/ui/indexable-codemirror"], function(IndexableCodeMirror) {
+define([
+  'underscore',
+  "fc/ui/indexable-codemirror",
+  "slowparse/tree-inspectors",
+  "slowparse/slowparse"
+], function(_, IndexableCodeMirror, TreeInspectors, Slowparse) {
+
+  function parseSource (html) {
+    return Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
+  }
+
   return function ParsingCodeMirror(place, givenOptions) {
     // Called whenever content of the editor area changes.
     function reparse() {
       var sourceCode = codeMirror.getValue();
-      var result = givenOptions.parse(sourceCode);
+      var result = parseSource(sourceCode);
       codeMirror.trigger("reparse", {
         error: result.error,
         sourceCode: sourceCode,

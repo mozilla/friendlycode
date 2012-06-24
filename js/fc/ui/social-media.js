@@ -6,9 +6,8 @@
  * they click the like button and we don't like that kind of
  * monitoring behaviour.
  */
-define(function() {
+define(['jquery'], function($) {
   return function SocialMedia(options) {
-    var $ = options.jQuery;
     var parent = options.container;
     var getURL = options.getURL;
     var urlPlaceHolder = "__URL__PLACE__HOLDER__";
