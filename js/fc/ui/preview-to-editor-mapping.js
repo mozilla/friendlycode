@@ -115,6 +115,15 @@ define([
     };
     var startBounds = movable.getBoundingClientRect();
     var window = movable.ownerDocument.defaultView;
+    var computedStyle = window.getComputedStyle(movable);
+    var margins = {
+      top: parseInt(computedStyle.marginTop.slice(0, -2)),
+      left: parseInt(computedStyle.marginLeft.slice(0, -2))
+    };
+    startBounds = {
+      top: startBounds.top - margins.top,
+      left: startBounds.left - margins.left
+    };
     window.addEventListener("mousemove", onMouseMove, false);
     window.addEventListener("mouseup", function() {
       mirrorChangesToCode();
