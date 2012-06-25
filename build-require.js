@@ -94,6 +94,7 @@ function optimize(done) {
       'jquery-slowparse': '../slowparse/spec/errors.jquery',
       underscore: 'underscore.min',
       backbone: 'backbone.min',
+      slowparse: '../slowparse',
       codemirror: "../codemirror2/lib/codemirror",
       "codemirror/xml": "../codemirror2/mode/xml/xml",
       "codemirror/javascript": "../codemirror2/mode/javascript/javascript",

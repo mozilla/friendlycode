@@ -52,6 +52,7 @@ require.config({
     underscore: 'underscore.min',
     backbone: 'backbone.min',
     templates: '../templates',
+    slowparse: '../slowparse',
     codemirror: "../codemirror2/lib/codemirror",
     "codemirror/xml": "../codemirror2/mode/xml/xml",
     "codemirror/javascript": "../codemirror2/mode/javascript/javascript",
