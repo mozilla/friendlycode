@@ -69,7 +69,7 @@ define([
       if (parallelNode.hasAttribute(name)) {
         for (var i = 0; i < parallelNode.attributes.length; i++) {
           var attr = parallelNode.attributes[i];
-          if (attr.nodeName == name) {
+          if (attr.nodeName == name && attr.parseInfo) {
             var from = codeMirror.posFromIndex(attr.parseInfo.value.start + 1);
             var to = codeMirror.posFromIndex(attr.parseInfo.value.end - 1);
             codeMirror.noReparseDuring(function() {
