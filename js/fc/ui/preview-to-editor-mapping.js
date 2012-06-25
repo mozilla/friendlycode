@@ -64,27 +64,35 @@ define([
     return parallelNode;
   }
 
+  function getAttrNode(name, node) {
+    if (node.hasAttribute(name))
+      for (var i = 0; i < node.attributes.length; i++) {
+        var attr = node.attributes[i];
+        if (attr.nodeName == name)
+          return attr;
+      }
+  }
+  
   function addOrChangeAttrInCode(codeMirror, name, node, parallelNode) {
     var attrValue = node.getAttribute(name);
-      if (parallelNode.hasAttribute(name)) {
-        for (var i = 0; i < parallelNode.attributes.length; i++) {
-          var attr = parallelNode.attributes[i];
-          if (attr.nodeName == name && attr.parseInfo) {
-            var from = codeMirror.posFromIndex(attr.parseInfo.value.start + 1);
-            var to = codeMirror.posFromIndex(attr.parseInfo.value.end - 1);
-            codeMirror.noReparseDuring(function() {
-              codeMirror.replaceRange(attrValue, from, to);
-            });
-          }
-        }
-      } else {
-        var beforeOpenTagEnd = parallelNode.parseInfo.openTag.end - 1;
-        beforeOpenTagEnd = codeMirror.posFromIndex(beforeOpenTagEnd);
-        codeMirror.noReparseDuring(function() {
-          codeMirror.replaceRange(' ' + name + '="' + attrValue +
-                                  '"', beforeOpenTagEnd);
-        });
-      }
+    var attrNode = getAttrNode(name, parallelNode);
+    if (attrNode) {
+      if (!attrNode.parseInfo)
+        // This happens sometimes on Safari, not sure why... Worrisome.
+        return;
+      var from = codeMirror.posFromIndex(attrNode.parseInfo.value.start + 1);
+      var to = codeMirror.posFromIndex(attrNode.parseInfo.value.end - 1);
+      codeMirror.noReparseDuring(function() {
+        codeMirror.replaceRange(attrValue, from, to);
+      });
+    } else {
+      var beforeOpenTagEnd = parallelNode.parseInfo.openTag.end - 1;
+      beforeOpenTagEnd = codeMirror.posFromIndex(beforeOpenTagEnd);
+      codeMirror.noReparseDuring(function() {
+        codeMirror.replaceRange(' ' + name + '="' + attrValue +
+                                '"', beforeOpenTagEnd);
+      });
+    }
   }
   
   function startMovableDrag(codeMirror, mouseDownEvent, movable, parallelNode) {
