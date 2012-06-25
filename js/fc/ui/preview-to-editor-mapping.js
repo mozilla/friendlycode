@@ -1,8 +1,9 @@
 "use strict";
 
 define([
-  "./mark-tracker"
-], function(MarkTracker) {
+  "./mark-tracker",
+  "slowparse/slowparse"
+], function(MarkTracker, Slowparse) {
   // Given a descendant of the given root element, returns a CSS
   // selector that uniquely selects only the descendant from the
   // root element.
@@ -98,10 +99,14 @@ define([
       movable.style.position = "absolute";
       movable.style.top = (startBounds.top + relMove.y) + "px";
       movable.style.left = (startBounds.left + relMove.x) + "px";
+      mirrorChangesToCode();
     }
     
     function mirrorChangesToCode() {
       addOrChangeAttrInCode(codeMirror, "style", movable, parallelNode);
+      var newHTML = codeMirror.getValue();
+      var result = Slowparse.HTML(document, newHTML);
+      parallelNode = getParallelNode(movable, result.document);
     }
     
     var dragStart = {
