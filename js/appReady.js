@@ -5,25 +5,33 @@
 //
 //  [RequireJS plugin]: http://requirejs.org/docs/plugins.html#apiload
 define(['jquery-slowparse'], function ($) {
-  var errorsLoaded = jQuery.Deferred();
-  var typekitFinished = jQuery.Deferred();
+  var errorsLoaded,
+      typekitFinished;
 
-  function finishTypekit() { typekitFinished.resolve(); }
+  function startLoad() {
+    errorsLoaded = $.Deferred();
+    typekitFinished = $.Deferred();
 
-  try {
-    Typekit.load({
-      active: finishTypekit,
-      inactive: finishTypekit
+    try {
+      Typekit.load({
+        active: finishTypekit,
+        inactive: finishTypekit
+      });
+    } catch(e) { typekitFinished.resolve(); }
+
+    $.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
+      errorsLoaded.resolve();
     });
-  } catch(e) { finishTypekit(); }
-
-  $.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
-    errorsLoaded.resolve();
-  });
+  }
 
   return {
-    load: function(name, req, load, config) {
-      $.when(errorsLoaded, typekitFinished).then(load);
+    load: function(name, req, onLoad, config) {
+      if (config.isBuild) {
+        onLoad(startLoad.toString());
+      } else {
+        startload();
+        $.when(errorsLoaded, typekitFinished).then(onLoad);
+      }
     }
   };
 });
