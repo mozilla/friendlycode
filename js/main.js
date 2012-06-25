@@ -1,7 +1,7 @@
 "use strict";
 
 require.config({
-  baseUrl: '/js',
+  baseUrl: 'js',
   shim: {
     underscore: {
       exports: '_'
@@ -14,12 +14,35 @@ require.config({
       exports: '$'
     },
     'jquery-slowparse': {
-      deps: ['jquery', 'underscore'],
+      deps: ['jquery'],
       exports: '$'
     },
     backbone: {
       deps: ['underscore', 'jquery'],
       exports: 'Backbone'
+    },
+    codemirror: {
+      exports: "CodeMirror"
+    },
+    "codemirror/xml": {
+      deps: ["codemirror"],
+      exports: "CodeMirror"
+    },
+    "codemirror/javascript": {
+      deps: ["codemirror"],
+      exports: "CodeMirror"
+    },
+    "codemirror/css": {
+      deps: ["codemirror"],
+      exports: "CodeMirror"
+    },
+    "codemirror/html": {
+      deps: [
+        "codemirror/xml",
+        "codemirror/javascript",
+        "codemirror/css"
+      ],
+      exports: "CodeMirror"
     }
   },
   paths: {
@@ -27,7 +50,13 @@ require.config({
     'jquery-tipsy': 'jquery.tipsy',
     'jquery-slowparse': '../slowparse/spec/errors.jquery',
     underscore: 'underscore.min',
-    backbone: 'backbone.min'
+    backbone: 'backbone.min',
+    templates: '../templates',
+    codemirror: "../codemirror2/lib/codemirror",
+    "codemirror/xml": "../codemirror2/mode/xml/xml",
+    "codemirror/javascript": "../codemirror2/mode/javascript/javascript",
+    "codemirror/css": "../codemirror2/mode/css/css",
+    "codemirror/html": "../codemirror2/mode/htmlmixed/htmlmixed"
   }
 });
 
@@ -35,15 +64,19 @@ require.config({
 // All of this module's exports are only being exposed for debugging
 // purposes. Other parts of our code should never cite this module
 // as a dependency.
-define('main', [
-  "appReady!",
+//define('main', [
+require([
+  // sloparse is appReady deps
+  // 'jquery-slowparse',
+  "appReady",
+  // "appReady!",
   'jquery-tipsy',
-  'jquery-slowparse',
   'underscore',
   'backbone',
   'fc/help',
   "fc/parachute",
   "fc/publisher",
+  "codemirror/html",
   "fc/ui/parsing-codemirror",
   "fc/ui/context-sensitive-help",
   "fc/ui/error-help",
@@ -58,12 +91,12 @@ define('main', [
 ],function (
   AppReady,
   $,
-  _$,
   _,
   Backbone,
   Help,
   Parachute,
   Publisher,
+  CodeMirror,
   ParsingCodeMirror,
   ContextSensitiveHelp,
   ErrorHelp,
@@ -82,7 +115,7 @@ define('main', [
       deploymentType = $("meta[name='deployment-type']").attr("content"),
       supportsPushState = window.history.pushState ? true : false,
       remixURLTemplate = null,
-      ready = jQuery.Deferred();
+      ready = $.Deferred();
 
 
   $("html").addClass("deployment-type-" + deploymentType);
@@ -287,7 +320,7 @@ define('main', [
   });
 
   if (!pageToLoad) {
-    jQuery.get("default-content.html", function(html) {
+    $.get("default-content.html", function(html) {
       codeMirror.setValue(html.trim());
       doneLoading();
     }, "text");
