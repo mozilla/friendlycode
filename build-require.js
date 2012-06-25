@@ -35,6 +35,11 @@ function optimize(done) {
     name: name,
     out: out,
     optimize: 'uglify',
+    uglify: {
+      // beautify for debugging
+      // beautify: true,
+      mangle: true
+    },
     // it didn't work since baseUrl is going to override mainConfigFile's baseUrl
     // https://github.com/jrburke/r.js/issues/130
     // mainConfigFile: mainConfigFile
