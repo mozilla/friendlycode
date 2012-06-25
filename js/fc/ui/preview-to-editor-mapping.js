@@ -103,6 +103,8 @@ define([
     }
     
     function mirrorChangesToCode() {
+      if (!movable.hasAttribute("style"))
+        return;
       addOrChangeAttrInCode(codeMirror, "style", movable, parallelNode);
       var newHTML = codeMirror.getValue();
       var result = Slowparse.HTML(document, newHTML);
