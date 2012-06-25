@@ -5,6 +5,8 @@
 // for extension points to hook into.
 define(["./indexable-codemirror"], function(IndexableCodeMirror) {
   return function ParsingCodeMirror(place, givenOptions) {
+    var reparseDisabled = false;
+    
     // Called whenever content of the editor area changes.
     function reparse() {
       var sourceCode = codeMirror.getValue();
@@ -33,6 +35,8 @@ define(["./indexable-codemirror"], function(IndexableCodeMirror) {
 
     givenOptions.onChange = function() {
       codeMirror.trigger("change");
+      if (reparseDisabled)
+        return;
       if (reparseTimeout !== undefined)
         time.clearTimeout(reparseTimeout);
       reparseTimeout = time.setTimeout(reparse, parseDelay);
@@ -42,6 +46,14 @@ define(["./indexable-codemirror"], function(IndexableCodeMirror) {
     var codeMirror = IndexableCodeMirror(place, givenOptions);
     _.extend(codeMirror, Backbone.Events);
     codeMirror.reparse = reparse;
+    codeMirror.noReparseDuring = function(cb) {
+      reparseDisabled = true;
+      try {
+        cb();
+      } finally {
+        reparseDisabled = false;
+      }
+    };
     return codeMirror;
   };
 });

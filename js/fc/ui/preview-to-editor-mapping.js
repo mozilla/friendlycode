@@ -23,9 +23,25 @@ define([
   }
   
   function nodeToCode(node, docFrag) {
+    var parallelNode = getParallelNode(node, docFrag);
+    var result = null;
+    if (parallelNode) {
+      var pi = parallelNode.parseInfo;
+      var isVoidElement = !pi.closeTag;
+      result = {
+        start: pi.openTag.start,
+        end: isVoidElement ? pi.openTag.end : pi.closeTag.end,
+        contentStart: isVoidElement ? pi.openTag.start : pi.openTag.end
+      };
+    }
+    return result;
+  }
+
+  function getParallelNode(node, docFrag) {
     var root, i;
     var htmlNode = docFrag.querySelector("html");
     var origDocFrag = docFrag;
+    var parallelNode = null;
     if (htmlNode && docFrag.querySelector("body")) {
       root = node.ownerDocument.documentElement;
     } else {
@@ -39,24 +55,71 @@ define([
       root = node.ownerDocument.body;
     }
     var path = "html " + pathTo(root, node);
-    var parallelNode = docFrag.querySelector(path);
-    var result = null;
-    if (parallelNode) {
-      var pi = parallelNode.parseInfo;
-      var isVoidElement = !pi.closeTag;
-      result = {
-        start: pi.openTag.start,
-        end: isVoidElement ? pi.openTag.end : pi.closeTag.end,
-        contentStart: isVoidElement ? pi.openTag.start : pi.openTag.end
-      };
-    }
+    parallelNode = docFrag.querySelector(path);
     if (origDocFrag != docFrag) {
       for (i = 0; i < htmlNode.childNodes.length; i++)
         origDocFrag.appendChild(htmlNode.childNodes[i]);
     }
-    return result;
+    return parallelNode;
   }
 
+  function addOrChangeAttrInCode(codeMirror, name, node, parallelNode) {
+    var attrValue = node.getAttribute(name);
+      if (parallelNode.hasAttribute(name)) {
+        for (var i = 0; i < parallelNode.attributes.length; i++) {
+          var attr = parallelNode.attributes[i];
+          if (attr.nodeName == name) {
+            var from = codeMirror.posFromIndex(attr.parseInfo.value.start + 1);
+            var to = codeMirror.posFromIndex(attr.parseInfo.value.end - 1);
+            codeMirror.noReparseDuring(function() {
+              codeMirror.replaceRange(attrValue, from, to);
+            });
+          }
+        }
+      } else {
+        var beforeOpenTagEnd = parallelNode.parseInfo.openTag.end - 1;
+        beforeOpenTagEnd = codeMirror.posFromIndex(beforeOpenTagEnd);
+        codeMirror.noReparseDuring(function() {
+          codeMirror.replaceRange(' ' + name + '="' + attrValue +
+                                  '"', beforeOpenTagEnd);
+        });
+      }
+  }
+  
+  function startMovableDrag(codeMirror, mouseDownEvent, movable, parallelNode) {
+    if (!parallelNode)
+      return;
+    
+    function onMouseMove(event) {
+      var relMove = {
+        x: event.clientX - dragStart.x,
+        y: event.clientY - dragStart.y
+      };
+      movable.style.position = "absolute";
+      movable.style.top = (startBounds.top + relMove.y) + "px";
+      movable.style.left = (startBounds.left + relMove.x) + "px";
+    }
+    
+    function mirrorChangesToCode() {
+      addOrChangeAttrInCode(codeMirror, "style", movable, parallelNode);
+    }
+    
+    var dragStart = {
+      x: mouseDownEvent.clientX,
+      y: mouseDownEvent.clientY
+    };
+    var startBounds = movable.getBoundingClientRect();
+    var window = movable.ownerDocument.defaultView;
+    window.addEventListener("mousemove", onMouseMove, false);
+    window.addEventListener("mouseup", function() {
+      mirrorChangesToCode();
+      window.removeEventListener("mousemove", onMouseMove, false);
+      setTimeout(function() {
+        codeMirror.reparse();
+      }, 10);
+    }, false);
+  }
+  
   function PreviewToEditorMapping(livePreview, codeMirrorAreas) {
     var codeMirror = livePreview.codeMirror;
     var marks = MarkTracker(codeMirror);
@@ -79,6 +142,16 @@ define([
           marks.mark(interval.start, interval.end,
                      "preview-to-editor-highlight");
           codeMirror.focus();
+
+          var movable;
+          if ($(event.target).hasClass(".thimble-movable"))
+            movable = $(event.target);
+          else
+            movable = $(event.target).closest(".thimble-movable");
+          if (movable.length)
+            startMovableDrag(codeMirror, event, movable[0],
+                             getParallelNode(movable[0], docFrag));
+
           event.preventDefault();
           event.stopPropagation();
         }
