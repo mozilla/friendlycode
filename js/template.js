@@ -10,7 +10,7 @@ define(['module', 'text', 'underscore'], function (module, text, _) {
       //req(["text!templates/" + name + ".html"], function(text) {
       text.get('templates/' + name + '.html', function (data) {
         // remove white spaces
-        data = data.replace(/\s+/g, '');
+        data = data.replace(/\r\n|\n|\r/g, '');
 
         var template;
         if (config.isBuild) {
