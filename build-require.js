@@ -34,6 +34,8 @@ function optimize(done) {
     baseUrl: baseUrl,
     name: name,
     out: out,
+    // use none optimize for debugging
+    // optimize: 'none',
     optimize: 'uglify',
     uglify: {
       // beautify for debugging
