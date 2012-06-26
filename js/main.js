@@ -65,8 +65,7 @@ require.config({
 // All of this module's exports are only being exposed for debugging
 // purposes. Other parts of our code should never cite this module
 // as a dependency.
-//define('main', [
-require([
+define('main', [
   // sloparse is appReady deps
   // 'jquery-slowparse',
   "appReady",
@@ -334,3 +333,8 @@ require([
     ready: ready
   };
 });
+
+/**
+ * this final line is for requirejs optimization
+ */
+require(['main'], function () {});
