@@ -95,6 +95,25 @@ define([
     }
   }
   
+  function getElementMetrics(node) {
+    var style = node.ownerDocument.defaultView.getComputedStyle(node);
+    var result = {
+      position: style.position
+    };
+    
+    ["margin", "padding"].forEach(function(type) {
+      ["Top", "Right", "Bottom", "Left"].forEach(function(side) {
+        var name = type + side;
+        result[name] = parseInt(style[name].slice(0, -2));
+      });
+    });
+    return result;
+  }
+  
+  function px(amount) {
+    return Math.floor(amount) + "px";
+  }
+  
   function startMovableDrag(codeMirror, mouseDownEvent, movable, parallelNode) {
     if (!parallelNode)
       return;
@@ -104,9 +123,15 @@ define([
         x: event.clientX - dragStart.x,
         y: event.clientY - dragStart.y
       };
-      movable.style.position = "absolute";
-      movable.style.top = (startBounds.top + relMove.y) + "px";
-      movable.style.left = (startBounds.left + relMove.x) + "px";
+      if (event.shiftKey) {
+        movable.style.width = px(startBounds.width + relMove.x);
+        movable.style.height = px(startBounds.height + relMove.y);
+      } else {
+        if (metrics.position != "absolute")
+          movable.style.position = "absolute";
+        movable.style.top = px(startBounds.top + relMove.y);
+        movable.style.left = px(startBounds.left + relMove.x);
+      }
       mirrorChangesToCode();
     }
     
@@ -125,14 +150,12 @@ define([
     };
     var startBounds = movable.getBoundingClientRect();
     var window = movable.ownerDocument.defaultView;
-    var computedStyle = window.getComputedStyle(movable);
-    var margins = {
-      top: parseInt(computedStyle.marginTop.slice(0, -2)),
-      left: parseInt(computedStyle.marginLeft.slice(0, -2))
-    };
+    var metrics = getElementMetrics(movable);
     startBounds = {
-      top: startBounds.top - margins.top,
-      left: startBounds.left - margins.left
+      top: startBounds.top - metrics.marginTop,
+      left: startBounds.left - metrics.marginLeft,
+      width: startBounds.width - metrics.paddingLeft - metrics.paddingRight,
+      height: startBounds.height - metrics.paddingTop - metrics.paddingBottom
     };
     window.addEventListener("mousemove", onMouseMove, false);
     window.addEventListener("mouseup", function() {
