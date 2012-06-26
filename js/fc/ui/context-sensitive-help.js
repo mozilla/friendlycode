@@ -10,6 +10,7 @@ define(["./mark-tracker"], function(MarkTracker) {
     var helpArea = options.helpArea;
     var relocator = options.relocator;
     var helpIndex = options.helpIndex;
+    var checkbox = options.checkbox;
     var lastEvent = null;
     var timeout = null;
     var lastHelp = null;
@@ -73,12 +74,23 @@ define(["./mark-tracker"], function(MarkTracker) {
       relocator.cleanup();
     }
     
+    // make hints on/off actually work
+    checkbox.click(function() {
+      var hints = $(".checkbox", this);
+      if (hints.hasClass("on")) {
+        hints.removeClass("on").addClass("off");
+        clearHelp();
+      } else {
+        hints.removeClass("off").addClass("on");
+      }
+    });
+    
     codeMirror.on("change", clearHelp);
     codeMirror.on("cursor-activity", function() {
       clearTimeout(timeout);
       
       // people may not want helpful hints
-      if ($("#hints-nav-item .checkbox").hasClass("off")) return;
+      if ($(".checkbox", checkbox).hasClass("off")) return;
 
       // If the editor widget doesn't have input focus, this event
       // was likely triggered through some programmatic manipulation rather

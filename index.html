@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="remix-url" content="">
-    <meta name="publish-url" content="http://thimbletest.org">
+    <meta name="publish-url" content="https://webpagemaker-dev.allizom.org">
     <meta name="deployment-type" content="development">
     <base target="_blank">
 
@@ -95,7 +95,7 @@
              <div class="thimble-additionals">
                <div class="confirmation-buttons">
                  <span id="confirm-publication" class="confirmation-button yes-button">Yes</span>
-                 <span id="cancel-publication" class="confirmation-button no-button">No</span>
+                 <span id="cancel-publication" class="confirmation-button no-button" data-close-modal>No</span>
                </div>
                <br>
                <div class="public-warning">
@@ -121,7 +121,7 @@
     <div id="publish-dialog" class="modal-overlay" style="display: none;">
       <div class="thimble-modal-menu thimble-grey-bar">
         <div class="thimble-menu-content">
-           <div id="modal-close-button">&nbsp;</div>
+           <div id="modal-close-button" data-close-modal>&nbsp;</div>
 
            <!-- PUBLISH YOUR WORK -->
            <div id="publication-result" class="accordion">
@@ -131,7 +131,7 @@
              </div>
              <div class="accordion-content">
                <div class="thimble-url-box">
-                 <a href="#" class="view">[we're busy publishing your page...]</a>
+                 <a href="#" class="view"></a>
                </div>
                <!-- TEMPORARY: Last-minute feedback text. -->
                <p>Please <a href="http://mzl.la/thimblefeedback">take our
@@ -143,7 +143,7 @@
              <div class="thimble-title">Grab the link to edit your published page</div>
              <div class="accordion-content">
                <div class="thimble-url-box">
-                 <a href="#" class="remix">[we're busy publishing your page...]</a>
+                 <a href="#" class="remix"></a>
                </div>
              </div>
            </div>

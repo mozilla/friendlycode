@@ -42,9 +42,7 @@ define("main", function(require) {
       LivePreview = require("fc/ui/live-preview"),
       PreviewToEditorMapping = require("fc/ui/preview-to-editor-mapping"),
       HistoryUI = require("fc/ui/history"),
-      PublishUI = require("fc/ui/publish"),
       Relocator = require("fc/ui/relocator"),
-      SocialMedia = require("fc/ui/social-media"),
       HelpTemplate = require("template!help"),
       ErrorTemplate = require("template!error"),
       AppReady = require("appReady!"),
@@ -62,7 +60,12 @@ define("main", function(require) {
     // A server is serving us as the custom edit URL for a web page.
     remixURLTemplate = location.protocol + "//" + location.host +
                        "{{VIEW_URL}}/edit";
+  } else {
+    // Base the edit URLs off a hash on the current page.
+    remixURLTemplate = location.protocol + "//" + location.host + 
+                       location.pathname + "#{{VIEW_URL}}";
   }
+  
   // If a URL hash is specified, it should override anything provided by
   // a server.
   if (window.location.hash.slice(1))
@@ -88,7 +91,8 @@ define("main", function(require) {
     helpIndex: Help.Index(),
     template: HelpTemplate,
     helpArea: helpArea,
-    relocator: relocator
+    relocator: relocator,
+    checkbox: $("#hints-nav-item")
   });
   var errorArea =  $(".error");
   var errorHelp = ErrorHelp({
@@ -104,49 +108,25 @@ define("main", function(require) {
   });
   var previewToEditorMapping = PreviewToEditorMapping(preview, $(".CodeMirror-lines"));
   var publisher = Publisher(publishURL);
-  var publishUI = PublishUI({
-    codeMirror: codeMirror,
-    publisher: publisher,
-    dialog: $("#publish-dialog"),
-    error: $("#error-dialog"),
-    remixURLTemplate: remixURLTemplate
-  });
   var historyUI = HistoryUI({
     codeMirror: codeMirror,
     undo: $("#undo-nav-item"),
     redo: $("#redo-nav-item")
   });
-  var socialMedia = SocialMedia({
-    jQuery: jQuery,
-    getURL: function() {
-      return $("#publication-result a.view")[0].href;
-    },
-    container: $("#share-result")
-  });
   var modals = Modals({
     codeMirror: codeMirror,
-    publishUI: publishUI,
-    socialMedia: socialMedia
+    publisher: publisher,
+    confirmDialog: $("#confirm-dialog"),
+    publishDialog: $("#publish-dialog"),
+    errorDialog: $("#error-dialog"),
+    publishButton: $("#publish-button"),
+    remixURLTemplate: remixURLTemplate
   });
   var textUI = TextUI({
     codeMirror: codeMirror,
     navItem: $("#text-nav-item")
   });
   var parachute = Parachute(window, codeMirror, pageToLoad);
-
-  // make hints on/off actually work
-  $("#hints-nav-item").click(function() {
-    var hints = $(".checkbox", this);
-    if (hints.hasClass("on")) {
-      hints.removeClass("on").addClass("off");
-      // make sure to hide the help, in case it's active when this option's selected
-      $("div.help").hide();
-      relocator.cleanup();
-    } else {
-      hints.removeClass("off").addClass("on");
-    }
-  });
-
   
   window.addEventListener("hashchange", function(event) {
     // We don't currently support dynamically changing the URL
@@ -172,12 +152,12 @@ define("main", function(require) {
         window.location.reload();
     }, false);
   
-  function onPostPublish(url, newPageToLoad) {
+  modals.on("publish", function(info) {
     // If the browser supports history.pushState, set the URL to
     // be the new URL to remix the page they just published, so they
     // can share/bookmark the URL and it'll be what they expect it
     // to be.
-    pageToLoad = newPageToLoad;
+    pageToLoad = info.path;
     // If the user clicks their back button, we don't want to show
     // them the page they just published--we want to show them the
     // page the current page is based on.
@@ -188,35 +168,11 @@ define("main", function(require) {
     // to be what they expect it to be, just in case.
     parachute.save();
     if (supportsPushState)
-      window.history.pushState({pageToLoad: pageToLoad}, "", url);
+      window.history.pushState({pageToLoad: pageToLoad}, "", info.remixURL);
     else
       window.location.hash = "#" + pageToLoad;
-  }
-  
-  // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
-  $("#confirm-publication").click(function(){
-    // Start the actual publishing process, so that hopefully by the
-    // time the transition has finished, the user's page is published.
-    modals.resetPublishModal();
-    publishUI.saveCode(function(viewURL, remixURL, path) {
-      onPostPublish(remixURL, path);
-    });
-    // We want the dialogs to transition while the page-sized translucent
-    // overlay stays in place. Because each dialog has its own overlay,
-    // however, this is a bit tricky. Eventually we might want to move
-    // to a DOM structure where each modal dialog shares the same overlay.
-    $("#confirm-dialog .thimble-modal-menu").slideUp(function() {
-      $(this).show();
-      $("#confirm-dialog").hide();
-      // suppress publish dialog if an error occurred
-      if ($("#error-dialog:hidden").length !== 0) {
-        $("#publish-dialog").show();
-        $("#publish-dialog .thimble-modal-menu").hide().slideDown();
-      }
-    });
   });
-  // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
-
+  
   function doneLoading() {
     $("body").removeClass("loading");
     codeMirror.clearHistory();
@@ -261,7 +217,15 @@ define("main", function(require) {
       doneLoading();
     }, "text");
   } else
-    publishUI.loadCode(pageToLoad, doneLoading);
+    publisher.loadCode(pageToLoad, function(err, data, url) {
+      if (err) {
+        alert('Sorry, an error occurred while trying to get the page.');
+      } else {
+        codeMirror.setValue(data);
+        modals.setCurrentURL(url);
+        doneLoading();
+      }
+    });
 
   return {
     codeMirror: codeMirror,
