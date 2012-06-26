@@ -18,7 +18,7 @@ define([
     // Called whenever content of the editor area changes.
     function reparse() {
       var sourceCode = codeMirror.getValue();
-      var result = parseSource(sourceCode);
+      var result = (givenOptions.parse || parseSource)(sourceCode);
       codeMirror.trigger("reparse", {
         error: result.error,
         sourceCode: sourceCode,
