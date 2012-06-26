@@ -1,20 +1,18 @@
 "use strict";
 
-define(function() {
-  return function(options) {
-    var codeMirror = options.codeMirror,
-        publishUI = options.publishUI,
-        socialMedia = options.socialMedia;
-
+define([
+  "./social-media"
+], function(SocialMedia) {
+  function activateModalBehaviors(modals) {
     var hideModals = function() {
-      $(".modal-overlay").fadeOut();
+      modals.fadeOut();
     }
 
     /**
      * When someone clicks on the darkening-overlay, rather
      * than the modal dialog, close the modal dialog again.
      */
-    $(".modal-overlay").click(function(event) { 
+    modals.click(function(event) { 
       if (event.target === this) { 
         $(this).fadeOut(); 
       }
@@ -28,73 +26,139 @@ define(function() {
         hideModals();
       }
     });
+    
+    $("[data-close-modal]", modals).click(hideModals);
+  }
+  
+  function makeSharingHotLoader(options) {
+    return function hotLoadEventHandler() {
+      var socialMedia = options.socialMedia,
+          urlToShare = options.urlToShare;
+      $("li[data-medium]", this).each(function() {
+        var element = $(this),
+            medium = element.attr("data-medium");
+        if (!element.hasClass("hotloaded") && socialMedia[medium]) {
+          socialMedia.hotLoad(element[0], socialMedia[medium], urlToShare);
+          element.addClass("hotloaded");
+        }
+      });
+    };
+  }
 
-    /**
-     * Add accordion behaviour to the publication dialog.
-     */
-    var accordion = $(".thimble-menu-content div.accordion");
-    var clickHandler = function(item) {
-      accordion.addClass("collapsed");
-      $(item).removeClass("collapsed");
-    }
-    accordion.click(function() { clickHandler(this); });
+  return function(options) {
+    var codeMirror = options.codeMirror,
+        publishUI = options.publishUI,
+        publisher = options.publisher,
+        baseRemixURL = options.remixURLTemplate,
+        publishDialog = options.publishDialog,
+        confirmDialog = options.confirmDialog,
+        publishButton = options.publishButton,
+        errorDialog = options.errorDialog,
+        shareResult = $("#share-result", publishDialog),
+        viewLink = $("a.view", publishDialog),
+        remixLink = $("a.remix", publishDialog),
+        accordions = $("div.accordion", publishDialog),
+        origShareHTML = $(".thimble-additionals", shareResult).html(),
+        currURL = null,
+        socialMedia = SocialMedia();
 
-    /**
-     * modal dialog interaction sequence
-     */
+    var modals = publishDialog.add(confirmDialog).add(errorDialog);
+    
+    activateModalBehaviors(modals);
+    
+    // Add accordion behaviour to the publication dialog.
+    accordions.click(function() {
+      accordions.addClass("collapsed");
+      $(this).removeClass("collapsed");
+    });
+
+    // If the editor has no content, disable the publish button.
     codeMirror.on("change", function() {
       var isEnabled = codeMirror.getValue().trim().length ? true : false;
-      $("#publish-button").toggleClass("enabled", isEnabled);
+      publishButton.toggleClass("enabled", isEnabled);
     });
     
+    // If the user's code has errors, warn them before publishing.
     codeMirror.on("reparse", function(event) {
       var hasErrors = event.error ? true : false;
-      $("#confirm-dialog").toggleClass("has-errors", hasErrors);
+      confirmDialog.toggleClass("has-errors", hasErrors);
     });
     
-    $("#publish-button").click(function(){
-      if ($(this).hasClass("enabled")) $("#confirm-dialog").fadeIn();
+    publishButton.click(function(){
+      if ($(this).hasClass("enabled")) confirmDialog.fadeIn();
     });
+    
+    $("#confirm-publication", confirmDialog).click(function(){
+      // Reset the publish modal.
+      shareResult.unbind('.hotLoad');
+      $(".accordion", publishDialog).addClass("collapsed");
+      $("#publication-result", publishDialog).removeClass("collapsed");
+      $(".thimble-additionals", shareResult).html(origShareHTML);
+      publishDialog.addClass("is-publishing");
+      
+      // Start the actual publishing process, so that hopefully by the
+      // time the transition has finished, the user's page is published.
+      var code = codeMirror.getValue(),
+          publishErrorOccurred = false;
+      publisher.saveCode(code, currURL, function(err, info) {
+        if (err) {
+          var text = "Sorry, an error occurred while trying to publish. " +
+                     err.responseText;
+          $(".error-text", errorDialog).text(text);
+          publishDialog.stop().hide();
+          errorDialog.show();
+          publishErrorOccurred = true;
+        } else {
+          var viewURL = info.url;
+          var remixURL = baseRemixURL.replace("{{VIEW_URL}}",
+                                              escape(info.path));
+          viewLink.attr('href', viewURL).text(viewURL);
+          remixLink.attr('href', remixURL).text(remixURL);
+          
+          shareResult.bind('click.hotLoad', makeSharingHotLoader({
+            urlToShare: viewURL,
+            socialMedia: socialMedia
+          }));
 
-    // CONFIRM DIALOG IS IN MAIN.JS FOR THE MOMENT DUE TO
-    // ITS NEED TO CALL A PUBLICATION CALLBACK IN MAIN.JS
+          // If the user has selected the sharing accordion while
+          // we were publishing, hot-load the sharing UI immediately.
+          if (!shareResult.hasClass("collapsed"))
+            shareResult.click();
 
-    $("#modal-close-button, #cancel-publication").click(function(){ 
-      hideModals();
-    });
+          // The user is now effectively remixing the page they just
+          // published.
+          currURL = viewURL;
 
-    /**
-     * Late-loading for social media
-     */
-    $("#share-result").click(function() {
-      var mediaList = $("#share-result li");
-      mediaList.each(function() {
-        var element = $(this),
-             medium = element.attr("data-medium");
-        if (!element.hasClass("hotloaded") && medium && socialMedia[medium]) {
-          socialMedia.hotLoad($, element, socialMedia[medium]);
-          element.addClass("hotloaded");
-          // Facebook needs additional help, because it needs
-          // to be told that it has to refresh its button, rather
-          // than simply reloading.
-          if (medium === "facebook" && FB && FB.XFBML && FB.XFBML.parse) {
-            FB.XFBML.parse();
-          }
+          publishDialog.removeClass("is-publishing");
+          self.trigger("publish", {
+            viewURL: viewURL,
+            remixURL: remixURL,
+            path: info.path
+          });
+        }
+      });
+
+      // We want the dialogs to transition while the page-sized translucent
+      // overlay stays in place. Because each dialog has its own overlay,
+      // however, this is a bit tricky. Eventually we might want to move
+      // to a DOM structure where each modal dialog shares the same overlay.
+      $(".thimble-modal-menu", confirmDialog).slideUp(function() {
+        $(this).show();
+        confirmDialog.hide();
+        if (!publishErrorOccurred) {
+          publishDialog.show();
+          $(".thimble-modal-menu", publishDialog).hide().slideDown();
         }
       });
     });
     
-    return {
-      /**
-       * Reset the publish modal dialog
-       */
-      resetPublishModal: function() {
-        $("script#twitter-wjs, script#google-plus, script#facebook-jssdk").remove();
-        $("a.view, a.remix").text("[we're busy publishing your page...]");
-        $(".accordion").addClass("collapsed");
-        $("#publication-result").removeClass("collapsed");
-        $("#share-result .thimble-additionals").html("<ul><li data-medium='twitter'>Twitter</li><li data-medium='google'>Google+</li><li data-medium='facebook'>Facebook</li></ul>");
+    var self = {
+      setCurrentURL: function(url) {
+        currURL = url;
       }
-    }
+    };
+    
+    _.extend(self, Backbone.Events);
+    return self;
   };
 });
