@@ -2,14 +2,19 @@
 
 // Provides context-sensitive help for a ParsingCodeMirror based on
 // the current cursor position.
-define(["./mark-tracker"], function(MarkTracker) {
+define([
+  "jquery",
+  "fc/ui/mark-tracker",
+  "fc/help",
+  "template!help"
+], function($, MarkTracker, Help, HelpTemplate) {
   return function ContextSensitiveHelp(options) {
     var self = {};
     var codeMirror = options.codeMirror;
-    var template = options.template;
-    var helpArea = options.helpArea;
+    var template = HelpTemplate;
+    var helpArea = $(options.selector);
     var relocator = options.relocator;
-    var helpIndex = options.helpIndex;
+    var helpIndex = Help.Index();
     var lastEvent = null;
     var timeout = null;
     var lastHelp = null;

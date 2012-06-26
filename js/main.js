@@ -1,61 +1,122 @@
 "use strict";
 
-// This is a simple [RequireJS plugin][] that waits for a few resources
-// to load before we execute any of the app's main logic.
-//
-//  [RequireJS plugin]: http://requirejs.org/docs/plugins.html#apiload
-(function() {
-  var errorsLoaded = jQuery.Deferred();
-  var typekitFinished = jQuery.Deferred();
-  
-  function finishTypekit() { typekitFinished.resolve(); }
-  
-  try {
-    Typekit.load({
-      active: finishTypekit,
-      inactive: finishTypekit
-    });
-  } catch(e) { finishTypekit(); }
-
-  define("appReady", [], {
-    load: function(name, req, load, config) {
-      jQuery.when(errorsLoaded, typekitFinished).then(load);
+require.config({
+  baseUrl: 'js',
+  shim: {
+    underscore: {
+      exports: '_'
+    },
+    jquery: {
+      exports: '$'
+    },
+    'jquery-tipsy': {
+      deps: ['jquery'],
+      exports: '$'
+    },
+    'jquery-slowparse': {
+      deps: ['jquery'],
+      exports: '$'
+    },
+    backbone: {
+      deps: ['underscore', 'jquery'],
+      exports: 'Backbone'
+    },
+    codemirror: {
+      exports: "CodeMirror"
+    },
+    "codemirror/xml": {
+      deps: ["codemirror"],
+      exports: "CodeMirror"
+    },
+    "codemirror/javascript": {
+      deps: ["codemirror"],
+      exports: "CodeMirror"
+    },
+    "codemirror/css": {
+      deps: ["codemirror"],
+      exports: "CodeMirror"
+    },
+    "codemirror/html": {
+      deps: [
+        "codemirror/xml",
+        "codemirror/javascript",
+        "codemirror/css"
+      ],
+      exports: "CodeMirror"
     }
-  });
-  jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
-    errorsLoaded.resolve();
-  });
-})();
+  },
+  paths: {
+    jquery: 'jquery.min',
+    'jquery-tipsy': 'jquery.tipsy',
+    'jquery-slowparse': '../slowparse/spec/errors.jquery',
+    underscore: 'underscore.min',
+    backbone: 'backbone.min',
+    templates: '../templates',
+    slowparse: '../slowparse',
+    codemirror: "../codemirror2/lib/codemirror",
+    "codemirror/xml": "../codemirror2/mode/xml/xml",
+    "codemirror/javascript": "../codemirror2/mode/javascript/javascript",
+    "codemirror/css": "../codemirror2/mode/css/css",
+    "codemirror/html": "../codemirror2/mode/htmlmixed/htmlmixed"
+  }
+});
+
 
 // All of this module's exports are only being exposed for debugging
 // purposes. Other parts of our code should never cite this module
 // as a dependency.
-define("main", function(require) {
-  var Help = require("fc/help"),
-      Parachute = require("fc/parachute"),
-      Publisher = require("fc/publisher"),
-      Slowparse = require("../slowparse/slowparse"),
-      TreeInspectors = require("../slowparse/tree-inspectors"),
-      ParsingCodeMirror = require("fc/ui/parsing-codemirror"),
-      ContextSensitiveHelp = require("fc/ui/context-sensitive-help"),
-      ErrorHelp = require("fc/ui/error-help"),
-      LivePreview = require("fc/ui/live-preview"),
-      PreviewToEditorMapping = require("fc/ui/preview-to-editor-mapping"),
-      HistoryUI = require("fc/ui/history"),
-      PublishUI = require("fc/ui/publish"),
-      Relocator = require("fc/ui/relocator"),
-      SocialMedia = require("fc/ui/social-media"),
-      HelpTemplate = require("template!help"),
-      ErrorTemplate = require("template!error"),
-      AppReady = require("appReady!"),
-      publishURL = $("meta[name='publish-url']").attr("content"),
+define('main', [
+  // sloparse is appReady deps
+  // 'jquery-slowparse',
+  "appReady",
+  // "appReady!",
+  'jquery-tipsy',
+  'underscore',
+  'backbone',
+  'fc/help',
+  "fc/parachute",
+  "fc/publisher",
+  "codemirror/html",
+  "fc/ui/parsing-codemirror",
+  "fc/ui/context-sensitive-help",
+  "fc/ui/error-help",
+  "fc/ui/live-preview",
+  "fc/ui/preview-to-editor-mapping",
+  "fc/ui/history",
+  "fc/ui/publish",
+  "fc/ui/relocator",
+  "fc/ui/social-media",
+  "fc/ui/modals",
+  "fc/ui/text"
+],function (
+  AppReady,
+  $,
+  _,
+  Backbone,
+  Help,
+  Parachute,
+  Publisher,
+  CodeMirror,
+  ParsingCodeMirror,
+  ContextSensitiveHelp,
+  ErrorHelp,
+  LivePreview,
+  PreviewToEditorMapping,
+  HistoryUI,
+  PublishUI,
+  Relocator,
+  SocialMedia,
+  Modals,
+  TextUI
+) {
+
+  var publishURL = $("meta[name='publish-url']").attr("content"),
       pageToLoad = $("meta[name='remix-url']").attr("content"),
       deploymentType = $("meta[name='deployment-type']").attr("content"),
-      Modals = require("fc/ui/modals"),
-      TextUI = require("fc/ui/text"),
       supportsPushState = window.history.pushState ? true : false,
       remixURLTemplate = null,
-      ready = jQuery.Deferred();
+      ready = $.Deferred();
+
 
   $("html").addClass("deployment-type-" + deploymentType);
   if (pageToLoad) {
@@ -70,40 +131,39 @@ define("main", function(require) {
 
   if (supportsPushState)
     window.history.replaceState({pageToLoad: pageToLoad}, "", location.href);
-    
+
   var codeMirror = ParsingCodeMirror($("#source")[0], {
     mode: "text/html",
     theme: "jsbin",
     tabMode: "indent",
     lineWrapping: true,
-    lineNumbers: true,
-    parse: function(html) {
-      return Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
-    }
+    lineNumbers: true
   });
+
   var relocator = Relocator(codeMirror);
-  var helpArea = $(".help");
+
   var cursorHelp = ContextSensitiveHelp({
+    selector: '.help',
     codeMirror: codeMirror,
-    helpIndex: Help.Index(),
-    template: HelpTemplate,
-    helpArea: helpArea,
     relocator: relocator
   });
-  var errorArea =  $(".error");
+
   var errorHelp = ErrorHelp({
+    selector: '.error',
     codeMirror: codeMirror,
-    template: ErrorTemplate,
-    errorArea: errorArea,
     relocator: relocator
   });
+
   var preview = LivePreview({
     codeMirror: codeMirror,
     ignoreErrors: true,
     previewArea: $("#preview-holder")
   });
+
   var previewToEditorMapping = PreviewToEditorMapping(preview, $(".CodeMirror-lines"));
+
   var publisher = Publisher(publishURL);
+
   var publishUI = PublishUI({
     codeMirror: codeMirror,
     publisher: publisher,
@@ -111,27 +171,31 @@ define("main", function(require) {
     error: $("#error-dialog"),
     remixURLTemplate: remixURLTemplate
   });
+
   var historyUI = HistoryUI({
     codeMirror: codeMirror,
     undo: $("#undo-nav-item"),
     redo: $("#redo-nav-item")
   });
+
   var socialMedia = SocialMedia({
-    jQuery: jQuery,
     getURL: function() {
       return $("#publication-result a.view")[0].href;
     },
     container: $("#share-result")
   });
+
   var modals = Modals({
     codeMirror: codeMirror,
     publishUI: publishUI,
     socialMedia: socialMedia
   });
+
   var textUI = TextUI({
     codeMirror: codeMirror,
     navItem: $("#text-nav-item")
   });
+
   var parachute = Parachute(window, codeMirror, pageToLoad);
 
   // make hints on/off actually work
@@ -147,7 +211,7 @@ define("main", function(require) {
     }
   });
 
-  
+
   window.addEventListener("hashchange", function(event) {
     // We don't currently support dynamically changing the URL
     // without a full page reload, unfortunately, so just trigger a
@@ -157,7 +221,7 @@ define("main", function(require) {
     if (newPageToLoad != pageToLoad)
       window.location.reload();
   }, false);
-  
+
   if (supportsPushState)
     window.addEventListener("popstate", function(event) {
       // We don't currently support dynamically changing the URL
@@ -171,7 +235,7 @@ define("main", function(require) {
       if (event.state && event.state.pageToLoad != pageToLoad)
         window.location.reload();
     }, false);
-  
+
   function onPostPublish(url, newPageToLoad) {
     // If the browser supports history.pushState, set the URL to
     // be the new URL to remix the page they just published, so they
@@ -192,7 +256,7 @@ define("main", function(require) {
     else
       window.location.hash = "#" + pageToLoad;
   }
-  
+
   // TEMP TEMP TEMP TEMP TEMP -- HOOK UP VIA publishUI INSTEAD
   $("#confirm-publication").click(function(){
     // Start the actual publishing process, so that hopefully by the
@@ -254,9 +318,9 @@ define("main", function(require) {
     else
       $(".preview-title").hide();
   });
-  
+
   if (!pageToLoad) {
-    jQuery.get("default-content.html", function(html) {
+    $.get("default-content.html", function(html) {
       codeMirror.setValue(html.trim());
       doneLoading();
     }, "text");
@@ -269,3 +333,8 @@ define("main", function(require) {
     ready: ready
   };
 });
+
+/**
+ * this final line is for requirejs optimization
+ */
+require(['main'], function () {});

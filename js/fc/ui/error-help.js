@@ -2,7 +2,11 @@
 
 // Provides helpful Slowparse-based error suggestions for a
 // ParsingCodeMirror.
-define(["./mark-tracker"], function(MarkTracker) {
+define([
+  "jquery",
+  "fc/ui/mark-tracker",
+  "template!error"
+], function($, MarkTracker, ErrorTemplate) {
   // Display an animated arrow pointing at a particular position in a
   // codeMirror instance. It disappears after a short delay.
   function pointAtPosition(codeMirror, pos) {
@@ -25,8 +29,8 @@ define(["./mark-tracker"], function(MarkTracker) {
   return function ErrorHelp(options) {
     var self = {};
     var codeMirror = options.codeMirror;
-    var template = options.template;
-    var errorArea = options.errorArea;
+    var template = ErrorTemplate
+    var errorArea = $(options.selector);
     var relocator = options.relocator;
     var timeout = null;
     var ERROR_DISPLAY_DELAY = 1000;
