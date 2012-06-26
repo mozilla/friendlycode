@@ -22,7 +22,7 @@ define(function() {
           // Facebook needs additional help, because it needs
           // to be told that it has to refresh its button, rather
           // than simply reloading.
-          if (typeof(FB) == "object" && FB.XFBML && FB.XFBML.parse) {
+          if (typeof(FB) === "object" && FB.XFBML && FB.XFBML.parse) {
             FB.XFBML.parse();
           }
         }
