@@ -1,7 +1,7 @@
 "use strict";
 
 // code will relocate an error or help message to near where the error actually is in CodeMirror.
-define(function() {
+define(["jquery"], function($) {
   return function Relocator(codeMirror) {
     var lastPos = null;
     var lastElement = null;

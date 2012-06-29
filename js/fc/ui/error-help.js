@@ -2,7 +2,7 @@
 
 // Provides helpful Slowparse-based error suggestions for a
 // ParsingCodeMirror.
-define(["./mark-tracker"], function(MarkTracker) {
+define(["jquery", "./mark-tracker"], function($, MarkTracker) {
   // Display an animated arrow pointing at a particular position in a
   // codeMirror instance. It disappears after a short delay.
   function pointAtPosition(codeMirror, pos) {

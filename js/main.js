@@ -1,37 +1,73 @@
 "use strict";
 
-// This is a simple [RequireJS plugin][] that waits for a few resources
-// to load before we execute any of the app's main logic.
-//
-//  [RequireJS plugin]: http://requirejs.org/docs/plugins.html#apiload
-(function() {
-  var errorsLoaded = jQuery.Deferred();
-  var typekitFinished = jQuery.Deferred();
-  
-  function finishTypekit() { typekitFinished.resolve(); }
-  
-  try {
-    Typekit.load({
-      active: finishTypekit,
-      inactive: finishTypekit
-    });
-  } catch(e) { finishTypekit(); }
-
-  define("appReady", [], {
-    load: function(name, req, load, config) {
-      jQuery.when(errorsLoaded, typekitFinished).then(load);
+require.config({
+  baseUrl: "js",
+  shim: {
+    underscore: {
+      exports: "_"
+    },
+    jquery: {
+      exports: "$"
+    },
+    "jquery-tipsy": {
+      deps: ["jquery"],
+      exports: "$"
+    },
+    "jquery-slowparse": {
+      deps: ["jquery"],
+      exports: "$"
+    },
+    backbone: {
+      deps: ["underscore", "jquery"],
+      exports: "Backbone"
+    },
+    codemirror: {
+      exports: "CodeMirror"
+    },
+    "codemirror/xml": {
+      deps: ["codemirror"],
+      exports: "CodeMirror"
+    },
+    "codemirror/javascript": {
+      deps: ["codemirror"],
+      exports: "CodeMirror"
+    },
+    "codemirror/css": {
+      deps: ["codemirror"],
+      exports: "CodeMirror"
+    },
+    "codemirror/html": {
+      deps: [
+        "codemirror/xml",
+        "codemirror/javascript",
+        "codemirror/css"
+      ],
+      exports: "CodeMirror"
     }
-  });
-  jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
-    errorsLoaded.resolve();
-  });
-})();
+  },
+  paths: {
+    jquery: "jquery.min",
+    "jquery-tipsy": "jquery.tipsy",
+    "jquery-slowparse": "../slowparse/spec/errors.jquery",
+    underscore: "underscore.min",
+    backbone: "backbone.min",
+    slowparse: "../slowparse",
+    codemirror: "../codemirror2/lib/codemirror",
+    "codemirror/xml": "../codemirror2/mode/xml/xml",
+    "codemirror/javascript": "../codemirror2/mode/javascript/javascript",
+    "codemirror/css": "../codemirror2/mode/css/css",
+    "codemirror/html": "../codemirror2/mode/htmlmixed/htmlmixed"
+  }
+});
 
 // All of this module's exports are only being exposed for debugging
 // purposes. Other parts of our code should never cite this module
 // as a dependency.
 define("main", function(require) {
-  var Help = require("fc/help"),
+  var $ = require("jquery-tipsy"),
+      appReady = require("appReady"),
+      htmlCodeMirror = require("codemirror/html"),
+      Help = require("fc/help"),
       Parachute = require("fc/parachute"),
       Publisher = require("fc/publisher"),
       Slowparse = require("../slowparse/slowparse"),
@@ -53,7 +89,7 @@ define("main", function(require) {
       TextUI = require("fc/ui/text"),
       supportsPushState = window.history.pushState ? true : false,
       remixURLTemplate = null,
-      ready = jQuery.Deferred();
+      ready = $.Deferred();
 
   $("html").addClass("deployment-type-" + deploymentType);
   if (pageToLoad) {
@@ -212,7 +248,7 @@ define("main", function(require) {
   });
   
   if (!pageToLoad) {
-    jQuery.get("default-content.html", function(html) {
+    $.get("default-content.html", function(html) {
       codeMirror.setValue(html.trim());
       doneLoading();
     }, "text");
