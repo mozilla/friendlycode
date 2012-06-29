@@ -269,3 +269,4 @@ define("main", function(require) {
   };
 });
 
+require(['main'], function () {});
