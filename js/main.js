@@ -65,7 +65,7 @@ require.config({
 // as a dependency.
 define("main", function(require) {
   var $ = require("jquery-tipsy"),
-      appReady = require("appReady"),
+      AppReady = require("appReady"),
       htmlCodeMirror = require("codemirror/html"),
       Help = require("fc/help"),
       Parachute = require("fc/parachute"),
@@ -81,7 +81,6 @@ define("main", function(require) {
       Relocator = require("fc/ui/relocator"),
       HelpTemplate = require("template!help"),
       ErrorTemplate = require("template!error"),
-      AppReady = require("appReady!"),
       publishURL = $("meta[name='publish-url']").attr("content"),
       pageToLoad = $("meta[name='remix-url']").attr("content"),
       deploymentType = $("meta[name='deployment-type']").attr("content"),
@@ -269,3 +268,4 @@ define("main", function(require) {
     ready: ready
   };
 });
+
