@@ -5,7 +5,7 @@
 // as a dependency.
 define("main", function(require) {
   var $ = require("jquery-tipsy"),
-      AppReady = require("appReady"),
+      AppReady = require("appReady!"),
       htmlCodeMirror = require("codemirror/html"),
       Help = require("fc/help"),
       Parachute = require("fc/parachute"),
