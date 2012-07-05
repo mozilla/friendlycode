@@ -5,7 +5,6 @@
 // as a dependency.
 define("main", function(require) {
   var $ = require("jquery-tipsy"),
-      AppReady = require("appReady!"),
       htmlCodeMirror = require("codemirror/html"),
       Help = require("fc/help"),
       Parachute = require("fc/parachute"),
@@ -30,7 +29,9 @@ define("main", function(require) {
       remixURLTemplate = null,
       ready = $.Deferred();
 
+  require("typekit-ready!");
   require('slowparse-errors');
+
   $("html").addClass("deployment-type-" + deploymentType);
   if (pageToLoad) {
     // A server is serving us as the custom edit URL for a web page.
