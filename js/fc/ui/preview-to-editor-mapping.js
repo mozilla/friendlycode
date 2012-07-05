@@ -1,8 +1,6 @@
 "use strict";
 
-define([
-  "./mark-tracker"
-], function(MarkTracker) {
+define(["jquery", "./mark-tracker"], function($, MarkTracker) {
   // Given a descendant of the given root element, returns a CSS
   // selector that uniquely selects only the descendant from the
   // root element.
