@@ -1,6 +1,9 @@
 "use strict";
 
-require(["fc/ui/parsing-codemirror"], function(ParsingCodeMirror) {
+require([
+  "jquery",
+  "fc/ui/parsing-codemirror"
+], function($, ParsingCodeMirror) {
   module("ParsingCodeMirror");
   
   function pcmTest(name, cb) {

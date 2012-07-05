@@ -6,7 +6,7 @@ var require = {
         return _.noConflict();
       }
     },
-    jquery: {
+    "jquery.min": {
       exports: function() {
         jQuery.noConflict();
         return jQuery;
@@ -48,8 +48,12 @@ var require = {
       exports: "CodeMirror"
     }
   },
+  map: {
+    "*": {
+      jquery: "jquery.min"
+    }
+  },
   paths: {
-    jquery: "jquery.min",
     "jquery-tipsy": "jquery.tipsy",
     "jquery-slowparse": "../slowparse/spec/errors.jquery",
     underscore: "underscore.min",

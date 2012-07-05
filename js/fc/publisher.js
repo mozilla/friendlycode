@@ -2,7 +2,7 @@
 
 // This class is responsible for communicating with a publishing server
 // to save and load published code.
-define(function() {
+define(["jquery"], function($) {
   var myOrigin = window.location.protocol + "//" + window.location.host;
   
   function Publisher(baseURL) {
@@ -14,7 +14,7 @@ define(function() {
       if (baseURL == myOrigin)
         return path;
       path = baseURL + path;
-      if (!jQuery.support.cors && window.console)
+      if (!$.support.cors && window.console)
         window.console.warn("No CORS detected for request to " + path);
       return path;
     }
@@ -22,7 +22,7 @@ define(function() {
     return {
       baseURL: baseURL,
       loadCode: function(path, cb) {
-        jQuery.ajax({
+        $.ajax({
           type: 'GET',
           url: makeURL(path),
           dataType: 'text',

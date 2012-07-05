@@ -35,7 +35,7 @@ require(["jquery", "lscache"], function($, lscache) {
   });
   
   appTest("publish works", function(window, start) {
-    var $ = window.jQuery;
+    var $ = window.require("jquery");
     var publishURL = $('meta[name="publish-url"]').attr("content");
     var url = window.location.href;
     

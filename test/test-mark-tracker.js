@@ -1,9 +1,10 @@
 "use strict";
 
 require([
+  "jquery",
   "fc/ui/mark-tracker",
   "codemirror"
-], function(MarkTracker, CodeMirror) {
+], function($, MarkTracker, CodeMirror) {
   module("MarkTracker");
   
   function mtTest(name, cb) {

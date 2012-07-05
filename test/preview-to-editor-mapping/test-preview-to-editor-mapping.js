@@ -1,8 +1,9 @@
 require([
+  "jquery",
   "fc/ui/preview-to-editor-mapping",
   "test/test-live-preview",
   "text!test/preview-to-editor-mapping/path-to.html"
-], function(PreviewToEditorMapping, testLivePreview, pathToHTML) {
+], function($, PreviewToEditorMapping, testLivePreview, pathToHTML) {
   module("PreviewToEditorMapping");
   
   var nodeToCode = PreviewToEditorMapping._nodeToCode;

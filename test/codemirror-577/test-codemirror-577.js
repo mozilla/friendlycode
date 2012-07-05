@@ -1,10 +1,11 @@
 "use strict";
 
 require([
+  "jquery",
   "codemirror",
   "text!test/codemirror-577/original.html",
   "text!test/codemirror-577/replacer.html"
-], function(CodeMirror, original, replacer) {
+], function($, CodeMirror, original, replacer) {
   module("Codemirror issue 577");
   
   // Test to ensure that this bug is fixed or worked around:

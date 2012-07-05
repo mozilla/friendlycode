@@ -1,10 +1,11 @@
 "use strict";
 
 define([
+  "jquery",
   "underscore",
   "fc/ui/live-preview",
   "slowparse/slowparse"
-], function(_, LivePreview, Slowparse) {
+], function($, _, LivePreview, Slowparse) {
   module("LivePreview");
   
   function lpTest(name, html, cb) {

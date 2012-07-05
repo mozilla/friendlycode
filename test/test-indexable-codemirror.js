@@ -1,6 +1,9 @@
 "use strict";
 
-require(["fc/ui/indexable-codemirror"], function(IndexableCodeMirror) {
+require([
+  "jquery",
+  "fc/ui/indexable-codemirror"
+], function($, IndexableCodeMirror) {
   module("IndexableCodeMirror");
   
   function icmTest(name, cb) {
