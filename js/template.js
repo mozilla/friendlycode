@@ -25,7 +25,7 @@ define(["module", "text", "underscore"], function (module, text, _) {
       if (buildMap[moduleName]) {
         var content = buildMap[moduleName];
         write.asModule(pluginName + "!" + moduleName,
-          "define(function () { \n  return " + content + ";});\n");
+          "define(['underscore'], function (_) { \n  return " + content + ";});\n");
       }
     }
   };
