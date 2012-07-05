@@ -2,18 +2,23 @@ var require = {
   baseUrl: "js",
   shim: {
     underscore: {
-      exports: "_"
+      exports: function() {
+        return _.noConflict();
+      }
     },
     jquery: {
-      exports: "$"
+      exports: function() {
+        jQuery.noConflict();
+        return jQuery;
+      }
     },
     "jquery-tipsy": {
       deps: ["jquery"],
-      exports: "$"
+      exports: 'jQuery'
     },
     "jquery-slowparse": {
       deps: ["jquery"],
-      exports: "$"
+      exports: "jQuery"
     },
     backbone: {
       deps: ["underscore", "jquery"],

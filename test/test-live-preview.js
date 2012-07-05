@@ -1,9 +1,10 @@
 "use strict";
 
 define([
+  "underscore",
   "fc/ui/live-preview",
   "slowparse/slowparse"
-], function(LivePreview, Slowparse) {
+], function(_, LivePreview, Slowparse) {
   module("LivePreview");
   
   function lpTest(name, html, cb) {
