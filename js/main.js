@@ -30,6 +30,7 @@ define("main", function(require) {
       remixURLTemplate = null,
       ready = $.Deferred();
 
+  require('slowparse-errors');
   $("html").addClass("deployment-type-" + deploymentType);
   if (pageToLoad) {
     // A server is serving us as the custom edit URL for a web page.

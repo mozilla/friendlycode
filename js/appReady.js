@@ -6,32 +6,19 @@
 //  [RequireJS plugin]: http://requirejs.org/docs/plugins.html#apiload
 define({
   load: function(name, req, onLoad, config) {
-    req(["jquery-slowparse"], function ($) {
-      var errorsLoaded,
-          typekitFinished;
-
-      function startLoad() {
-        errorsLoaded = $.Deferred();
-        typekitFinished = $.Deferred();
-
-        try {
-          Typekit.load({
-            active: finishTypekit,
-            inactive: finishTypekit
-          });
-        } catch(e) { typekitFinished.resolve(); }
-
-        $.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
-          errorsLoaded.resolve();
+    function tryLoadingTypekit() {
+      try {
+        Typekit.load({
+          active: function() { onLoad("Typekit active"); },
+          inactive: function() { onLoad("Typekit inactive"); }
         });
-      }
+      } catch(e) { onLoad("ERROR: " + e); }
+    }
 
-      if (config.isBuild) {
-        onLoad(startLoad.toString());
-      } else {
-        startLoad();
-        $.when(errorsLoaded, typekitFinished).then(onLoad);
-      }
-    });
+    if (config.isBuild) {
+      onLoad(null);
+    } else {
+      tryLoadingTypekit();
+    }
   }
 });
