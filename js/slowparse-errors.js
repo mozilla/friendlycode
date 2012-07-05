@@ -1,3 +1,5 @@
+"use strict";
+
 define([
   'jquery-slowparse',
   'text!slowparse/spec/errors.base.html',
