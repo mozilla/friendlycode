@@ -1,4 +1,4 @@
-require(["lscache"], function(lscache) {
+require(["jquery", "lscache"], function($, lscache) {
   module("app");
 
   function appTest(name, cb) {
