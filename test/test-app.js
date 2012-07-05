@@ -26,10 +26,11 @@ require(["jquery", "lscache"], function($, lscache) {
   }
   
   appTest("navbar shows page title", function(window, start) {
+    var $ = window.require("jquery");
     var cm = window.require("main").codeMirror;
     cm.setValue("<title>supdog</title>");
     cm.reparse();
-    equal(window.$("#nav-options .preview-title").text(), "supdog",
+    equal($("#nav-options .preview-title").text(), "supdog",
           "navbar preview title is 'supdog'");
     start();
   });

@@ -6,12 +6,9 @@ var require = {
         return _.noConflict();
       }
     },
-    "jquery.min": {
-      exports: function() {
-        jQuery.noConflict();
-        return jQuery;
-      }
-    },
+    // We would have an entry for jquery in here, but requirejs never
+    // seems to consult it, perhaps because define.amd contains 'jQuery'
+    // in require.min.js.
     "jquery-tipsy": {
       deps: ["jquery"],
       exports: 'jQuery'
@@ -48,12 +45,8 @@ var require = {
       exports: "CodeMirror"
     }
   },
-  map: {
-    "*": {
-      jquery: "jquery.min"
-    }
-  },
   paths: {
+    jquery: "jquery.min",
     "jquery-tipsy": "jquery.tipsy",
     "jquery-slowparse": "../slowparse/spec/errors.jquery",
     underscore: "underscore.min",
@@ -65,6 +58,13 @@ var require = {
     "codemirror/css": "../codemirror2/mode/css/css",
     "codemirror/html": "../codemirror2/mode/htmlmixed/htmlmixed",
     test: "../test"
+  },
+  deps: ['jquery'],
+  callback: function($) {
+    // This really ought to be called from shim.jquery.exports(),
+    // but as mentioned above, requirejs doesn't seem to ever consult
+    // shim.jquery, so we'll do it here.
+    $.noConflict();
   }
 };
 
