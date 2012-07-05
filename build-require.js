@@ -55,12 +55,11 @@ if (!module.parent) {
   } else {
     console.log("Generating", out);
 
-    optimize(function (err) {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log("build success");
-      }
+    optimize(function (buildResponse) {
+      // buildResponse is just a text output of the modules
+      // included.
+      console.log("Done. About " + buildResponse.split('\n').length +
+                  " modules are inside the generated JS file.");
       process.exit();
     });
   }
