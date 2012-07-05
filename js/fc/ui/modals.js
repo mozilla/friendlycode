@@ -1,8 +1,11 @@
 "use strict";
 
-define([
-  "./social-media"
-], function(SocialMedia) {
+define(function (require) {
+  var $ = require("jquery"),
+      _ = require("underscore"),
+      Backbone = require("backbone"),
+      SocialMedia = require("./social-media");
+
   function activateModalBehaviors(modals) {
     var hideModals = function() {
       modals.fadeOut();

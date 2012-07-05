@@ -1,6 +1,6 @@
 "use strict";
 
-define(["lscache"], function(lscache) {
+define(["jquery", "lscache"], function($, lscache) {
   // Amount of time, in minutes, to store text size setting.
   var CACHE_TIME_LIMIT = 9000;
   var DEFAULT_CACHE_KEY = "ThimbleTextSize";

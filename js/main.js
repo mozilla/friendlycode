@@ -1,37 +1,13 @@
 "use strict";
 
-// This is a simple [RequireJS plugin][] that waits for a few resources
-// to load before we execute any of the app's main logic.
-//
-//  [RequireJS plugin]: http://requirejs.org/docs/plugins.html#apiload
-(function() {
-  var errorsLoaded = jQuery.Deferred();
-  var typekitFinished = jQuery.Deferred();
-  
-  function finishTypekit() { typekitFinished.resolve(); }
-  
-  try {
-    Typekit.load({
-      active: finishTypekit,
-      inactive: finishTypekit
-    });
-  } catch(e) { finishTypekit(); }
-
-  define("appReady", [], {
-    load: function(name, req, load, config) {
-      jQuery.when(errorsLoaded, typekitFinished).then(load);
-    }
-  });
-  jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
-    errorsLoaded.resolve();
-  });
-})();
-
 // All of this module's exports are only being exposed for debugging
 // purposes. Other parts of our code should never cite this module
 // as a dependency.
 define("main", function(require) {
-  var Help = require("fc/help"),
+  var $ = require("jquery-tipsy"),
+      AppReady = require("appReady!"),
+      htmlCodeMirror = require("codemirror/html"),
+      Help = require("fc/help"),
       Parachute = require("fc/parachute"),
       Publisher = require("fc/publisher"),
       Slowparse = require("../slowparse/slowparse"),
@@ -45,7 +21,6 @@ define("main", function(require) {
       Relocator = require("fc/ui/relocator"),
       HelpTemplate = require("template!help"),
       ErrorTemplate = require("template!error"),
-      AppReady = require("appReady!"),
       publishURL = $("meta[name='publish-url']").attr("content"),
       pageToLoad = $("meta[name='remix-url']").attr("content"),
       deploymentType = $("meta[name='deployment-type']").attr("content"),
@@ -53,7 +28,7 @@ define("main", function(require) {
       TextUI = require("fc/ui/text"),
       supportsPushState = window.history.pushState ? true : false,
       remixURLTemplate = null,
-      ready = jQuery.Deferred();
+      ready = $.Deferred();
 
   $("html").addClass("deployment-type-" + deploymentType);
   if (pageToLoad) {
@@ -212,7 +187,7 @@ define("main", function(require) {
   });
   
   if (!pageToLoad) {
-    jQuery.get("default-content.html", function(html) {
+    $.get("default-content.html", function(html) {
       codeMirror.setValue(html.trim());
       doneLoading();
     }, "text");
@@ -233,3 +208,5 @@ define("main", function(require) {
     ready: ready
   };
 });
+
+require(['main'], function () {});

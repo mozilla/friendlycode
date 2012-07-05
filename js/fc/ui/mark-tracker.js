@@ -2,7 +2,7 @@
 
 // This helper class keeps track of different kinds of highlighting in
 // a CodeMirror instance.
-define(function() {
+define(["jquery"], function($) {
   return function MarkTracker(codeMirror) {
     var classNames = {};
     var marks = [];

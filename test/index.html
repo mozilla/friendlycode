@@ -32,19 +32,13 @@
 
     <script src="test/qunit.js"></script>
     <script>QUnit.config.autostart = false;</script>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/underscore.min.js"></script>
-    <script src="js/backbone.min.js"></script>
+
+    <script src="js/require-config.js"></script>
     <script src="js/require.min.js"></script>
     <script>
-    require.config({
-      baseUrl: "js",
-      paths: {
-        "test": "../test"
-      }
-    });
-    
     require([
+      // load jquery and underscore
+      "backbone",
       "test/test-app",
       "test/test-help",
       "test/test-templates",
