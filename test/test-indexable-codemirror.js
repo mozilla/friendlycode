@@ -1,6 +1,6 @@
 "use strict";
 
-require([
+defineTests([
   "jquery",
   "fc/ui/indexable-codemirror"
 ], function($, IndexableCodeMirror) {

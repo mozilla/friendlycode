@@ -1,9 +1,9 @@
-require([
+defineTests([
   "jquery",
   "fc/ui/preview-to-editor-mapping",
-  "test/test-live-preview",
+  "test/lptest",
   "text!test/preview-to-editor-mapping/path-to.html"
-], function($, PreviewToEditorMapping, testLivePreview, pathToHTML) {
+], function($, PreviewToEditorMapping, lpTest, pathToHTML) {
   module("PreviewToEditorMapping");
   
   var nodeToCode = PreviewToEditorMapping._nodeToCode;
@@ -12,7 +12,7 @@ require([
   function n2cTest(options) {
     var desc = "in " + JSON.stringify(options.html) + ", selector " +
                JSON.stringify(options.selector) + " ";
-    testLivePreview.lpTest(options.name,
+    lpTest(options.name,
       options.html,
       function(previewArea, preview, cm, docFrag, html) {
         var wind = previewArea.contents()[0].defaultView;

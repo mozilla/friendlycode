@@ -1,4 +1,6 @@
-require(["fc/help", "slowparse/slowparse"], function(Help, Slowparse) {
+"use strict";
+
+defineTests(["fc/help", "slowparse/slowparse"], function(Help, Slowparse) {
   module("Help");
 
   function helpAt(index, searchString, html) {

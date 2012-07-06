@@ -1,6 +1,6 @@
 "use strict";
 
-require(["jquery", "slowparse-errors"], function($) {
+defineTests(["jquery", "slowparse-errors"], function($) {
   module("slowparse-errors");
 
   test("base errors are available", function() {

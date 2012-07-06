@@ -1,4 +1,6 @@
-require(["jquery", "lscache"], function($, lscache) {
+"use strict";
+
+defineTests(["jquery", "lscache"], function($, lscache) {
   module("app");
 
   function appTest(name, cb) {

@@ -1,6 +1,6 @@
 "use strict";
 
-require([
+defineTests([
   "jquery",
   "codemirror",
   "text!test/codemirror-577/original.html",
