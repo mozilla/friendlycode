@@ -24,7 +24,9 @@ var require = {
     },
     backbone: {
       deps: ["underscore", "jquery"],
-      exports: "Backbone"
+      exports: function() {
+        return Backbone.noConflict();
+      }
     },
     codemirror: {
       exports: "CodeMirror"
