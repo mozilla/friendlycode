@@ -215,8 +215,8 @@ define("main", function(require) {
   
   if (!pageToLoad) {
     jQuery.get("default-content.html", function(html) {
-      html = html.replace("{{MEDIA_URL}}", location.protocol + "//" +
-                          location.host + location.pathname);
+      html = html.replace("js/dz.js", location.protocol + "//" +
+                          location.host + location.pathname + "js/dz.js");
       codeMirror.setValue(html.trim());
       doneLoading();
     }, "text");

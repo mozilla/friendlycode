@@ -29,6 +29,7 @@ define(function() {
         // Update the preview area with the given HTML.
         doc = $(iframe).contents()[0];
         wind = doc.defaultView;
+        wind.isInThimble = true;
 
         doc.open();
         doc.write(event.sourceCode);

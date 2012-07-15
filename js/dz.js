@@ -161,7 +161,7 @@
     if (argv[0] === "TOGGLE_CONTENT" && argc === 1)
       this.toggleContent();
     if (argv[0] === "SET_CURSOR" && argc === 2)
-      window.location.hash = "#" + argv[1];
+      Dz.setWindowHash("#" + argv[1]);
     if (argv[0] === "GET_CURSOR" && argc === 1)
       this.postMsg(win, "CURSOR", this.idx + "." + this.step);
     if (argv[0] === "GET_NOTES" && argc === 1)
@@ -188,11 +188,11 @@
     // If the user change the slide number in the URL bar, jump
     // to this slide.
     aStep = (aStep != 0 && typeof aStep !== "undefined") ? "." + aStep : ".0";
-    window.location.hash = "#" + aIdx + aStep;
+    Dz.setWindowHash("#" + aIdx + aStep);
   }
 
   Dz.onhashchange = function() {
-    var cursor = window.location.hash.split("#"),
+    var cursor = Dz.getWindowHash().split("#"),
         newidx = 1,
         newstep = 0;
     if (cursor.length == 2) {
@@ -387,4 +387,29 @@
 
   $$.forEach = function(nodeList, fun) {
     Array.prototype.forEach.call(nodeList, fun);
+  }
+
+  if (window.isInThimble) {
+    (function() {
+      var currentHash = "";
+      
+      Dz.setWindowHash = function(hash) {
+        currentHash = hash;
+        setTimeout(function() {
+          Dz.onhashchange();
+        }, 10);
+      };
+
+      Dz.getWindowHash = function() {
+        return currentHash;
+      };
+    })();
+  } else {
+    Dz.setWindowHash = function(hash) {
+      window.location.hash = hash;
+    };
+  
+    Dz.getWindowHash = function() {
+      return window.location.hash;
+    };
   }
