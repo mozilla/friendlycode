@@ -389,9 +389,13 @@
     Array.prototype.forEach.call(nodeList, fun);
   }
 
-  if (window.isInThimble) {
+  if (window.Thimble) {
     (function() {
-      var currentHash = "";
+      var currentHash = window.Thimble.lscache.get("_dzhash") || "";
+      
+      window.onunload = function() {
+        window.Thimble.lscache.set("_dzhash", currentHash, 10);
+      };
       
       Dz.setWindowHash = function(hash) {
         currentHash = hash;

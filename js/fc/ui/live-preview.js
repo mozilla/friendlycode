@@ -2,7 +2,7 @@
 
 // Displays the HTML source of a CodeMirror editor as a rendered preview
 // in an iframe.
-define(function() {
+define(["lscache"], function(lscache) {
   function LivePreview(options) {
     var self = {codeMirror: options.codeMirror},
         codeMirror = options.codeMirror,
@@ -29,7 +29,7 @@ define(function() {
         // Update the preview area with the given HTML.
         doc = $(iframe).contents()[0];
         wind = doc.defaultView;
-        wind.isInThimble = true;
+        wind.Thimble = {lscache: lscache};
 
         doc.open();
         doc.write(event.sourceCode);
