@@ -22,7 +22,7 @@
       jQuery.when(errorsLoaded, typekitFinished).then(load);
     }
   });
-  jQuery.loadErrors("slowparse/spec/", ["base", "forbidjs"], function() {
+  jQuery.loadErrors("slowparse/spec/", ["base"], function() {
     errorsLoaded.resolve();
   });
 })();
@@ -55,6 +55,8 @@ define("main", function(require) {
       remixURLTemplate = null,
       ready = jQuery.Deferred();
 
+  Slowparse.CSS_PROPERTY_NAMES.push("pointer-events");
+
   $("html").addClass("deployment-type-" + deploymentType);
   if (pageToLoad) {
     // A server is serving us as the custom edit URL for a web page.
@@ -81,7 +83,7 @@ define("main", function(require) {
     lineWrapping: true,
     lineNumbers: true,
     parse: function(html) {
-      return Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
+      return Slowparse.HTML(document, html);
     }
   });
   var relocator = Relocator(codeMirror);
@@ -213,6 +215,8 @@ define("main", function(require) {
   
   if (!pageToLoad) {
     jQuery.get("default-content.html", function(html) {
+      html = html.replace("{{MEDIA_URL}}", location.protocol + "//" +
+                          location.host + location.pathname);
       codeMirror.setValue(html.trim());
       doneLoading();
     }, "text");
