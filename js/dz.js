@@ -348,6 +348,8 @@
     window.onresize = Dz.onresize.bind(Dz);
     window.onhashchange = Dz.onhashchange.bind(Dz);
     window.onmessage = Dz.onmessage.bind(Dz);
+    if (window.Thimble)
+      window.Thimble.ready();
   }
 
   window.onload = init;
@@ -391,14 +393,10 @@
 
   if (window.Thimble) {
     (function() {
-      var currentHash = window.Thimble.lscache.get("_dzhash") || "";
-      
-      window.onunload = function() {
-        window.Thimble.lscache.set("_dzhash", currentHash, 10);
-      };
+      var currentHash = window.Thimble.storage.dzhash || "";
       
       Dz.setWindowHash = function(hash) {
-        currentHash = hash;
+        currentHash = window.Thimble.storage.dzhash = hash;
         setTimeout(function() {
           Dz.onhashchange();
         }, 10);

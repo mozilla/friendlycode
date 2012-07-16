@@ -499,6 +499,13 @@ div.editor-actions {
   padding: 10px;
 }
 
+#preview-holder iframe.loading {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  visibility: hidden;
+}
+
 #preview-holder iframe {
   border: 1px solid #D6D6D6;
   width: 100%;

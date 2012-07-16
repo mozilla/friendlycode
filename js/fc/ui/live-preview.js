@@ -2,11 +2,12 @@
 
 // Displays the HTML source of a CodeMirror editor as a rendered preview
 // in an iframe.
-define(["lscache"], function(lscache) {
+define(function() {
   function LivePreview(options) {
     var self = {codeMirror: options.codeMirror},
         codeMirror = options.codeMirror,
-        iframe;
+        storage = {},
+        iframe, oldframe;
 
     codeMirror.on("reparse", function(event) {
       if (!event.error || options.ignoreErrors) {
@@ -16,11 +17,15 @@ define(["lscache"], function(lscache) {
             doc, wind;
         
         if (iframe) {
+          if (oldframe) {
+            $(iframe).remove();
+            iframe = oldframe;
+          }
           doc = $(iframe).contents()[0];
           wind = doc.defaultView;
           x = wind.pageXOffset;
           y = wind.pageYOffset;
-          $(iframe).remove();
+          oldframe = iframe;
         }
 
         iframe = document.createElement("iframe");
@@ -29,8 +34,19 @@ define(["lscache"], function(lscache) {
         // Update the preview area with the given HTML.
         doc = $(iframe).contents()[0];
         wind = doc.defaultView;
-        wind.Thimble = {lscache: lscache};
+        wind.Thimble = {
+          storage: storage,
+          ready: function() {
+            if (oldframe) {
+              $(oldframe).remove();
+              oldframe = null;
+            }
+            $(iframe).removeClass('loading');
+          }
+        };
 
+        $(iframe).addClass('loading');
+        
         doc.open();
         doc.write(event.sourceCode);
         doc.close();
