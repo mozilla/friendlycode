@@ -213,10 +213,10 @@ define("main", function(require) {
       $(".preview-title").hide();
   });
   
-  if (!pageToLoad) {
-    jQuery.get("default-content.html", function(html) {
-      html = html.replace("js/dz.js", location.protocol + "//" +
-                          location.host + location.pathname + "js/dz.js");
+  if (!pageToLoad || pageToLoad.indexOf("static:") == 0) {
+    var staticHTML = (pageToLoad ? pageToLoad.split("static:")[1] :
+                      "default-content");
+    jQuery.get(staticHTML + ".html", function(html) {
       codeMirror.setValue(html.trim());
       doneLoading();
     }, "text");
