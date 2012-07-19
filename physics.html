@@ -3,6 +3,26 @@
 <head>
 <meta charset="utf-8">
 <title>Physics Fun</title>
+</head>
+<body>
+
+<!-- This page describes a little world with its own physics. Click the "start physics" button at the top-left of the preview pane to start the simulation. -->
+
+<div id="world">
+  <!-- Try dragging this element in the preview pane to position it! -->
+  <!-- You can also hold shift while dragging to resize it. -->
+  <!-- Just add the "thimble-movable" class to any element to make it movable, resizable, and become a participant in the physics simulation. -->
+  <div class="thimble-movable box"
+    style="position: absolute; top: 28px; left: 128px; width: 42px; height: 126px;"
+    data-physics-type="dynamic"
+    data-friction="0.3"
+    data-density="1.0">hi</div>
+    
+  <!-- Setting data-physics-type to "static" means that the element doesn't obey the laws of gravity. -->
+  <div class="thimble-movable ground"
+    style="position: absolute; top: 410px; left: 166px; width: 200px; height: 20px;"
+    data-physics-type="static"></div>
+</div>
 <style>
 * {
   -moz-box-sizing: border-box;
@@ -27,18 +47,6 @@
   background: brown;
 }
 </style>
-</head>
-<body>
-<div id="world">
-  <div class="thimble-movable box"
-    style="position: absolute; top: 28px; left: 128px; width: 42px; height: 126px;"
-    data-physics-type="dynamic"
-    data-friction="0.3"
-    data-density="1.0">hi</div>
-  <div class="thimble-movable ground"
-    style="position: absolute; top: 410px; left: 166px; width: 200px; height: 20px;"
-    data-physics-type="static"></div>
-</div>
 <script src="js/physics.js"></script>
 </body>
 </html>
