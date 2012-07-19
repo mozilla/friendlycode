@@ -10,17 +10,15 @@
 <section>
     <!-- This is the first slide. -->
 
+    <h1>My Presentation</h1>
+    <footer>by John Doe</footer>
+
     <!-- Try dragging this element in the preview pane to position it! -->
     <!-- You can also hold shift while dragging to resize it. -->
     <!-- Just add the "thimble-movable" class to any element to make it movable and resizable. -->
-    <h1 class="thimble-movable">My Presentation</h1>
-    <footer>by John Doe</footer>
-</section>
-
-<section>
-  <!-- This is the second slide. -->
-    <p>Some random text: But I've never been to the moon! You can see how I lived before I met you. Also Zoidberg.
-    I could if you hadn't turned on the light and shut off my stereo.</p>
+    <img class="thimble-movable"
+         src="http://upload.wikimedia.org/wikipedia/en/b/bc/Wiki.png"
+         style="position: absolute; top: 235px; left: 21px;">
 </section>
 
 <section>
@@ -30,43 +28,10 @@
       <li>Item 2</li>
       <li>Item 3</li>
     </ul>
-    <details>Some notes. They are only visible using onstage shell.</details>
-</section>
-
-<section>
-  <blockquote>
-    Who's brave enough to fly into something we all keep calling a death sphere?
-  </blockquote>
-</section>
-
-<section>
-    <h2>Part two</h2>
-</section>
-
-<section>
-    <figure> <!-- Figures are used to display images and videos fullpage -->
-      <img src="http://placekitten.com/g/800/600">
-      <figcaption>An image</figcaption>
-    </figure>
-    <details>Kittens are so cute!</details>
-</section>
-
-<section>
-    <figure> <!-- Videos are automatically played -->
-      <video src="http://videos-cdn.mozilla.net/brand/Mozilla_Firefox_Manifesto_v0.2_640.webm" poster="http://www.mozilla.org/images/about/poster.jpg"></video>
-      <figcaption>A video</figcaption>
-    </figure>
-</section>
-
-<section>
-    <h2>End!</h2>
 </section>
 
 <!-- Your Style -->
 <!-- Define the style of your presentation -->
-
-<!-- Maybe a font from http://www.google.com/webfonts ? -->
-<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
 
 <style>
   html, .view body { background-color: black; counter-reset: slideidx; }
@@ -74,7 +39,7 @@
   /* A section is a slide. It's size is 800x600, and this will never change */
   section, .view head > title {
       /* The font from Google */
-      font-family: 'Oswald', arial, serif;
+      font-family: arial, serif;
       font-size: 30px;
   }
 
