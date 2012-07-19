@@ -393,10 +393,18 @@
 
   if (window.Thimble) {
     (function() {
+      function btn(name, cb) {
+        var button = document.createElement('button');
+        button.textContent = name;
+        button.onclick = cb;
+        panel.appendChild(button);
+      }
+      
       var currentHash = window.Thimble.storage.dzhash || "";
       
       Dz.setWindowHash = function(hash) {
         currentHash = window.Thimble.storage.dzhash = hash;
+        slide.textContent = currentHash.slice(1);
         setTimeout(function() {
           Dz.onhashchange();
         }, 10);
@@ -407,6 +415,22 @@
       };
       
       window.Thimble.autostart = false;
+      
+      var panel = document.createElement('div');
+      var slide = document.createElement('span');
+      document.documentElement.appendChild(panel);
+      panel.appendChild(slide);
+      slide.textContent = (currentHash || "#1.0").slice(1);
+      panel.style.position = "absolute";
+      panel.style.top = "0px";
+      panel.style.right = "0px";
+      panel.style.color = "white";
+      panel.style.padding = "4px";
+      panel.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+      slide.style.paddingRight = "4px";
+      
+      btn("\u2190", function() { Dz.back(); });
+      btn("\u2192", function() { Dz.forward(); });
     })();
   } else {
     Dz.setWindowHash = function(hash) {
