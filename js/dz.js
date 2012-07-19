@@ -405,6 +405,8 @@
       Dz.getWindowHash = function() {
         return currentHash;
       };
+      
+      window.Thimble.autostart = false;
     })();
   } else {
     Dz.setWindowHash = function(hash) {

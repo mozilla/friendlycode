@@ -110,7 +110,6 @@ onload = function() {
   
   if (window.Thimble) {
     setupUI();
-    window.Thimble.ready();
   } else
     go();
 };

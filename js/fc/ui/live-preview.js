@@ -36,6 +36,7 @@ define(function() {
         wind = doc.defaultView;
         wind.Thimble = {
           storage: storage,
+          autostart: true,
           ready: function() {
             if (oldframe) {
               $(oldframe).remove();
@@ -44,7 +45,12 @@ define(function() {
             $(iframe).removeClass('loading');
           }
         };
-
+        
+        wind.addEventListener("load", function() {
+          if (wind.Thimble.autostart)
+            wind.Thimble.ready();
+        }, false);
+        
         $(iframe).addClass('loading');
         
         doc.open();
