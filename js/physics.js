@@ -172,11 +172,10 @@ function startPhysics(worldParent) {
   
   var velocityIterations = 6;
   var positionIterations = 2;
-  var startTime = Date.now();
+  var intervalTime = 1.0 / 60.0;
   
   var interval = setInterval(function() {
-    var realTimePassed = Date.now() - startTime;
-    world.Step(realTimePassed / 100000.0, velocityIterations, 
+    world.Step(intervalTime, velocityIterations, 
                positionIterations);
     objects.forEach(function(o) { o.updateElement(); });
   }, 20);
