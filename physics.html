@@ -12,15 +12,15 @@
   <!-- Try dragging this element in the preview pane to position it! -->
   <!-- You can also hold shift while dragging to resize it. -->
   <!-- Just add the "thimble-movable" class to any element to make it movable, resizable, and become a participant in the physics simulation. -->
-  <div class="thimble-movable box"
-    style="position: absolute; top: 28px; left: 128px; width: 42px; height: 126px;"
+  <img class="thimble-movable"
     data-physics-type="dynamic"
-    data-friction="0.3"
-    data-density="1.0">hi</div>
+    data-density="1.0"
+    src="https://github.com/mozilla/BrowserQuest/raw/master/client/img/1/chest.png"
+    style="position: absolute; top: 63px; left: 113px;">
     
   <!-- Setting data-physics-type to "static" means that the element doesn't obey the laws of gravity. -->
   <div class="thimble-movable ground"
-    style="position: absolute; top: 410px; left: 166px; width: 200px; height: 20px;"
+    style="position: absolute; top: 93px; left: 122px; width: 200px; height: 16px;"
     data-physics-type="static"></div>
 </div>
 <style>
@@ -32,19 +32,14 @@
 
 #world {
   position: relative;
-  background: #f0f0f0;
+  background: black;
   height: 500px;
   width: 500px;
   overflow: hidden;
 }
 
-.box {
-  background: pink;
-  padding: 10px;
-}
-
 .ground {
-  background: brown;
+  background: url(https://github.com/mozilla/BrowserQuest/raw/master/client/img/1/wood.png);
 }
 </style>
 <script src="js/physics.js"></script>
