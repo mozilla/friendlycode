@@ -34,18 +34,28 @@ function RectangularThing(options) {
 
 RectangularThing.prototype = {
   updateElement: function() {
+    var css = this.getElementStyle();
+    var style = this.element.style;
+
+    Object.keys(css).forEach(function(name) {
+      style.setProperty(name, css[name], '');
+    });
+  },
+  getElementStyle: function() {
     var metrics = this.getMetrics(),
         transform = "rotate(" + -metrics.angle.toFixed(2) + "rad)",
-        style = this.element.style;
-    
+        style = {};
+
     style.bottom = metrics.bottom.toFixed(2) + "px";
     style.left = metrics.left.toFixed(2) + "px";
     style.width = metrics.width.toFixed(2) + "px";
     style.height = metrics.height.toFixed(2) + "px";
     
     ['-moz-', '-webkit-', '-o', ''].forEach(function(prefix) {
-      style.setProperty(prefix + 'transform', transform, "");
+      style[prefix + 'transform'] = transform;
     });
+
+    return style;
   },
   getMetrics: function() {
     var pos = this.body.GetPosition();
