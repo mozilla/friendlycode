@@ -217,7 +217,11 @@ define("main", function(require) {
     var staticHTML = (pageToLoad ? pageToLoad.split("static:")[1] :
                       "default-content");
     jQuery.get(staticHTML + ".html", function(html) {
-      codeMirror.setValue(html.trim());
+      var absScript = '<script src="' + location.protocol +
+                      "//" + location.host + location.pathname +
+                      'js/';
+      html = html.replace(/\<script src="js\//g, absScript).trim();
+      codeMirror.setValue(html);
       doneLoading();
     }, "text");
   } else
