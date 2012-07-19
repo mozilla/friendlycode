@@ -46,7 +46,7 @@ define(function() {
           }
         };
         
-        wind.addEventListener("load", function() {
+        iframe.addEventListener("load", function() {
           if (wind.Thimble.autostart)
             wind.Thimble.ready();
         }, false);
