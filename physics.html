@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Physics Fun</title>
+<style>
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#world {
+  position: relative;
+  background: #f0f0f0;
+  height: 500px;
+  width: 500px;
+  overflow: hidden;
+}
+
+.box {
+  background: pink;
+  padding: 10px;
+}
+
+.ground {
+  background: brown;
+}
+</style>
+</head>
+<body>
+<div id="world">
+  <div class="thimble-movable box"
+    style="position: absolute; top: 28px; left: 128px; width: 42px; height: 126px;"
+    data-physics-type="dynamic"
+    data-friction="0.3"
+    data-density="1.0">hi</div>
+  <div class="thimble-movable ground"
+    style="position: absolute; top: 410px; left: 166px; width: 200px; height: 20px;"
+    data-physics-type="static"></div>
+</div>
+<script src="js/physics.js"></script>
+</body>
+</html>
