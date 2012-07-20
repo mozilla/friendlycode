@@ -1,6 +1,7 @@
 "use strict";
 
-define(["jquery", "./mark-tracker"], function($, MarkTracker) {
+define(["jquery", "./mark-tracker", "./flickrfindr"], function($, MarkTracker, FlickrFindr) {
+
   // Given a descendant of the given root element, returns a CSS
   // selector that uniquely selects only the descendant from the
   // root element.
@@ -79,6 +80,51 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
           codeMirror.focus();
           event.preventDefault();
           event.stopPropagation();
+          
+          // TEMP TEST (webmaker flickr api_key)
+          if (tagName === "img")
+          {
+            var showResults = function(finder) {
+              var contentPane = $("#FlickrFindrPane div.images"),
+                  entry, href, link, i, last;
+              for(i=finder.lastCount, last=finder.entries.length; i<last; i++) {
+                entry = finder.entries[i];
+
+                link = document.createElement("span");
+                link.appendChild(entry.img);
+                link.title = entry.title;
+                link.onclick = (function(i,h) {
+                  return function() {
+                    i = i.replace("http://","//");
+                    var imgHTML = "&lt;img src=\"<a href='"+i+"'>"+i+"</a>\" alt=\"Found on: <a href='"+h+"'>"+h+"</a>\"&gt;",
+                        imageDiv = $("#FlickrFindrPane div.imgCode div");
+                    imageDiv.html(imgHTML);
+                    
+                    // modify codemirror side of things
+                    codeMirror.setSelection(start, end);
+                    var originalCode = codeMirror.getSelection();
+                    codeMirror.replaceSelection(imageDiv.text());
+                    
+                    // update "end"
+                    end = codeMirror.posFromIndex(interval.start + imageDiv.text().length);
+                  };
+                }(entry.dataUrlB,entry.href));
+                contentPane.append(link);
+              }
+              finder.moreOnScroll = true;
+            }
+          
+            // inject image picker
+            var f = new FlickrFindr("b939e5bd8aa696db965888a31b2f1964", showResults),
+                template = f.buildTemplate();
+            document.body.appendChild(template[0]);
+            document.body.appendChild(template[1]);
+            var ffPane = $(template[1]),
+                tWidth = ffPane.width();
+            ffPane.css({position: "absolute", zIndex: 999999, top: "20%", left: "50%", marginLeft: "-"+(tWidth/2)+"px"});
+          }
+          // TEMP TEST (webmaker flickr api_key)
+
         }
       });
     });
