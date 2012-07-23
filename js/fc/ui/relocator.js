@@ -5,7 +5,8 @@ define(["jquery"], function($) {
   return function Relocator(codeMirror) {
     var lastPos = null;
     var lastElement = null;
-    
+    var lastToggle = document.createElement("div");
+
     function flipElementIfNeeded() {
       var coords = codeMirror.charCoords(lastPos, "local");
       var bottomChar = {line: codeMirror.lineCount(), ch: 0};
@@ -29,6 +30,10 @@ define(["jquery"], function($) {
           lastElement.hide();
           lastElement = null;
         }
+        if (lastToggle) {
+          $(lastToggle).hide();
+          lastToggle.parentNode.removeChild(lastToggle);
+        }
       },
 
       // relocate an element to inside CodeMirror, pointing "at" the line for startMark
@@ -43,12 +48,32 @@ define(["jquery"], function($) {
         lastPos = codeMirror.posFromIndex(startMark);
         codeMirror.setLineClass(lastPos.line, null, "CodeMirror-line-highlight");
         codeMirror.setMarker(lastPos.line, null, "gutter-highlight-" + type);
-        lastElement.show();
+        
+        window.console.log("lastPos",lastPos);
         codeMirror.addWidget(lastPos, lastElement[0], false);
         $(".up-arrow, .down-arrow", lastElement).css({
           left: codeMirror.charCoords(lastPos, "local").x + "px"
         });
         flipElementIfNeeded();
+
+        // EXPERIMENTAL "THERE IS A HINT/ERROR" MARKER
+        {
+          lastElement.hide();
+          lastToggle.text(type == "error" ? "!!" : "?");
+          codeMirror.addWidget(lastPos, lastToggle, false);
+          $(lastToggle).css({left: "auto",
+                          right: "1em",
+                          width: "1em",
+                          textAlign: "center",
+                          backgroundColor: (type == "error"? "rgb(240,0,0)" : "rgb(240,120,0)"),
+                          margin: "0px",
+                          marginTop: "-1em",
+                          padding: "0px",
+                          lineHeight: "1em",
+                          cursor: "pointer"});
+          $(lastToggle).click(function() { lastElement.toggle(); });
+        }
+        // EXPERIMENTAL "THERE IS A HINT/ERROR" MARKER
       }
     };
 
