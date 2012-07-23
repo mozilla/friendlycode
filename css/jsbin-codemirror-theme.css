@@ -19,20 +19,20 @@
 .cm-s-jsbin span.cm-attribute {color: #994500;}
 
 .CodeMirror {
-  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
+  font-family: 'Ubuntu Mono', monospace;
   font-weight: 200;
   font-size: 14px;
 }
 
 .CodeMirror .CodeMirror-lines {
-  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
+  font-family: 'Ubuntu Mono', monospace;
   color: #333;
   font-size: 14px;
   line-height: 15.75px;
 }
 
 .CodeMirror textarea {
-  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
+  font-family: 'Ubuntu Mono', monospace;
   font-size: 14px;
   line-height: 15.75px;
 }
@@ -43,7 +43,7 @@
 }
 
 .CodeMirror-gutter-text {
-  font-family: Menlo, Monaco, consolas, monospace;
+  font-family: 'Ubuntu Mono', monospace;
   color: #A9A9A9;
   font-size: 12px;
   line-height: 15.75px;
@@ -54,7 +54,7 @@
 }
 
 .cm-s-jsbin span.cm-comment {
-  font-family: "Myriad Pro", "myriad-pro", Helvetica, Arial, sans-serif;
+  font-family: 'Ubuntu Mono', monospace;
   color: #333;
   font-style: italic;
   font-weight: bold;
