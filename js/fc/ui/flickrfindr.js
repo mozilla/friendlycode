@@ -6,7 +6,8 @@
 define(["jquery"], function(jQuery) {
   return function FlickrFindr(api_key, callback, undef)
   {
-    var api_location = "http://api.flickr.com/services/rest/?",
+    var $ = jQuery,
+        api_location = "http://api.flickr.com/services/rest/?",
         constructed = api_location + "agent=flickrfindr" + "&api_key=" + api_key,
         addArgument = function(arg, val) { constructed += "&" + arg + "=" + val; };
 
@@ -64,32 +65,28 @@ define(["jquery"], function(jQuery) {
        * initiate a search
        */
       find: function(term) {
-        var $ = this;
-        $.searchTerm = term;
-        $.search = $.url + "&tags=" + $.searchTerm;
-        if($.xhr) { $.xhr.abort(); }
-        $.getMoreResults();
+        self.searchTerm = term;
+        self.search = self.url + "&tags=" + self.searchTerm;
+        if(self.xhr) { self.xhr.abort(); }
+        self.getMoreResults();
       },
 
       /**
        * get the next page of results
        */
       getMoreResults: function() {
-        var $ = this;
-        $.lastCount = $.entries.length;
-        $.loaded = false;
-        $.page += 1;
-        $.request($.search + "&page=" + $.page);
+        self.lastCount = self.entries.length;
+        self.loaded = false;
+        self.page += 1;
+        self.request(self.search + "&page=" + self.page);
       },
 
       /**
        * The search request XHR
        */
       request: function(url) {
-        var $ = this;
-        var completed = $.onRetrieved;
-        jQuery.support.cors = true;
-        $.xhr = jQuery.ajax(url, {complete: completed} );
+        $.support.cors = true;
+        self.xhr = $.ajax(url, {complete: self.onRetrieved} );
       },
 
       /**
@@ -100,15 +97,14 @@ define(["jquery"], function(jQuery) {
           return;
         }
 
-        var $ = self,
-            xml = jqXhr.responseXML,
+        var xml = jqXhr.responseXML,
             results = xml.getElementsByTagName("photo"),
             result, url, farm, server, owner, id, secret, title,
             i, last = results.length, img, entry,
             url_b, url_m, url_s;
         
         // note how many results we can find for this query
-        $.pages = xml.getElementsByTagName("photos")[0].getAttribute("pages");
+        self.pages = xml.getElementsByTagName("photos")[0].getAttribute("pages");
         
         // iterate over all photos in the retrieved page set
         for(i=0; i<last; i++) {
@@ -147,12 +143,12 @@ define(["jquery"], function(jQuery) {
           }
 
           // add this entry to the collection of found results
-          $.entries.push(entry);
+          self.entries.push(entry);
         }
 
         // done. loaded can be set to true again
-        $.loaded = true;
-        callback($);
+        self.loaded = true;
+        callback(self);
       },
       
       moreOnScroll: true,
@@ -161,8 +157,8 @@ define(["jquery"], function(jQuery) {
        * Temlate builder
        */
       buildTemplate: function() {
-        var $ = this,
-            template = jQuery("\
+        var _ = this,
+            template = $("\
               <style>\
                 #FlickrFindrPane {\
                   height: 500px;\
@@ -172,12 +168,26 @@ define(["jquery"], function(jQuery) {
                   border: 6px solid #CCC;\
                   box-shadow: 8px 8px 12px 0px rgba(0, 0, 0, 0.5); \
                   border-radius: 7px;\
+                  padding: 2px;\
                 }\
-                #FlickrFindrPane span {\
+                #FlickrFindrPane div.title {\
+                  background-color: rgb(180,210,250);\
+                  text-align: center;\
+                }\
+                #FlickrFindrPane span.close {\
+                  display: block;\
+                  float: right;\
                   text-align: right;\
+                  border: 1px solid black;\
+                  padding: 2px;\
+                  margin: 2px;\
+                  line-height: 10px;\
+                  font-size: 10px;\
+                  background-color: white;\
                 }\
                 #FlickrFindrPane input.tags {\
-                  width: 60%;\
+                  width: 14em;\
+                  text-align: left;\
                 }\
                 #FlickrFindrPane div.images {\
                   overflow: auto;\
@@ -199,8 +209,10 @@ define(["jquery"], function(jQuery) {
                   font-size: 90%;\
                 }\
               </style><div id='FlickrFindrPane'>\
-                Search for pictures: <input class='tags' type='search' placeholder='by typing keywords here'>\
-                <span>[close]</span>\
+                <div class='title'>\
+                  Search <a href='//flickr.com'>Flickr</a> for pictures: <input class='tags' type='search' placeholder='by typing keywords here'>\
+                  <span class='close'>X</span>\
+                </div>\
                 <div class='images'>\
                   <!-- this will contain the list of found images -->\
                 </div>\
@@ -210,32 +222,33 @@ define(["jquery"], function(jQuery) {
                   <div></div>\
                 </div>\
               </div>"),
-            input = jQuery("input.tags",template),
-            span = jQuery("span",template),
+            input = $("input.tags",template),
+            span = $("span",template),
 
             getMoreResults = function() {
-              if(!$.moreOnScroll) return;
-              var object = jQuery("#FlickrFindrPane div.images img").last()[0],
+              if(!_.moreOnScroll) return;
+              var object = $("#FlickrFindrPane div.images img").last()[0],
                   oRect = object.getBoundingClientRect(),
-                  pRect = jQuery("#FlickrFindrPane div.images")[0].getBoundingClientRect();
+                  pRect = $("#FlickrFindrPane div.images")[0].getBoundingClientRect();
               if (oRect.top <= pRect.bottom) { 
-                $.moreOnScroll = false;
-                $.getMoreResults();
+                _.moreOnScroll = false;
+                _.getMoreResults();
               }
             },
    
             find = function(term) {
-              var contentPane = jQuery("#FlickrFindrPane div.images");
+              var contentPane = $("#FlickrFindrPane div.images");
               contentPane.text("");
               contentPane.scroll(getMoreResults);
-              $.find(term);
+              _.find(term);
             };
 
         input.keyup(function() { find(this.value); });
         span.click(function() {
-          var doc = this.parentNode.parentNode;
-          doc.removeChild(this.parentNode.previousSibling);
-          doc.removeChild(this.parentNode);
+          var dialog = this.parentNode.parentNode,
+              topOwner = dialog.parentNode;
+          topOwner.removeChild(dialog.previousSibling);
+          topOwner.removeChild(dialog);
         });
         span.css("cursor","pointer");
         return template;

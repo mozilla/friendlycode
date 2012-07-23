@@ -117,8 +117,8 @@ define(["jquery", "./mark-tracker", "./flickrfindr"], function($, MarkTracker, F
             // inject image picker
             var f = new FlickrFindr("b939e5bd8aa696db965888a31b2f1964", showResults),
                 template = f.buildTemplate();
-            document.body.appendChild(template[0]);
-            document.body.appendChild(template[1]);
+            document.body.appendChild(template[0]); // stylesheet
+            document.body.appendChild(template[1]); // html code
             var ffPane = $(template[1]),
                 tWidth = ffPane.width();
             ffPane.css({position: "absolute", zIndex: 999999, top: "20%", left: "50%", marginLeft: "-"+(tWidth/2)+"px"});
