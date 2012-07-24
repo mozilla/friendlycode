@@ -105,11 +105,13 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
         return;
 
       clearHelp();
-      if (help)
+      // same as error-help.js, "reparse" handler
+      if (help) {
         timeout = setTimeout(function() {
           lastHelp = JSON.stringify(help);
           showHelp(cursorIndex, help);
         }, 250);
+      }
     });
 
     return self;

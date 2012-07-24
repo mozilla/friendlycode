@@ -193,3 +193,13 @@ b {
   top: -22px;
   background-image: url("../img/hint-up-arrow.png");
 }
+
+.error-marker-color {
+  background-color: #FF2A04;
+  color: white;
+}
+
+.help-marker-color {
+  background-color: #FF9933;
+  color: white;
+}

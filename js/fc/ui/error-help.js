@@ -58,7 +58,7 @@ define(["jquery-slowparse", "./mark-tracker"], function($, MarkTracker) {
         });
       });
       relocator.relocate(errorArea, startMark, "error");
-      errorArea.hide().fadeIn();
+      errorArea.hide();
     }
   
     function clearError() {
@@ -71,10 +71,11 @@ define(["jquery-slowparse", "./mark-tracker"], function($, MarkTracker) {
     codeMirror.on("change", clearError);
     codeMirror.on("reparse", function(event) {
       clearError();
+      // same as context-sensitive-help.js, "cursor-activity" handling
       if (event.error) {
         timeout = setTimeout(function() {
           reportError(event.error);
-        }, ERROR_DISPLAY_DELAY);
+        }, 250);
       }
     });
     return self;

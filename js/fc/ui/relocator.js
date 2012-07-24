@@ -30,7 +30,7 @@ define(["jquery"], function($) {
           lastElement.hide();
           lastElement = null;
         }
-        if (lastToggle) {
+        if (lastToggle.parentNode) {
           $(lastToggle).hide();
           lastToggle.parentNode.removeChild(lastToggle);
         }
@@ -48,32 +48,36 @@ define(["jquery"], function($) {
         lastPos = codeMirror.posFromIndex(startMark);
         codeMirror.setLineClass(lastPos.line, null, "CodeMirror-line-highlight");
         codeMirror.setMarker(lastPos.line, null, "gutter-highlight-" + type);
-        
-        window.console.log("lastPos",lastPos);
+
         codeMirror.addWidget(lastPos, lastElement[0], false);
         $(".up-arrow, .down-arrow", lastElement).css({
           left: codeMirror.charCoords(lastPos, "local").x + "px"
         });
         flipElementIfNeeded();
 
-        // EXPERIMENTAL "THERE IS A HINT/ERROR" MARKER
-        {
-          lastElement.hide();
-          lastToggle.text(type == "error" ? "!!" : "?");
-          codeMirror.addWidget(lastPos, lastToggle, false);
-          $(lastToggle).css({left: "auto",
-                          right: "1em",
-                          width: "1em",
-                          textAlign: "center",
-                          backgroundColor: (type == "error"? "rgb(240,0,0)" : "rgb(240,120,0)"),
-                          margin: "0px",
-                          marginTop: "-1em",
-                          padding: "0px",
-                          lineHeight: "1em",
-                          cursor: "pointer"});
-          $(lastToggle).click(function() { lastElement.toggle(); });
-        }
-        // EXPERIMENTAL "THERE IS A HINT/ERROR" MARKER
+        // make sure to add the end-of-line marker
+        this.setupMarker(type);
+      },
+
+      // set up the end-of-line marker for hint/error toggling
+      setupMarker: function(type) {
+        lastElement.hide();
+        var jToggle = $(lastToggle);
+        jToggle.text(type == "error" ? "!" : "?");
+        codeMirror.addWidget(lastPos, lastToggle, false);
+        jToggle.css({left: "auto",
+                     right: "1em",
+                     width: "1em",
+                     textAlign: "center",
+                     margin: "0px",
+                     marginTop: "-1em",
+                     padding: "0px",
+                     lineHeight: "1em",
+                     cursor: "pointer"});
+        jToggle.removeClass("error-marker-color help-marker-color");
+        jToggle.addClass(type === "error" ? "error-marker-color" : "help-marker-color");
+        lastToggle.onclick = (function(element) { return function() { element.toggle(); }; } (lastElement));
+        jToggle.show();
       }
     };
 
