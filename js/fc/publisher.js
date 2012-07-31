@@ -18,6 +18,49 @@ define(["jquery", "lscache"], function($, lscache) {
         window.console.warn("No CORS detected for request to " + path);
       return path;
     }
+    
+    function commit(info, cb) {
+      function save() {
+        $.ajax({
+          type: 'POST',
+          url: baseURL + '/commit',
+          headers: {
+            'X-Access-Token': loginInfo.accessToken
+          },
+          contentType: 'application/json',
+          data: JSON.stringify(info),
+          success: function() {
+            console.log("commit successful");
+            cb(null);
+          },
+          error: function(req) {
+            if (req.status == 403)
+              // Stale token?
+              lscache.remove("browserid-login-info");
+            if (req.responseText.indexOf("nothing to commit") != -1)
+              return cb(null);
+            console.log("commit failed: " + req.responseText);
+            cb(req);
+          }
+        });
+      }
+      
+      var loginInfo = lscache.get("browserid-login-info");
+      if (!loginInfo)
+        navigator.id.get(function(assertion) {
+          console.log("POST " + baseURL + "/token");
+          $.post(baseURL + "/token", {
+            assertion: assertion
+          }, function(info) {
+            loginInfo = JSON.parse(info);
+            lscache.set("browserid-login-info", loginInfo, 60*60*24*7);
+            console.log(" -> " + JSON.stringify(loginInfo));
+            save();
+          });
+        });
+      else
+        save();
+    }
 
     return {
       baseURL: baseURL,
@@ -41,56 +84,18 @@ define(["jquery", "lscache"], function($, lscache) {
         });
       },
       saveCode: function(data, originalURL, cb) {
-        function save() {
-          $.ajax({
-            type: 'POST',
-            url: baseURL + '/commit',
-            headers: {
-              'X-Access-Token': loginInfo.accessToken
-            },
-            contentType: 'application/json',
-            data: JSON.stringify({
-              add: filesToAdd,
-              message: "User edited code in Thimble."
-            }),
-            success: function() {
-              console.log("commit successful");
-              cb(null, successInfo);
-            },
-            error: function(req) {
-              if (req.status == 403)
-                // Stale token?
-                lscache.remove("browserid-login-info");
-              if (req.responseText.indexOf("nothing to commit") != -1)
-                return cb(null, successInfo);
-              console.log("commit failed: " + req.responseText);
-              cb(req);
-            }
-          });
-        }
-        
         var path = originalURL.slice((baseURL + '/static/').length);
-        console.log("orig", originalURL, path);
-        var loginInfo = lscache.get("browserid-login-info");
-        var successInfo = {path: '/' + path,
-                           url: baseURL + '/static/' + path}
         var filesToAdd = {};
         filesToAdd[path] = data;
-        if (!loginInfo)
-          navigator.id.get(function(assertion) {
-            console.log("POST " + baseURL + "/token");
-            $.post(baseURL + "/token", {
-              assertion: assertion
-            }, function(info) {
-              loginInfo = JSON.parse(info);
-              lscache.set("browserid-login-info", loginInfo, 60*60*24*7);
-              console.log(" -> " + JSON.stringify(loginInfo));
-              save();
-            });
-          });
-        else
-          save();
-      }
+        commit({
+          add: filesToAdd,
+          message: "User edited code in Thimble."
+        }, function(err) {
+          cb(err, {path: '/' + path, url: baseURL + '/static/' + path});
+        });
+        console.log("orig", originalURL, path);
+      },
+      commit: commit
     };
   }
   

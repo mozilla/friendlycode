@@ -11,6 +11,7 @@ define("main", function(require) {
       Publisher = require("fc/publisher"),
       Slowparse = require("slowparse/slowparse"),
       TreeInspectors = require("slowparse/tree-inspectors"),
+      DragUploader = require("fc/ui/drag-uploader"),
       ParsingCodeMirror = require("fc/ui/parsing-codemirror"),
       ContextSensitiveHelp = require("fc/ui/context-sensitive-help"),
       ErrorHelp = require("fc/ui/error-help"),
@@ -85,6 +86,10 @@ define("main", function(require) {
   });
   var previewToEditorMapping = PreviewToEditorMapping(preview, $(".CodeMirror-lines"));
   var publisher = Publisher(publishURL);
+  var dragUploader = DragUploader({
+    codeMirror: codeMirror,
+    publisher: publisher
+  });
   var historyUI = HistoryUI({
     codeMirror: codeMirror,
     undo: $("#undo-nav-item"),
@@ -200,6 +205,7 @@ define("main", function(require) {
       } else {
         codeMirror.setValue(data);
         preview.baseURL = url;
+        dragUploader.basePath = pageToLoad;
         modals.setCurrentURL(url);
         doneLoading();
       }
