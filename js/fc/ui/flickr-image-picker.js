@@ -5,15 +5,20 @@
  */
 define(["jquery"], function($) {
 
-  return function FlickrImagePicker(options)
+  return function FlickrImagePicker(options, undef)
   {
     var flickrFinder = options.flickrFinder,
-        previewMapper = options.previewMapper;
+        previewMapper = options.previewMapper,
+        codeMirror = options.codeMirror,
+        interval = undef;
 
-    var showResults = function(finder, codeMirror, interval) {
-      // TEST
-      document.body.appendChild(finder.template);
-      // TEST
+    var showResults = function(finder) {
+
+      // this does not seem the best way to inject?
+      if(finder.template.parentNode !== document.body) {
+        document.body.appendChild(finder.template);
+      }
+
       var contentPane = $("div.images", finder.template),
           entry, href, link, i, last;
       for(i=finder.lastCount, last=finder.entries.length; i<last; i++) {
@@ -44,20 +49,19 @@ define(["jquery"], function($) {
         contentPane.append(link);
       }
       finder.moreOnScroll = true;
-    }
+    };
     
     /**
-     * callback handler for result retrieval
+     * callback handler for "more results" retrieval
      */
-    finder.setCallback(function(finder) {
-      console.log(finder);
-    })
+    flickrFinder.setCallback(showResults);
 
     // tricker whenever the mapper signals a refresh
     previewMapper.on("PreviewToEditorMapping:refresh", function(e) {
       var tagName = e.tagName;
       if (tagName !== "img") return;
-      showResults(flickrFinder, e.codeMirror, e.interval);
+      interval = e.interval;
+      showResults(flickrFinder);
     });
 
   }

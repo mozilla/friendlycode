@@ -1,8 +1,22 @@
 "use strict";
 
 /**
- * Flickr searching of CC-at(-sa/-nc/-nd) photo content.
- */
+
+   A JAvaScript Flickr search API utility.
+
+   To filter on license:
+
+    0 = "All Rights Reserved" 
+    1 = "Attribution-NonCommercial-ShareAlike License" 
+    2 = "Attribution-NonCommercial License" 
+    3 = "Attribution-NonCommercial-NoDerivs License" 
+    4 = "Attribution License" 
+    5 = "Attribution-ShareAlike License" 
+    6 = "Attribution-NoDerivs License" 
+    7 = "No known copyright restrictions" 
+    8 = "United States Government Work" 
+
+**/
 define(["jquery"], function(jQuery) {
 
   return function FlickrFindr(options, undef)
@@ -12,30 +26,19 @@ define(["jquery"], function(jQuery) {
         template = $(options.template())[0],
         api_location = "http://api.flickr.com/services/rest/?",
         constructed = api_location + "agent=flickrfindr" + "&api_key=" + api_key,
-        addArgument = function(arg, val) { constructed += "&" + arg + "=" + val; };
+        addArgument = function(arg, val) { constructed += "&" + arg + "=" + val; },
+        filters = options.filters;
 
     // set up search
     addArgument("method","flickr.photos.search");
     
-    /**
-      filter on license:
+    // add all the filters
+    for (filter in filters) {
+      if (!Object.hasOwnProperty(filters,filter)) {
+        addArgument(filter, filters[filter]);
+      }
+    }
 
-      0 = "All Rights Reserved" 
-      1 = "Attribution-NonCommercial-ShareAlike License" 
-      2 = "Attribution-NonCommercial License" 
-      3 = "Attribution-NonCommercial-NoDerivs License" 
-      4 = "Attribution License" 
-      5 = "Attribution-ShareAlike License" 
-      6 = "Attribution-NoDerivs License" 
-      7 = "No known copyright restrictions" 
-      8 = "United States Government Work" 
-    **/
-    addArgument("license","1,2,3,4,5,6");
-
-    // force photos-only
-    addArgument("content_type", "1");
-    addArgument("media", "photos");
-    
     /**
      * Create the finder object:
      */
@@ -75,7 +78,7 @@ define(["jquery"], function(jQuery) {
        */
       setCallback: function(callback) {
         this.callback = callback;
-      }
+      },
       
       /**
        * initiate a search

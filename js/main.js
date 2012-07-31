@@ -93,10 +93,16 @@ define("main", function(require) {
   var flickrFindr = FlickrFindr({
     api_key: "b939e5bd8aa696db965888a31b2f1964",
     template: FlickrFindrTemplate
+    filters: {
+      license: "1,2,3,4,5,6",
+      content_type: 1,
+      media: "photos"
+    }
   });
   var flickrImagePicker = FlickrImagePicker({
     flickrFinder: flickrFindr,
-    previewMapper: previewToEditorMapping
+    previewMapper: previewToEditorMapping,
+    codeMirror: codeMirror
   });
   var publisher = Publisher(publishURL);
   var historyUI = HistoryUI({

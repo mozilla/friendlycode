@@ -7,6 +7,12 @@
   box-shadow: 8px 8px 12px 0px rgba(0, 0, 0, 0.5); 
   border-radius: 7px;
   padding: 2px;
+  
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  margin-left: -250px;
+  z-index: 9999999;
 }
 
 #FlickrFindrPane div.title {
