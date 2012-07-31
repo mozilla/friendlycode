@@ -4,9 +4,12 @@
  * Flickr searching of CC-at(-sa/-nc/-nd) photo content.
  */
 define(["jquery"], function(jQuery) {
-  return function FlickrFindr(api_key, callback, undef)
+
+  return function FlickrFindr(options, undef)
   {
     var $ = jQuery,
+        api_key = options.api_key,
+        template = $(options.template())[0],
         api_location = "http://api.flickr.com/services/rest/?",
         constructed = api_location + "agent=flickrfindr" + "&api_key=" + api_key,
         addArgument = function(arg, val) { constructed += "&" + arg + "=" + val; };
@@ -60,6 +63,19 @@ define(["jquery"], function(jQuery) {
 
       // indicates the retrieval status
       loaded: false,
+      
+      // template to use for the HTML side of things
+      template: template,
+      
+      // callback function
+      callback: false,
+      
+      /**
+       * set callback function
+       */
+      setCallback: function(callback) {
+        this.callback = callback;
+      }
       
       /**
        * initiate a search
@@ -148,113 +164,50 @@ define(["jquery"], function(jQuery) {
 
         // done. loaded can be set to true again
         self.loaded = true;
-        callback(self);
+        if (self.callback !== false) {
+          self.callback(self);
+        }
       },
-      
-      moreOnScroll: true,
-      
-      /**
-       * Temlate builder
-       */
-      buildTemplate: function() {
-        var _ = this,
-            template = $("\
-              <style>\
-                #FlickrFindrPane {\
-                  height: 500px;\
-                  width: 500px;\
-                  background-color: white;\
-                  margin: auto;\
-                  border: 6px solid #CCC;\
-                  box-shadow: 8px 8px 12px 0px rgba(0, 0, 0, 0.5); \
-                  border-radius: 7px;\
-                  padding: 2px;\
-                }\
-                #FlickrFindrPane div.title {\
-                  background-color: rgb(180,210,250);\
-                  text-align: center;\
-                }\
-                #FlickrFindrPane span.close {\
-                  display: block;\
-                  float: right;\
-                  text-align: right;\
-                  border: 1px solid black;\
-                  padding: 2px;\
-                  margin: 2px;\
-                  line-height: 10px;\
-                  font-size: 10px;\
-                  background-color: white;\
-                }\
-                #FlickrFindrPane input.tags {\
-                  width: 14em;\
-                  text-align: left;\
-                }\
-                #FlickrFindrPane div.images {\
-                  overflow: auto;\
-                  height: 400px;\
-                  width: 100%;\
-                  text-align: center;\
-                }\
-                #FlickrFindrPane div.imgCode {\
-                  margin: 5px;\
-                  background-color: #DDD;\
-                }\
-                #FlickrFindrPane div.imgCode label {\
-                  font-weight: bold;\
-                  text-align: center;\
-                }\
-                #FlickrFindrPane div.imgCode div {\
-                  color: #00C;\
-                  font-family: monospace;\
-                  font-size: 90%;\
-                }\
-              </style><div id='FlickrFindrPane'>\
-                <div class='title'>\
-                  Search <a href='//flickr.com'>Flickr</a> for pictures: <input class='tags' type='search' placeholder='by typing keywords here'>\
-                  <span class='close'>X</span>\
-                </div>\
-                <div class='images'>\
-                  <!-- this will contain the list of found images -->\
-                </div>\
-                <div class='imgCode'>\
-                  <label>HTML code for the selected image:</label>\
-                  <!-- this will contain the html code for a selected image -->\
-                  <div></div>\
-                </div>\
-              </div>"),
-            input = $("input.tags",template),
-            span = $("span",template),
-
-            getMoreResults = function() {
-              if(!_.moreOnScroll) return;
-              var object = $("#FlickrFindrPane div.images img").last()[0],
-                  oRect = object.getBoundingClientRect(),
-                  pRect = $("#FlickrFindrPane div.images")[0].getBoundingClientRect();
-              if (oRect.top <= pRect.bottom) { 
-                _.moreOnScroll = false;
-                _.getMoreResults();
-              }
-            },
-   
-            find = function(term) {
-              var contentPane = $("#FlickrFindrPane div.images");
-              contentPane.text("");
-              contentPane.scroll(getMoreResults);
-              _.find(term);
-            };
-
-        input.keyup(function() { find(this.value); });
-        span.click(function() {
-          var dialog = this.parentNode.parentNode,
-              topOwner = dialog.parentNode;
-          topOwner.removeChild(dialog.previousSibling);
-          topOwner.removeChild(dialog);
-        });
-        span.css("cursor","pointer");
-        return template;
-      }
     };
     
+    // add template interacing
+
+    (function($, self, template){
+      self.moreOnScroll = true;
+
+      var input = $("input.tags", template),
+          span = $("span", template);
+
+      var getMoreResults = function() {
+        if(!self.moreOnScroll) return;
+        var object = $("div.images img", template).last()[0],
+            oRect = object.getBoundingClientRect(),
+            pRect = $("div.images", template)[0].getBoundingClientRect();
+        if (oRect.top <= pRect.bottom) {
+          self.moreOnScroll = false;
+          self.getMoreResults();
+        }
+      };
+
+      var find = function(term) {
+        var contentPane = $("div.images", template);
+        contentPane.text("");
+        contentPane.scroll(getMoreResults);
+        self.find(term);
+      };
+
+      input.keyup(function() { find(this.value); });
+
+      span.click(function() {
+        var dialog = this.parentNode.parentNode,
+            topOwner = dialog.parentNode;
+        topOwner.removeChild(dialog.previousSibling);
+        topOwner.removeChild(dialog);
+      });
+
+      span.css("cursor","pointer");
+    }($, self, template));
+      
     // return the finder
     return self;
   };

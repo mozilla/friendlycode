@@ -1,0 +1,55 @@
+#FlickrFindrPane {
+  height: 500px;
+  width: 500px;
+  background-color: white;
+  margin: auto;
+  border: 6px solid #CCC;
+  box-shadow: 8px 8px 12px 0px rgba(0, 0, 0, 0.5); 
+  border-radius: 7px;
+  padding: 2px;
+}
+
+#FlickrFindrPane div.title {
+  background-color: rgb(180,210,250);
+  text-align: center;
+}
+
+#FlickrFindrPane span.close {
+  display: block;
+  float: right;
+  text-align: right;
+  border: 1px solid black;
+  padding: 2px;
+  margin: 2px;
+  line-height: 10px;
+  font-size: 10px;
+  background-color: white;
+}
+
+#FlickrFindrPane input.tags {
+  width: 14em;
+  text-align: left;
+}
+
+#FlickrFindrPane div.images {
+  overflow: auto;
+  height: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+#FlickrFindrPane div.imgCode {
+  margin: 5px;
+  background-color: #DDD;
+}
+
+#FlickrFindrPane div.imgCode label {
+  font-weight: bold;
+  text-align: center;
+}
+
+#FlickrFindrPane div.imgCode div {
+  color: #00C;
+  font-family: monospace;
+  font-size: 90%;
+}

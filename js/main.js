@@ -20,6 +20,9 @@ define("main", function(require) {
       Relocator = require("fc/ui/relocator"),
       HelpTemplate = require("template!help"),
       ErrorTemplate = require("template!error"),
+      FlickrFindr = require("fc/ui/flickrfindr"),
+      FlickrFindrTemplate = require("template!flickrfindr"),
+      FlickrImagePicker = require("fc/ui/flickr-image-picker"),
       publishURL = $("meta[name='publish-url']").attr("content"),
       pageToLoad = $("meta[name='remix-url']").attr("content"),
       deploymentType = $("meta[name='deployment-type']").attr("content"),
@@ -83,7 +86,18 @@ define("main", function(require) {
     ignoreErrors: true,
     previewArea: $("#preview-holder")
   });
-  var previewToEditorMapping = PreviewToEditorMapping(preview, $(".CodeMirror-lines"));
+  var previewToEditorMapping = PreviewToEditorMapping({
+    livePreview: preview,
+    codeMirrorAreas: $(".CodeMirror-lines")
+  });
+  var flickrFindr = FlickrFindr({
+    api_key: "b939e5bd8aa696db965888a31b2f1964",
+    template: FlickrFindrTemplate
+  });
+  var flickrImagePicker = FlickrImagePicker({
+    flickrFinder: flickrFindr,
+    previewMapper: previewToEditorMapping
+  });
   var publisher = Publisher(publishURL);
   var historyUI = HistoryUI({
     codeMirror: codeMirror,
