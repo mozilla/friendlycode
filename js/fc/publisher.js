@@ -2,7 +2,7 @@
 
 // This class is responsible for communicating with a publishing server
 // to save and load published code.
-define(["jquery"], function($) {
+define(["jquery", "lscache"], function($, lscache) {
   var myOrigin = window.location.protocol + "//" + window.location.host;
   
   function Publisher(baseURL) {
@@ -22,34 +22,74 @@ define(["jquery"], function($) {
     return {
       baseURL: baseURL,
       loadCode: function(path, cb) {
+        var originalURL = baseURL + '/static' + path;
         $.ajax({
           type: 'GET',
-          url: makeURL(path),
+          url: makeURL('/static' + path),
           dataType: 'text',
-          error: function(data) {
-            cb(data);
+          error: function(req) {
+            if (req.status == 404) {
+              $.get('default-content.html', function(html) {
+                cb(null, html, originalURL);
+              });
+            } else
+              cb(req);
           },
           success: function(data) {
-            cb(null, fixDoctypeHeadBodyMunging(data), baseURL + path);
+            cb(null, fixDoctypeHeadBodyMunging(data), originalURL);
           }
         });
       },
       saveCode: function(data, originalURL, cb) {
-        $.ajax({
-          type: 'POST',
-          url: makeURL('/api/page'),
-          data: {
-            'html': data,
-            'original-url': originalURL || ''
-          },
-          dataType: 'text',
-          error: function(data) {
-            cb(data);
-          },
-          success: function(data) {
-            cb(null, {path: data, url: baseURL + data});
-          }
-        });
+        function save() {
+          $.ajax({
+            type: 'POST',
+            url: baseURL + '/commit',
+            headers: {
+              'X-Access-Token': loginInfo.accessToken
+            },
+            contentType: 'application/json',
+            data: JSON.stringify({
+              add: filesToAdd,
+              message: "User edited code in Thimble."
+            }),
+            success: function() {
+              console.log("commit successful");
+              cb(null, successInfo);
+            },
+            error: function(req) {
+              if (req.status == 403)
+                // Stale token?
+                lscache.remove("browserid-login-info");
+              if (req.responseText.indexOf("nothing to commit") != -1)
+                return cb(null, successInfo);
+              console.log("commit failed: " + req.responseText);
+              cb(req);
+            }
+          });
+        }
+        
+        var path = originalURL.slice((baseURL + '/static/').length);
+        console.log("orig", originalURL, path);
+        var loginInfo = lscache.get("browserid-login-info");
+        var successInfo = {path: '/' + path,
+                           url: baseURL + '/static/' + path}
+        var filesToAdd = {};
+        filesToAdd[path] = data;
+        if (!loginInfo)
+          navigator.id.get(function(assertion) {
+            console.log("POST " + baseURL + "/token");
+            $.post(baseURL + "/token", {
+              assertion: assertion
+            }, function(info) {
+              loginInfo = JSON.parse(info);
+              lscache.set("browserid-login-info", loginInfo, 60*60*24*7);
+              console.log(" -> " + JSON.stringify(loginInfo));
+              save();
+            });
+          });
+        else
+          save();
       }
     };
   }
