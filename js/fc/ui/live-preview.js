@@ -3,6 +3,28 @@
 // Displays the HTML source of a CodeMirror editor as a rendered preview
 // in an iframe.
 define(["underscore", "jquery", "backbone"], function(_, $, Backbone) {
+  function addBaseHref(baseURL, docFrag, sourceCode) {
+    if (!baseURL)
+      return;
+    var baseHref = '<base href="' + baseURL + '">';
+    var head = docFrag.querySelector('head');
+    var insertAt = 0;
+    if (head)
+      insertAt = head.parseInfo.openTag.end;
+    else {
+      var html = docFrag.querySelector('html');
+      if (html)
+        insertAt = html.parseInfo.openTag.end;
+      else {
+        var doctype = '<!doctype html>';
+        if (sourceCode.slice(0, doctype.length).toLowerCase() == doctype)
+          insertAt = doctype.length;
+      }
+    }
+    return sourceCode.slice(0, insertAt) + baseHref +
+           sourceCode.slice(insertAt);
+  }
+  
   function LivePreview(options) {
     var self = {codeMirror: options.codeMirror},
         codeMirror = options.codeMirror,
@@ -31,7 +53,7 @@ define(["underscore", "jquery", "backbone"], function(_, $, Backbone) {
         wind = doc.defaultView;
 
         doc.open();
-        doc.write(event.sourceCode);
+        doc.write(addBaseHref(self.baseURL, docFrag, event.sourceCode));
         doc.close();
 
         // Insert a BASE TARGET tag so that links don't open in
@@ -39,12 +61,6 @@ define(["underscore", "jquery", "backbone"], function(_, $, Backbone) {
         var baseTag = doc.createElement('base');
         baseTag.setAttribute('target', '_blank');
         doc.querySelector("head").appendChild(baseTag);
-        
-        if (self.baseURL) {
-          baseTag = doc.createElement('base');
-          baseTag.setAttribute('href', self.baseURL);
-          doc.querySelector("head").appendChild(baseTag);
-        }
         
         // TODO: If the document has images that take a while to load
         // and the previous scroll position of the document depends on
