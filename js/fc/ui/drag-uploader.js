@@ -23,7 +23,7 @@ define([], function() {
       evt.stopPropagation();
       evt.preventDefault();
       evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
-    }, false);
+    }, true);
     dropZone.addEventListener('drop', function(evt) {
       function fetch(file) {
         console.log("FILE", file, file.name, file.type);
@@ -90,7 +90,7 @@ define([], function() {
         evt.preventDefault();
       }
       console.log("DROP");
-    }, false);
+    }, true);
     
     self.basePath = null;
     return self;

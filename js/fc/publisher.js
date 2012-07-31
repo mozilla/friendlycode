@@ -52,7 +52,11 @@ define(["jquery", "lscache"], function($, lscache) {
           $.post(baseURL + "/token", {
             assertion: assertion
           }, function(info) {
-            loginInfo = JSON.parse(info);
+            // Odd, some browsers seem to automatically decode the JSON
+            // while others don't...
+            if (typeof(info) == "string")
+              info = JSON.parse(info);
+            loginInfo = info;
             lscache.set("browserid-login-info", loginInfo, 60*60*24*7);
             console.log(" -> " + JSON.stringify(loginInfo));
             save();
