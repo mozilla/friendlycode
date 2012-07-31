@@ -199,6 +199,7 @@ define("main", function(require) {
         alert('Sorry, an error occurred while trying to get the page.');
       } else {
         codeMirror.setValue(data);
+        preview.baseURL = url;
         modals.setCurrentURL(url);
         doneLoading();
       }
