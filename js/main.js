@@ -20,7 +20,7 @@ define("main", function(require) {
       Relocator = require("fc/ui/relocator"),
       HelpTemplate = require("template!help"),
       ErrorTemplate = require("template!error"),
-      FlickrFindr = require("fc/ui/flickrfindr"),
+      FlickrFindr = require("fc/ui/flickrfindr/flickrfindr"),
       FlickrFindrTemplate = require("template!flickrfindr"),
       FlickrImagePicker = require("fc/ui/flickr-image-picker"),
       publishURL = $("meta[name='publish-url']").attr("content"),
@@ -92,7 +92,7 @@ define("main", function(require) {
   });
   var flickrFindr = FlickrFindr({
     api_key: "b939e5bd8aa696db965888a31b2f1964",
-    template: FlickrFindrTemplate,
+    template: $(FlickrFindrTemplate())[0],
     filters: {
       license: "1,2,3,4,5,6",
       content_type: 1,
