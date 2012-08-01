@@ -173,7 +173,7 @@
       },
     };
     
-    // add template interacing
+    // add template interacting
     (function($, self, template){
       self.moreOnScroll = true;
 
