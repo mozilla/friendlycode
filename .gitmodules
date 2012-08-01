@@ -1,3 +1,6 @@
 [submodule "slowparse"]
 	path = slowparse
 	url = git://github.com/toolness/slowparse.git
+[submodule "js/fc/ui/flickrfindr"]
+	path = js/fc/ui/flickrfindr
+	url = git@github.com:Pomax/FlickrFindr.git
