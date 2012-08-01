@@ -5,7 +5,7 @@ define(["jquery"], function($) {
   return function Relocator(codeMirror) {
     var lastPos = null;
     var lastElement = null;
-    
+
     function flipElementIfNeeded() {
       var coords = codeMirror.charCoords(lastPos, "local");
       var bottomChar = {line: codeMirror.lineCount(), ch: 0};
@@ -16,7 +16,7 @@ define(["jquery"], function($) {
       var isPointingDown = coords.yBot + height > bottom;
       lastElement.toggleClass("flipped", isPointingDown);
     }
-    
+
     var relocator = {
       // clear old markings
       cleanup: function() {

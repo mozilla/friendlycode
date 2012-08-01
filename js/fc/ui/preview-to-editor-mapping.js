@@ -1,6 +1,7 @@
 "use strict";
 
-define(["jquery", "./mark-tracker"], function($, MarkTracker) {
+define(["underscore", "jquery", "backbone", "./mark-tracker"], function(_, $, Backbone, MarkTracker) {
+
   // Given a descendant of the given root element, returns a CSS
   // selector that uniquely selects only the descendant from the
   // root element.
@@ -55,9 +56,15 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
     return result;
   }
 
-  function PreviewToEditorMapping(livePreview, codeMirrorAreas) {
-    var codeMirror = livePreview.codeMirror;
-    var marks = MarkTracker(codeMirror);
+  function PreviewToEditorMapping(options) {
+    var livePreview = options.livePreview,
+        codeMirrorAreas = options.codeMirrorAreas,
+        codeMirror = livePreview.codeMirror,
+        marks = MarkTracker(codeMirror);
+    
+    var self = {};
+    _.extend(self, Backbone.Events);
+
     codeMirrorAreas.on("mouseup", marks.clear);
     livePreview.on("refresh", function(event) {
       var docFrag = event.documentFragment;
@@ -79,13 +86,23 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
           codeMirror.focus();
           event.preventDefault();
           event.stopPropagation();
+          
+          // trigger an event for further components
+          self.trigger("PreviewToEditorMapping:refresh", {
+            tagName: tagName,
+            interval: interval,
+            codeMirror: codeMirror
+          });
         }
       });
     });
+    _.extend(livePreview, Backbone.Events);
+    
+    return self;
   }
   
   PreviewToEditorMapping._pathTo = pathTo;
   PreviewToEditorMapping._nodeToCode = nodeToCode;
-  
+
   return PreviewToEditorMapping;
 });
