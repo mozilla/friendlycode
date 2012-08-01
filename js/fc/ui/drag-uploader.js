@@ -51,8 +51,11 @@ define(["jquery"], function($) {
         if (git.isLoggedIn())
           upload();
         else {
-          var loginElt = $('<p>Please <a href="#">sign in</a> to upload' +
-                           ' your files.</p>');
+          var loginElt = $(
+            '<p>Please sign in to upload your files.</p>' +
+            '<p><a href="#">' +
+            '<img src="https://browserid.org/i/sign_in_blue.png">' +
+            '</a></p>');
           $('a', loginElt).click(function() {
             modals.showErrorDialog('Please wait', 'Logging in...');
             git.login(function(err) {
