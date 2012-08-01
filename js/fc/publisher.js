@@ -2,104 +2,47 @@
 
 // This class is responsible for communicating with a publishing server
 // to save and load published code.
-define(["jquery", "lscache"], function($, lscache) {
-  var myOrigin = window.location.protocol + "//" + window.location.host;
-  
-  function Publisher(baseURL) {
-    // We want to support CORS for development but in production it doesn't
-    // matter because all requests will be same-origin. However, browsers
-    // that don't support CORS will barf if they're given absolute URLs to
-    // the same domain, so we want to return relative URLs in such cases.
-    function makeURL(path) {
-      if (baseURL == myOrigin)
-        return path;
-      path = baseURL + path;
-      if (!$.support.cors && window.console)
-        window.console.warn("No CORS detected for request to " + path);
-      return path;
-    }
-    
-    function commit(info, cb) {
-      function save() {
-        $.ajax({
-          type: 'POST',
-          url: baseURL + '/commit',
-          headers: {
-            'X-Access-Token': loginInfo.accessToken
-          },
-          contentType: 'application/json',
-          data: JSON.stringify(info),
-          success: function() {
-            console.log("commit successful");
-            cb(null);
-          },
-          error: function(req) {
-            if (req.status == 403)
-              // Stale token?
-              lscache.remove("browserid-login-info");
-            if (req.responseText.indexOf("nothing to commit") != -1)
-              return cb(null);
-            console.log("commit failed: " + req.responseText);
-            cb(req);
-          }
-        });
-      }
-      
-      var loginInfo = lscache.get("browserid-login-info");
-      if (!loginInfo)
-        navigator.id.get(function(assertion) {
-          console.log("POST " + baseURL + "/token");
-          $.post(baseURL + "/token", {
-            assertion: assertion
-          }, function(info) {
-            // Odd, some browsers seem to automatically decode the JSON
-            // while others don't...
-            if (typeof(info) == "string")
-              info = JSON.parse(info);
-            loginInfo = info;
-            lscache.set("browserid-login-info", loginInfo, 60*60*24*7);
-            console.log(" -> " + JSON.stringify(loginInfo));
-            save();
-          });
-        });
-      else
-        save();
-    }
-
+define(["jquery"], function($) {
+  function Publisher(git) {
     return {
-      baseURL: baseURL,
+      baseURL: git.baseURL,
       loadCode: function(path, cb) {
-        var originalURL = baseURL + '/static' + path;
-        $.ajax({
-          type: 'GET',
-          url: makeURL('/static' + path),
-          dataType: 'text',
-          error: function(req) {
-            if (req.status == 404) {
+        var originalURL = git.url(path);
+        git.get(path, function(err, data) {
+          if (err) {
+            if (err.status == 404) {
               $.get('default-content.html', function(html) {
                 cb(null, html, originalURL);
               });
             } else
-              cb(req);
-          },
-          success: function(data) {
+              cb(err);
+          } else {
             cb(null, fixDoctypeHeadBodyMunging(data), originalURL);
           }
         });
       },
       saveCode: function(data, originalURL, cb) {
-        var path = originalURL.slice((baseURL + '/static/').length);
-        var filesToAdd = {};
-        filesToAdd[path] = data;
-        commit({
-          add: filesToAdd,
+        function commit(err) {
+          if (err) return cb(err);
+          git.commit(info, function(err) {
+            cb(err, {path: path, url: git.url(path)});
+          });
+        }
+        
+        var path = git.path(originalURL);
+        var info = {
+          add: {},
           message: "User edited code in Thimble."
-        }, function(err) {
-          cb(err, {path: '/' + path, url: baseURL + '/static/' + path});
-        });
+        };
+        info.add[path.slice(1)] = data;
+        
+        if (!git.isLoggedIn())
+          git.login(commit);
+        else
+          commit();
+        
         console.log("orig", originalURL, path);
-      },
-      commit: commit
+      }
     };
   }
   

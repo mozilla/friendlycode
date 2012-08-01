@@ -16,7 +16,7 @@ define([], function() {
   
   function DragUploader(options) {
     var codeMirror = options.codeMirror;
-    var publisher = options.publisher;
+    var git = options.git;
     var self = {};
     var dropZone = codeMirror.getWrapperElement();
     dropZone.addEventListener('dragover', function(evt) {
@@ -44,7 +44,7 @@ define([], function() {
                 };
               });
               console.log("UPLOAD", filesToUpload, "to", staticDir);
-              publisher.commit({
+              git.commit({
                 add: filesToAdd,
                 message: "files uploaded via Thimble drag-and-drop"
               }, function(err) {

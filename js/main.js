@@ -6,6 +6,8 @@
 define("main", function(require) {
   var $ = require("jquery-tipsy"),
       htmlCodeMirror = require("codemirror/html"),
+      BrowserIDCORS = require("browserid-cors"),
+      GitBrowserIDCORS = require("git-browserid-cors"),
       Help = require("fc/help"),
       Parachute = require("fc/parachute"),
       Publisher = require("fc/publisher"),
@@ -62,6 +64,8 @@ define("main", function(require) {
       return Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
     }
   });
+  var browserIDCORS = BrowserIDCORS({baseURL: publishURL});
+  var git = GitBrowserIDCORS(browserIDCORS);
   var relocator = Relocator(codeMirror);
   var helpArea = $(".help");
   var cursorHelp = ContextSensitiveHelp({
@@ -85,10 +89,10 @@ define("main", function(require) {
     previewArea: $("#preview-holder")
   });
   var previewToEditorMapping = PreviewToEditorMapping(preview, $(".CodeMirror-lines"));
-  var publisher = Publisher(publishURL);
+  var publisher = Publisher(git);
   var dragUploader = DragUploader({
     codeMirror: codeMirror,
-    publisher: publisher
+    git: git
   });
   var historyUI = HistoryUI({
     codeMirror: codeMirror,
@@ -212,6 +216,7 @@ define("main", function(require) {
     });
 
   return {
+    git: git,
     codeMirror: codeMirror,
     parachute: parachute,
     ready: ready
