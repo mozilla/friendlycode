@@ -29,7 +29,11 @@ define(["jquery"], function($) {
         link.title = entry.title;
         link.onclick = (function(i,h,interval) {
           return function() {
-            i = i.replace("http://","//");
+            // make protocol-agnostic when not running from file
+            if (window.location.toString().indexOf("file:///") === -1) {
+              i = i.replace("http://","//");
+            }
+
             var imgHTML = "&lt;img src=\"<a href='"+i+"'>"+i+"</a>\" alt=\"Found on: <a href='"+h+"'>"+h+"</a>\"&gt;",
                 imageDiv = $("div.imgCode div", finder.template),
                 start = codeMirror.posFromIndex(interval.start),

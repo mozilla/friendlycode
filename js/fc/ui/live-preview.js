@@ -13,7 +13,7 @@ define(["underscore", "jquery", "backbone"], function(_, $, Backbone) {
         var x = 0,
             y = 0,
             docFrag = event.document,
-            doc, wind, style;
+            doc, wind;
         
         if (iframe) {
           doc = $(iframe).contents()[0];
@@ -33,14 +33,6 @@ define(["underscore", "jquery", "backbone"], function(_, $, Backbone) {
         doc.open();
         doc.write(event.sourceCode);
         doc.close();
-        
-        // firefox broken image fix
-        if (event.sourceCode.indexOf("img:-moz-broken") === -1) {
-          style = document.createElement("style");
-          style.innerHTML = "/* ensure broken image icon for FireFox */\n";
-          style.innerHTML += "img:-moz-broken { -moz-force-broken-image-icon: 1; width: 24px; height: 24px; }";
-          doc.head.appendChild(style);
-        }
 
         // Insert a BASE TARGET tag so that links don't open in
         // the iframe.

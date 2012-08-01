@@ -92,7 +92,7 @@ define("main", function(require) {
   });
   var flickrFindr = FlickrFindr({
     api_key: "b939e5bd8aa696db965888a31b2f1964",
-    template: FlickrFindrTemplate
+    template: FlickrFindrTemplate,
     filters: {
       license: "1,2,3,4,5,6",
       content_type: 1,

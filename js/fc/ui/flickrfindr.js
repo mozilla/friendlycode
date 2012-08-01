@@ -1,7 +1,5 @@
 "use strict";
-
 /**
-
    A JAvaScript Flickr search API utility.
 
    To filter on license:
@@ -17,9 +15,10 @@
     8 = "United States Government Work" 
 
 **/
-define(["jquery"], function(jQuery) {
 
-  return function FlickrFindr(options, undef)
+(function() {
+
+  var FlickrFindr = function(options, undef)
   {
     var $ = jQuery,
         api_key = options.api_key,
@@ -27,7 +26,8 @@ define(["jquery"], function(jQuery) {
         api_location = "http://api.flickr.com/services/rest/?",
         constructed = api_location + "agent=flickrfindr" + "&api_key=" + api_key,
         addArgument = function(arg, val) { constructed += "&" + arg + "=" + val; },
-        filters = options.filters;
+        filters = options.filters,
+        filter;
 
     // set up search
     addArgument("method","flickr.photos.search");
@@ -117,13 +117,13 @@ define(["jquery"], function(jQuery) {
         }
 
         var xml = jqXhr.responseXML,
-            results = xml.getElementsByTagName("photo"),
+            results = $("photo",xml),
             result, url, farm, server, owner, id, secret, title,
             i, last = results.length, img, entry,
             url_b, url_m, url_s;
         
         // note how many results we can find for this query
-        self.pages = xml.getElementsByTagName("photos")[0].getAttribute("pages");
+        self.pages = $("photos[pages]",xml);
         
         // iterate over all photos in the retrieved page set
         for(i=0; i<last; i++) {
@@ -174,7 +174,6 @@ define(["jquery"], function(jQuery) {
     };
     
     // add template interacing
-
     (function($, self, template){
       self.moreOnScroll = true;
 
@@ -214,4 +213,12 @@ define(["jquery"], function(jQuery) {
     // return the finder
     return self;
   };
-});
+  
+  // Do we use require.js?
+  if (typeof requirejs === "function") {
+    define(function() { return FlickrFindr; });
+  }
+
+  // We are not using require.js
+  else { return FlickrFindr; }
+}());
