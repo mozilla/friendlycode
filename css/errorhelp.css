@@ -129,8 +129,9 @@ b {
 }
 
 .error em.highlight-1 {
-  color: inherit;
   font-style: normal;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .CodeMirror span.highlight-1,
@@ -152,8 +153,6 @@ b {
 .CodeMirror .cursor-pointer {
   display: absolute;
   font-size: 40px;
-  margin-left: -20px;
-  margin-top: 10px;
   padding-top: 0px;
   font-weight: bold;
   z-index: 2000;
@@ -202,4 +201,17 @@ b {
 .help-marker-color {
   background-color: #FF9933;
   color: white;
+}
+
+.hint-marker-positioning {
+  left: auto !important; /* CodeMirror will set this value, but we don't want it set! */
+  right: 1em;
+  line-height: 1em;
+  text-align: center;
+  border-radius: 0.5em;
+  margin: 0px;
+  margin-top: -1em;
+  padding: 0px;
+  width: 1em;
+  cursor: pointer;
 }

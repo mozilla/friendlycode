@@ -62,20 +62,23 @@ define(["jquery"], function($) {
       // set up the end-of-line marker for hint/error toggling
       setupMarker: function(type) {
         lastElement.hide();
-        var jToggle = $(lastToggle);
-        jToggle.text(type == "error" ? "!" : "?");
+        var jToggle = $(lastToggle),
+            jToggleText = "",
+            jToggleClass = "";
+        if (type === "error") {
+          jToggleText = "!";
+          jToggleClass = "error-marker-color";
+        } else {
+          jToggleText = "?";
+          jToggleClass = "help-marker-color";
+        }
+
         codeMirror.addWidget(lastPos, lastToggle, false);
-        jToggle.css({left: "auto",
-                     right: "1em",
-                     width: "1em",
-                     textAlign: "center",
-                     margin: "0px",
-                     marginTop: "-1em",
-                     padding: "0px",
-                     lineHeight: "1em",
-                     cursor: "pointer"});
+        jToggle.text(jToggleText);
         jToggle.removeClass("error-marker-color help-marker-color");
-        jToggle.addClass(type === "error" ? "error-marker-color" : "help-marker-color");
+        jToggle.addClass("hint-marker-positioning");
+        jToggle.addClass(jToggleClass);
+
         lastToggle.onclick = (function(element) { return function() { element.toggle(); }; } (lastElement));
         jToggle.show();
       }
