@@ -90,10 +90,6 @@ define("main", function(require) {
   });
   var previewToEditorMapping = PreviewToEditorMapping(preview, $(".CodeMirror-lines"));
   var publisher = Publisher(git);
-  var dragUploader = DragUploader({
-    codeMirror: codeMirror,
-    git: git
-  });
   var historyUI = HistoryUI({
     codeMirror: codeMirror,
     undo: $("#undo-nav-item"),
@@ -107,6 +103,11 @@ define("main", function(require) {
     errorDialog: $("#error-dialog"),
     publishButton: $("#publish-button"),
     remixURLTemplate: remixURLTemplate
+  });
+  var dragUploader = DragUploader({
+    codeMirror: codeMirror,
+    git: git,
+    modals: modals
   });
   var textUI = TextUI({
     codeMirror: codeMirror,

@@ -62,6 +62,7 @@ define(function (require) {
         remixLink = $("a.remix", publishDialog),
         accordions = $("div.accordion", publishDialog),
         origShareHTML = $(".thimble-additionals", shareResult).html(),
+        defaultErrorTitle = $(".thimble-title", errorDialog).text(),
         currURL = null,
         socialMedia = SocialMedia();
 
@@ -107,6 +108,7 @@ define(function (require) {
         if (err) {
           var text = "Sorry, an error occurred while trying to publish. " +
                      err.responseText;
+          $(".thimble-title", errorDialog).text(defaultErrorTitle);
           $(".error-text", errorDialog).text(text);
           publishDialog.stop().hide();
           errorDialog.show();
@@ -156,6 +158,22 @@ define(function (require) {
     });
     
     var self = {
+      showErrorDialog: function(title, html) {
+        if (!html) {
+          html = title;
+          title = defaultErrorTitle;
+        }
+        var content = $(".error-text", errorDialog);
+        if (typeof(html) == 'string')
+          content.html(html);
+        else
+          content.empty().append(html);
+        $(".thimble-title", errorDialog).text(title);
+        errorDialog.show();
+      },
+      hideErrorDialog: function() {
+        errorDialog.hide();
+      },
       setCurrentURL: function(url) {
         currURL = url;
       }

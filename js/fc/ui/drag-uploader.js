@@ -1,6 +1,6 @@
 "use strict";
 
-define([], function() {
+define(["jquery"], function($) {
   var ACCEPTED_FILE_TYPES = [
     "image/png",
     "image/jpeg",
@@ -17,6 +17,7 @@ define([], function() {
   function DragUploader(options) {
     var codeMirror = options.codeMirror;
     var git = options.git;
+    var modals = options.modals;
     var self = {};
     var dropZone = codeMirror.getWrapperElement();
     dropZone.addEventListener('dragover', function(evt) {
@@ -25,6 +26,49 @@ define([], function() {
       evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
     }, true);
     dropZone.addEventListener('drop', function(evt) {
+      function startUpload(filesToAdd) {
+        function upload() {
+          var MIN_UPLOAD_TIME = 1000,
+              startTime = Date.now();
+
+          modals.showErrorDialog('Please wait', 'Uploading...');
+          git.commit({
+            add: filesToAdd,
+            message: "files uploaded via Thimble drag-and-drop"
+          }, function(err) {
+            if (err)
+              modals.showErrorDialog('An error occurred while uploading. ' +
+                                     err.responseText);
+            else {
+              setTimeout(function() {
+                modals.hideErrorDialog();
+                insertCode();
+              }, Math.max(MIN_UPLOAD_TIME - (Date.now() - startTime), 0));
+            }
+          });
+        }
+        
+        if (git.isLoggedIn())
+          upload();
+        else {
+          var loginElt = $('<p>Please <a href="#">sign in</a> to upload' +
+                           ' your files.</p>');
+          $('a', loginElt).click(function() {
+            modals.showErrorDialog('Please wait', 'Logging in...');
+            git.login(function(err) {
+              if (err)
+                modals.showErrorDialog('An error occured while logging in.');
+              else {
+                modals.hideErrorDialog();
+                upload();
+              }
+            });
+            return false;
+          });
+          modals.showErrorDialog('Login required', loginElt);
+        }
+      }
+      
       function fetch(file) {
         console.log("FILE", file, file.name, file.type);
         var reader = new FileReader();
@@ -44,14 +88,7 @@ define([], function() {
                 };
               });
               console.log("UPLOAD", filesToUpload, "to", staticDir);
-              git.commit({
-                add: filesToAdd,
-                message: "files uploaded via Thimble drag-and-drop"
-              }, function(err) {
-                if (err)
-                  return alert('an error occurred while uploading!');
-                insertCode();
-              });
+              startUpload(filesToAdd);
             }
           }
         };
