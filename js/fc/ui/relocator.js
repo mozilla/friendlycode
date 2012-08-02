@@ -63,19 +63,15 @@ define(["jquery"], function($) {
       setupMarker: function(type) {
         lastElement.hide();
         var jToggle = $(lastToggle),
-            jToggleText = "",
             jToggleClass = "";
         if (type === "error") {
-          jToggleText = "!";
-          jToggleClass = "error-marker-color";
+          jToggleClass = "hint-marker-error";
         } else {
-          jToggleText = "?";
-          jToggleClass = "help-marker-color";
+          jToggleClass = "hint-marker-help";
         }
 
         codeMirror.addWidget(lastPos, lastToggle, false);
-        jToggle.text(jToggleText);
-        jToggle.removeClass("error-marker-color help-marker-color");
+        jToggle.removeClass("hint-marker-error hint-marker-help");
         jToggle.addClass("hint-marker-positioning");
         jToggle.addClass(jToggleClass);
 
