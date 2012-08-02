@@ -47,7 +47,55 @@
             cb(req);
           }
         });
-      }
+      },
+      commitFileObjects: (function() {
+        function commitFiles(base64Files, message, cb) {
+          var filesToAdd = {};
+          Object.keys(base64Files).forEach(function(path) {
+            filesToAdd[path] = {
+              encoding: 'base64',
+              data: base64Files[path]
+            };
+          });
+          self.commit({
+            add: filesToAdd,
+            message: message
+          }, cb);
+        }
+        
+        function readFileAsBase64(file, cb) {
+          var reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onloadend = function() {
+            var dataPrefix = 'data:' + file.type + ";base64,";
+            var content = reader.result.slice(dataPrefix.length);
+            if (reader.result && reader.result.indexOf(dataPrefix) == 0)
+              cb(null, content);
+            else
+              cb("could not get base64 encoding of " + file.name);
+          };
+        }
+        
+        return function commitFileObjects(files, message, cb) {
+          var filesToRead = {},
+              filesLeft = Object.keys(files).length,
+              isAborted = false;
+          
+          Object.keys(files).forEach(function(path) {
+            readFileAsBase64(files[path], function(err, content) {
+              if (isAborted)
+                return;
+              if (err) {
+                isAborted = true;
+                return cb({responseText: err});
+              }
+              filesToRead[path] = content;
+              if (--filesLeft == 0)
+                commitFiles(filesToRead, message, cb);
+            });
+          });
+        };
+      })()
     };
     
     Object.keys(browserIDCORS).forEach(function(prop) {
