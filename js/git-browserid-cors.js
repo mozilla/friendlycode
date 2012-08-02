@@ -17,14 +17,7 @@
           type: 'GET',
           url: self.url(path),
           dataType: 'text',
-          error: function(req) {
-            if (req.status == 404) {
-              $.get('default-content.html', function(html) {
-                cb(null, html, originalURL);
-              });
-            } else
-              cb(req);
-          },
+          error: cb,
           success: function(data) {
             cb(null, data);
           }
