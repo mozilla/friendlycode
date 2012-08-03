@@ -39,7 +39,7 @@ img {
   background-image: url("../img/header-gradient.png");
   background-position: 0 0;
 
-  height: 120px;    /* height value must correspond with section.top */
+  height: 40px;    /* height value must correspond with section.top */
   width: 100%;
   margin: 0;
   padding: 0;
@@ -49,6 +49,8 @@ img {
 
   border-top: 2px solid white;
   border-bottom: 1px solid #D6D6D6;
+
+  background: white;
 }
 
 
@@ -58,6 +60,8 @@ img {
   margin-left: 15px;
   width: 200px;
   margin-top: 10px;
+  
+  display: none;
 }
 
 #header .logo a {
@@ -71,7 +75,7 @@ img {
 
   position: absolute;
   display: block;
-  top: 79px;
+  top: 0px;
   width: 100%;
   height: 0;
 }
@@ -423,7 +427,7 @@ img {
 
 section {
   position: absolute;
-  top: 110px;       /* corresponds to #header.height */
+  top: 30px;       /* corresponds to #header.height */
   left: 0;
   right: 0;
   bottom: 0;    /* corresponds to 20 + footer.height */
