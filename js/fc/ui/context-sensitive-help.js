@@ -14,6 +14,7 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
     var lastEvent = null;
     var timeout = null;
     var lastHelp = null;
+    var HELP_DISPLAY_DELAY = 250;
     
     // The escape key should close hints 
     $(document).keyup(function(event) {
@@ -105,11 +106,13 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
         return;
 
       clearHelp();
-      if (help)
+      // same as error-help.js, "reparse" handler
+      if (help) {
         timeout = setTimeout(function() {
           lastHelp = JSON.stringify(help);
           showHelp(cursorIndex, help);
-        }, 250);
+        }, HELP_DISPLAY_DELAY);
+      }
     });
 
     return self;
