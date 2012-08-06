@@ -29,7 +29,7 @@ define(["jquery-slowparse", "./mark-tracker"], function($, MarkTracker) {
     var errorArea = options.errorArea;
     var relocator = options.relocator;
     var timeout = null;
-    var ERROR_DISPLAY_DELAY = 1000;
+    var ERROR_DISPLAY_DELAY = 250;
 
     // The escape key should close error help 
     $(document).keyup(function(event) {
@@ -75,7 +75,7 @@ define(["jquery-slowparse", "./mark-tracker"], function($, MarkTracker) {
       if (event.error) {
         timeout = setTimeout(function() {
           reportError(event.error);
-        }, 250);
+        }, ERROR_DISPLAY_DELAY);
       }
     });
     return self;

@@ -31,8 +31,7 @@ define(["jquery"], function($) {
           lastElement = null;
         }
         if (lastToggle.parentNode) {
-          $(lastToggle).hide();
-          lastToggle.parentNode.removeChild(lastToggle);
+          $(lastToggle).remove();
         }
       },
 
@@ -61,22 +60,15 @@ define(["jquery"], function($) {
 
       // set up the end-of-line marker for hint/error toggling
       setupMarker: function(type) {
+        var cursorPosition = codeMirror.getCursor();
         lastElement.hide();
-        var jToggle = $(lastToggle),
-            jToggleClass = "";
-        if (type === "error") {
-          jToggleClass = "hint-marker-error";
-        } else {
-          jToggleClass = "hint-marker-help";
-        }
-
+        lastToggle.lastElement = lastElement;
         codeMirror.addWidget(lastPos, lastToggle, false);
-        jToggle.removeClass("hint-marker-error hint-marker-help");
-        jToggle.addClass("hint-marker-positioning");
-        jToggle.addClass(jToggleClass);
-
-        lastToggle.onclick = (function(element) { return function() { element.toggle(); }; } (lastElement));
-        jToggle.show();
+        lastToggle.onclick = function() {
+          lastToggle.lastElement.toggle(); 
+          codeMirror.focus();
+        };
+        $(lastToggle).attr("class", "hint-marker-positioning hint-marker-" + type).show();
       }
     };
 
