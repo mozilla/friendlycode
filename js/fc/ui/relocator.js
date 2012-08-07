@@ -5,7 +5,8 @@ define(["jquery"], function($) {
   return function Relocator(codeMirror) {
     var lastPos = null;
     var lastElement = null;
-    
+    var lastToggle = document.createElement("div");
+
     function flipElementIfNeeded() {
       var coords = codeMirror.charCoords(lastPos, "local");
       var bottomChar = {line: codeMirror.lineCount(), ch: 0};
@@ -29,6 +30,9 @@ define(["jquery"], function($) {
           lastElement.hide();
           lastElement = null;
         }
+        if (lastToggle.parentNode) {
+          $(lastToggle).remove();
+        }
       },
 
       // relocate an element to inside CodeMirror, pointing "at" the line for startMark
@@ -43,12 +47,28 @@ define(["jquery"], function($) {
         lastPos = codeMirror.posFromIndex(startMark);
         codeMirror.setLineClass(lastPos.line, null, "CodeMirror-line-highlight");
         codeMirror.setMarker(lastPos.line, null, "gutter-highlight-" + type);
-        lastElement.show();
+
         codeMirror.addWidget(lastPos, lastElement[0], false);
         $(".up-arrow, .down-arrow", lastElement).css({
           left: codeMirror.charCoords(lastPos, "local").x + "px"
         });
         flipElementIfNeeded();
+
+        // make sure to add the end-of-line marker
+        this.setupMarker(type);
+      },
+
+      // set up the end-of-line marker for hint/error toggling
+      setupMarker: function(type) {
+        var cursorPosition = codeMirror.getCursor();
+        lastElement.hide();
+        lastToggle.lastElement = lastElement;
+        codeMirror.addWidget(lastPos, lastToggle, false);
+        lastToggle.onclick = function() {
+          lastToggle.lastElement.toggle(); 
+          codeMirror.focus();
+        };
+        $(lastToggle).attr("class", "hint-marker-positioning hint-marker-" + type).show();
       }
     };
 
