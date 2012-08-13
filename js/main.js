@@ -21,6 +21,7 @@ define("main", function(require) {
       HelpMsgTemplate = require("template!help-msg"),
       ErrorMsgTemplate = require("template!error-msg"),
       ErrorDialogTemplate = require("template!error-dialog"),
+      ConfirmDialogTemplate = require("template!confirm-dialog"),
       publishURL = $("meta[name='publish-url']").attr("content"),
       pageToLoad = $("meta[name='remix-url']").attr("content"),
       deploymentType = $("meta[name='deployment-type']").attr("content"),
@@ -94,7 +95,7 @@ define("main", function(require) {
   var modals = Modals({
     codeMirror: codeMirror,
     publisher: publisher,
-    confirmDialog: $("#confirm-dialog"),
+    confirmDialog: $(ConfirmDialogTemplate()).appendTo(document.body),
     publishDialog: $("#publish-dialog"),
     errorDialog: $(ErrorDialogTemplate()).appendTo(document.body),
     publishButton: $("#publish-button"),

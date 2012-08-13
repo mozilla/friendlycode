@@ -91,7 +91,7 @@ define(function (require) {
       if ($(this).hasClass("enabled")) confirmDialog.fadeIn();
     });
     
-    $("#confirm-publication", confirmDialog).click(function(){
+    $(".yes-button", confirmDialog).click(function(){
       // Reset the publish modal.
       shareResult.unbind('.hotLoad');
       $(".accordion", publishDialog).addClass("collapsed");

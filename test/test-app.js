@@ -76,6 +76,6 @@ defineTests(["jquery", "lscache"], function($, lscache) {
 
     window.require("main").codeMirror.setValue("<p>hi</p>");
     $("#publish").click();
-    $("#confirm-publication").click();
+    $(".yes-button").click();
   });
 });

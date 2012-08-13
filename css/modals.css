@@ -132,7 +132,7 @@
   padding-left: 1em;
 }
 
-#confirm-dialog .thimble-title:before {
+.confirm-dialog .thimble-title:before {
   content: "" !important;
 }
 
@@ -233,24 +233,24 @@ div#publication-result p {
   color: #236819;
 }
 
-#confirm-dialog .public-warning {
+.confirm-dialog .public-warning {
   text-align: center;
   padding-bottom: 1em;
 }
 
-#confirm-dialog .error-warning,
-#confirm-dialog .development-note {
+.confirm-dialog .error-warning,
+.confirm-dialog .development-note {
   display: none;
 }
 
-html.deployment-type-development #confirm-dialog .development-note {
+html.deployment-type-development .confirm-dialog .development-note {
   display: block;
   padding-bottom: 1em;
   color: gray;
   font-style: italic;
 }
 
-#confirm-dialog.has-errors .error-warning {
+.confirm-dialog.has-errors .error-warning {
   display: block;
   padding-bottom: 1em;
   color: red;
