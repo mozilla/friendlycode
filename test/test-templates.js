@@ -1,6 +1,6 @@
 "use strict";
 
-defineTests(["template!error", "template!help"], function(err, help) {
+defineTests(["template!error-msg", "template!help-msg"], function(err, help) {
   module("templates");
 
   function contains(str, terms) {
