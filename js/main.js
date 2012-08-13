@@ -18,8 +18,8 @@ define("main", function(require) {
       PreviewToEditorMapping = require("fc/ui/preview-to-editor-mapping"),
       HistoryUI = require("fc/ui/history"),
       Relocator = require("fc/ui/relocator"),
-      HelpTemplate = require("template!help"),
-      ErrorTemplate = require("template!error"),
+      HelpMsgTemplate = require("template!help-msg"),
+      ErrorMsgTemplate = require("template!error-msg"),
       publishURL = $("meta[name='publish-url']").attr("content"),
       pageToLoad = $("meta[name='remix-url']").attr("content"),
       deploymentType = $("meta[name='deployment-type']").attr("content"),
@@ -66,7 +66,7 @@ define("main", function(require) {
   var cursorHelp = ContextSensitiveHelp({
     codeMirror: codeMirror,
     helpIndex: Help.Index(),
-    template: HelpTemplate,
+    template: HelpMsgTemplate,
     helpArea: helpArea,
     relocator: relocator,
     checkbox: $("#hints-nav-item")
@@ -74,7 +74,7 @@ define("main", function(require) {
   var errorArea =  $(".error");
   var errorHelp = ErrorHelp({
     codeMirror: codeMirror,
-    template: ErrorTemplate,
+    template: ErrorMsgTemplate,
     errorArea: errorArea,
     relocator: relocator
   });
