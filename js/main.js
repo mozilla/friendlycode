@@ -18,11 +18,14 @@ define("main", function(require) {
       PreviewToEditorMapping = require("fc/ui/preview-to-editor-mapping"),
       HistoryUI = require("fc/ui/history"),
       Relocator = require("fc/ui/relocator"),
+      NavOptionsTemplate = require("template!nav-options"),
       HelpMsgTemplate = require("template!help-msg"),
       ErrorMsgTemplate = require("template!error-msg"),
       ErrorDialogTemplate = require("template!error-dialog"),
       ConfirmDialogTemplate = require("template!confirm-dialog"),
       PublishDialogTemplate = require("template!publish-dialog"),
+      navOptions = $(NavOptionsTemplate()).appendTo("header"),
+      undoNavItem = navOptions.find(".undo-nav-item"),
       publishURL = $("meta[name='publish-url']").attr("content"),
       pageToLoad = $("meta[name='remix-url']").attr("content"),
       deploymentType = $("meta[name='deployment-type']").attr("content"),
@@ -72,7 +75,7 @@ define("main", function(require) {
     template: HelpMsgTemplate,
     helpArea: helpArea,
     relocator: relocator,
-    checkbox: $("#hints-nav-item")
+    checkbox: navOptions.find(".hints-nav-item")
   });
   var errorArea =  $(".error");
   var errorHelp = ErrorHelp({
@@ -90,8 +93,8 @@ define("main", function(require) {
   var publisher = Publisher(publishURL);
   var historyUI = HistoryUI({
     codeMirror: codeMirror,
-    undo: $("#undo-nav-item"),
-    redo: $("#redo-nav-item")
+    undo: undoNavItem,
+    redo: navOptions.find(".redo-nav-item")
   });
   var modals = Modals({
     codeMirror: codeMirror,
@@ -99,12 +102,12 @@ define("main", function(require) {
     confirmDialog: $(ConfirmDialogTemplate()).appendTo(document.body),
     publishDialog: $(PublishDialogTemplate()).appendTo(document.body),
     errorDialog: $(ErrorDialogTemplate()).appendTo(document.body),
-    publishButton: $("#publish-button"),
+    publishButton: navOptions.find(".publish-button"),
     remixURLTemplate: remixURLTemplate
   });
   var textUI = TextUI({
     codeMirror: codeMirror,
-    navItem: $("#text-nav-item")
+    navItem: navOptions.find(".text-nav-item")
   });
   var parachute = Parachute(window, codeMirror, pageToLoad);
   
@@ -166,13 +169,13 @@ define("main", function(require) {
       // discussion:
       //
       // https://github.com/mozilla/webpagemaker/issues/53
-      $("#undo-nav-item").tipsy({
+      undoNavItem.tipsy({
         gravity: 'n',
         fade: true,
         trigger: 'manual',
         title: 'data-restore-help'
       }).tipsy("show");
-      setTimeout(function() { $("#undo-nav-item").tipsy("hide"); }, 6000);
+      setTimeout(function() { undoNavItem.tipsy("hide"); }, 6000);
     } else {
       // Only save data on page unload if it's different from
       // the URL we just (hopefully) loaded.
