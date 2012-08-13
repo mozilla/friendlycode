@@ -480,12 +480,12 @@ div.editor-actions {
   top: 20px;
 }
 
-#source {
+.source-code {
   background-color: #F9F9F9;
   z-index: 1;
 }
 
-#source, #preview-holder {
+.source-code, .preview-holder {
   width: 50%;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -495,7 +495,7 @@ div.editor-actions {
   top: 10px;
 }
 
-#preview-holder {
+.preview-holder {
   right: 0;
   border-left: 1px solid #D6D6D6;
   background: white;
@@ -503,14 +503,14 @@ div.editor-actions {
   padding: 10px;
 }
 
-#preview-holder iframe {
+.preview-holder iframe {
   border: 1px solid #D6D6D6;
   width: 100%;
   height: 100%;
   background-color: white;
 }
 
-#source .CodeMirror, #source .CodeMirror-scroll {
+.source-code .CodeMirror, .source-code .CodeMirror-scroll {
   height: 100%;
   overflow: auto;
 }

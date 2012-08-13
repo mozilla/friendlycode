@@ -57,7 +57,7 @@ define("main", function(require) {
   if (supportsPushState)
     window.history.replaceState({pageToLoad: pageToLoad}, "", location.href);
     
-  var codeMirror = ParsingCodeMirror($("#source")[0], {
+  var codeMirror = ParsingCodeMirror($("#editor .source-code")[0], {
     mode: "text/html",
     theme: "jsbin",
     tabMode: "indent",
@@ -68,7 +68,7 @@ define("main", function(require) {
     }
   });
   var relocator = Relocator(codeMirror);
-  var helpArea = $(".help");
+  var helpArea = $("#editor .help");
   var cursorHelp = ContextSensitiveHelp({
     codeMirror: codeMirror,
     helpIndex: Help.Index(),
@@ -77,7 +77,7 @@ define("main", function(require) {
     relocator: relocator,
     checkbox: navOptions.find(".hints-nav-item")
   });
-  var errorArea =  $(".error");
+  var errorArea =  $("#editor .error");
   var errorHelp = ErrorHelp({
     codeMirror: codeMirror,
     template: ErrorMsgTemplate,
@@ -87,7 +87,7 @@ define("main", function(require) {
   var preview = LivePreview({
     codeMirror: codeMirror,
     ignoreErrors: true,
-    previewArea: $("#preview-holder")
+    previewArea: $("#editor .preview-holder")
   });
   var previewToEditorMapping = PreviewToEditorMapping(preview, $(".CodeMirror-lines"));
   var publisher = Publisher(publishURL);
