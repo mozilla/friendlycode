@@ -39,7 +39,7 @@ img {
   background-image: url("../img/header-gradient.png");
   background-position: 0 0;
 
-  height: 120px;    /* height value must correspond with section.top */
+  height: 120px;    /* height value must correspond with #editor.top */
   width: 100%;
   margin: 0;
   padding: 0;
@@ -425,7 +425,7 @@ img {
 
 /* ------ CONTENT AREA ------ */
 
-section {
+#editor {
   position: absolute;
   top: 110px;       /* corresponds to #header.height */
   left: 0;
