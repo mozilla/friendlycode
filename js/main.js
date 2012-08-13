@@ -20,6 +20,7 @@ define("main", function(require) {
       Relocator = require("fc/ui/relocator"),
       HelpMsgTemplate = require("template!help-msg"),
       ErrorMsgTemplate = require("template!error-msg"),
+      ErrorDialogTemplate = require("template!error-dialog"),
       publishURL = $("meta[name='publish-url']").attr("content"),
       pageToLoad = $("meta[name='remix-url']").attr("content"),
       deploymentType = $("meta[name='deployment-type']").attr("content"),
@@ -95,7 +96,7 @@ define("main", function(require) {
     publisher: publisher,
     confirmDialog: $("#confirm-dialog"),
     publishDialog: $("#publish-dialog"),
-    errorDialog: $("#error-dialog"),
+    errorDialog: $(ErrorDialogTemplate()).appendTo(document.body),
     publishButton: $("#publish-button"),
     remixURLTemplate: remixURLTemplate
   });
