@@ -234,6 +234,10 @@ img {
   font-weight: bold;
 }
 
+#publish-button:after {
+  content: '\0000a0\0000a0';
+}
+
 #publish-button.enabled {
   opacity: 1.0;
   cursor: pointer;
