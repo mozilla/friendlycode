@@ -57,7 +57,7 @@ define(function (require) {
         confirmDialog = options.confirmDialog,
         publishButton = options.publishButton,
         errorDialog = options.errorDialog,
-        shareResult = $("#share-result", publishDialog),
+        shareResult = $(".share-result", publishDialog),
         viewLink = $("a.view", publishDialog),
         remixLink = $("a.remix", publishDialog),
         accordions = $("div.accordion", publishDialog),
@@ -95,7 +95,7 @@ define(function (require) {
       // Reset the publish modal.
       shareResult.unbind('.hotLoad');
       $(".accordion", publishDialog).addClass("collapsed");
-      $("#publication-result", publishDialog).removeClass("collapsed");
+      $(".publication-result", publishDialog).removeClass("collapsed");
       $(".thimble-additionals", shareResult).html(origShareHTML);
       publishDialog.addClass("is-publishing");
       

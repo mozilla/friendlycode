@@ -22,6 +22,7 @@ define("main", function(require) {
       ErrorMsgTemplate = require("template!error-msg"),
       ErrorDialogTemplate = require("template!error-dialog"),
       ConfirmDialogTemplate = require("template!confirm-dialog"),
+      PublishDialogTemplate = require("template!publish-dialog"),
       publishURL = $("meta[name='publish-url']").attr("content"),
       pageToLoad = $("meta[name='remix-url']").attr("content"),
       deploymentType = $("meta[name='deployment-type']").attr("content"),
@@ -96,7 +97,7 @@ define("main", function(require) {
     codeMirror: codeMirror,
     publisher: publisher,
     confirmDialog: $(ConfirmDialogTemplate()).appendTo(document.body),
-    publishDialog: $("#publish-dialog"),
+    publishDialog: $(PublishDialogTemplate()).appendTo(document.body),
     errorDialog: $(ErrorDialogTemplate()).appendTo(document.body),
     publishButton: $("#publish-button"),
     remixURLTemplate: remixURLTemplate

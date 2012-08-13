@@ -82,7 +82,7 @@
   position: absolute;
 }
 
-#modal-close-button {
+.modal-close-button {
   background-image: url("../img/modal-close-button.png");
   background-position: center center;
   background-repeat: no-repeat;
@@ -95,7 +95,7 @@
   z-index: 3;
 }
 
-.thimble-grey-bar #modal-close-button {
+.thimble-grey-bar .modal-close-button {
   top: 0;
 }
 
@@ -209,12 +209,12 @@ div.accordion:not(.collapsed) .accordion-content {
 }
 
 /* TEMPORARY: Give some extra space for last-minute feedback text. */
-div#publication-result.accordion:not(.collapsed) .accordion-content {
+div.publication-result.accordion:not(.collapsed) .accordion-content {
   height: 75px;
 }
 
 /* TEMPORARY: Style last-minute feedback text. */
-div#publication-result p {
+div.publication-result p {
   font-size: 12px;
   padding-left: 20px;
   margin-top: -8px;
@@ -302,17 +302,17 @@ html.deployment-type-development .confirm-dialog .development-note {
   border-top: 1px solid #D6D6D6;
 }
 
-#publish-dialog.is-publishing .thimble-url-box {
+.publish-dialog.is-publishing .thimble-url-box {
   background-image: url(../img/throbber.gif);
   background-repeat: no-repeat;
   background-position: 8px 8px;
 }
 
-#publish-dialog.is-publishing .thimble-url-box a {
+.publish-dialog.is-publishing .thimble-url-box a {
   font-size: 0;
 }
 
-#publish-dialog.is-publishing #share-result .thimble-additionals {
+.publish-dialog.is-publishing .share-result .thimble-additionals {
   font-size: 0;
   width: 100%;
   height: 100%;

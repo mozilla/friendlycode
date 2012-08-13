@@ -58,8 +58,8 @@ defineTests(["jquery", "lscache"], function($, lscache) {
             text: "/lol"
           });
           var viewURL = publishURL + "/lol";
-          var view = $("#publication-result .view");
-          var remix = $("#remix-it .remix");
+          var view = $(".publication-result .view");
+          var remix = $(".publish-dialog .remix");
           equal(view.text(), viewURL, "view URL text is " + viewURL);
           equal(view.attr("href"), viewURL, "view URL href is " + viewURL);
           ok(remix.text().indexOf("/lol") != -1,
