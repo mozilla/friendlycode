@@ -13,7 +13,8 @@ define(["module", "text", "underscore"], function (module, text, _) {
 
         var template;
         if (config.isBuild) {
-          template = buildMap[name] = "_.template('" + data  + "')";
+          template = buildMap[name] = "_.template(" + JSON.stringify(data)  +
+                     ")";
         } else {
           template = _.template(data);
         }
@@ -25,7 +26,8 @@ define(["module", "text", "underscore"], function (module, text, _) {
       if (buildMap[moduleName]) {
         var content = buildMap[moduleName];
         write.asModule(pluginName + "!" + moduleName,
-          "define(['underscore'], function (_) { \n  return " + content + ";});\n");
+          "define(['underscore'], function (_) { \n  return " + content +
+          ";});\n");
       }
     }
   };
