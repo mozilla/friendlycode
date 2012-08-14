@@ -13,6 +13,7 @@ define(function(require) {
       ErrorMsgTemplate = require("template!error-msg");
   
   require('slowparse-errors');
+  require("codemirror/html");
   
   return function Editor(options) {
     var self = {},

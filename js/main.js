@@ -5,7 +5,6 @@
 // as a dependency.
 define("main", function(require) {
   var $ = require("jquery"),
-      htmlCodeMirror = require("codemirror/html"),
       TwoPanedEditor = require("fc/ui/two-paned-editor"),
       EditorToolbar = require("fc/ui/editor-toolbar"),
       Modals = require("fc/ui/modals"),
