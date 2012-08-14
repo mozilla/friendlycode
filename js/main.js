@@ -10,6 +10,7 @@ define("main", function(require) {
       Modals = require("fc/ui/modals"),
       Parachute = require("fc/parachute"),
       Publisher = require("fc/publisher"),
+      PublishUI = require("fc/ui/publish"),
       publishURL = $("meta[name='publish-url']").attr("content"),
       pageToLoad = $("meta[name='remix-url']").attr("content"),
       deploymentType = $("meta[name='deployment-type']").attr("content"),
@@ -41,17 +42,20 @@ define("main", function(require) {
   var editor = TwoPanedEditor({
     container: $("#editor")
   });
-  var toolbar = EditorToolbar({
-    container: $("#editor-toolbar"),
-    editor: editor,
-    startPublish: function() { modals.startPublish(); }
+  var modals = Modals({
+    container: $("#modal-dialogs")
   });
   var publisher = Publisher(publishURL);
-  var modals = Modals({
-    container: $("#modal-dialogs"),
+  var publishUI = PublishUI({
+    modals: modals,
     codeMirror: editor.codeMirror,
     publisher: publisher,
     remixURLTemplate: remixURLTemplate
+  });
+  var toolbar = EditorToolbar({
+    container: $("#editor-toolbar"),
+    editor: editor,
+    startPublish: publishUI.start
   });
   var parachute = Parachute(window, editor.codeMirror, pageToLoad);
 
@@ -79,7 +83,7 @@ define("main", function(require) {
         window.location.reload();
     }, false);
   
-  modals.on("publish", function(info) {
+  publishUI.on("publish", function(info) {
     // If the browser supports history.pushState, set the URL to
     // be the new URL to remix the page they just published, so they
     // can share/bookmark the URL and it'll be what they expect it
@@ -124,10 +128,12 @@ define("main", function(require) {
   } else
     publisher.loadCode(pageToLoad, function(err, data, url) {
       if (err) {
-        alert('Sorry, an error occurred while trying to get the page.');
+        modals.showErrorDialog({
+          text: 'Sorry, an error occurred while trying to get the page.'
+        });
       } else {
         editor.codeMirror.setValue(data);
-        modals.setCurrentURL(url);
+        publishUI.setCurrentURL(url);
         doneLoading();
       }
     });
