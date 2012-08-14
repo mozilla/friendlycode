@@ -16,6 +16,11 @@ define("main", function(require) {
       deploymentType = $("meta[name='deployment-type']").attr("content"),
       supportsPushState = window.history.pushState ? true : false,
       remixURLTemplate = null,
+      container = $("#friendlycode-holder").empty(),
+      toolbarDiv = $('<div class="friendlycode-toolbar"></div>')
+        .appendTo(container),
+      editorDiv = $('<div class="friendlycode-editor"></div>')
+        .appendTo(container),
       ready = $.Deferred();
 
   require("typekit-ready!");
@@ -40,10 +45,10 @@ define("main", function(require) {
     window.history.replaceState({pageToLoad: pageToLoad}, "", location.href);
 
   var editor = TwoPanedEditor({
-    container: $("#editor")
+    container: editorDiv
   });
   var modals = Modals({
-    container: $("#modal-dialogs")
+    container: $('<div></div>').appendTo(document.body)
   });
   var publisher = Publisher(publishURL);
   var publishUI = PublishUI({
@@ -53,7 +58,7 @@ define("main", function(require) {
     remixURLTemplate: remixURLTemplate
   });
   var toolbar = EditorToolbar({
-    container: $("#editor-toolbar"),
+    container: toolbarDiv,
     editor: editor,
     startPublish: publishUI.start
   });
