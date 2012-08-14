@@ -18,7 +18,12 @@ defineTests(["jquery", "lscache"], function($, lscache) {
         wind.require(["main"], function(main) {
           main.ready.done(function() {
             cb(wind, function() {
-              iframe.remove();
+              setTimeout(function() {
+                // Hopefully this should avoid a spurious
+                // NS_ERROR_NOT_INITIALIZED coming from 
+                // nsIDOMJSWindow.setTimeout (via jQuery) in Firefox.
+                iframe.remove();
+              }, 100);
               start();
             });
           });

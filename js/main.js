@@ -6,21 +6,11 @@
 define("main", function(require) {
   var $ = require("jquery-tipsy"),
       htmlCodeMirror = require("codemirror/html"),
-      Help = require("fc/help"),
+      TwoPanedEditor = require("fc/ui/two-paned-editor"),
       Parachute = require("fc/parachute"),
       Publisher = require("fc/publisher"),
-      Slowparse = require("slowparse/slowparse"),
-      TreeInspectors = require("slowparse/tree-inspectors"),
-      ParsingCodeMirror = require("fc/ui/parsing-codemirror"),
-      ContextSensitiveHelp = require("fc/ui/context-sensitive-help"),
-      ErrorHelp = require("fc/ui/error-help"),
-      LivePreview = require("fc/ui/live-preview"),
-      PreviewToEditorMapping = require("fc/ui/preview-to-editor-mapping"),
       HistoryUI = require("fc/ui/history"),
-      Relocator = require("fc/ui/relocator"),
       NavOptionsTemplate = require("template!nav-options"),
-      HelpMsgTemplate = require("template!help-msg"),
-      ErrorMsgTemplate = require("template!error-msg"),
       ErrorDialogTemplate = require("template!error-dialog"),
       ConfirmDialogTemplate = require("template!confirm-dialog"),
       PublishDialogTemplate = require("template!publish-dialog"),
@@ -33,12 +23,7 @@ define("main", function(require) {
       TextUI = require("fc/ui/text"),
       supportsPushState = window.history.pushState ? true : false,
       remixURLTemplate = null,
-      ready = $.Deferred(),
-      editor = $("#editor"),
-      sourceCode = $('<div class="source-code"></div>').appendTo(editor),
-      previewArea = $('<div class="preview-holder"></div>').appendTo(editor),
-      helpArea = $('<div class="help hidden"></div>').appendTo(editor),
-      errorArea =  $('<div class="error hidden"></div>').appendTo(editor);
+      ready = $.Deferred();
 
   require("typekit-ready!");
   require('slowparse-errors');
@@ -61,46 +46,19 @@ define("main", function(require) {
 
   if (supportsPushState)
     window.history.replaceState({pageToLoad: pageToLoad}, "", location.href);
-    
-  var codeMirror = ParsingCodeMirror(sourceCode[0], {
-    mode: "text/html",
-    theme: "jsbin",
-    tabMode: "indent",
-    lineWrapping: true,
-    lineNumbers: true,
-    parse: function(html) {
-      return Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
-    }
+
+  var editor = TwoPanedEditor({
+    container: $("#editor"),
+    hintsCheckbox: navOptions.find(".hints-nav-item")
   });
-  var relocator = Relocator(codeMirror);
-  var cursorHelp = ContextSensitiveHelp({
-    codeMirror: codeMirror,
-    helpIndex: Help.Index(),
-    template: HelpMsgTemplate,
-    helpArea: helpArea,
-    relocator: relocator,
-    checkbox: navOptions.find(".hints-nav-item")
-  });
-  var errorHelp = ErrorHelp({
-    codeMirror: codeMirror,
-    template: ErrorMsgTemplate,
-    errorArea: errorArea,
-    relocator: relocator
-  });
-  var preview = LivePreview({
-    codeMirror: codeMirror,
-    ignoreErrors: true,
-    previewArea: previewArea
-  });
-  var previewToEditorMapping = PreviewToEditorMapping(preview, $(".CodeMirror-lines"));
   var publisher = Publisher(publishURL);
   var historyUI = HistoryUI({
-    codeMirror: codeMirror,
+    codeMirror: editor.codeMirror,
     undo: undoNavItem,
     redo: navOptions.find(".redo-nav-item")
   });
   var modals = Modals({
-    codeMirror: codeMirror,
+    codeMirror: editor.codeMirror,
     publisher: publisher,
     confirmDialog: $(ConfirmDialogTemplate()).appendTo(document.body),
     publishDialog: $(PublishDialogTemplate()).appendTo(document.body),
@@ -109,10 +67,10 @@ define("main", function(require) {
     remixURLTemplate: remixURLTemplate
   });
   var textUI = TextUI({
-    codeMirror: codeMirror,
+    codeMirror: editor.codeMirror,
     navItem: navOptions.find(".text-nav-item")
   });
-  var parachute = Parachute(window, codeMirror, pageToLoad);
+  var parachute = Parachute(window, editor.codeMirror, pageToLoad);
   
   window.addEventListener("hashchange", function(event) {
     // We don't currently support dynamically changing the URL
@@ -161,7 +119,7 @@ define("main", function(require) {
   
   function doneLoading() {
     $("body").removeClass("loading");
-    codeMirror.clearHistory();
+    editor.codeMirror.clearHistory();
     historyUI.refresh();
     if (parachute.restore()) {
       // Display a non-modal message telling the user that their
@@ -184,12 +142,12 @@ define("main", function(require) {
       // the URL we just (hopefully) loaded.
       parachute.refresh();
     }
-    codeMirror.reparse();
-    codeMirror.focus();
+    editor.codeMirror.reparse();
+    editor.codeMirror.focus();
     ready.resolve();
   }
 
-  preview.on("refresh", function(event) {
+  editor.preview.on("refresh", function(event) {
     var title = event.window.document.title;
     if (title.length)
       $(".preview-title").text(title).show();
@@ -199,7 +157,7 @@ define("main", function(require) {
   
   if (!pageToLoad) {
     $.get("default-content.html", function(html) {
-      codeMirror.setValue(html.trim());
+      editor.codeMirror.setValue(html.trim());
       doneLoading();
     }, "text");
   } else
@@ -207,14 +165,14 @@ define("main", function(require) {
       if (err) {
         alert('Sorry, an error occurred while trying to get the page.');
       } else {
-        codeMirror.setValue(data);
+        editor.codeMirror.setValue(data);
         modals.setCurrentURL(url);
         doneLoading();
       }
     });
 
   return {
-    codeMirror: codeMirror,
+    codeMirror: editor.codeMirror,
     parachute: parachute,
     ready: ready
   };

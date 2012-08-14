@@ -55,10 +55,11 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
     return result;
   }
 
-  function PreviewToEditorMapping(livePreview, codeMirrorAreas) {
+  function PreviewToEditorMapping(livePreview) {
     var codeMirror = livePreview.codeMirror;
     var marks = MarkTracker(codeMirror);
-    codeMirrorAreas.on("mouseup", marks.clear);
+    $(".CodeMirror-lines", codeMirror.getWrapperElement())
+      .on("mouseup", marks.clear);
     livePreview.on("refresh", function(event) {
       var docFrag = event.documentFragment;
       marks.clear();
