@@ -9,9 +9,9 @@ var requirejs = require('requirejs'),
   resolve = require('path').resolve,
   requireConfig = require('./js/require-config'),
   baseUrl = resolve(__dirname, 'js'),
-  name = 'main',
-  out = resolve(baseUrl, 'main-built.js'),
-  mainConfigFile = resolve(baseUrl, 'main.js');
+  name = 'thimble-main',
+  out = resolve(baseUrl, 'thimble-main-built.js'),
+  mainConfigFile = resolve(baseUrl, 'thimble-main.js');
 
 function optimize(done) {
   requirejs.optimize(generateConfig(), done);
