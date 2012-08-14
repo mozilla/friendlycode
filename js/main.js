@@ -16,7 +16,8 @@ define("main", function(require) {
       deploymentType = $("meta[name='deployment-type']").attr("content"),
       supportsPushState = window.history.pushState ? true : false,
       remixURLTemplate = null,
-      container = $("#friendlycode-holder").empty(),
+      container = $("#friendlycode-holder").empty()
+        .addClass("friendlycode-loading"),
       toolbarDiv = $('<div class="friendlycode-toolbar"></div>')
         .appendTo(container),
       editorDiv = $('<div class="friendlycode-editor"></div>')
@@ -110,7 +111,7 @@ define("main", function(require) {
   });
   
   function doneLoading() {
-    $("body").removeClass("loading");
+    container.removeClass("friendlycode-loading");
     editor.codeMirror.clearHistory();
     toolbar.refresh();
     if (parachute.restore()) {

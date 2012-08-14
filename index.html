@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="css/errorhelp.css">
     <link rel="stylesheet" href="css/modals.css">
   </head>
-  <body class="loading">
+  <body>
      <a href="http://www.mozilla.org/" id="tabzilla">mozilla</a>
 
     <header id="header">
@@ -34,18 +34,7 @@
       </div>
     </header>
 
-    <div id="friendlycode-holder">
-      <div class="friendlycode-toolbar">
-        <div class="nav-options">
-          <div class="loading-message">
-            Loading&hellip;
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- page script section, at the end of body to prevent them holding up the page -->
-    <script>document.body.className += " html-loaded";</script>
+    <div id="friendlycode-holder" class="friendlycode-loading"></div>
 
     <script>
     if (!location.search.match(/notypekit=1/))

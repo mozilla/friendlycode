@@ -38,6 +38,65 @@ img {
   right: 0;
 }
 
+.friendlycode-loading > * {
+  visibility: hidden;
+}
+
+.friendlycode-loading {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  left: 0;
+  right: 0;
+  height: 41px;
+  background: white;
+  color: lightgray;
+  border-bottom: 1px solid #D6D6D6;
+  font-family: sans-serif;
+  font-size: 12px;
+  padding: 14px 0 0 42px;
+  background-image: url(../img/throbber.gif);
+  background-position: 20px 12px;
+  background-repeat: no-repeat;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  
+  -moz-animation-duration: 4s;
+  -moz-animation-name: friendlycode-loading-fadein;
+  -webkit-animation-duration: 4s;
+  -webkit-animation-name: friendlycode-loading-fadein;
+}
+
+@-moz-keyframes friendlycode-loading-fadein {
+  /* Slowly fade-in the loading message, so that users on really slow
+   * connections will see it, but users on fast connections won't
+   * see the distracting flicker of a loading message that only shows
+   * itself for a split-second. */
+  
+  from {
+    color: white;
+  }
+  
+  to {
+    color: lightgray;
+  }
+}
+
+@-webkit-keyframes friendlycode-loading-fadein {
+  from {
+    color: white;
+  }
+  
+  to {
+    color: lightgray;
+  }
+}
+
+.friendlycode-loading:before {
+  content: 'Loading...';
+}
+
 .friendlycode-toolbar {
   position: absolute;
   z-index: 2;
@@ -449,46 +508,6 @@ img {
   left: 0;
   right: 0;
   bottom: 0;    /* corresponds to 20 + footer.height */
-}
-
-body.loading .nav-options .editor-pane-nav-options,
-body.loading .nav-options .preview-pane-nav-options,
-body.loading .friendlycode-editor,
-body.loading .CodeMirror-cursor {
-  visibility: hidden;
-}
-
-.loading-message {
-  display: none;
-}
-
-body.loading .loading-message {
-  display: block;
-  position: absolute;
-  top: 12px;
-  left: 22px;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  height: 41px;
-  color: lightgray;
-  padding-left: 20px;
-  padding-top: 2px;
-  font-family: sans-serif;
-  background: url(../img/throbber.gif);
-  background-repeat: no-repeat;
-  opacity: 0;
-  -moz-transition: opacity 4s;
-  -webkit-transition: opacity 4s;
-  -o-transition: opacity 4s;
-}
-
-body.loading.html-loaded .loading-message {
-  /* Slowly fade-in the loading message, so that users on really slow
-   * connections will see it, but users on fast connections won't
-   * see the distracting flicker of a loading message that only shows
-   * itself for a split-second. */
-  opacity: 1;
 }
 
 div.editor-actions {
