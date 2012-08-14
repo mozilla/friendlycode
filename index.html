@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="remix-url" content="">
-    <meta name="publish-url" content="https://webpagemaker-dev.allizom.org">
+    <meta name="publish-url" content="">
     <meta name="deployment-type" content="development">
     <base target="_blank">
 
@@ -13,20 +13,13 @@
     <base href=".">
 
     <title>Mozilla Thimble</title>
-    <link rel="stylesheet" href="codemirror2/lib/codemirror.css">
-    <link rel="stylesheet" href="css/jsbin-codemirror-theme.css">
-    <link rel="stylesheet" href="css/tipsy.css">
-    <link rel="stylesheet" href="css/ubuntumono/stylesheet.css">
-    <link rel="stylesheet" href="css/opensans/stylesheet.css">
-    <link rel="stylesheet" href="css/opensymbolcropped/stylesheet.css">
-    <link rel="stylesheet" href="css/editor.css">
-    <link rel="stylesheet" href="css/errorhelp.css">
-    <link rel="stylesheet" href="css/modals.css">
+    <link rel="stylesheet" href="css/friendlycode.css">
+    <link rel="stylesheet" href="css/thimble.css">
   </head>
   <body>
      <a href="http://www.mozilla.org/" id="tabzilla">mozilla</a>
 
-    <header id="header">
+    <header id="thimble-header">
       <div class="logo">
         <a href="/">
           <img src="img/thimble-logo.png" alt="Mozilla Thimble">
@@ -34,7 +27,7 @@
       </div>
     </header>
 
-    <div id="friendlycode-holder" class="friendlycode-loading"></div>
+    <div id="thimble-friendlycode-holder" class="friendlycode-loading"></div>
 
     <script>
     if (!location.search.match(/notypekit=1/))
@@ -42,7 +35,7 @@
                      'script>');
     </script>
     <script src="js/require-config.js"></script>
-    <script data-main="js/main" src="js/require.min.js"></script>
+    <script data-main="js/thimble-main" src="js/require.min.js"></script>
     <!-- use main-built for production -->
     <!-- <script data-main="js/main-built" src="js/require.min.js"></script> -->
 
