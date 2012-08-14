@@ -61,7 +61,7 @@ define(function(require) {
       publishButton.toggleClass("enabled", codeLength ? true : false);
     });
     publishButton.click(function(){
-      if ($(this).hasClass("enabled")) startPublish();
+      if ($(this).hasClass("enabled")) startPublish(this);
     });
     
     self.refresh = function() {

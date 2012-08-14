@@ -27,6 +27,7 @@ define(function (require) {
     var modals = options.modals,
         confirmDialog = $(ConfirmDialogTemplate()),
         publishDialog = $(PublishDialogTemplate()),
+        dialogs = confirmDialog.add(publishDialog),
         codeMirror = options.codeMirror,
         publisher = options.publisher,
         baseRemixURL = options.remixURLTemplate,
@@ -38,7 +39,7 @@ define(function (require) {
         currURL = null,
         socialMedia = SocialMedia();
 
-    modals.add(confirmDialog, publishDialog);
+    modals.add(dialogs);
 
     // Add accordion behaviour to the publication dialog.
     accordions.click(function() {
@@ -106,12 +107,12 @@ define(function (require) {
       // overlay stays in place. Because each dialog has its own overlay,
       // however, this is a bit tricky. Eventually we might want to move
       // to a DOM structure where each modal dialog shares the same overlay.
-      $(".thimble-modal-menu", confirmDialog).slideUp(function() {
+      $(".thimble-modal-menu", confirmDialog).fadeOut(function() {
         $(this).show();
         confirmDialog.hide();
         if (!publishErrorOccurred) {
           publishDialog.show();
-          $(".thimble-modal-menu", publishDialog).hide().slideDown();
+          $(".thimble-modal-menu", publishDialog).hide().fadeIn();
         }
       });
     });
@@ -120,7 +121,13 @@ define(function (require) {
       setCurrentURL: function(url) {
         currURL = url;
       },
-      start: function() {
+      start: function(publishButton) {
+        var bounds = publishButton.getBoundingClientRect();
+        var dialogBoxes = $('.thimble-modal-menu', dialogs);
+        dialogBoxes.css({
+          top: bounds.bottom + 'px',
+          left: (bounds.right - dialogBoxes.width()) + 'px'
+        });
         confirmDialog.fadeIn();
       }
     };

@@ -35,8 +35,8 @@
 
 .thimble-modal-menu {
   position: absolute;
-  top: 140px;
-  right: 8px;
+  margin-top: 22px;
+  margin-left: 18px;
   width: 425px;
   height: 145px;
   border: 1px solid #C0C0C0;
