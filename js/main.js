@@ -10,9 +10,6 @@ define("main", function(require) {
       Modals = require("fc/ui/modals"),
       Parachute = require("fc/parachute"),
       Publisher = require("fc/publisher"),
-      ErrorDialogTemplate = require("template!error-dialog"),
-      ConfirmDialogTemplate = require("template!confirm-dialog"),
-      PublishDialogTemplate = require("template!publish-dialog"),
       publishURL = $("meta[name='publish-url']").attr("content"),
       pageToLoad = $("meta[name='remix-url']").attr("content"),
       deploymentType = $("meta[name='deployment-type']").attr("content"),
@@ -51,11 +48,9 @@ define("main", function(require) {
   });
   var publisher = Publisher(publishURL);
   var modals = Modals({
+    container: $("#modal-dialogs"),
     codeMirror: editor.codeMirror,
     publisher: publisher,
-    confirmDialog: $(ConfirmDialogTemplate()).appendTo(document.body),
-    publishDialog: $(PublishDialogTemplate()).appendTo(document.body),
-    errorDialog: $(ErrorDialogTemplate()).appendTo(document.body),
     remixURLTemplate: remixURLTemplate
   });
   var parachute = Parachute(window, editor.codeMirror, pageToLoad);

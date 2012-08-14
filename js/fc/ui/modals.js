@@ -4,7 +4,10 @@ define(function (require) {
   var $ = require("jquery"),
       _ = require("underscore"),
       Backbone = require("backbone"),
-      SocialMedia = require("./social-media");
+      SocialMedia = require("./social-media"),
+      ErrorDialogTemplate = require("template!error-dialog"),
+      ConfirmDialogTemplate = require("template!confirm-dialog"),
+      PublishDialogTemplate = require("template!publish-dialog");
 
   function activateModalBehaviors(modals) {
     var hideModals = function() {
@@ -49,12 +52,13 @@ define(function (require) {
   }
 
   return function(options) {
-    var codeMirror = options.codeMirror,
+    var div = options.container,
+        confirmDialog = $(ConfirmDialogTemplate()).appendTo(div),
+        publishDialog = $(PublishDialogTemplate()).appendTo(div),
+        errorDialog = $(ErrorDialogTemplate()).appendTo(div),
+        codeMirror = options.codeMirror,
         publisher = options.publisher,
         baseRemixURL = options.remixURLTemplate,
-        publishDialog = options.publishDialog,
-        confirmDialog = options.confirmDialog,
-        errorDialog = options.errorDialog,
         shareResult = $(".share-result", publishDialog),
         viewLink = $("a.view", publishDialog),
         remixLink = $("a.remix", publishDialog),
@@ -63,9 +67,7 @@ define(function (require) {
         currURL = null,
         socialMedia = SocialMedia();
 
-    var modals = publishDialog.add(confirmDialog).add(errorDialog);
-    
-    activateModalBehaviors(modals);
+    activateModalBehaviors(div.children());
     
     // Add accordion behaviour to the publication dialog.
     accordions.click(function() {
