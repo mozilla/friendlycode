@@ -55,7 +55,6 @@ define(function (require) {
         baseRemixURL = options.remixURLTemplate,
         publishDialog = options.publishDialog,
         confirmDialog = options.confirmDialog,
-        publishButton = options.publishButton,
         errorDialog = options.errorDialog,
         shareResult = $(".share-result", publishDialog),
         viewLink = $("a.view", publishDialog),
@@ -74,21 +73,11 @@ define(function (require) {
       accordions.addClass("collapsed");
       $(this).removeClass("collapsed");
     });
-
-    // If the editor has no content, disable the publish button.
-    codeMirror.on("change", function() {
-      var isEnabled = codeMirror.getValue().trim().length ? true : false;
-      publishButton.toggleClass("enabled", isEnabled);
-    });
     
     // If the user's code has errors, warn them before publishing.
     codeMirror.on("reparse", function(event) {
       var hasErrors = event.error ? true : false;
       confirmDialog.toggleClass("has-errors", hasErrors);
-    });
-    
-    publishButton.click(function(){
-      if ($(this).hasClass("enabled")) confirmDialog.fadeIn();
     });
     
     $(".yes-button", confirmDialog).click(function(){
@@ -158,6 +147,9 @@ define(function (require) {
     var self = {
       setCurrentURL: function(url) {
         currURL = url;
+      },
+      startPublish: function() {
+        confirmDialog.fadeIn();
       }
     };
     

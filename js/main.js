@@ -4,29 +4,24 @@
 // purposes. Other parts of our code should never cite this module
 // as a dependency.
 define("main", function(require) {
-  var $ = require("jquery-tipsy"),
+  var $ = require("jquery"),
       htmlCodeMirror = require("codemirror/html"),
       TwoPanedEditor = require("fc/ui/two-paned-editor"),
+      EditorToolbar = require("fc/ui/editor-toolbar"),
+      Modals = require("fc/ui/modals"),
       Parachute = require("fc/parachute"),
       Publisher = require("fc/publisher"),
-      HistoryUI = require("fc/ui/history"),
-      NavOptionsTemplate = require("template!nav-options"),
       ErrorDialogTemplate = require("template!error-dialog"),
       ConfirmDialogTemplate = require("template!confirm-dialog"),
       PublishDialogTemplate = require("template!publish-dialog"),
-      navOptions = $(NavOptionsTemplate()).appendTo("header"),
-      undoNavItem = navOptions.find(".undo-nav-item"),
       publishURL = $("meta[name='publish-url']").attr("content"),
       pageToLoad = $("meta[name='remix-url']").attr("content"),
       deploymentType = $("meta[name='deployment-type']").attr("content"),
-      Modals = require("fc/ui/modals"),
-      TextUI = require("fc/ui/text"),
       supportsPushState = window.history.pushState ? true : false,
       remixURLTemplate = null,
       ready = $.Deferred();
 
   require("typekit-ready!");
-  require('slowparse-errors');
 
   $("html").addClass("deployment-type-" + deploymentType);
   if (pageToLoad) {
@@ -48,30 +43,24 @@ define("main", function(require) {
     window.history.replaceState({pageToLoad: pageToLoad}, "", location.href);
 
   var editor = TwoPanedEditor({
-    container: $("#editor"),
-    hintsCheckbox: navOptions.find(".hints-nav-item")
+    container: $("#editor")
+  });
+  var toolbar = EditorToolbar({
+    container: $("#editor-toolbar"),
+    editor: editor,
+    startPublish: function() { modals.startPublish(); }
   });
   var publisher = Publisher(publishURL);
-  var historyUI = HistoryUI({
-    codeMirror: editor.codeMirror,
-    undo: undoNavItem,
-    redo: navOptions.find(".redo-nav-item")
-  });
   var modals = Modals({
     codeMirror: editor.codeMirror,
     publisher: publisher,
     confirmDialog: $(ConfirmDialogTemplate()).appendTo(document.body),
     publishDialog: $(PublishDialogTemplate()).appendTo(document.body),
     errorDialog: $(ErrorDialogTemplate()).appendTo(document.body),
-    publishButton: navOptions.find(".publish-button"),
     remixURLTemplate: remixURLTemplate
   });
-  var textUI = TextUI({
-    codeMirror: editor.codeMirror,
-    navItem: navOptions.find(".text-nav-item")
-  });
   var parachute = Parachute(window, editor.codeMirror, pageToLoad);
-  
+
   window.addEventListener("hashchange", function(event) {
     // We don't currently support dynamically changing the URL
     // without a full page reload, unfortunately, so just trigger a
@@ -120,23 +109,9 @@ define("main", function(require) {
   function doneLoading() {
     $("body").removeClass("loading");
     editor.codeMirror.clearHistory();
-    historyUI.refresh();
+    toolbar.refresh();
     if (parachute.restore()) {
-      // Display a non-modal message telling the user that their
-      // previous data has been restored, and that they can click 'undo'
-      // to go back to the original version of the editor content.
-      // This is just a temporary workaround to avoid confusion until
-      // we figure out a better solution; see this issue for more
-      // discussion:
-      //
-      // https://github.com/mozilla/webpagemaker/issues/53
-      undoNavItem.tipsy({
-        gravity: 'n',
-        fade: true,
-        trigger: 'manual',
-        title: 'data-restore-help'
-      }).tipsy("show");
-      setTimeout(function() { undoNavItem.tipsy("hide"); }, 6000);
+      toolbar.showDataRestoreHelp();
     } else {
       // Only save data on page unload if it's different from
       // the URL we just (hopefully) loaded.
@@ -146,14 +121,6 @@ define("main", function(require) {
     editor.codeMirror.focus();
     ready.resolve();
   }
-
-  editor.preview.on("refresh", function(event) {
-    var title = event.window.document.title;
-    if (title.length)
-      $(".preview-title").text(title).show();
-    else
-      $(".preview-title").hide();
-  });
   
   if (!pageToLoad) {
     $.get("default-content.html", function(html) {
