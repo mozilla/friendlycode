@@ -50,7 +50,6 @@ define(function (require) {
 
   return function(options) {
     var codeMirror = options.codeMirror,
-        publishUI = options.publishUI,
         publisher = options.publisher,
         baseRemixURL = options.remixURLTemplate,
         publishDialog = options.publishDialog,
