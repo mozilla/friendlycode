@@ -5,9 +5,9 @@ define(["module", "text", "underscore"], function (module, text, _) {
 
   return {
     load: function(name, req, onLoad, config) {
-      var url = req.toUrl(name).replace(".js", ".html");
+      var url = req.toUrl("templates/" + name).replace(".js", ".html");
 
-      text.get("templates/" + name + ".html", function (data) {
+      text.get(url, function (data) {
         var template;
         if (config.isBuild) {
           template = buildMap[name] = "_.template(" + JSON.stringify(data)  +
