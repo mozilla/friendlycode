@@ -111,6 +111,7 @@ define(function(require) {
       }
       editor.codeMirror.reparse();
       editor.codeMirror.focus();
+      editor.codeMirror.refresh();
       ready.resolve();
     }
 
