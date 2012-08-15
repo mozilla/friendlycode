@@ -4,11 +4,9 @@ defineTests(["jquery", "lscache"], function($, lscache) {
   module("app");
 
   function appTest(name, cb) {
-    var iframe = $('<iframe src="../index.html?notypekit=1"></iframe>');
+    var iframe = $('<iframe src="test-app.html"></iframe>');
     iframe.css({
-      visibility: "hidden",
-      width: "800px",
-      height: "600px"
+      display: "none"
     });
 
     asyncTest(name, function() {
@@ -44,7 +42,7 @@ defineTests(["jquery", "lscache"], function($, lscache) {
   
   appTest("publish works", function(window, start) {
     var $ = window.require("jquery");
-    var publishURL = $('meta[name="publish-url"]').attr("content");
+    var publishURL = window.publishURL;
     var url = window.location.href;
     
     // Inject a fake ajax transport handler so we get called instead
