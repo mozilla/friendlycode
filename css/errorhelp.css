@@ -83,10 +83,6 @@ html .flipped .down-arrow {
   background-image: url("../img/help.png");
 }
 
-b {
-  font-family: OpenSansRegular, sans-serif;
-}
-
 .CodeMirror-gutter-text .gutter-highlight-error {
   color: white;
   background: #FF2A04;
