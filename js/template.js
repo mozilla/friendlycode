@@ -8,9 +8,6 @@ define(["module", "text", "underscore"], function (module, text, _) {
       var url = req.toUrl(name).replace(".js", ".html");
 
       text.get("templates/" + name + ".html", function (data) {
-        // remove break lines
-        data = data.replace(/\r\n|\n|\r/g, '');
-
         var template;
         if (config.isBuild) {
           template = buildMap[name] = "_.template(" + JSON.stringify(data)  +

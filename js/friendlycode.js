@@ -5,12 +5,13 @@ define(function(require) {
       Modals = require("fc/ui/modals"),
       Parachute = require("fc/parachute"),
       Publisher = require("fc/publisher"),
-      PublishUI = require("fc/ui/publish");
+      PublishUI = require("fc/ui/publish"),
+      DefaultContentTemplate = require("template!default-content");
 
   return function FriendlycodeEditor(options) {
     var publishURL = options.publishURL,
         pageToLoad = options.pageToLoad,
-        defaultContent = options.defaultContent || "default-content.html",
+        defaultContent = options.defaultContent || DefaultContentTemplate(),
         remixURLTemplate = options.remixURLTemplate ||
           location.protocol + "//" + location.host + 
           location.pathname + "#{{VIEW_URL}}",
@@ -114,10 +115,10 @@ define(function(require) {
     }
 
     if (!pageToLoad) {
-      $.get(defaultContent, function(html) {
-        editor.codeMirror.setValue(html.trim());
+      setTimeout(function() {
+        editor.codeMirror.setValue(defaultContent);
         doneLoading();
-      }, "text");
+      }, 0);
     } else
       publisher.loadCode(pageToLoad, function(err, data, url) {
         if (err) {
