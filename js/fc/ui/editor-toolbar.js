@@ -81,7 +81,7 @@ define(function(require) {
         fade: true,
         trigger: 'manual',
         title: 'data-restore-help'
-      }).tipsy("show");
+      }).tipsy("show").tipsy(true).tip().addClass("friendlycode-base");
       setTimeout(function() { undoNavItem.tipsy("hide"); }, 6000);
     };
     

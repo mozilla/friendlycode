@@ -11,23 +11,15 @@
 
 */
 
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
+.friendlycode-base {
+  font-family: "myriad-pro", Helvetica, Arial, sans-serif;
+  overflow: hidden;
+  background-color: #F5F5F5;
   color: #414244;
 }
 
-body {
-  font-family: "myriad-pro", Helvetica, Arial, sans-serif;
-  overflow: hidden;
-
-  /* background-color: red; */
-  background-color: #F5F5F5;
-}
-
-img {
-    border: 0 none;
+.friendlycode-base img {
+  border: 0 none;
 }
 
 .friendlycode-loading > * {
@@ -511,8 +503,7 @@ div.editor-actions {
   overflow: auto;
 }
 
-
-html .tipsy {
+.tipsy.friendlycode-base {
   /* Make tipsy tooltips slightly larger than the default. */
   font-size: 12px;
 }

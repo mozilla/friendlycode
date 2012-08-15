@@ -16,7 +16,7 @@ define(function(require) {
           location.protocol + "//" + location.host + 
           location.pathname + "#{{VIEW_URL}}",
         container = options.container.empty()
-          .addClass("friendlycode-loading"),
+          .addClass("friendlycode-base friendlycode-loading"),
         toolbarDiv = $('<div class="friendlycode-toolbar"></div>')
           .appendTo(container),
         editorDiv = $('<div class="friendlycode-editor"></div>')
@@ -32,7 +32,8 @@ define(function(require) {
       container: editorDiv
     });
     var modals = Modals({
-      container: $('<div></div>').appendTo(document.body)
+      container: $('<div class="friendlycode-base"></div>')
+        .appendTo(document.body)
     });
     var publisher = Publisher(publishURL);
     var publishUI = PublishUI({

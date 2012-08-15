@@ -1,3 +1,10 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  color: #414244;
+}
+
 #thimble-friendlycode-holder {
   position: absolute;
   top: 79px;
