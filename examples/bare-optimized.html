@@ -4,14 +4,15 @@
     <meta charset="utf-8">
     <base target="_blank">
 
-    <title>Barebones Friendlycode Editor</title>
-    <link rel="stylesheet" href="css/friendlycode.css">
+    <title>Optimized Barebones Friendlycode Editor</title>
+    <link rel="stylesheet" href="../css/friendlycode.css">
   </head>
   <body>
     <div id="bare-fc-holder" class="friendlycode-loading"></div>
 
-    <script src="js/require-config.js"></script>
-    <script src="js/require.min.js"></script>
+    <script src="../js/require.min.js"></script>
+    <script src="../js/friendlycode-built.js"
+            onerror="alert('please run build-require.js!');"></script>
     <script>
     require(["jquery", "friendlycode"], function($, FriendlycodeEditor) {
       return FriendlycodeEditor({
