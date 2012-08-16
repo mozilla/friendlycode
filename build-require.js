@@ -9,9 +9,8 @@ var requirejs = require('requirejs'),
   resolve = require('path').resolve,
   requireConfig = require('./js/require-config'),
   baseUrl = resolve(__dirname, 'js'),
-  name = 'main',
-  out = resolve(baseUrl, 'main-built.js'),
-  mainConfigFile = resolve(baseUrl, 'main.js');
+  name = 'friendlycode',
+  out = resolve(baseUrl, 'friendlycode-built.js');
 
 function optimize(done) {
   requirejs.optimize(generateConfig(), done);
@@ -22,8 +21,8 @@ function generateConfig() {
     name: name,
     out: out,
     // use none optimize for debugging
-    // optimize: "none",
-    optimize: 'uglify',
+    optimize: "none",
+    // optimize: 'uglify',
     uglify: {
       // beautify for debugging
       // beautify: true,

@@ -9,3 +9,9 @@
     z-index: 9001;
     right: 6em;
 }
+
+@media screen and (max-width: 620px) {
+  #tabzilla {
+    right: 16% !important;
+  }
+}

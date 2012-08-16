@@ -35,8 +35,8 @@
 
 .thimble-modal-menu {
   position: absolute;
-  top: 140px;
-  right: 8px;
+  margin-top: 22px;
+  margin-left: 18px;
   width: 425px;
   height: 145px;
   border: 1px solid #C0C0C0;
@@ -82,7 +82,7 @@
   position: absolute;
 }
 
-#modal-close-button {
+.modal-close-button {
   background-image: url("../img/modal-close-button.png");
   background-position: center center;
   background-repeat: no-repeat;
@@ -95,7 +95,7 @@
   z-index: 3;
 }
 
-.thimble-grey-bar #modal-close-button {
+.thimble-grey-bar .modal-close-button {
   top: 0;
 }
 
@@ -111,7 +111,6 @@
   padding-left: 5px;
 
   font-weight: bold;
-  font-family: "myriad-pro", sans-serif;
   font-size: 14px;
 
   background-color: #3A84FC;
@@ -132,7 +131,7 @@
   padding-left: 1em;
 }
 
-#confirm-dialog .thimble-title:before {
+.confirm-dialog .thimble-title:before {
   content: "" !important;
 }
 
@@ -209,12 +208,12 @@ div.accordion:not(.collapsed) .accordion-content {
 }
 
 /* TEMPORARY: Give some extra space for last-minute feedback text. */
-div#publication-result.accordion:not(.collapsed) .accordion-content {
+div.publication-result.accordion:not(.collapsed) .accordion-content {
   height: 75px;
 }
 
 /* TEMPORARY: Style last-minute feedback text. */
-div#publication-result p {
+div.publication-result p {
   font-size: 12px;
   padding-left: 20px;
   margin-top: -8px;
@@ -233,24 +232,24 @@ div#publication-result p {
   color: #236819;
 }
 
-#confirm-dialog .public-warning {
+.confirm-dialog .public-warning {
   text-align: center;
   padding-bottom: 1em;
 }
 
-#confirm-dialog .error-warning,
-#confirm-dialog .development-note {
+.confirm-dialog .error-warning,
+.confirm-dialog .development-note {
   display: none;
 }
 
-html.deployment-type-development #confirm-dialog .development-note {
+html.deployment-type-development .confirm-dialog .development-note {
   display: block;
   padding-bottom: 1em;
   color: gray;
   font-style: italic;
 }
 
-#confirm-dialog.has-errors .error-warning {
+.confirm-dialog.has-errors .error-warning {
   display: block;
   padding-bottom: 1em;
   color: red;
@@ -302,17 +301,17 @@ html.deployment-type-development #confirm-dialog .development-note {
   border-top: 1px solid #D6D6D6;
 }
 
-#publish-dialog.is-publishing .thimble-url-box {
+.publish-dialog.is-publishing .thimble-url-box {
   background-image: url(../img/throbber.gif);
   background-repeat: no-repeat;
   background-position: 8px 8px;
 }
 
-#publish-dialog.is-publishing .thimble-url-box a {
+.publish-dialog.is-publishing .thimble-url-box a {
   font-size: 0;
 }
 
-#publish-dialog.is-publishing #share-result .thimble-additionals {
+.publish-dialog.is-publishing .share-result .thimble-additionals {
   font-size: 0;
   width: 100%;
   height: 100%;

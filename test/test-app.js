@@ -4,11 +4,9 @@ defineTests(["jquery", "lscache"], function($, lscache) {
   module("app");
 
   function appTest(name, cb) {
-    var iframe = $('<iframe src="index.html?notypekit=1"></iframe>');
+    var iframe = $('<iframe src="test-app.html"></iframe>');
     iframe.css({
-      visibility: "hidden",
-      width: "800px",
-      height: "600px"
+      display: "none"
     });
 
     asyncTest(name, function() {
@@ -18,7 +16,12 @@ defineTests(["jquery", "lscache"], function($, lscache) {
         wind.require(["main"], function(main) {
           main.ready.done(function() {
             cb(wind, function() {
-              iframe.remove();
+              setTimeout(function() {
+                // Hopefully this should avoid a spurious
+                // NS_ERROR_NOT_INITIALIZED coming from 
+                // nsIDOMJSWindow.setTimeout (via jQuery) in Firefox.
+                iframe.remove();
+              }, 100);
               start();
             });
           });
@@ -32,14 +35,14 @@ defineTests(["jquery", "lscache"], function($, lscache) {
     var cm = window.require("main").codeMirror;
     cm.setValue("<title>supdog</title>");
     cm.reparse();
-    equal($("#nav-options .preview-title").text(), "supdog",
+    equal($(".nav-options .preview-title").text(), "supdog",
           "navbar preview title is 'supdog'");
     start();
   });
   
   appTest("publish works", function(window, start) {
     var $ = window.require("jquery");
-    var publishURL = $('meta[name="publish-url"]').attr("content");
+    var publishURL = window.publishURL;
     var url = window.location.href;
     
     // Inject a fake ajax transport handler so we get called instead
@@ -58,8 +61,8 @@ defineTests(["jquery", "lscache"], function($, lscache) {
             text: "/lol"
           });
           var viewURL = publishURL + "/lol";
-          var view = $("#publication-result .view");
-          var remix = $("#remix-it .remix");
+          var view = $(".publication-result .view");
+          var remix = $(".publish-dialog .remix");
           equal(view.text(), viewURL, "view URL text is " + viewURL);
           equal(view.attr("href"), viewURL, "view URL href is " + viewURL);
           ok(remix.text().indexOf("/lol") != -1,
@@ -76,6 +79,6 @@ defineTests(["jquery", "lscache"], function($, lscache) {
 
     window.require("main").codeMirror.setValue("<p>hi</p>");
     $("#publish").click();
-    $("#confirm-publication").click();
+    $(".yes-button").click();
   });
 });

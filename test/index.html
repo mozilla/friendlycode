@@ -2,24 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <base href="..">
     <title>Friendlycode Test Suite</title>
-    <script>
-    // IE9 really wants base hrefs to be absolute URLs, so we'll do that...
-    (function() {
-      try {
-        var base = document.querySelector("base[href]");
-        var pathRE = /(.*)\/test\/(index\.html)?$/;
-        var match = location.pathname.match(pathRE);
-        var pathname = match[1] ? match[1] : "";
-        var href = location.protocol + "//" + location.host + pathname + "/";
-        base.setAttribute("href", href);
-      } catch (e) {
-        alert("ERROR setting base href: " + e);
-      }
-    })();
-    </script>
-    <link rel="stylesheet" href="test/qunit.css">
+    <link rel="stylesheet" href="qunit.css">
   </head>
 
   <body>
@@ -30,7 +14,7 @@
     <ol  id="qunit-tests"></ol>
     <div id="qunit-fixture"></div>
 
-    <script src="test/qunit.js"></script>
+    <script src="qunit.js"></script>
     <script>
     // Because we're using requirejs to asynchronously load tests,
     // we need to have manual control over the running of tests.
@@ -56,8 +40,8 @@
     }
     </script>
 
-    <script src="js/require-config.js"></script>
-    <script src="js/require.min.js"></script>
+    <script src="../js/require-config.js"></script>
+    <script src="../js/require.min.js"></script>
     <script>
     require([
       "jquery",

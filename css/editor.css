@@ -11,72 +11,102 @@
 
 */
 
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
+.friendlycode-base {
+  font-family: "myriad-pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  overflow: hidden;
+  background-color: #F5F5F5;
   color: #414244;
 }
 
-body {
-  font-family: "myriad-pro", Helvetica, Arial, sans-serif;
-  overflow: hidden;
-
-  /* background-color: red; */
-  background-color: #F5F5F5;
+.friendlycode-base img {
+  border: 0 none;
 }
 
-img {
-    border: 0 none;
+.friendlycode-loading > * {
+  visibility: hidden;
 }
 
-#header {
-  position: fixed;
+.friendlycode-loading {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  left: 0;
+  right: 0;
+  height: 41px;
+  background: white;
+  color: lightgray;
+  border-bottom: 1px solid #D6D6D6;
+  font-family: sans-serif;
+  font-size: 12px;
+  padding: 14px 0 0 42px;
+  background-image: url(../img/throbber.gif);
+  background-position: 20px 12px;
+  background-repeat: no-repeat;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  
+  -moz-animation-duration: 4s;
+  -moz-animation-name: friendlycode-loading-fadein;
+  -webkit-animation-duration: 4s;
+  -webkit-animation-name: friendlycode-loading-fadein;
+}
+
+@-moz-keyframes friendlycode-loading-fadein {
+  /* Slowly fade-in the loading message, so that users on really slow
+   * connections will see it, but users on fast connections won't
+   * see the distracting flicker of a loading message that only shows
+   * itself for a split-second. */
+  
+  from {
+    color: white;
+  }
+  
+  to {
+    color: lightgray;
+  }
+}
+
+@-webkit-keyframes friendlycode-loading-fadein {
+  from {
+    color: white;
+  }
+  
+  to {
+    color: lightgray;
+  }
+}
+
+.friendlycode-loading:before {
+  content: 'Loading...';
+}
+
+.friendlycode-toolbar {
+  position: absolute;
   z-index: 2;
   top: 0;
 
-  background: #f5f5f5;
-  background-image: url("../img/header-gradient.png");
-  background-position: 0 0;
-
-  height: 120px;    /* height value must correspond with section.top */
+  height: 40px;    /* corresponds with .friendlycode-editor.top */
   width: 100%;
   margin: 0;
   padding: 0;
 
-  -webkit-box-shadow: 0 5px 5px 0 rgba(233,233,233,0.5);
-  box-shadow: 0 5px 5px 0 rgba(233,233,233,0.5);
-
-  border-top: 2px solid white;
   border-bottom: 1px solid #D6D6D6;
+  
+  background: white;
 }
 
-
-#header .logo {
-  display: inline-block;
-  font-family: OpenSansLight, sans-serif;
-  margin-left: 15px;
-  width: 200px;
-  margin-top: 10px;
-}
-
-#header .logo a {
-  color: #27AAE1;
-  text-decoration: none;
-}
-
-#nav-options {
-  font-family: "myriad-pro", Helvetica, Arial, sans-serif;
+.nav-options {
   font-size: 12px;
 
   position: absolute;
   display: block;
-  top: 79px;
+  top: 0;
   width: 100%;
   height: 0;
 }
 
-#editor-pane-nav-options {
+.editor-pane-nav-options {
   position: absolute;
   top: 0;
   left: 0;
@@ -87,7 +117,7 @@ img {
   height: 41px;
 }
 
-#preview-pane-nav-options {
+.preview-pane-nav-options {
   position: absolute;
   top: 0;
   left: 50%;
@@ -96,7 +126,7 @@ img {
   z-index: 1;
 }
 
-#nav-options .nav-item {
+.nav-options .nav-item {
   display: table-cell;
   height: 41px;
   text-align: center;
@@ -120,89 +150,86 @@ img {
   user-select: none;
 }
 
-#nav-options .nav-item.enabled {
+.nav-options .nav-item.enabled {
   cursor: pointer;
   opacity: 1.0;
 }
 
-#nav-options .nav-item.enabled:hover {
+.nav-options .nav-item.enabled:hover {
   color: #3D59FE;
 }
 
 @media screen and (max-width: 980px) {
-  #nav-options .responsive,
-  #nav-options .responsive:hover,
-  #nav-options .nav-item.responsive.enabled {
+  .nav-options .responsive,
+  .nav-options .responsive:hover,
+  .nav-options .nav-item.responsive.enabled {
     max-width: 30px;
     overflow: hidden;
     background-position: center center;
     color: transparent !important;
   }
-  #nav-options .nav-item ul,
-  #nav-options .nav-item ul li {
+  .nav-options .nav-item ul,
+  .nav-options .nav-item ul li {
     max-width: 999px !important;
     width: auto !important;
     padding-right: 1em;
     color: black;
   }
-  #nav-options .nav-item {
+  .nav-options .nav-item {
     border: none;
   }
 }
 
 @media screen and (max-width: 785px) {
-  #editor-pane-nav-options {
+  .editor-pane-nav-options {
     border: none;
   }
-  #preview-pane-nav-options {
+  .preview-pane-nav-options {
    left: 65%;
   }
-  #preview-nav-item .icon {
+  .preview-nav-item .icon {
     margin-right: 0 !important;
   }
-  #preview-nav-item {
+  .preview-nav-item {
     border-left: 1px solid #D6D6D6 !important;
     border-right: 1px solid #D6D6D6 !important;
     padding-right: 10px !important;
   }
-  #nav-options .nav-item.buttons {
+  .nav-options .nav-item.buttons {
     right: 30% !important;
   }
-  #hints-nav-item {
+  .hints-nav-item {
     margin-left: 0 !important;
     left: 310px !important;
   }
 }
 
 @media screen and (max-width: 620px) {
-  #editor-nav-item.nav-item,
-  #preview-nav-item.nav-item {
+  .editor-nav-item.nav-item,
+  .preview-nav-item.nav-item {
     display: none !important;
   }
-  #hints-nav-item {
+  .hints-nav-item {
     left: 180px !important;
-  }
-  #tabzilla {
-    right: 16% !important;
   }
 }
 
 @media screen and (max-width: 420px) {
-  #preview-pane-nav-options > div.nav-item.buttons {
+  .preview-pane-nav-options > div.nav-item.buttons {
     left: 0 !important;
     right: auto !important;
   }
 }
 
-#nav-options .nav-item ul li {
+.nav-options .nav-item ul li {
   color: #666;
 }
 
-#nav-options .nav-item ul li:hover {
+.nav-options .nav-item ul li:hover {
   color: #666;
 }
 
-#nav-options .nav-button {
+.nav-options .nav-button {
   display: inline;
   height: 30px;
   border-radius: 15px;
@@ -212,12 +239,12 @@ img {
   top: 0;
 }
 
-#preview-pane-nav-options > div.nav-item.buttons {
+.preview-pane-nav-options > div.nav-item.buttons {
   cursor: default;
   opacity: 1.0;
 }
 
-#publish-button {
+.publish-button {
   position: relative;
   top: 2px;
   background-color: #3A84FC;
@@ -234,12 +261,16 @@ img {
   font-weight: bold;
 }
 
-#publish-button.enabled {
+.publish-button:after {
+  content: '\0000a0\0000a0';
+}
+
+.publish-button.enabled {
   opacity: 1.0;
   cursor: pointer;
 }
 
-#nav-options .nav-item.buttons {
+.nav-options .nav-item.buttons {
   position: absolute;
   top: 10px;
   right: 0;
@@ -248,16 +279,16 @@ img {
 
 /* ------ nav button stylings ------ */
 
-#nav-options #editor-nav-item,
-#nav-options #preview-nav-item {
+.nav-options .editor-nav-item,
+.nav-options .preview-nav-item {
   font-weight: bold;
   font-size: 16px;
   opacity: 1.0;
   color: black;
 }
 
-#editor-nav-item .icon,
-#preview-nav-item .icon {
+.editor-nav-item .icon,
+.preview-nav-item .icon {
   display: inline-block;
   width: 30px;
   background-repeat: no-repeat;
@@ -265,26 +296,26 @@ img {
   margin-right: 1em;
 }
 
-#editor-nav-item .icon {
+.editor-nav-item .icon {
   background-image: url("../img/editor-icon.png");
 }
 
-#preview-nav-item .icon {
+.preview-nav-item .icon {
   background-image: url("../img/preview-icon.png");
 }
 
-#preview-nav-item .preview-title {
+.preview-nav-item .preview-title {
   font-weight: bold;
   display: none;
 }
 
-#preview-nav-item .preview-title:before {
+.preview-nav-item .preview-title:before {
   content: ' for ';
   font-weight: normal;
 }
 
-#editor-nav-item .pane-indicator,
-#preview-nav-item .pane-indicator {
+.editor-nav-item .pane-indicator,
+.preview-nav-item .pane-indicator {
   position: absolute;
   background-image: url("../img/indicator-arrow.png");
   background-repeat: no-repeat;
@@ -294,7 +325,7 @@ img {
   height: 25px;
 }
 
-#undo-nav-item .icon {
+.undo-nav-item .icon {
   display: inline-block;
   width: 30px;
 
@@ -303,11 +334,11 @@ img {
   background-position: center center;
 }
 
-#undo-nav-item.enabled:hover .icon {
+.undo-nav-item.enabled:hover .icon {
   background-image: url("../img/undo-blue.png");
 }
 
-#redo-nav-item .icon {
+.redo-nav-item .icon {
   display: inline-block;
   width: 30px;
 
@@ -316,11 +347,11 @@ img {
   background-position: center center;
 }
 
-#redo-nav-item.enabled:hover .icon {
+.redo-nav-item.enabled:hover .icon {
   background-image: url("../img/redo-blue.png");
 }
 
-#text-nav-item .icon {
+.text-nav-item .icon {
   display: inline-block;
   width: 40px;
 
@@ -329,11 +360,11 @@ img {
   background-position: center center;
 }
 
-#text-nav-item.enabled:hover .icon {
+.text-nav-item.enabled:hover .icon {
   background-image: url("../img/text-size-blue.png");
 }
 
-#text-size-options {
+.text-size-options {
   position: absolute;
   display: none;
   list-style: none;
@@ -341,13 +372,13 @@ img {
   padding-top: 14px;
 }
 
-#text-nav-item ul {
+.text-nav-item ul {
   margin: 0;
   padding: 0;
   padding-top: 35px;
 }
 
-#text-nav-item li {
+.text-nav-item li {
   background-color: white;
   border: 1px solid C0C0C0;
   border-top: none;
@@ -362,35 +393,35 @@ img {
   margin-top: -1px;
 }
 
-#text-size-options li.selected {
+.text-size-options li.selected {
   background-color: #F4F4F4;
 }
 
-#text-size-options li:hover {
+.text-size-options li:hover {
   background-color: rgb(200,235,255);
 }
 
-#text-size-options li[data-size=small] {
+.text-size-options li[data-size=small] {
   background-image: url("../img/text-size-small.png");
   font-size: 12px;
 }
-#text-size-options li[data-size=normal] {
+.text-size-options li[data-size=normal] {
   background-image: url("../img/text-size-normal.png");
   font-size: 14px;
 }
-#text-size-options li[data-size=large] {
+.text-size-options li[data-size=large] {
   background-image: url("../img/text-size-large.png");
   font-size: 18px;
 }
 
-#hints-nav-item {
+.hints-nav-item {
   left: 100%;
   margin-left: -100px;
   position: absolute;
   top: 11px;
 }
 
-#hints-nav-item .checkbox {
+.hints-nav-item .checkbox {
   display: inline-block;
   border: 1px solid grey;
   border-radius: 2px;
@@ -409,64 +440,24 @@ img {
   vertical-align: middle;
 }
 
-#hints-nav-item .checkbox-label {
+.hints-nav-item .checkbox-label {
   display: inline-block;
   vertical-align: middle;
 }
 
-#hints-nav-item .checkbox.off {
+.hints-nav-item .checkbox.off {
   color: transparent;
 }
 
 
 /* ------ CONTENT AREA ------ */
 
-section {
+.friendlycode-editor {
   position: absolute;
-  top: 110px;       /* corresponds to #header.height */
+  top: 30px;       /* corresponds to .friendlycode-toolbar.height */
   left: 0;
   right: 0;
   bottom: 0;    /* corresponds to 20 + footer.height */
-}
-
-body.loading #nav-options #editor-pane-nav-options,
-body.loading #nav-options #preview-pane-nav-options,
-body.loading #editor,
-body.loading .CodeMirror-cursor {
-  visibility: hidden;
-}
-
-#loading-message {
-  display: none;
-}
-
-body.loading #loading-message {
-  display: block;
-  position: absolute;
-  top: 12px;
-  left: 22px;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  height: 41px;
-  color: lightgray;
-  padding-left: 20px;
-  padding-top: 2px;
-  font-family: sans-serif;
-  background: url(../img/throbber.gif);
-  background-repeat: no-repeat;
-  opacity: 0;
-  -moz-transition: opacity 4s;
-  -webkit-transition: opacity 4s;
-  -o-transition: opacity 4s;
-}
-
-body.loading.html-loaded #loading-message {
-  /* Slowly fade-in the loading message, so that users on really slow
-   * connections will see it, but users on fast connections won't
-   * see the distracting flicker of a loading message that only shows
-   * itself for a split-second. */
-  opacity: 1;
 }
 
 div.editor-actions {
@@ -476,12 +467,12 @@ div.editor-actions {
   top: 20px;
 }
 
-#source {
+.source-code {
   background-color: #F9F9F9;
   z-index: 1;
 }
 
-#source, #preview-holder {
+.source-code, .preview-holder {
   width: 50%;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -491,7 +482,7 @@ div.editor-actions {
   top: 10px;
 }
 
-#preview-holder {
+.preview-holder {
   right: 0;
   border-left: 1px solid #D6D6D6;
   background: white;
@@ -499,20 +490,19 @@ div.editor-actions {
   padding: 10px;
 }
 
-#preview-holder iframe {
+.preview-holder iframe {
   border: 1px solid #D6D6D6;
   width: 100%;
   height: 100%;
   background-color: white;
 }
 
-#source .CodeMirror, #source .CodeMirror-scroll {
+.source-code .CodeMirror, .source-code .CodeMirror-scroll {
   height: 100%;
   overflow: auto;
 }
 
-
-html .tipsy {
+.tipsy.friendlycode-base {
   /* Make tipsy tooltips slightly larger than the default. */
   font-size: 12px;
 }
