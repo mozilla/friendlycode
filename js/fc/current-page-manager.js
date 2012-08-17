@@ -3,8 +3,6 @@ define(function() {
     var self = {},
         window = options.window,
         pageToLoad = options.currentPage,
-        publishUI = options.publishUI,
-        parachute = options.parachute,
         supportsPushState = window.history.pushState ? true : false;
     
     if (supportsPushState)
@@ -40,30 +38,14 @@ define(function() {
           window.location.reload();
       }, false);
     
-    publishUI.on("publish", function(info) {
-      // If the browser supports history.pushState, set the URL to
-      // be the new URL to remix the page they just published, so they
-      // can share/bookmark the URL and it'll be what they expect it
-      // to be.
-      pageToLoad = info.path;
-      // If the user clicks their back button, we don't want to show
-      // them the page they just published--we want to show them the
-      // page the current page is based on.
-      parachute.clearCurrentPage();
-      parachute.changePage(pageToLoad);
-      // It's possible that the server sanitized some stuff that the
-      // user will be confused by, so save the new state of the page
-      // to be what they expect it to be, just in case.
-      parachute.save();
-      if (supportsPushState)
-        window.history.pushState({pageToLoad: pageToLoad}, "", info.remixURL);
-      else
-        window.location.hash = "#" + pageToLoad;
-    });
-    
-    parachute.changePage(pageToLoad);
-    
     self.currentPage = function() { return pageToLoad; };
+    self.changePage = function(page, url) {
+      pageToLoad = page;
+      if (supportsPushState)
+        window.history.pushState({pageToLoad: page}, "", url);
+      else
+        window.location.hash = "#" + page;
+    };
     
     return self;
   };

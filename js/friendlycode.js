@@ -46,9 +46,7 @@ define(function(require) {
     var parachute = Parachute(window, editor.codeMirror);
     var pageManager = CurrentPageManager({
       window: window,
-      currentPage: pageToLoad,
-      publishUI: publishUI,
-      parachute: parachute
+      currentPage: pageToLoad
     });
     
     function doneLoading() {
@@ -67,6 +65,24 @@ define(function(require) {
       editor.codeMirror.refresh();
       ready.resolve();
     }
+
+    publishUI.on("publish", function(info) {
+      // If the user clicks their back button, we don't want to show
+      // them the page they just published--we want to show them the
+      // page the current page is based on.
+      parachute.clearCurrentPage();
+      parachute.changePage(info.path);
+      // It's possible that the server sanitized some stuff that the
+      // user will be confused by, so save the new state of the page
+      // to be what they expect it to be, just in case.
+      parachute.save();
+      // Set the URL to be the new URL to remix the page the user just
+      // published, so they can share/bookmark the URL and it'll be what 
+      // they expect it to be.
+      pageManager.changePage(info.path, info.remixURL);
+    });
+    
+    parachute.changePage(pageManager.currentPage());
 
     if (!pageManager.currentPage()) {
       setTimeout(function() {
