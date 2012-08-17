@@ -17,6 +17,7 @@ html .flipped .down-arrow {
 .help {
   display: block;
   position: absolute;
+  font-family: "myriad-pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /* Force the left side of the message to be on the left side of the
    * editing area. CodeMirror.addWidget() will set the left side on the
@@ -81,10 +82,6 @@ html .flipped .down-arrow {
 }
 .help .icon {
   background-image: url("../img/help.png");
-}
-
-b {
-  font-family: OpenSansRegular, sans-serif;
 }
 
 .CodeMirror-gutter-text .gutter-highlight-error {

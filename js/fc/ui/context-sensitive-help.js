@@ -2,7 +2,12 @@
 
 // Provides context-sensitive help for a ParsingCodeMirror based on
 // the current cursor position.
-define(["jquery", "./mark-tracker"], function($, MarkTracker) {
+define([
+  "jquery",
+  "underscore",
+  "backbone",
+  "./mark-tracker"
+], function($, _, Backbone, MarkTracker) {
   return function ContextSensitiveHelp(options) {
     var self = {};
     var codeMirror = options.codeMirror;
@@ -10,10 +15,10 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
     var helpArea = options.helpArea;
     var relocator = options.relocator;
     var helpIndex = options.helpIndex;
-    var checkbox = options.checkbox;
     var lastEvent = null;
     var timeout = null;
     var lastHelp = null;
+    var isEnabled = true;
     var HELP_DISPLAY_DELAY = 250;
     
     // The escape key should close hints 
@@ -75,23 +80,12 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
       relocator.cleanup();
     }
     
-    // make hints on/off actually work
-    checkbox.click(function() {
-      var hints = $(".checkbox", this);
-      if (hints.hasClass("on")) {
-        hints.removeClass("on").addClass("off");
-        clearHelp();
-      } else {
-        hints.removeClass("off").addClass("on");
-      }
-    });
-    
     codeMirror.on("change", clearHelp);
     codeMirror.on("cursor-activity", function() {
       clearTimeout(timeout);
       
-      // people may not want helpful hints
-      if ($(".checkbox", checkbox).hasClass("off")) return;
+      if (!isEnabled)
+        return;
 
       // If the editor widget doesn't have input focus, this event
       // was likely triggered through some programmatic manipulation rather
@@ -115,6 +109,25 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
       }
     });
 
+    self.isEnabled = function() {
+      return isEnabled;
+    };
+    
+    self.setEnabled = function(value) {
+      if (isEnabled != value) {
+        isEnabled = value;
+        if (!isEnabled)
+          clearHelp();
+        self.trigger("set-enabled", isEnabled);
+      }
+    };
+    
+    self.toggleEnabled = function() {
+      self.setEnabled(!isEnabled);
+    };
+    
+    _.extend(self, Backbone.Events);
+    
     return self;
   };
 });
