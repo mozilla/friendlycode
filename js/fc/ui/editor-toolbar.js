@@ -80,8 +80,9 @@ define(function(require) {
         gravity: 'n',
         fade: true,
         trigger: 'manual',
-        title: 'data-restore-help'
-      }).tipsy("show").tipsy(true).tip().addClass("friendlycode-base");
+        title: 'data-restore-help',
+        className: 'friendlycode-base'
+      }).tipsy("show");
       setTimeout(function() { undoNavItem.tipsy("hide"); }, 6000);
     };
     
