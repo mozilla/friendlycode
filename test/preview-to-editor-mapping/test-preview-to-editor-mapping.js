@@ -8,6 +8,24 @@ defineTests([
   
   var nodeToCode = PreviewToEditorMapping._nodeToCode;
   var pathTo = PreviewToEditorMapping._pathTo;
+
+  function spaces(n) {
+    var s = [];
+    for (var i = 0; i < n; i++) s.push(" ");
+    return s.join("");
+  }
+  
+  function domStructure(node, lines, indent) {
+    if (!indent) indent = 0;
+    if (!lines) lines = [];
+    for (var i = 0; i < node.childNodes.length; i++) {
+      var child = node.childNodes[i];
+      lines.push(spaces(indent) + child.nodeName);
+      if (child.nodeType == node.ELEMENT_NODE)
+        domStructure(child, lines, indent + 2);
+    }
+    return lines.join('\n');
+  }
   
   function n2cTest(options) {
     var desc = "in " + JSON.stringify(options.html) + ", selector " +
@@ -15,6 +33,7 @@ defineTests([
     lpTest(options.name,
       options.html,
       function(previewArea, preview, cm, docFrag, html) {
+        var originalDom = domStructure(docFrag);
         var wind = previewArea.contents()[0].defaultView;
         var p = wind.document.querySelector(options.selector);
         if (!p)
@@ -25,6 +44,8 @@ defineTests([
         else
           equal(html.slice(interval.start, interval.end), options.expect,
                 desc + "maps to code " + JSON.stringify(options.expect));
+        equal(domStructure(docFrag), originalDom,
+              "DOM structure of document fragment is unchanged");
       });
   }
 
