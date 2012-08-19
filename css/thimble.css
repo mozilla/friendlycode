@@ -3,6 +3,7 @@ html, body {
   padding: 0;
   height: 100%;
   color: #414244;
+  background-color: #f5f5f5;
 }
 
 #thimble-friendlycode-holder {
@@ -20,11 +21,8 @@ html, body {
   right: 0;
   height: 79px;
 
-  background: #f5f5f5;
   background-image: url("../img/header-gradient.png");
   background-position: 0 0;
-  -webkit-box-shadow: 0 5px 5px 0 rgba(233,233,233,0.5);
-  box-shadow: 0 5px 5px 0 rgba(233,233,233,0.5);
   border-top: 2px solid white;
   
   z-index: 2;

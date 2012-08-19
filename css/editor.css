@@ -42,6 +42,9 @@
   background-image: url(../img/throbber.gif);
   background-position: 20px 12px;
   background-repeat: no-repeat;
+  -webkit-box-shadow: 0 5px 5px 0 rgba(233,233,233,0.5);
+  box-shadow: 0 5px 5px 0 rgba(233,233,233,0.5);
+  
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -94,6 +97,9 @@
   border-bottom: 1px solid #D6D6D6;
   
   background: white;
+  
+  -webkit-box-shadow: 0 5px 5px 0 rgba(233,233,233,0.5);
+  box-shadow: 0 5px 5px 0 rgba(233,233,233,0.5);
 }
 
 .nav-options {
