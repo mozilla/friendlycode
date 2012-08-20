@@ -1,14 +1,13 @@
 define(function(require) {
   var $ = require("jquery"),
-      TwoPanedEditor = require("fc/ui/two-paned-editor"),
-      EditorToolbar = require("fc/ui/editor-toolbar"),
+      EditorWithToolbar = require("fc/ui/editor-with-toolbar"),
       Modals = require("fc/ui/modals"),
       Parachute = require("fc/parachute"),
       CurrentPageManager = require("fc/current-page-manager"),
       Publisher = require("fc/publisher"),
       PublishUI = require("fc/ui/publish"),
       DefaultContentTemplate = require("template!default-content");
-
+  
   return function FriendlycodeEditor(options) {
     var publishURL = options.publishURL,
         pageToLoad = options.pageToLoad,
@@ -16,17 +15,9 @@ define(function(require) {
         remixURLTemplate = options.remixURLTemplate ||
           location.protocol + "//" + location.host + 
           location.pathname + "#{{VIEW_URL}}",
-        container = options.container.empty()
-          .addClass("friendlycode-base friendlycode-loading"),
-        toolbarDiv = $('<div class="friendlycode-toolbar"></div>')
-          .appendTo(container),
-        editorDiv = $('<div class="friendlycode-editor"></div>')
-          .appendTo(container),
+        ewt = EditorWithToolbar({container: options.container}),
         ready = $.Deferred();
     
-    var editor = TwoPanedEditor({
-      container: editorDiv
-    });
     var modals = Modals({
       container: $('<div class="friendlycode-base"></div>')
         .appendTo(document.body)
@@ -34,38 +25,35 @@ define(function(require) {
     var publisher = Publisher(publishURL);
     var publishUI = PublishUI({
       modals: modals,
-      codeMirror: editor.codeMirror,
+      codeMirror: ewt.editor.codeMirror,
       publisher: publisher,
       remixURLTemplate: remixURLTemplate
     });
-    var toolbar = EditorToolbar({
-      container: toolbarDiv,
-      editor: editor,
-      startPublish: publishUI.start
-    });
-    var parachute = Parachute(window, editor.codeMirror);
+    var parachute = Parachute(window, ewt.editor.codeMirror);
     var pageManager = CurrentPageManager({
       window: window,
       currentPage: pageToLoad
     });
     
     function doneLoading() {
-      container.removeClass("friendlycode-loading");
-      editor.codeMirror.clearHistory();
-      toolbar.refresh();
+      ewt.container.removeClass("friendlycode-loading");
+      ewt.editor.codeMirror.clearHistory();
+      ewt.toolbar.refresh();
       if (parachute.restore()) {
-        toolbar.showDataRestoreHelp();
+        ewt.toolbar.showDataRestoreHelp();
       } else {
         // Only save data on page unload if it's different from
         // the URL we just (hopefully) loaded.
         parachute.refresh();
       }
-      editor.codeMirror.reparse();
-      editor.codeMirror.focus();
-      editor.codeMirror.refresh();
+      ewt.editor.codeMirror.reparse();
+      ewt.editor.codeMirror.focus();
+      ewt.editor.codeMirror.refresh();
       ready.resolve();
     }
 
+    ewt.toolbar.setStartPublish(publishUI.start);
+    ewt.container.addClass("friendlycode-loading");
     publishUI.on("publish", function(info) {
       // If the user clicks their back button, we don't want to show
       // them the page they just published--we want to show them the
@@ -86,7 +74,7 @@ define(function(require) {
 
     if (!pageManager.currentPage()) {
       setTimeout(function() {
-        editor.codeMirror.setValue(defaultContent);
+        ewt.editor.codeMirror.setValue(defaultContent);
         doneLoading();
       }, 0);
     } else
@@ -96,14 +84,14 @@ define(function(require) {
             text: 'Sorry, an error occurred while trying to get the page.'
           });
         } else {
-          editor.codeMirror.setValue(data);
+          ewt.editor.codeMirror.setValue(data);
           publishUI.setCurrentURL(url);
           doneLoading();
         }
       });
     
     return {
-      codeMirror: editor.codeMirror,
+      codeMirror: ewt.editor.codeMirror,
       parachute: parachute,
       ready: ready
     };

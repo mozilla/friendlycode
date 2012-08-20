@@ -28,10 +28,10 @@ define(function(require) {
     var self = {},
         div = options.container,
         editor = options.editor,
-        startPublish = options.startPublish,
         navOptions = $(NavOptionsTemplate()).appendTo(div),
         publishButton = navOptions.find(".publish-button"),
-        undoNavItem = navOptions.find(".undo-nav-item");
+        undoNavItem = navOptions.find(".undo-nav-item"),
+        startPublish;
     
     var historyUI = HistoryUI({
       codeMirror: editor.codeMirror,
@@ -67,6 +67,10 @@ define(function(require) {
     self.refresh = function() {
       historyUI.refresh();
     };
+    self.setStartPublish = function(func) {
+      startPublish = func;
+      publishButton.toggle(!!startPublish);
+    };
     self.showDataRestoreHelp = function() {
       // Display a non-modal message telling the user that their
       // previous data has been restored, and that they can click 'undo'
@@ -86,6 +90,7 @@ define(function(require) {
       setTimeout(function() { undoNavItem.tipsy("hide"); }, 6000);
     };
     
+    self.setStartPublish(null);
     return self;
   };
 });
