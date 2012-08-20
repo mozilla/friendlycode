@@ -4,10 +4,9 @@
 // the current cursor position.
 define([
   "jquery",
-  "underscore",
-  "backbone",
+  "fc/prefs",
   "./mark-tracker"
-], function($, _, Backbone, MarkTracker) {
+], function($, Preferences, MarkTracker) {
   return function ContextSensitiveHelp(options) {
     var self = {};
     var codeMirror = options.codeMirror;
@@ -18,7 +17,6 @@ define([
     var lastEvent = null;
     var timeout = null;
     var lastHelp = null;
-    var isEnabled = true;
     var HELP_DISPLAY_DELAY = 250;
     
     // The escape key should close hints 
@@ -84,7 +82,7 @@ define([
     codeMirror.on("cursor-activity", function() {
       clearTimeout(timeout);
       
-      if (!isEnabled)
+      if (Preferences.get("showHints") === false)
         return;
 
       // If the editor widget doesn't have input focus, this event
@@ -109,25 +107,12 @@ define([
       }
     });
 
-    self.isEnabled = function() {
-      return isEnabled;
-    };
+    Preferences.on("change:showHints", function() {
+      if (Preferences.get("showHints") === false)
+        clearHelp();
+    });
     
-    self.setEnabled = function(value) {
-      if (isEnabled != value) {
-        isEnabled = value;
-        if (!isEnabled)
-          clearHelp();
-        self.trigger("set-enabled", isEnabled);
-      }
-    };
-    
-    self.toggleEnabled = function() {
-      self.setEnabled(!isEnabled);
-    };
-    
-    _.extend(self, Backbone.Events);
-    
+    Preferences.trigger("change:showHints");
     return self;
   };
 });
