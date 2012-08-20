@@ -1,5 +1,6 @@
 define(function(require) {
   var $ = require("jquery"),
+      Preferences = require("fc/prefs"),
       TwoPanedEditor = require("fc/ui/two-paned-editor"),
       EditorToolbar = require("fc/ui/editor-toolbar"),
       Modals = require("fc/ui/modals"),
@@ -8,6 +9,8 @@ define(function(require) {
       Publisher = require("fc/publisher"),
       PublishUI = require("fc/ui/publish"),
       DefaultContentTemplate = require("template!default-content");
+
+  Preferences.fetch();
 
   return function FriendlycodeEditor(options) {
     var publishURL = options.publishURL,
