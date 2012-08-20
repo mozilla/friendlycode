@@ -1,26 +1,29 @@
 define(function(require) {
   var $ = require("jquery-tipsy"),
+      Preferences = require("fc/prefs"),
       HistoryUI = require("fc/ui/history"),
       NavOptionsTemplate = require("template!nav-options"),
       TextUI = require("fc/ui/text");
   
   function HintsUI(options) {
     var self = {},
-        cursorHelp = options.cursorHelp,
         hintsNavItem = options.navItem,
         hintsCheckbox = hintsNavItem.find(".checkbox");
     
-    function onChange() {
-      if (!this.isEnabled())
+    Preferences.on("change:showHints", function() {
+      if (Preferences.get("showHints") === false)
         hintsCheckbox.removeClass("on").addClass("off");
       else
         hintsCheckbox.removeClass("off").addClass("on");
-    }
+    });
     
-    cursorHelp.on("set-enabled", onChange);
-    hintsNavItem.click(function() { cursorHelp.toggleEnabled(); });
-    onChange.call(cursorHelp);
+    hintsNavItem.click(function() {
+      var isDisabled = (Preferences.get("showHints") === false);
+      Preferences.set("showHints", isDisabled);
+      Preferences.save();
+    });
 
+    Preferences.trigger("change:showHints");
     return self;
   }
   
@@ -43,7 +46,6 @@ define(function(require) {
       navItem: navOptions.find(".text-nav-item")
     });
     var hintsUI = HintsUI({
-      cursorHelp: editor.cursorHelp,
       navItem: navOptions.find(".hints-nav-item")
     });
     
