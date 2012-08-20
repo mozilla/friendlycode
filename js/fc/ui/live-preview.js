@@ -9,6 +9,14 @@ define(["underscore", "jquery", "backbone"], function(_, $, Backbone) {
         iframe;
 
     codeMirror.on("reparse", function(event) {
+      var isPreviewInDocument = $.contains(document.documentElement,
+                                           options.previewArea[0]);
+      if (!isPreviewInDocument) {
+        if (window.console)
+          window.console.log("reparse triggered, but preview area is not " +
+                             "attached to the document.");
+        return;
+      }
       if (!event.error || options.ignoreErrors) {
         var x = 0,
             y = 0,

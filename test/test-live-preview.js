@@ -2,9 +2,24 @@
 
 defineTests([
   "jquery",
-  "test/lptest"
-], function($, lpTest) {
+  "underscore",
+  "backbone",
+  "test/lptest",
+  "fc/ui/live-preview"
+], function($, _, Backbone, lpTest, LivePreview) {
   module("LivePreview");
+  
+  test("does nothing if preview area isn't attached", function() {
+    var div = $("<div></div>");
+    var cm = {};
+    _.extend(cm, Backbone.Events);
+    var lp = LivePreview({
+      previewArea: div,
+      codeMirror: cm
+    });
+    cm.trigger('reparse', {error: null});
+    ok(true);
+  });
   
   lpTest("HTML is written into document", function(previewArea, preview, cm) {
     equal($("body", previewArea.contents()).html(),
