@@ -15,63 +15,12 @@
     <div id="qunit-fixture"></div>
 
     <script src="qunit.js"></script>
-    <script>
-    // Because we're using requirejs to asynchronously load tests,
-    // we need to have manual control over the running of tests.
-    QUnit.config.autostart = false;
-    
-    // We want to "lazily" define tests so that the order of their
-    // definition isn't arbitrarily determined by requirejs. This way,
-    // the test results will always be reported in the same order, which
-    // makes reading test results across multiple page reloads much
-    // easier.
-    //
-    // Note that this has NOTHING to do with the order of
-    // actual test execution--our tests should always be isolated from
-    // each other so that the order QUnit chooses to run them in
-    // doesn't matter.
-    function defineTests(deps, fn) {
-      define(deps, function() {
-        var injectedDeps = arguments;
-        return function describeTests() {
-          fn.apply(this, injectedDeps);
-        };
-      });
-    }
-    </script>
-
+    <script src="define-tests.js"></script>
     <script src="../js/require-config.js"></script>
     <script src="../js/require.min.js"></script>
     <script>
-    require([
-      "jquery",
-      "test/test-app",
-      "test/test-help",
-      "test/test-templates",
-      "test/test-indexable-codemirror",
-      "test/test-parsing-codemirror",
-      "test/test-mark-tracker",
-      "test/test-live-preview",
-      "test/test-slowparse-errors",
-      "test/publisher/test-publisher",
-      "test/codemirror-577/test-codemirror-577",
-      "test/preview-to-editor-mapping/test-preview-to-editor-mapping",
-      "test/test-current-page-manager",
-      "test/test-editor-toolbar",
-      "test/test-prefs"
-    ], function($) {
-      var args = $.makeArray(arguments);
-      args.slice(1).forEach(function(describeTests) {
-        describeTests();
-      });
-      if (QUnit.config.blocking)
-        QUnit.config.autostart = true;
-      else
-        QUnit.start();
-    });
-    </script>
-
-    <script>
+    defineTests.run(["test/all-tests"]);
+    
     if (location.search.match(/externalreporter=1/))
       document.write('<script src="/externalreporter.js"></' + 'script>');
     </script>
