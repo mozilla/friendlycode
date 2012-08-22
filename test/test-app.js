@@ -4,7 +4,8 @@ defineTests(["jquery", "lscache"], function($, lscache) {
   module("app");
 
   function appTest(name, cb) {
-    var iframe = $('<iframe src="test-app.html"></iframe>');
+    var iframe = $('<iframe src="' + require.toUrl('test/test-app.html') +
+                   '"></iframe>');
     iframe.css({
       display: "none"
     });
