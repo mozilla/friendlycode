@@ -22,8 +22,8 @@ define(function() {
           // Facebook needs additional help, because it needs
           // to be told that it has to refresh its button, rather
           // than simply reloading.
-          if (typeof(FB) === "object" && FB.XFBML && FB.XFBML.parse) {
-            FB.XFBML.parse();
+          if (typeof(window.FB) === "object" && window.FB.XFBML && window.FB.XFBML.parse) {
+            window.FB.XFBML.parse();
           }
         }
       },
@@ -51,8 +51,9 @@ define(function() {
        */
       hotLoad:  function(element, socialMedium, url) {
         var oldScript = document.getElementById(socialMedium.id);
-        if (oldScript)
+        if (oldScript) {
           oldScript.parentNode.removeChild(oldScript);
+        }
         // TODO: Should we escape url? It's likely
         // to not contain any characters that need escaping, and its value
         // is trusted, but we may still want to do it.
@@ -65,8 +66,9 @@ define(function() {
           script.src = src;
           document.head.appendChild(script);
         }(document, socialMedium.id, socialMedium.src));
-        if (socialMedium.afterHotLoad)
+        if (socialMedium.afterHotLoad) {
           socialMedium.afterHotLoad();
+        }
       }
     };
 
