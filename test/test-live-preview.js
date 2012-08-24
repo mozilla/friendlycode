@@ -2,17 +2,15 @@
 
 defineTests([
   "jquery",
-  "underscore",
-  "backbone",
+  "backbone-events",
   "test/lptest",
   "fc/ui/live-preview"
-], function($, _, Backbone, lpTest, LivePreview) {
+], function($, BackboneEvents, lpTest, LivePreview) {
   module("LivePreview");
   
   test("does nothing if preview area isn't attached", function() {
     var div = $("<div></div>");
-    var cm = {};
-    _.extend(cm, Backbone.Events);
+    var cm = BackboneEvents.mixin({});
     var lp = LivePreview({
       previewArea: div,
       codeMirror: cm

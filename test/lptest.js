@@ -1,10 +1,9 @@
 define([
   "jquery",
-  "underscore",
-  "backbone",
+  "backbone-events",
   "fc/ui/live-preview",
   "slowparse/slowparse"
-], function($, _, Backbone, LivePreview, Slowparse) {
+], function($, BackboneEvents, LivePreview, Slowparse) {
   return function lpTest(name, html, cb) {
     if (typeof(html) == 'function') {
       cb = html;
@@ -12,8 +11,7 @@ define([
     }
     test(name, function() {
       var div = $('<div></div>').appendTo('body').css({visibility: "hidden"});
-      var cm = {};
-      _.extend(cm, Backbone.Events);
+      var cm = BackboneEvents.mixin({});
       var preview = LivePreview({
         codeMirror: cm,
         previewArea: div

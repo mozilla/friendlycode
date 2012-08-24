@@ -3,7 +3,10 @@
 // A subclass of IndexableCodeMirror which continuously re-parses
 // the code in its editor. Also adds a Backbone.Events interface
 // for extension points to hook into.
-define(["underscore", "backbone", "./indexable-codemirror"], function(_, Backbone, IndexableCodeMirror) {
+define([
+  "backbone-events",
+  "./indexable-codemirror"
+], function(BackboneEvents, IndexableCodeMirror) {
   return function ParsingCodeMirror(place, givenOptions) {
     // Called whenever content of the editor area changes.
     function reparse() {
@@ -40,7 +43,7 @@ define(["underscore", "backbone", "./indexable-codemirror"], function(_, Backbon
     givenOptions.onCursorActivity = onCursorActivity;
 
     var codeMirror = IndexableCodeMirror(place, givenOptions);
-    _.extend(codeMirror, Backbone.Events);
+    BackboneEvents.mixin(codeMirror);
     codeMirror.reparse = reparse;
     return codeMirror;
   };

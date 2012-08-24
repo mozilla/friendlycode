@@ -2,7 +2,7 @@
 
 // Displays the HTML source of a CodeMirror editor as a rendered preview
 // in an iframe.
-define(["underscore", "jquery", "backbone"], function(_, $, Backbone) {
+define(["jquery", "backbone-events"], function($, BackboneEvents) {
   function LivePreview(options) {
     var self = {codeMirror: options.codeMirror},
         codeMirror = options.codeMirror,
@@ -61,7 +61,7 @@ define(["underscore", "jquery", "backbone"], function(_, $, Backbone) {
       }
     });
 
-    _.extend(self, Backbone.Events);
+    BackboneEvents.mixin(self);
     return self;
   };
   

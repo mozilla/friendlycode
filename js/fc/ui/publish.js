@@ -2,8 +2,7 @@
 
 define(function (require) {
   var $ = require("jquery"),
-      _ = require("underscore"),
-      Backbone = require("backbone"),
+      BackboneEvents = require("backbone-events"),
       SocialMedia = require("./social-media"),
       ConfirmDialogTemplate = require("template!confirm-dialog"),
       PublishDialogTemplate = require("template!publish-dialog");
@@ -132,7 +131,7 @@ define(function (require) {
       }
     };
     
-    _.extend(self, Backbone.Events);
+    BackboneEvents.mixin(self);
     return self;
   };
 });
