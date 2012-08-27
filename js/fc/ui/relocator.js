@@ -14,7 +14,7 @@ define(["jquery"], function($) {
     var svg = document.createElementNS(SVG_NS, "svg");
     var w = ($(".CodeMirror-gutter", wrapper).outerWidth() -
              highlight.width()) * 2;
-    var h = highlight.outerHeight();
+    var h = highlight[0].getBoundingClientRect().height;
     var pos = highlight.position();
     
     pos.left += highlight.width();
