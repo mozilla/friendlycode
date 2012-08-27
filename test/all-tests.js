@@ -12,5 +12,6 @@ defineTests.combine([
   "test/preview-to-editor-mapping/test-preview-to-editor-mapping",
   "test/test-current-page-manager",
   "test/test-editor-toolbar",
-  "test/test-prefs"
+  "test/test-prefs",
+  "test/test-gutter-pointer"
 ]);
