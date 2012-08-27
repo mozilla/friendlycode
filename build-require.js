@@ -59,7 +59,13 @@ if (!module.parent) {
       // included.
       console.log("Done. About " + buildResponse.split('\n').length +
                   " modules are inside the generated JS file.");
-      process.exit();
+      requirejs.optimize({
+        cssIn: "css/friendlycode.css",
+        out: "css/friendlycode-built.css"
+      }, function() {
+        console.log("Optimized CSS.");
+        process.exit();
+      });
     });
   }
 }
