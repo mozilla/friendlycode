@@ -4,8 +4,10 @@ defineTests(["jquery", "lscache"], function($, lscache) {
   module("app");
 
   function appTest(name, cb) {
-    var iframe = $('<iframe src="' + require.toUrl('test/test-app.html') +
-                   '"></iframe>');
+    var url = 'test/test-app' +
+              (location.pathname.match(/optimized/) ? '-optimized' : '') +
+              '.html';
+    var iframe = $('<iframe src="' + require.toUrl(url) + '"></iframe>');
     iframe.css({
       display: "none"
     });
