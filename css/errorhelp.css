@@ -213,3 +213,16 @@ html .flipped .down-arrow {
 .hint-marker-error {
   background-image: url("../img/explanationpt.png");
 }
+
+svg.gutter-pointer {
+  position: absolute;
+  z-index: 100;
+}
+
+svg.gutter-pointer.gutter-highlight-error polygon {
+  fill: #FF2A04;
+}
+
+svg.gutter-pointer.gutter-highlight-help polygon {
+  fill: #FF9933;
+}
