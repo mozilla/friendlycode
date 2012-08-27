@@ -12,9 +12,9 @@ define(["jquery"], function($) {
     var highlight = $(".CodeMirror-gutter-text ." + highlightClass, wrapper);
     var SVG_NS = "http://www.w3.org/2000/svg";
     var svg = document.createElementNS(SVG_NS, "svg");
-    var w = $(".CodeMirror-gutter", wrapper).outerWidth() -
-            highlight.width();
-    var h = highlight.height();
+    var w = ($(".CodeMirror-gutter", wrapper).outerWidth() -
+             highlight.width()) * 2;
+    var h = highlight.outerHeight();
     var pos = highlight.position();
     
     pos.left += highlight.width();
@@ -24,7 +24,13 @@ define(["jquery"], function($) {
     });
     var pointer = document.createElementNS(SVG_NS, "polygon");
     attrs(pointer, {
-      points: ["0,0", w + "," + (h/2), "0," + h].join(" ")
+      points: [
+        "0,0",
+        (w/2) + ",0",
+        w + "," + (h/2),
+        (w/2) + "," + h,
+        "0," + h
+      ].join(" ")
     });
     svg.appendChild(pointer);
     $(svg).css({
