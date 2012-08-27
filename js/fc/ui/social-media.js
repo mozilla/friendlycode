@@ -16,7 +16,7 @@ define(function() {
     var self = {
       facebook: {
         id: "facebook-jssdk",
-        src: "//connect.facebook.net/en_US/all.js#xfbml=1&appId=1",
+        src: "//connect.facebook.net/en_US/all.js#xfbml=1",
         html: "<div class='fb-like' data-href='"+urlPlaceHolder+"' data-send='false' data-action='recommend' data-layout='button_count' data-show-faces='false' data-font='tahoma'></div>",
         afterHotLoad: function() {
           // Facebook needs additional help, because it needs
