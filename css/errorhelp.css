@@ -215,7 +215,6 @@ html .flipped .down-arrow {
 }
 
 svg.gutter-pointer {
-  position: absolute;
   z-index: 100;
 }
 

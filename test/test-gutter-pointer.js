@@ -15,6 +15,8 @@ defineTests([
     cm.setMarker(1, null, "blarg");
     
     var gp = gutterPointer(cm, "blarg");
+    equal(gp.css('position'), 'absolute',
+          'gutterPointer is absolutely positioned');
     equal(gp[0].nodeName, "svg", "gutterPointer is <svg>");
     equal(gp[0].namespaceURI, "http://www.w3.org/2000/svg",
           "gutterPointer has SVG namespace");
