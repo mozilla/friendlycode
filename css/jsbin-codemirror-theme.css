@@ -38,13 +38,13 @@
 
 .CodeMirror-gutter {
   background-color: #EEEEEE !important;
-  padding-right: 3px;
 }
 
 .CodeMirror-gutter-text {
   color: #A9A9A9;
   font-size: 12px;
   line-height: 15.75px;
+  padding-left: 0;
 }
 
 .cm-s-jsbin span.cm-meta {
