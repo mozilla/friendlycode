@@ -1,10 +1,11 @@
 "use strict";
 
 // code will relocate an error or help message to near where the error actually is in CodeMirror.
-define(["jquery"], function($) {
+define(["jquery", "./gutter-pointer"], function($, gutterPointer) {
   return function Relocator(codeMirror) {
     var lastPos = null;
     var lastElement = null;
+    var lastGutterPointer = null;
     var lastToggle = document.createElement("div");
 
     function flipElementIfNeeded() {
@@ -30,6 +31,10 @@ define(["jquery"], function($) {
           lastElement.hide();
           lastElement = null;
         }
+        if (lastGutterPointer) {
+          lastGutterPointer.remove();
+          lastGutterPointer = null;
+        }
         if (lastToggle.parentNode) {
           $(lastToggle).remove();
         }
@@ -37,6 +42,8 @@ define(["jquery"], function($) {
 
       // relocate an element to inside CodeMirror, pointing "at" the line for startMark
       relocate: function(element, startMark, type) {
+        var highlightClass = "gutter-highlight-" + type;
+
         this.cleanup();
         lastElement = $(element);
 
@@ -46,7 +53,8 @@ define(["jquery"], function($) {
         // the right one.
         lastPos = codeMirror.posFromIndex(startMark);
         codeMirror.setLineClass(lastPos.line, null, "CodeMirror-line-highlight");
-        codeMirror.setMarker(lastPos.line, null, "gutter-highlight-" + type);
+        codeMirror.setMarker(lastPos.line, null, highlightClass);
+        lastGutterPointer = gutterPointer(codeMirror, highlightClass);
 
         codeMirror.addWidget(lastPos, lastElement[0], false);
         $(".up-arrow, .down-arrow", lastElement).css({
