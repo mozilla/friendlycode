@@ -15,9 +15,10 @@ define(function(require) {
   require('slowparse-errors');
   require("codemirror/html");
   
-  return function Editor(options) {
+  return function EditorPanes(options) {
     var self = {},
         div = options.container,
+        initialValue = options.value || "",
         sourceCode = $('<div class="source-code"></div>').appendTo(div),
         previewArea = $('<div class="preview-holder"></div>').appendTo(div),
         helpArea = $('<div class="help hidden"></div>').appendTo(div),
@@ -29,6 +30,7 @@ define(function(require) {
       tabMode: "indent",
       lineWrapping: true,
       lineNumbers: true,
+      value: initialValue,
       parse: function(html) {
         return Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
       }

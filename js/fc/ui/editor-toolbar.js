@@ -30,26 +30,26 @@ define(function(require) {
   return function Toolbar(options) {
     var self = {},
         div = options.container,
-        editor = options.editor,
-        startPublish = options.startPublish,
+        panes = options.panes,
         navOptions = $(NavOptionsTemplate()).appendTo(div),
         publishButton = navOptions.find(".publish-button"),
-        undoNavItem = navOptions.find(".undo-nav-item");
+        undoNavItem = navOptions.find(".undo-nav-item"),
+        startPublish;
     
     var historyUI = HistoryUI({
-      codeMirror: editor.codeMirror,
+      codeMirror: panes.codeMirror,
       undo: undoNavItem,
       redo: navOptions.find(".redo-nav-item")
     });
     var textUI = TextUI({
-      codeMirror: editor.codeMirror,
+      codeMirror: panes.codeMirror,
       navItem: navOptions.find(".text-nav-item")
     });
     var hintsUI = HintsUI({
       navItem: navOptions.find(".hints-nav-item")
     });
     
-    editor.preview.on("refresh", function(event) {
+    panes.preview.on("refresh", function(event) {
       var title = event.window.document.title;
       if (title.length)
         $(".preview-title", navOptions).text(title).show();
@@ -58,8 +58,8 @@ define(function(require) {
     });
     
     // If the editor has no content, disable the publish button.
-    editor.codeMirror.on("change", function() {
-      var codeLength = editor.codeMirror.getValue().trim().length;
+    panes.codeMirror.on("change", function() {
+      var codeLength = panes.codeMirror.getValue().trim().length;
       publishButton.toggleClass("enabled", codeLength ? true : false);
     });
     publishButton.click(function(){
@@ -68,6 +68,10 @@ define(function(require) {
     
     self.refresh = function() {
       historyUI.refresh();
+    };
+    self.setStartPublish = function(func) {
+      startPublish = func;
+      publishButton.toggle(!!startPublish);
     };
     self.showDataRestoreHelp = function() {
       // Display a non-modal message telling the user that their
@@ -88,6 +92,7 @@ define(function(require) {
       setTimeout(function() { undoNavItem.tipsy("hide"); }, 6000);
     };
     
+    self.setStartPublish(null);
     return self;
   };
 });
