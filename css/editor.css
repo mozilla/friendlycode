@@ -89,7 +89,7 @@
   z-index: 2;
   top: 0;
 
-  height: 40px;    /* corresponds with .friendlycode-editor.top */
+  height: 40px;    /* corresponds with .friendlycode-panes.top */
   width: 100%;
   margin: 0;
   padding: 0;
@@ -458,7 +458,7 @@
 
 /* ------ CONTENT AREA ------ */
 
-.friendlycode-editor {
+.friendlycode-panes {
   position: absolute;
   top: 30px;       /* corresponds to .friendlycode-toolbar.height */
   left: 0;

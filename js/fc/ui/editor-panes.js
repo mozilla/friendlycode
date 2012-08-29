@@ -15,7 +15,7 @@ define(function(require) {
   require('slowparse-errors');
   require("codemirror/html");
   
-  return function Editor(options) {
+  return function EditorPanes(options) {
     var self = {},
         div = options.container,
         initialValue = options.value || "",

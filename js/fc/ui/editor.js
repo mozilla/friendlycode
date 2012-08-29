@@ -1,32 +1,32 @@
 define([
   "jquery",
-  "./two-paned-editor",
+  "./editor-panes",
   "./editor-toolbar"
-], function($, TwoPanedEditor, EditorToolbar) {
-  return function EditorWithToolbar(options) {
+], function($, EditorPanes, EditorToolbar) {
+  return function Editor(options) {
     var value = options.value,
         container = options.container.empty()
           .addClass("friendlycode-base"),
         toolbarDiv = $('<div class="friendlycode-toolbar"></div>')
           .appendTo(container),
-        editorDiv = $('<div class="friendlycode-editor"></div>')
+        panesDiv = $('<div class="friendlycode-panes"></div>')
           .appendTo(container);
     
-    var editor = TwoPanedEditor({
-      container: editorDiv,
+    var panes = EditorPanes({
+      container: panesDiv,
       value: value
     });
     var toolbar = EditorToolbar({
       container: toolbarDiv,
-      editor: editor
+      panes: panes
     });
     
     container.removeClass("friendlycode-loading");
-    editor.codeMirror.refresh();
+    panes.codeMirror.refresh();
     
     return {
       container: container,
-      editor: editor,
+      panes: panes,
       toolbar: toolbar
     };
   };

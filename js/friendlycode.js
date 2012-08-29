@@ -1,6 +1,6 @@
 define(function(require) {
   var $ = require("jquery"),
-      EditorWithToolbar = require("fc/ui/editor-with-toolbar"),
+      Editor = require("fc/ui/editor"),
       Modals = require("fc/ui/modals"),
       Parachute = require("fc/parachute"),
       CurrentPageManager = require("fc/current-page-manager"),
@@ -15,7 +15,7 @@ define(function(require) {
         remixURLTemplate = options.remixURLTemplate ||
           location.protocol + "//" + location.host + 
           location.pathname + "#{{VIEW_URL}}",
-        ewt = EditorWithToolbar({container: options.container}),
+        editor = Editor({container: options.container}),
         ready = $.Deferred();
     
     var modals = Modals({
@@ -25,35 +25,35 @@ define(function(require) {
     var publisher = Publisher(publishURL);
     var publishUI = PublishUI({
       modals: modals,
-      codeMirror: ewt.editor.codeMirror,
+      codeMirror: editor.panes.codeMirror,
       publisher: publisher,
       remixURLTemplate: remixURLTemplate
     });
-    var parachute = Parachute(window, ewt.editor.codeMirror);
+    var parachute = Parachute(window, editor.panes.codeMirror);
     var pageManager = CurrentPageManager({
       window: window,
       currentPage: pageToLoad
     });
     
     function doneLoading() {
-      ewt.container.removeClass("friendlycode-loading");
-      ewt.editor.codeMirror.clearHistory();
-      ewt.toolbar.refresh();
+      editor.container.removeClass("friendlycode-loading");
+      editor.panes.codeMirror.clearHistory();
+      editor.toolbar.refresh();
       if (parachute.restore()) {
-        ewt.toolbar.showDataRestoreHelp();
+        editor.toolbar.showDataRestoreHelp();
       } else {
         // Only save data on page unload if it's different from
         // the URL we just (hopefully) loaded.
         parachute.refresh();
       }
-      ewt.editor.codeMirror.reparse();
-      ewt.editor.codeMirror.focus();
-      ewt.editor.codeMirror.refresh();
+      editor.panes.codeMirror.reparse();
+      editor.panes.codeMirror.focus();
+      editor.panes.codeMirror.refresh();
       ready.resolve();
     }
 
-    ewt.toolbar.setStartPublish(publishUI.start);
-    ewt.container.addClass("friendlycode-loading");
+    editor.toolbar.setStartPublish(publishUI.start);
+    editor.container.addClass("friendlycode-loading");
     publishUI.on("publish", function(info) {
       // If the user clicks their back button, we don't want to show
       // them the page they just published--we want to show them the
@@ -74,7 +74,7 @@ define(function(require) {
 
     if (!pageManager.currentPage()) {
       setTimeout(function() {
-        ewt.editor.codeMirror.setValue(defaultContent);
+        editor.panes.codeMirror.setValue(defaultContent);
         doneLoading();
       }, 0);
     } else
@@ -84,14 +84,14 @@ define(function(require) {
             text: 'Sorry, an error occurred while trying to get the page.'
           });
         } else {
-          ewt.editor.codeMirror.setValue(data);
+          editor.panes.codeMirror.setValue(data);
           publishUI.setCurrentURL(url);
           doneLoading();
         }
       });
     
     return {
-      codeMirror: ewt.editor.codeMirror,
+      codeMirror: editor.panes.codeMirror,
       parachute: parachute,
       ready: ready
     };
