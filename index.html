@@ -128,13 +128,13 @@
       var getWikiBadges = require("badges/get-wiki-badges");
       var badger = Gapingbadger("http://labs.toolness.com:3031");
       var wikiBadges = {};
-      var wikiReq = $.Deferred();
-      var userBadgesReq = $.Deferred();
-      var readyToAwardBadges = $.when(wikiReq, userBadgesReq);
       var fc = FriendlycodeEditor({
         publishURL: "https://webpagemaker-dev.allizom.org",
         container: $("#fc")
       });
+      var wikiReq = $.Deferred();
+      var userBadgesReq = $.Deferred();
+      var readyToAwardBadges = $.when(wikiReq, userBadgesReq, fc.ready);
 
       /* Scrape available badges from the Mozilla wiki. */
 
@@ -225,6 +225,13 @@
 
       readyToAwardBadges.done(function() {
         badger.awardUnique(wikiBadges.FIRST_LOGIN);
+        
+        fc.publishUI.on('publish', function(info) {
+          badger.awardUnique({
+            evidence: info.viewURL,
+            badge: wikiBadges.PUBLISHER
+          });
+        });
       });
       
       return {
