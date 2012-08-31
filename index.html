@@ -12,6 +12,14 @@
     <link rel="stylesheet" href="css/media-object.css">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <style>
+    html:not(.logged-out) .logged-out {
+      display: none;
+    }
+
+    html:not(.logged-in) .logged-in {
+      display: none;
+    }
+    
     #fc {
       position: absolute;
       top: 100px;
@@ -38,7 +46,12 @@
       background-position: 2px 2px;
       background-size: 24px 24px;
       background-repeat: no-repeat;
-      padding-left: 28px;
+      padding-left: 18px;
+      min-height: 18px;
+    }
+
+    .btn.badge-button .unread-badges {
+      margin-left: 10px;
     }
     
     /* Fix some blatant bootstrap-achievement CSS conflicts. */
@@ -60,21 +73,21 @@
   </head>
   <body style="margin: 0">
     <header>
-      <a href="#authenticated" class="persona-button"><span>Sign in
+      <a href="#" class="persona-button logged-out"><span>Sign in
           with Persona</span></a>
-      <div class="btn-toolbar">
+      <div class="btn-toolbar logged-in">
         <div class="btn-group">
           <a class="btn btn-primary dropdown-toggle"
              data-toggle="dropdown" href="#">
-            foo@bar.org
+            <span class="email"></span>
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li><a href="#">Logout</a></li>
+            <li><a id="logout" href="#">Logout</a></li>
           </ul>
         </div>
         <div class="btn-group">
-          <a class="btn badge-button" href="#badge-list" data-toggle="modal"><span class="badge">1</span></a>
+          <a class="btn badge-button" href="#badge-list" data-toggle="modal"><span class="badge unread-badges"></span></a>
         </div>
       </div>
     </header>
@@ -84,27 +97,18 @@
         <h3>Your Badges</h3>
       </div>
       <div class="modal-body">
-        <ul class="badges">
-          <li>
-            <div class="media">
-              <img class="img badge-img" src="img/badge.png">
-              <div class="bd">
-                <div class="badge-name"><a target="_blank" href="#">Cool Badge</a></div>
-                <div class="badge-desc">A cool badge.</div>
-              </div>
-            </div>
-          </li>
-        </ul>
+        <div class="no-badges">
+          <p>You don’t have any badges yet. Keep writing HTML and you’ll
+            get some!</p>
+        </div>
+        <ul class="badges"></ul>
       </div>
-      <div class="modal-footer">
-        <button class="btn">Push to backpack&hellip;</button>
+      <div class="modal-footer some-badges">
+        <button class="btn" id="push-to-backpack">Push 
+          to backpack&hellip;</button>
       </div>
     </div>
     <div id="fc" class="friendlycode-loading"></div>
-    <div class="achievement">
-      <h3>Achievement Unlocked</h3>
-      <p>Cool Badge</p>
-    </div>
     <script src="js/require-config.js"></script>
     <script>
     require.shim.bootstrap = {
@@ -117,15 +121,112 @@
     <script>
     define("main", function(require) {
       var $ = require("bootstrap");
+      var badgeTemplate = require("template!badge");
+      var achievementTemplate = require("template!achievement");
       var FriendlycodeEditor = require("friendlycode");
-      
-      return FriendlycodeEditor({
+      var Gapingbadger = require("badges/gapingbadger");
+      var getWikiBadges = require("badges/get-wiki-badges");
+      var badger = Gapingbadger("http://labs.toolness.com:3031");
+      var wikiBadges = {};
+      var fc = FriendlycodeEditor({
         publishURL: "https://webpagemaker-dev.allizom.org",
         container: $("#fc")
       });
+
+      /* Scrape available badges from the Mozilla wiki. */
+
+      getWikiBadges('/Webmakers/SampleBadges', function(badges) {
+        $.extend(wikiBadges, badges);
+      });
+
+      /* Manage BrowserID-based authentication semantics. */
+
+      badger.checkLogin({
+        success: function() {
+          $("html").removeClass("logged-out").addClass("logged-in");
+          $(".email").text(badger.email);
+          badger.fetch();
+        },
+        authenticate: function(next) {
+          require(["https://login.persona.org/include.js"], function() {
+            $("html").addClass("logged-out");
+            $(".persona-button").unbind().click(function() {
+              navigator.id.get(next);
+              return false;
+            });
+          });
+        }
+      });
+
+      $("#logout").click(function() {
+        badger.logout();
+        window.location.reload();
+        return false;
+      });
+
+      $("#push-to-backpack").click(function() {
+        require(["http://beta.openbadges.org/issuer.js"], function() {
+          OpenBadges.issue(badger.getAssertionURLs());
+        });
+        return false;
+      });
+      
+      $("#badge-list").on('shown', function() {
+        /* The user is looking at their badge list, so reset the unread
+         * badge count. */
+         
+        badger.markAllBadgesRead();
+      });
+
+      badger.on('award', function(badge) {
+        /* The user has just been awarded a badge! Show a
+         * Steam-like achievement popup. */
+
+        var div = $(achievementTemplate(badge.badge));
+        div.appendTo("html").hide().slideDown().delay(2000)
+          .slideUp(function() { div.remove(); });
+      });
+
+      badger.on('change:badges', function() {
+        /* One or more badges have been added or removed from the user's
+         * account. Refresh the list. */
+        
+        var badgeList = $("#badge-list ul.badges");
+        $(".no-badges").toggle(!badger.badges.length);
+        $(".some-badges").toggle(!!badger.badges.length);
+        badgeList.empty();
+        badger.badges.forEach(function(badge) {
+          var li = $(badgeTemplate(badge.badge));
+          li.appendTo(badgeList);
+        });
+      });
+      
+      badger.on('change:unreadBadges', function() {
+        /* The number of badges that the user hasn't "read" yet has
+         * changed, so update the page accordingly. */
+
+         if (badger.unreadBadges)
+           $(".unread-badges").text(badger.unreadBadges.toString()).show();
+         else
+           $(".unread-badges").hide();
+      });
+      
+      /* Manually trigger badger events to set up the initial page state. */
+
+      badger.trigger('change:badges');
+      badger.trigger('change:unreadBadges');
+
+      return {
+        fc: fc,
+        badger: badger,
+        wikiBadges: wikiBadges
+      };
     });
     
-    require(["main"], function() {});
+    require(["main"], function(main) {
+      /* For console debugging only! */
+      window._app = main;
+    });
     </script>
   </body>
 </html>
