@@ -128,6 +128,9 @@
       var getWikiBadges = require("badges/get-wiki-badges");
       var badger = Gapingbadger("http://labs.toolness.com:3031");
       var wikiBadges = {};
+      var wikiReq = $.Deferred();
+      var userBadgesReq = $.Deferred();
+      var readyToAwardBadges = $.when(wikiReq, userBadgesReq);
       var fc = FriendlycodeEditor({
         publishURL: "https://webpagemaker-dev.allizom.org",
         container: $("#fc")
@@ -137,6 +140,7 @@
 
       getWikiBadges('/Webmakers/SampleBadges', function(badges) {
         $.extend(wikiBadges, badges);
+        wikiReq.resolve();
       });
 
       /* Manage BrowserID-based authentication semantics. */
@@ -145,7 +149,10 @@
         success: function() {
           $("html").removeClass("logged-out").addClass("logged-in");
           $(".email").text(badger.email);
-          badger.fetch();
+          badger.fetch(function(err) {
+            if (!err)
+              userBadgesReq.resolve();
+          });
         },
         authenticate: function(next) {
           require(["https://login.persona.org/include.js"], function() {
@@ -216,6 +223,10 @@
       badger.trigger('change:badges');
       badger.trigger('change:unreadBadges');
 
+      readyToAwardBadges.done(function() {
+        badger.awardUnique(wikiBadges.FIRST_LOGIN_BADGE);
+      });
+      
       return {
         fc: fc,
         badger: badger,
