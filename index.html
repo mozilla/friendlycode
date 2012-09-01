@@ -119,11 +119,89 @@
     </script>
     <script src="js/require.min.js"></script>
     <script>
+    define("html-badges", function() {
+      var badgeQueries = {
+        HYPERLINKER: function(doc) {
+          var anchors = doc.querySelectorAll("a");
+          var candidates = [];
+          
+          for (var i = 0; i < anchors.length; i++)
+            if ((anchors[i].children.length ||
+                 anchors[i].textContent.trim()) &&
+                anchors[i].hasAttribute('href') &&
+                anchors[i].getAttribute('href').match(/^https?:/i))
+              // TODO: Check href to make sure entire URL is well-formed.
+              candidates.push({
+                node: anchors[i],
+                start: anchors[i].parseInfo.openTag.start,
+                end: anchors[i].parseInfo.closeTag.end
+              });
+          
+          return candidates;
+        },
+        HTML_DOCUMENTER: function(doc) {
+          var candidates = [];
+          
+          function traverse(element) {
+            for (var i = 0; i < element.childNodes.length; i++) {
+              var node = element.childNodes[i];
+              
+              if (node.nodeType == element.ELEMENT_NODE)
+                traverse(node);
+              else if (node.nodeType == element.COMMENT_NODE &&
+                       node.nodeValue.trim())
+                candidates.push({
+                  node: node,
+                  start: node.parseInfo.start,
+                  end: node.parseInfo.end
+                });
+            }
+          }
+          
+          traverse(doc);
+          return candidates;
+        }
+      };
+      
+      return {
+        attachProbes: function(fc, badger, wikiBadges) {
+          var issued = {};
+          var originalCode = fc.codeMirror.getValue();
+          
+          fc.codeMirror.on("reparse", function(event) {
+            var currentCode = fc.codeMirror.getValue();
+
+            if (event.error)
+              return;
+            
+            Object.keys(badgeQueries).forEach(function(badgeName) {
+              if (badger.has(wikiBadges[badgeName]) || issued[badgeName])
+                return;
+              
+              var candidates = badgeQueries[badgeName](event.document);
+              
+              candidates.forEach(function(info) {
+                if (issued[badgeName])
+                  return;
+                var snippet = currentCode.slice(info.start, info.end);
+                if (originalCode.indexOf(snippet) == -1) {
+                  badger.awardUnique(wikiBadges[badgeName]);
+                  issued[badgeName] = true;
+                  console.log("award " + badgeName + " for " + snippet);
+                }
+              });
+            });
+          });
+        }
+      };
+    });
+    
     define("main", function(require) {
       var $ = require("bootstrap");
       var badgeTemplate = require("template!badge");
       var achievementTemplate = require("template!achievement");
       var FriendlycodeEditor = require("friendlycode");
+      var HtmlBadges = require("html-badges");
       var Gapingbadger = require("badges/gapingbadger");
       var getWikiBadges = require("badges/get-wiki-badges");
       var badger = Gapingbadger("http://labs.toolness.com:3031");
@@ -232,6 +310,8 @@
             badge: wikiBadges.PUBLISHER
           });
         });
+        
+        HtmlBadges.attachProbes(fc, badger, wikiBadges);
       });
       
       return {
