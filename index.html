@@ -124,8 +124,8 @@
     <script src="js/require.min.js"></script>
     <script>
     define("html-badges", function() {
-      var badgeQueries = {
-        HYPERLINKER: function(doc) {
+      var behaviorQueries = {
+        HYPERLINK: function(doc) {
           var anchors = doc.querySelectorAll("a");
           var candidates = [];
           
@@ -143,7 +143,7 @@
           
           return candidates;
         },
-        HTML_DOCUMENTER: function(doc) {
+        HTML_COMMENT: function(doc) {
           var candidates = [];
           
           function traverse(element) {
@@ -168,8 +168,7 @@
       };
       
       return {
-        attachProbes: function(fc, badger, wikiBadges) {
-          var issued = {};
+        attachProbes: function(fc, badger) {
           var originalCode = fc.codeMirror.getValue();
           
           fc.codeMirror.on("reparse", function(event) {
@@ -178,20 +177,15 @@
             if (event.error)
               return;
             
-            Object.keys(badgeQueries).forEach(function(badgeName) {
-              if (badger.has(wikiBadges[badgeName]) || issued[badgeName])
-                return;
-              
-              var candidates = badgeQueries[badgeName](event.document);
+            Object.keys(behaviorQueries).forEach(function(behavior) {
+              var candidates = behaviorQueries[behavior](event.document);
               
               candidates.forEach(function(info) {
-                if (issued[badgeName])
-                  return;
                 var snippet = currentCode.slice(info.start, info.end);
                 if (originalCode.indexOf(snippet) == -1) {
-                  badger.awardUnique(wikiBadges[badgeName]);
-                  issued[badgeName] = true;
-                  console.log("award " + badgeName + " for " + snippet);
+                  badger.credit(behavior);
+                  originalCode = currentCode;
+                  console.log("credit " + behavior + " for " + snippet);
                 }
               });
             });
@@ -306,16 +300,14 @@
       badger.trigger('change:unreadBadges');
 
       readyToAwardBadges.done(function() {
-        badger.awardUnique(wikiBadges.FIRST_LOGIN);
+        badger.setTriggers(wikiBadges);
+        badger.credit('LOGGED_IN');
         
         fc.publishUI.on('publish', function(info) {
-          badger.awardUnique({
-            evidence: info.viewURL,
-            badge: wikiBadges.PUBLISHER
-          });
+          badger.credit('PUBLISHED', info.viewURL);
         });
         
-        HtmlBadges.attachProbes(fc, badger, wikiBadges);
+        HtmlBadges.attachProbes(fc, badger);
       });
       
       return {

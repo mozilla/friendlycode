@@ -21,8 +21,15 @@ define(["jquery"], function($) {
         var imgURL = baseWikiURL + img.attr('src');
         var criteriaURL = baseWikiURL + wikiPath + "#" + id;
         var description = contents.find("tr td p:first-child i").text();
-
+        var behavior = contents.find(".behavior").text()
+                       .replace(/ /g, '_').toUpperCase();
+        var trigger = contents.find(".trigger").text();
+        
+        if (trigger == 'once')
+          trigger = '1';
         badges[id.toUpperCase()] = {
+          behavior: behavior,
+          trigger: parseInt(trigger),
           name: name,
           image: imgURL,
           description: description,

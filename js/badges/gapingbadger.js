@@ -14,7 +14,8 @@ define(function(require) {
       cacheKey: 'gapingbadger_' + options.baseURL
     });
     var badges = Badges(bic);
-    var badgesRead = 0;
+    var blob = {badgesRead: 0};
+    var triggers = {};
     var self = {
       baseURL: options.baseURL,
       email: null,
@@ -28,7 +29,7 @@ define(function(require) {
     function updateUnreadBadges() {
       var count = 0;
       for (var i = 0; i < self.badges.length; i++) {
-        if (self.badges[i].id > badgesRead)
+        if (self.badges[i].id > blob.badgesRead)
           count++;
       }
       if (count != self.unreadBadges) {
@@ -54,8 +55,8 @@ define(function(require) {
       var maxId = 0;
       if (self.badges.length)
         maxId = self.badges[self.badges.length-1].id;
-      badgesRead = maxId;
-      badges.setBadgesRead(badgesRead);
+      blob.badgesRead = maxId;
+      badges.setBlob(blob);
       updateUnreadBadges();
     };
     
@@ -66,10 +67,14 @@ define(function(require) {
       }
       
       cb = cb || nullCb;
-      badges.getBadgesRead(function(err, maxId) {
+      badges.getBlob(function(err, data) {
         if (err)
-          return error('badges.getBadgesRead() failed', err);
-        badgesRead = maxId;
+          return error('badges.getBlob() failed', err);
+        blob = data;
+        if (!blob)
+          blob = {};
+        if (!blob.badgesRead)
+          blob.badgesRead = 0;
         updateUnreadBadges();
         badges.fetch(function(err, badgeList) {
           var badgesChanged = false;
@@ -145,6 +150,38 @@ define(function(require) {
       return false;
     };
 
+    self.credit = function(behavior, evidence) {
+      console.log('credit', behavior);
+
+      if (!blob[behavior])
+        blob[behavior] = 0;
+      blob[behavior]++;
+      badges.setBlob(blob);
+      if (behavior in triggers) {
+        Object.keys(triggers[behavior]).forEach(function(amount) {
+          if (blob[behavior] >= amount) {
+            self.awardUnique({
+              evidence: evidence,
+              badge: triggers[behavior][amount]
+            });
+          }
+        });
+      }
+    };
+    
+    self.getBlob = function() {
+      return blob;
+    };
+    
+    self.setTriggers = function(badges) {
+      Object.keys(badges).forEach(function(badgeName) {
+        var badge = badges[badgeName];
+        if (!(badge.behavior in triggers))
+          triggers[badge.behavior] = {};
+        triggers[badge.behavior][badge.trigger] = badges[badgeName];
+      });
+    };
+    
     self.awardUnique = function(badgeAssertion, cb) {
       cb = cb || nullCb;
       if (self.has(badgeAssertion))
