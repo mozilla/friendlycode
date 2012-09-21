@@ -20,12 +20,24 @@ define(function(require) {
       baseURL: options.baseURL,
       email: null,
       unreadBadges: 0,
+      behaviors: {},
       badges: []
     };
 
     if (bic.isLoggedIn())
       self.email = bic.getLoginInfo().email;
-
+    
+    function updateBehaviors() {
+      var behaviors = {};
+      Object.keys(blob).forEach(function(key) {
+        if (key.toUpperCase() == key)
+          behaviors[key] = blob[key];
+      });
+      
+      self.behaviors = behaviors;
+      self.triggerChange('behaviors');
+    }
+    
     function updateUnreadBadges() {
       var count = 0;
       for (var i = 0; i < self.badges.length; i++) {
@@ -76,6 +88,7 @@ define(function(require) {
         if (!blob.badgesRead)
           blob.badgesRead = 0;
         updateUnreadBadges();
+        updateBehaviors();
         badges.fetch(function(err, badgeList) {
           var badgesChanged = false;
           if (err)
@@ -157,6 +170,7 @@ define(function(require) {
         blob[behavior] = 0;
       blob[behavior]++;
       badges.setBlob(blob);
+      updateBehaviors();
       if (behavior in triggers) {
         Object.keys(triggers[behavior]).forEach(function(amount) {
           if (blob[behavior] >= amount) {
@@ -169,8 +183,15 @@ define(function(require) {
       }
     };
     
-    self.getBlob = function() {
-      return blob;
+    self.resetBehaviors = function() {
+      var behaviors = self.behaviors;
+      if (Object.keys(behaviors).length) {
+        Object.keys(behaviors).forEach(function(behavior) {
+          delete blob[behavior];
+        });
+        badges.setBlob(blob);
+        updateBehaviors();
+      }
     };
     
     self.setTriggers = function(badges) {
