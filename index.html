@@ -6,11 +6,11 @@
 
     <title>Thimble Badge Integration Prototype</title>
     <link rel="stylesheet" href="css/friendlycode.css">
-    <link rel="stylesheet" href="css/persona-button.css">
     <link rel="stylesheet" href="css/achievement.css">
     <link rel="stylesheet" href="css/badge.css">
     <link rel="stylesheet" href="css/media-object.css">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//www.mozilla.org/tabzilla/media/css/tabzilla.css">
     <style>
     html:not(.logged-out) .logged-out {
       display: none;
@@ -22,27 +22,13 @@
     
     #fc {
       position: absolute;
-      top: 100px;
+      top: 45px;
       left: 0;
       right: 0;
       bottom: 0;
-      border-top: 1px solid gray;
       -moz-box-sizing: border-box;
       -webkit-box-sizing: border-box;
       box-sizing: border-box;
-    }
-
-    header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 100px;
-      -moz-box-sizing: border-box;
-      -webkit-box-sizing: border-box;
-      box-sizing: border-box;
-      background: #f0f0f0;
-      padding: 30px;
     }
     
     .btn.badge-button, .btn.badge-button:hover {
@@ -73,9 +59,108 @@
       min-height: 0;
       padding-left: 0;
     }
+    
+    /* Ensure the Tabzilla tab is on top of everything else. */
+    #tabzilla-panel {
+      z-index: 1040;
+    }
+    
+    .wmnav-buttons {
+      position: absolute;
+      top: 0px;
+      right: 200px;
+    }
     </style>
   </head>
   <body style="margin: 0">
+    <div class="navbar navbar-static-top">
+      <div class="navbar-inner">
+        <!-- This <div> used to have class 'container' but not anymore. -->
+        <div>
+          <a class="brand" href="http://webmaker.org/">Webmaker</a>
+          <a id="tabzilla" href="http://www.mozilla.org/">from Mozilla</a>
+          <ul class="nav">
+            <!-- Projects Menu -->
+            <li class="dropdown">
+              <a id="wmnav-projects" href="#" role="button" class="dropdown-toggle"
+                 data-toggle="dropdown">Projects <b class="caret"></b></a>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="wmnav-projects">
+                <li><a tabindex="-1" href="https://webmaker.org/projects">All Projects</a></li>
+                <li><a tabindex="-1" href="https://webmaker.org/projects/?tool=popcorn#filter">Popcorn Projects</a></li>
+                <li><a tabindex="-1" href="https://webmaker.org/projects/?tool=thimble#filter">Thimble Projects</a></li>
+              </ul>
+            </li>
+
+            <!-- Tools Menu -->
+            <li class="dropdown">
+              <a id="wmnav-tools" href="#" role="button" class="dropdown-toggle"
+                 data-toggle="dropdown">Tools <b class="caret"></b></a>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="wmnav-tools">
+                <li><a tabindex="-1" href="http://maker.mozillapopcorn.org/">Popcorn</a></li>
+                <li><a tabindex="-1" href="https://thimble.webmaker.org/">Thimble</a></li>
+                <li><a tabindex="-1" href="http://hackasaurus.org/en-US/goggles/">X-Ray Goggles</a></li>
+              </ul>
+            </li>
+
+            <!-- Events Menu -->
+            <li class="dropdown">
+              <a id="wmnav-events" href="#" role="button" class="dropdown-toggle"
+                 data-toggle="dropdown">Events <b class="caret"></b></a>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="wmnav-events">
+                <li><a tabindex="-1" href="https://webmaker.org/events/">Events</a></li>
+                <li><a tabindex="-1" href="https://webmaker.org/events/search/">Explore</a></li>
+              </ul>
+            </li>
+
+          </ul>
+          <div class="wmnav-buttons">
+            <span class="logged-out">
+              <a href="#wmnav-join" role="button" class="btn" data-toggle="modal">Join Webmaker</a>
+              <button id="wmnav-login" class="btn btn-primary"><i class="icon-user"></i> Login</button>
+            </span>
+            <span class="logged-in">
+              <a class="btn badge-button" href="#badge-list" data-toggle="modal"><span class="badge unread-badges"></span></a>
+              <div class="dropdown" style="display: inline-block">
+                <a id="wmnav-login-actions" role="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                  <span class="email"></span>
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="wmnav-login-actions">
+                  <li><a id="logout" href="#">Logout</a></li>
+                </ul>
+              </div>
+            </span>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
+    <div id="wmnav-join" class="modal hide fade">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Become a Webmaker</h3>
+      </div>
+      <div class="modal-body">
+        <p>Join webmaker to earn badges and get
+        feedback on your various webmaking 
+        activities.</p>
+        <p>Join by getting yourself an account with
+        Persona. Pesona is Cupcake ipsum dolor sit 
+        amet dessert ice cream bonbon gummies. 
+        Caramels chupa chups topping bear claw danish.
+        Brownie gummies pie candy canes sweet roll
+        cotton candy chocolate bar.</p>
+        <p><small>By clicking <strong>Sign Up</strong> you are agreeing to the 
+          Mozilla <a href="http://www.mozilla.org/privacy-policy.html">Privacy 
+          Policy</a> and <a href="#">Terms of Use</a>.</small></p>
+      </div>
+      <div class="modal-footer">
+        <button id="wmnav-sign-up" class="btn btn-primary">Sign Up</button>
+      </div>
+    </div>
+    
+    <!--
     <header>
       <a href="#" class="persona-button logged-out"><span>Sign in
           with Persona</span></a>
@@ -94,7 +179,7 @@
           <a class="btn badge-button" href="#badge-list" data-toggle="modal"><span class="badge unread-badges"></span></a>
         </div>
       </div>
-    </header>
+    </header> -->
     <div id="badge-list" class="modal hide fade">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -233,7 +318,8 @@
         authenticate: function(next) {
           require(["https://login.persona.org/include.js"], function() {
             $("html").addClass("logged-out");
-            $(".persona-button").unbind().click(function() {
+            $("#wmnav-login, #wmnav-sign-up").unbind().click(function() {
+              $("#wmnav-join").modal('hide');
               navigator.id.get(next);
               return false;
             });
@@ -318,6 +404,11 @@
     });
     
     require(["main"], function(main) {
+      var script = document.createElement("script");
+      script.setAttribute("src", 
+                          '//www.mozilla.org/tabzilla/media/js/tabzilla.js');
+      document.body.appendChild(script);
+      
       /* For console debugging only! */
       window._app = main;
     });
