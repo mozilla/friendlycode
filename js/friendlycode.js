@@ -25,7 +25,7 @@ define(function(require) {
       container: $('<div class="friendlycode-base"></div>')
         .appendTo(document.body)
     });
-    var publisher = Publisher(publishURL);
+    var publisher = options.publisher || Publisher(publishURL);
     var publishUI = PublishUI({
       modals: modals,
       codeMirror: editor.panes.codeMirror,
