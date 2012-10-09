@@ -18,7 +18,10 @@ define(function(require) {
         remixURLTemplate = options.remixURLTemplate ||
           location.protocol + "//" + location.host + 
           location.pathname + "#{{VIEW_URL}}",
-        editor = Editor({container: options.container}),
+        editor = Editor({
+          container: options.container,
+          allowJS: options.allowJS
+        }),
         ready = $.Deferred();
     
     var modals = Modals({
