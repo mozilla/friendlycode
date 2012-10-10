@@ -18,14 +18,17 @@ define(function(require) {
         remixURLTemplate = options.remixURLTemplate ||
           location.protocol + "//" + location.host + 
           location.pathname + "#{{VIEW_URL}}",
-        editor = Editor({container: options.container}),
+        editor = Editor({
+          container: options.container,
+          allowJS: options.allowJS
+        }),
         ready = $.Deferred();
     
     var modals = Modals({
       container: $('<div class="friendlycode-base"></div>')
         .appendTo(document.body)
     });
-    var publisher = Publisher(publishURL);
+    var publisher = options.publisher || Publisher(publishURL);
     var publishUI = PublishUI({
       modals: modals,
       codeMirror: editor.panes.codeMirror,

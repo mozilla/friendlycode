@@ -19,6 +19,7 @@ define(function(require) {
     var self = {},
         div = options.container,
         initialValue = options.value || "",
+        allowJS = options.allowJS || false,
         sourceCode = $('<div class="source-code"></div>').appendTo(div),
         previewArea = $('<div class="preview-holder"></div>').appendTo(div),
         helpArea = $('<div class="help hidden"></div>').appendTo(div),
@@ -32,7 +33,8 @@ define(function(require) {
       lineNumbers: true,
       value: initialValue,
       parse: function(html) {
-        return Slowparse.HTML(document, html, [TreeInspectors.forbidJS]);
+        return Slowparse.HTML(document, html,
+                              allowJS ? [] : [TreeInspectors.forbidJS]);
       }
     });
     var relocator = Relocator(codeMirror);

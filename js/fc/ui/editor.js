@@ -14,7 +14,8 @@ define([
     
     var panes = EditorPanes({
       container: panesDiv,
-      value: value
+      value: value,
+      allowJS: options.allowJS
     });
     var toolbar = EditorToolbar({
       container: toolbarDiv,
