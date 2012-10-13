@@ -52,6 +52,15 @@ defineTests([
       ]);
     });
 
+  pcmTest("change triggered but no timeout set if reparseEnabled is false",
+    function(cm, events, fakeTime) {
+      cm.reparseEnabled = false;
+      cm.setValue("hello");
+      deepEqual(events, [
+        "cm.trigger('change')"
+      ]);
+    });
+  
   pcmTest("reparse() triggers events and passes expected arguments",
     function(cm, events, fakeTime) {
       cm.setValue("hello"); events.splice(0);
