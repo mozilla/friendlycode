@@ -21,9 +21,25 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
   }
   
   function nodeToCode(node, docFrag) {
+    var parallelNode = getParallelNode(node, docFrag);
+    var result = null;
+    if (parallelNode) {
+      var pi = parallelNode.parseInfo;
+      var isVoidElement = !pi.closeTag;
+      result = {
+        start: pi.openTag.start,
+        end: isVoidElement ? pi.openTag.end : pi.closeTag.end,
+        contentStart: isVoidElement ? pi.openTag.start : pi.openTag.end
+      };
+    }
+    return result;
+  }
+
+  function getParallelNode(node, docFrag) {
     var root, i;
     var htmlNode = docFrag.querySelector("html");
     var origDocFrag = docFrag;
+    var parallelNode = null;
     if (htmlNode && docFrag.querySelector("body")) {
       root = node.ownerDocument.documentElement;
     } else {
@@ -37,22 +53,12 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
       root = node.ownerDocument.body;
     }
     var path = "html " + pathTo(root, node);
-    var parallelNode = docFrag.querySelector(path);
-    var result = null;
-    if (parallelNode) {
-      var pi = parallelNode.parseInfo;
-      var isVoidElement = !pi.closeTag;
-      result = {
-        start: pi.openTag.start,
-        end: isVoidElement ? pi.openTag.end : pi.closeTag.end,
-        contentStart: isVoidElement ? pi.openTag.start : pi.openTag.end
-      };
-    }
+    parallelNode = docFrag.querySelector(path);
     if (origDocFrag != docFrag) {
       for (i = 0; i < htmlNode.childNodes.length; i++)
         origDocFrag.appendChild(htmlNode.childNodes[i]);
     }
-    return result;
+    return parallelNode;
   }
 
   function PreviewToEditorMapping(livePreview) {
