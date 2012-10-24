@@ -98,6 +98,7 @@ define(function(require) {
     
     return {
       codeMirror: editor.panes.codeMirror,
+      publishUI: publishUI,
       parachute: parachute,
       ready: ready
     };
