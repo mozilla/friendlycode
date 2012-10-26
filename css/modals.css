@@ -207,18 +207,6 @@ div.accordion:not(.collapsed) .accordion-content {
   height: 50px;
 }
 
-/* TEMPORARY: Give some extra space for last-minute feedback text. */
-div.publication-result.accordion:not(.collapsed) .accordion-content {
-  height: 75px;
-}
-
-/* TEMPORARY: Style last-minute feedback text. */
-div.publication-result p {
-  font-size: 12px;
-  padding-left: 20px;
-  margin-top: -8px;
-}
-
 .thimble-grey-bar .thimble-additionals {
   padding: 0 1em;
 }
