@@ -48,14 +48,16 @@ define(function(require) {
     var hintsUI = HintsUI({
       navItem: navOptions.find(".hints-nav-item")
     });
-    
-    panes.preview.on("refresh", function(event) {
-      var title = event.window.document.title;
+
+    function onChangeTitle(title) {
       if (title.length)
         $(".preview-title", navOptions).text(title).show();
       else
         $(".preview-title", navOptions).hide();
-    });
+    }
+    
+    panes.preview.on("change:title", onChangeTitle);
+    onChangeTitle(panes.preview.title);
     
     // If the editor has no content, disable the publish button.
     panes.codeMirror.on("change", function() {

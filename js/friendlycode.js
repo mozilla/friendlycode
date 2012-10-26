@@ -97,6 +97,7 @@ define(function(require) {
       });
     
     return {
+      editor: editor,
       codeMirror: editor.panes.codeMirror,
       publishUI: publishUI,
       parachute: parachute,
