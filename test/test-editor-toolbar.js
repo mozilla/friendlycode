@@ -24,7 +24,8 @@ defineTests([
     var toolbar = EditorToolbar(options);
     panes.codeMirror.setValue("<title>supdog</title>");
     panes.codeMirror.reparse();
-    ok(!$(".preview-title", toolbarDiv).attr("style"),
+    parentDiv.show();
+    equal($(".preview-title:visible", toolbarDiv).length, 1,
           "navbar preview title is not hidden");
     equal($(".preview-title", toolbarDiv).text(), "supdog",
           "navbar preview title is 'supdog'");
@@ -34,7 +35,8 @@ defineTests([
     var toolbar = EditorToolbar(options);
     panes.codeMirror.setValue("<p>hello</p>");
     panes.codeMirror.reparse();
-    ok($(".preview-title", toolbarDiv).attr("style").match(/display:\s*none/),
+    parentDiv.show();
+    equal($(".preview-title:visible", toolbarDiv).length, 0,
           "navbar preview title is hidden");
   });
 });
