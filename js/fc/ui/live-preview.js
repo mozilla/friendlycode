@@ -4,7 +4,7 @@
 // in an iframe.
 define(["jquery", "backbone-events"], function($, BackboneEvents) {
   function LivePreview(options) {
-    var self = {codeMirror: options.codeMirror},
+    var self = {codeMirror: options.codeMirror, title: ""},
         codeMirror = options.codeMirror,
         iframe;
 
@@ -58,6 +58,11 @@ define(["jquery", "backbone-events"], function($, BackboneEvents) {
           window: wind,
           documentFragment: event.document
         });
+
+        if (wind.document.title != self.title) {
+          self.title = wind.document.title;
+          self.trigger("change:title", self.title);
+        }
       }
     });
 

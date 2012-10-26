@@ -19,6 +19,45 @@ defineTests([
     ok(true);
   });
   
+  lpTest(
+    "title property reflects document title",
+    "<title>hello</title>",
+    function(previewArea, preview) {
+      equal(preview.title, "hello");
+    }
+  );
+
+  lpTest(
+    "change:title event is fired when page title changes",
+    "<title>hello</title>",
+    function(previewArea, preview, cm) {
+      stop();
+      preview.on('change:title', function(title) {
+        equal(title, 'yo');
+        equal(preview.title, title);
+        start();
+      });
+      cm.trigger('reparse', {
+        error: null,
+        sourceCode: '<title>yo</title>'
+      });
+    }
+  );
+
+  lpTest(
+    "change:title event is not fired when page title stays the same",
+    "<title>hello</title>",
+    function(previewArea, preview, cm) {
+      var changed = 0;
+      preview.on('change:title', function(title) { changed++; });
+      cm.trigger('reparse', {
+        error: null,
+        sourceCode: '<title>hello</title><p>there</p>'
+      });
+      equal(changed, 0);
+    }
+  );
+    
   lpTest("HTML is written into document", function(previewArea, preview, cm) {
     equal($("body", previewArea.contents()).html(),
           "<p>hi <em>there</em></p>",
