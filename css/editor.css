@@ -235,50 +235,14 @@
   color: #666;
 }
 
-.nav-options .nav-button {
-  display: inline;
-  height: 30px;
-  border-radius: 15px;
-  padding: 6px 20px 4px 15px;
-  margin: auto;
-  color: white;
-  top: 0;
-}
-
 .preview-pane-nav-options > div.nav-item.buttons {
   cursor: default;
   opacity: 1.0;
 }
 
-.publish-button {
-  position: relative;
-  top: 2px;
-  background-color: #3A84FC;
-  background-image: url("../img/publish-button-right.png"), url("../img/publish-button-left.png");
-  background-repeat: no-repeat, no-repeat;
-  background-position: top right, top left;
-
-  opacity: 0.4;
-  -moz-transition: opacity 1s;
-  -webkit-transition: opacity 1s;
-  -o-transition: opacity 1s;
-
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.publish-button:after {
-  content: '\0000a0\0000a0';
-}
-
-.publish-button.enabled {
-  opacity: 1.0;
-  cursor: pointer;
-}
-
 .nav-options .nav-item.buttons {
   position: absolute;
-  top: 10px;
+  top: 5px;
   right: 0;
   width: 7em;
 }
