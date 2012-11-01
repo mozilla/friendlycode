@@ -1,18 +1,5 @@
-/*
-
-  A note on fonts: we use a typekit-supplied version of Adobe's
-  Myriad Pro, which can be slightly different from the various
-  versions of Myriad Pro that people may have installed because
-  they use Adobe products. In order to prevent version collision
-  we actively do not use "font-family: "Myriad Pro", "myriad-pro", ..."
-  because this will prefer the local version over the remote
-  version, against which the design was validated. If you want
-  to optimise the CSS's font usage, please bear this in mind.
-
-*/
-
 .friendlycode-base {
-  font-family: "myriad-pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   overflow: hidden;
   background-color: #F5F5F5;
   color: #414244;
