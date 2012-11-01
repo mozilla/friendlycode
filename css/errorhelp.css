@@ -17,7 +17,7 @@ html .flipped .down-arrow {
 .help {
   display: block;
   position: absolute;
-  font-family: "myriad-pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /* Force the left side of the message to be on the left side of the
    * editing area. CodeMirror.addWidget() will set the left side on the
