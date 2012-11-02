@@ -463,3 +463,34 @@ div.editor-actions {
   /* Make tipsy tooltips slightly larger than the default. */
   font-size: 12px;
 }
+
+.friendlycode-base .breadcrumbs {
+  position: relative;
+  display: inline-block;
+  width: 1px;
+  height: 100%;
+  margin: 0;
+  border-right: 1px solid #d6d8d7;
+}
+.friendlycode-base .breadcrumbs:after,
+.friendlycode-base .breadcrumbs:before {
+  left: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.friendlycode-base .breadcrumbs:after {
+  border-left-color: #fff; 
+  border-width: 5px;
+  top: 50%;
+  margin-top: -5px;
+}
+.friendlycode-base .breadcrumbs:before {
+  border-left-color: #d6d8d7;
+  border-width: 7px;
+  top: 50%;
+  margin-top: -7px;
+}
