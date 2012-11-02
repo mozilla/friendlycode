@@ -470,7 +470,7 @@ div.editor-actions {
   width: 1px;
   height: 100%;
   margin: 0;
-  border-right: 1px solid #d6d8d7;
+  border-right: 1px solid #848484;
 }
 .friendlycode-base .breadcrumbs:after,
 .friendlycode-base .breadcrumbs:before {
@@ -489,7 +489,7 @@ div.editor-actions {
   margin-top: -5px;
 }
 .friendlycode-base .breadcrumbs:before {
-  border-left-color: #d6d8d7;
+  border-left-color: #848484;
   border-width: 7px;
   top: 50%;
   margin-top: -7px;
