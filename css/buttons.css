@@ -6,8 +6,8 @@
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
   box-sizing: border-box;
-  height: 28px;
-  line-height: 26px;
+  height: 36px;
+  line-height: 34px;
   border-radius: 2px;
   font-size: 12px;
   cursor: pointer;
@@ -41,4 +41,9 @@
   background: linear-gradient(top, #7fb0f3);
   border-color: #2277eb;
   box-shadow: 0 4px 7px -4px rgba(0, 0, 0, 0.6);
+}
+
+.wm-button.short {
+  height: 28px;
+  line-height: 26px;
 }
