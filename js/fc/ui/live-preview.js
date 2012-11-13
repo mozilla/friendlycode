@@ -20,7 +20,6 @@ define(["jquery", "backbone-events"], function($, BackboneEvents) {
       if (!event.error || options.ignoreErrors) {
         var x = 0,
             y = 0,
-            docFrag = event.document,
             doc, wind;
         
         if (iframe) {
