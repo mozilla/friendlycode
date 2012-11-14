@@ -20,6 +20,7 @@ define(function(require) {
         div = options.container,
         initialValue = options.value || "",
         allowJS = options.allowJS || false,
+        makeLivePreview = options.makeLivePreview || LivePreview,
         sourceCode = $('<div class="source-code"></div>').appendTo(div),
         previewArea = $('<div class="preview-holder"></div>').appendTo(div),
         helpArea = $('<div class="help hidden"></div>').appendTo(div),
@@ -51,7 +52,7 @@ define(function(require) {
       errorArea: errorArea,
       relocator: relocator
     });
-    var preview = self.preview = LivePreview({
+    var preview = self.preview = makeLivePreview({
       codeMirror: codeMirror,
       ignoreErrors: true,
       previewArea: previewArea
