@@ -28,6 +28,9 @@ var require = {
         return Backbone.noConflict();
       }
     },
+    jschannel: {
+      exports: "Channel"
+    },
     codemirror: {
       exports: "CodeMirror"
     },
