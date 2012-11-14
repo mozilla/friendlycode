@@ -17,15 +17,20 @@
     require([
       "jquery",
       "friendlycode",
-      "hackpub"
-    ], function($, FriendlycodeEditor, Hackpub) {
+      "hackpub",
+      "fc/ui/live-preview-sandbox"
+    ], function($, FriendlycodeEditor, Hackpub, LivePreview) {
       return FriendlycodeEditor({
         allowJS: true,
         publisher: Hackpub({
           hackpubURL: "http://hackpub.hackasaurus.org",
           publishURL: "http://poof.hksr.us"
         }),
-        container: $("#bare-fc-holder")
+        container: $("#bare-fc-holder"),
+        makeLivePreview: function(options) {
+          options.sandboxURL = "http://friendlycode-live-preview-sandbox.toolness.org/templates/live-preview-sandbox.html";
+          return LivePreview(options);
+        }
       });
     });
     </script>
