@@ -17,15 +17,7 @@ define(function(require) {
         latestReparse;
 
     if (!sandboxURL)
-      (function() {
-        var baseURL = require.toUrl("templates/live-preview-sandbox.html");
-        var a = document.createElement('a');
-        a.setAttribute("href", baseURL);
-        var oldPort = location.port;
-        var newPort = (parseInt(oldPort) + 1).toString();
-        sandboxURL = a.href.replace(":" + oldPort + "/",
-                                    ":" + newPort + "/");
-      })();
+      sandboxURL = require.toUrl("templates/live-preview-sandbox.html");
 
     function sendLatestReparse() {
       channel.call({
