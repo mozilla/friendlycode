@@ -30,6 +30,7 @@ define("main", function(require) {
       LivePreview = require("fc/ui/live-preview"),
       Channel = require("jschannel"),
       FakeCodemirror = require("fake-codemirror"),
+      PreviewToEditorMapping = require("fc/ui/preview-to-editor-mapping"),
       previewArea = $(document.body),
       preview = LivePreview({
         codeMirror: FakeCodemirror(),
@@ -43,6 +44,8 @@ define("main", function(require) {
         onReady: function() {}
       });
 
+  preview.channel = channel;
+
   preview.on("change:title", function(title) {
     channel.notify({method: "change:title", params: title});
   });
@@ -54,6 +57,8 @@ define("main", function(require) {
       sourceCode: params.sourceCode
     });
   });
+  
+  PreviewToEditorMapping(preview);
 });
   
 require(["main"], function() {});

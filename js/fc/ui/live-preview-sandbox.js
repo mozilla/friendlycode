@@ -8,7 +8,12 @@ define(function(require) {
       Channel = require("jschannel");
 
   function LivePreviewSandbox(options) {
-    var self = {codeMirror: options.codeMirror, title: ""},
+    var self = {
+          codeMirror: options.codeMirror,
+          title: "",
+          inEditor: true,
+          channel: null
+        },
         codeMirror = options.codeMirror,
         sandboxURL = options.sandboxURL,
         readyToSendLatestReparse = false,
@@ -45,11 +50,16 @@ define(function(require) {
         window: iframeSandbox.contentWindow,
         origin: "*",
         scope: "friendlycode",
-        onReady: sendLatestReparse
+        onReady: function() {
+          sendLatestReparse();
+          self.trigger("channel:ready", self);
+        }
       });
       channel.bind("change:title", function(trans, title) {
         self.trigger("change:title", title);
       });
+      self.channel = channel;
+      self.trigger("channel:created", self);
     }
     
     codeMirror.on("reparse", function(event) {
