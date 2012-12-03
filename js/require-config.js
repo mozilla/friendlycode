@@ -52,6 +52,7 @@ var require = {
       exports: "CodeMirror"
     }
   },
+  packages: ['slowparse-errors'],
   paths: {
     jquery: "jquery.no-conflict",
     "jquery-tipsy": "jquery.tipsy",
