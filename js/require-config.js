@@ -66,6 +66,7 @@ var require = {
     "codemirror/html": "../codemirror2/mode/htmlmixed/htmlmixed",
     text: "require-plugins/text",
     template: "require-plugins/template",
+    i18n: "require-plugins/i18n",
     test: "../test",
     templates: "../templates"
   }

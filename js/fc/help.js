@@ -1,6 +1,10 @@
 "use strict";
 
-define(["./hacktionary-data"], function(HacktionaryData) {
+define([
+  "i18n!fc/nls/html-element-docs",
+  "i18n!fc/nls/css-property-docs",
+  "i18n!fc/nls/hacktionary"
+], function(HtmlElementDocs, CssPropertyDocs, Hacktionary) {
   // A help index provides context-sensitive help for an HTML document,
   // indexed by characters in the HTML source code.
   function HelpIndex() {
@@ -31,26 +35,24 @@ define(["./hacktionary-data"], function(HacktionaryData) {
   function getHelp(index, helpIndex) {
     var help = helpIndex[index];
     if (help) {
-      if (help.type == "tag" &&
-          help.value in HacktionaryData["html-element-docs"])
+      if (help.type == "tag" && help.value in HtmlElementDocs)
         return {
           type: help.type,
-          html: HacktionaryData["html-element-docs"][help.value],
+          html: HtmlElementDocs[help.value],
           url: Help.MDN_URLS.html + help.value,
           highlights: help.highlights
         };
-      else if (help.type == "cssProperty" &&
-               help.value in HacktionaryData["css-property-docs"])
+      else if (help.type == "cssProperty" && help.value in CssPropertyDocs)
         return {
           type: help.type,
-          html: HacktionaryData["css-property-docs"][help.value],
+          html: CssPropertyDocs[help.value],
           url: Help.MDN_URLS.css + help.value,
           highlights: help.highlights
         };
       else if (help.type == "cssSelector")
         return {
           type: help.type,
-          html: HacktionaryData["css-selector-docs"],
+          html: Hacktionary["css-selector-docs"],
           url: Help.MDN_URLS.cssSelectors,
           highlights: help.highlights
         };
