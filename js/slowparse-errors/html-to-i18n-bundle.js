@@ -1,7 +1,24 @@
 define(function() {
+  function getDocument() {
+    if (typeof(document) == "undefined") {
+      // We're being run in node, so make a document using jsdom.
+      var jsdom = require("jsdom").jsdom;
+      var doc = jsdom('<html></html>', null, {
+        features: {
+          FetchExternalResources: false,
+          ProcessExternalResources: false,
+          MutationEvents: false,
+          QuerySelector: true
+        }
+      });
+      return doc;
+    }
+    return document;
+  }
+  
   return function htmlToI18nBundle(html) {
     var result = {};
-    var div = document.createElement('div');
+    var div = getDocument().createElement('div');
 
     div.innerHTML = html;
     [].slice.call(div.querySelectorAll('.error-msg')).forEach(function(el) {
