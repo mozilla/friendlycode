@@ -123,10 +123,9 @@ define([
     Index: HelpIndex,
     // URLs for help on the Mozilla Developer Network.
     MDN_URLS: {
-      html: "https://developer.mozilla.org/en/HTML/Element/",
-      css: "https://developer.mozilla.org/en/CSS/",
-      cssSelectors: "https://developer.mozilla.org/en/CSS/" +
-                    "Getting_Started/Selectors"
+      html: Hacktionary["mdn_url_html"],
+      css: Hacktionary["mdn_url_css"],
+      cssSelectors: Hacktionary["mdn_url_css_selectors"]
     }
   };
 
