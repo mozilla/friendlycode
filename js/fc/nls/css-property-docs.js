@@ -1,8 +1,7 @@
 "use strict";
 
-// Data here was originally scraped from MDN:
-// https://github.com/toolness/hacktionary
 define({
+  description: 'Help for individual CSS properties, originally scraped from <a href="https://developer.mozilla.org/">MDN</a> by the <a href="https://github.com/toolness/hacktionary">Hacktionary</a>.',
   root: {
     "animation": "The <code>animation</code> <a title=\"CSS\" rel=\"internal\" href=\"https://developer.mozilla.org/en/CSS\">CSS</a> property is a shorthand property for <code><a rel=\"custom\" href=\"https://developer.mozilla.org/en/CSS/animation-name\">animation-name</a></code>\n, <code><a rel=\"custom\" href=\"https://developer.mozilla.org/en/CSS/animation-duration\">animation-duration</a></code>\n, <code><a rel=\"custom\" href=\"https://developer.mozilla.org/en/CSS/animation-timing-function\">animation-timing-function</a></code>\n, <code><a rel=\"custom\" href=\"https://developer.mozilla.org/en/CSS/animation-delay\">animation-delay</a></code>\n, <code><a rel=\"custom\" href=\"https://developer.mozilla.org/en/CSS/animation-iteration-count\">animation-iteration-count</a></code>\n and <code><a rel=\"custom\" href=\"https://developer.mozilla.org/en/CSS/animation-direction\">animation-direction</a></code>\n.",
     "animation-delay": "The <code>animation-delay</code> <a title=\"CSS\" rel=\"internal\" href=\"https://developer.mozilla.org/en/CSS\">CSS</a> property specifies when the animation should start. This lets the animation sequence begin some time after it's applied to an element.",

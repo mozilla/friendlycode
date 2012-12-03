@@ -1,8 +1,7 @@
 "use strict";
 
-// Data here was originally scraped from MDN:
-// https://github.com/toolness/hacktionary
 define({
+  description: 'Help for individual HTML elements, originally scraped from <a href="https://developer.mozilla.org/">MDN</a> by the <a href="https://github.com/toolness/hacktionary">Hacktionary</a>.',
   root: {
     "a": "The HTML Anchor Element (<code>&lt;a&gt;</code>) defines a hyperlink, the named target destination for a hyperlink, or both.",
     "abbr": "The HTML&nbsp;Abbreviation Element (<code>&lt;abbr&gt;</code>) represents an abbreviation and optionally provides a full description for it. If present, the <strong>title</strong> attribute must contain this full description and nothing else.",

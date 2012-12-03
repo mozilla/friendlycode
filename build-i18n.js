@@ -15,11 +15,11 @@ NLS_PATHS.forEach(function(path) {
     var match = filename.match(/^(.*)\.js$/);
     if (match) {
       var moduleName = path + '/' + match[1];
-      var bundle = requirejs('i18n!' + moduleName);
+      var bundle = requirejs(moduleName);
       
       bundles[moduleName] = bundle;
     }
   });
 });
 
-console.log(bundles);
+require('sys').puts(JSON.stringify(bundles, null, 2));
