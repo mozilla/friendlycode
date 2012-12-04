@@ -1,3 +1,7 @@
+// If args are specified on the command line, assume they are
+// module names, and only export their localizations.
+var MODULE_FILTER = process.argv.slice(2);
+
 var NLS_PATHS = [
   'fc/nls',
   'slowparse-errors/nls'
@@ -8,6 +12,9 @@ var requirejs = require('requirejs');
 var requireConfig = require('./js/require-config');
 var bundles = {};
 
+// For some reason r.js doesn't like our default underscore shim.
+requireConfig.shim['underscore'].exports = '_';
+
 requirejs.config(requireConfig);
 
 NLS_PATHS.forEach(function(path) {
@@ -15,6 +22,11 @@ NLS_PATHS.forEach(function(path) {
     var match = filename.match(/^(.*)\.js$/);
     if (match) {
       var moduleName = path + '/' + match[1];
+      
+      if (MODULE_FILTER.length &&
+          MODULE_FILTER.indexOf(moduleName) == -1)
+        return;
+      
       var bundle = requirejs(moduleName);
       
       bundles[moduleName] = bundle;
