@@ -20,8 +20,7 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
     return ' > ' + parts.join(' > ');
   }
   
-  function nodeToCode(node, docFrag) {
-    var parallelNode = getParallelNode(node, docFrag);
+  function nodeToCode(parallelNode) {
     var result = null;
     if (parallelNode) {
       var pi = parallelNode.parseInfo;
@@ -35,60 +34,58 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
     return result;
   }
 
-  function getParallelNode(node, docFrag) {
-    var root, i;
-    var htmlNode = docFrag.querySelector("html");
-    var origDocFrag = docFrag;
-    var parallelNode = null;
-    if (htmlNode && docFrag.querySelector("body")) {
-      root = node.ownerDocument.documentElement;
-    } else {
-      if (!htmlNode) {
-        docFrag = document.createDocumentFragment();
-        htmlNode = document.createElement("html");
-        docFrag.appendChild(htmlNode);
-        for (i = 0; i < origDocFrag.childNodes.length; i++)
-          htmlNode.appendChild(origDocFrag.childNodes[i]);
-      }
-      root = node.ownerDocument.body;
-    }
-    var path = "html " + pathTo(root, node);
-    parallelNode = docFrag.querySelector(path);
-    if (origDocFrag != docFrag) {
-      for (i = 0; i < htmlNode.childNodes.length; i++)
-        origDocFrag.appendChild(htmlNode.childNodes[i]);
-    }
-    return parallelNode;
-  }
-
-  function PreviewToEditorMapping(livePreview) {
+  function initParent(livePreview) {
     var codeMirror = livePreview.codeMirror;
+    var docFrag = null;
     var marks = MarkTracker(codeMirror);
     $(".CodeMirror-lines", codeMirror.getWrapperElement())
       .on("mouseup", marks.clear);
+    livePreview.on("channel:created", function() {
+      livePreview.channel.bind("ptem:highlight", function(trans, params) {
+        marks.clear();
+        if (!docFrag) return;
+        var element = docFrag.querySelector(params);
+        if (!element) return;
+        var interval = nodeToCode(element);
+        if (!interval) return;
+        var start = codeMirror.posFromIndex(interval.start);
+        var end = codeMirror.posFromIndex(interval.end);
+        var contentStart = codeMirror.posFromIndex(interval.contentStart);
+        var startCoords = codeMirror.charCoords(start, "local");
+        codeMirror.scrollTo(startCoords.x, startCoords.y);
+        marks.mark(interval.start, interval.end,
+                   "preview-to-editor-highlight");
+        codeMirror.focus();
+      });
+    });
+    codeMirror.on("reparse", function(event) {
+      docFrag = event.document;
+      marks.clear();
+    });
+  }
+  
+  function initChild(livePreview) {
     livePreview.on("refresh", function(event) {
       var docFrag = event.documentFragment;
-      marks.clear();
       $(event.window).on("mousedown", function(event) {
-        marks.clear();
         var tagName = event.target.tagName.toLowerCase();
         var interval = null;
-        if (tagName !== "html" && tagName !== "body")
-          interval = nodeToCode(event.target, docFrag);
-        if (interval) {
-          var start = codeMirror.posFromIndex(interval.start);
-          var end = codeMirror.posFromIndex(interval.end);
-          var contentStart = codeMirror.posFromIndex(interval.contentStart);
-          var startCoords = codeMirror.charCoords(start, "local");
-          codeMirror.scrollTo(startCoords.x, startCoords.y);
-          marks.mark(interval.start, interval.end,
-                     "preview-to-editor-highlight");
-          codeMirror.focus();
-          event.preventDefault();
-          event.stopPropagation();
+        if (tagName !== "html" && tagName !== "body") {
+          var htmlElement = event.target.ownerDocument.documentElement;
+          livePreview.channel.notify({
+            method: "ptem:highlight",
+            params: "html " + pathTo(htmlElement, event.target)
+          });
         }
       });
     });
+  }
+  
+  function PreviewToEditorMapping(livePreview) {
+    if (livePreview.inEditor)
+      initParent(livePreview);
+    else
+      initChild(livePreview);
   }
   
   PreviewToEditorMapping._pathTo = pathTo;

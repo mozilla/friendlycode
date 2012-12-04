@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body, html, iframe {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  font-size: 0;
+}
+</style>
+<title>Live Preview Sandbox</title>
+<script src="../js/require-config.js"></script>
+<script src="../js/require.min.js"></script>
+<script>
+define("fake-codemirror", function(require) {
+  var BackboneEvents = require("backbone-events");
+  
+  return function FakeCodemirror() {
+    var self = {};
+    
+    BackboneEvents.mixin(self);
+    return self;
+  }
+});
+
+define("main", function(require) {
+  var $ = require("jquery"),
+      LivePreview = require("fc/ui/live-preview"),
+      Channel = require("jschannel"),
+      FakeCodemirror = require("fake-codemirror"),
+      PreviewToEditorMapping = require("fc/ui/preview-to-editor-mapping"),
+      previewArea = $(document.body),
+      preview = LivePreview({
+        codeMirror: FakeCodemirror(),
+        ignoreErrors: true,
+        previewArea: previewArea
+      }),
+      channel = Channel.build({
+        window: window.parent,
+        origin: "*",
+        scope: "friendlycode",
+        onReady: function() {}
+      });
+
+  preview.channel = channel;
+
+  preview.on("change:title", function(title) {
+    channel.notify({method: "change:title", params: title});
+  });
+  
+  channel.bind("setHTML", function(trans, params) {
+    preview.codeMirror.trigger("reparse", {
+      error: params.error,
+      document: null,
+      sourceCode: params.sourceCode
+    });
+  });
+  
+  PreviewToEditorMapping(preview);
+});
+  
+require(["main"], function() {});
+</script>

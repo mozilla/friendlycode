@@ -20,7 +20,8 @@ define(function(require) {
           location.pathname + "#{{VIEW_URL}}",
         editor = Editor({
           container: options.container,
-          allowJS: options.allowJS
+          allowJS: options.allowJS,
+          makeLivePreview: options.makeLivePreview
         }),
         ready = $.Deferred();
     
