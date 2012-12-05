@@ -8,5 +8,10 @@ define({
     "facebook-locale": "en_US",
     "default-tweet": "Check out the #MozThimble page I just made:",
     "tweet": "Tweet"
+  },
+  metadata: {
+    "facebook-locale": {
+      help: "Locale passed to Facebook for social media actions."
+    }
   }
 });
