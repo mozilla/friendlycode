@@ -6,7 +6,7 @@
  * they click the like button and we don't like that kind of
  * monitoring behaviour.
  */
-define(["i18n!fc/nls/misc"], function(i18nBundle) {
+define(["i18n!fc/nls/ui"], function(i18nBundle) {
   return function SocialMedia() {
     var urlPlaceHolder = "__URL__PLACE__HOLDER__";
 

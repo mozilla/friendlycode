@@ -1,6 +1,6 @@
 define(function(require) {
   var $ = require("jquery"),
-      i18nBundle = require("i18n!fc/nls/misc"),
+      i18nBundle = require("i18n!fc/nls/ui"),
       Preferences = require("fc/prefs"),
       Editor = require("fc/ui/editor"),
       Modals = require("fc/ui/modals"),

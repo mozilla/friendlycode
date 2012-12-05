@@ -4,7 +4,7 @@ define([
   "text",
   "underscore",
   "inline-l10n",
-  "i18n!fc/nls/templates"
+  "i18n!fc/nls/ui"
 ], function (module, text, _, InlineL10n, i18nBundle) {
   var buildMap = {},
       masterConfig = module.config();
@@ -29,7 +29,7 @@ define([
       if (buildMap[moduleName]) {
         var content = buildMap[moduleName];
         write.asModule(pluginName + "!" + moduleName,
-          "define(['underscore', 'inline-l10n', 'i18n!fc/nls/templates'], " +
+          "define(['underscore', 'inline-l10n', 'i18n!fc/nls/ui'], " +
           "function (_, InlineL10n, i18nBundle) { \n  return " + content +
           ";});\n");
       }

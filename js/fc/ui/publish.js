@@ -2,7 +2,7 @@
 
 define(function (require) {
   var $ = require("jquery"),
-      i18nBundle = require("i18n!fc/nls/misc"),
+      i18nBundle = require("i18n!fc/nls/ui"),
       BackboneEvents = require("backbone-events"),
       SocialMedia = require("./social-media"),
       ConfirmDialogTemplate = require("template!confirm-dialog"),
