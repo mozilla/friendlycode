@@ -10,6 +10,12 @@ define([
     "default-tweet": "Check out the #MozThimble page I just made:",
     "tweet": "Tweet"
   };
+
+  var metadata = {
+    "facebook-locale": {
+      help: "Locale passed to Facebook for social media actions."
+    }
+  };
   
   if (typeof(document) == "undefined") {
     // We're running in node. Parse all inline l10n strings out
@@ -23,6 +29,11 @@ define([
         if (key in root && root[key] != value)
           throw new Error("conflicting definitions for key: " + key);
         root[key] = value;
+        metadata[key] = {
+          help: 'This string appears in ' +
+                '<a href="https://github.com/mozilla/friendlycode/blob/gh-pages/templates/' + filename + '">' +
+                filename + '</a>.'
+        };
       }
     });
   }
@@ -30,10 +41,6 @@ define([
   return {
     description: "Strings for the user interface.",
     root: root,
-    metadata: {
-      "facebook-locale": {
-        help: "Locale passed to Facebook for social media actions."
-      }
-    }
+    metadata: metadata
   };
 });
