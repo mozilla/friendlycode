@@ -86,6 +86,9 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
           codeMirror.focus();
         }
       });
+      $(event.window).on("mouseleave", "html", function(event) {
+        marks.clear();
+      });
       $(event.window).on("mouseenter", "*", function(event) {
         marks.clear();
         var interval = intervalForElement(this, docFrag);
