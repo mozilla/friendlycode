@@ -89,9 +89,9 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
       $(event.window).on("mouseleave", "html", function(event) {
         marks.clear();
       });
-      $(event.window).on("mouseenter", "*", function(event) {
+      $(event.window).on("mouseover", function(event) {
         marks.clear();
-        var interval = intervalForElement(this, docFrag);
+        var interval = intervalForElement(event.target, docFrag);
         if (interval)
           marks.mark(interval.start, interval.end,
                      "preview-to-editor-highlight");
