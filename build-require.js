@@ -13,7 +13,10 @@ var requirejs = require('requirejs'),
   out = resolve(baseUrl, 'friendlycode-built.js');
 
 function optimize(done) {
-  requirejs.optimize(generateConfig(), done);
+  requirejs.optimize(generateConfig(), done, function(err) {
+    process.stderr.write(err.toString());
+    process.exit(1);
+  });
 }
 
 function generateConfig() {
