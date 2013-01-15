@@ -7,7 +7,8 @@
   "dependencies": {
     "requirejs": "2.1.x",
     "jsdom": "0.2.19",
-    "tap": "0.3.x"
+    "tap": "0.3.x",
+    "express": "2.5.x"
   },
   "scripts": {
     "optimize": "node bin/build-require.js",
