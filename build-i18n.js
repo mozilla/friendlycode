@@ -8,11 +8,13 @@ var NLS_PATHS = [
 ];
 
 var fs = require('fs');
+var buildRequire = require('./build-require');
 var requirejs = require('requirejs');
-var requireConfig = require('./js/require-config');
 var bundles = {};
+var config = buildRequire.generateConfig();
 
-requirejs.config(requireConfig);
+config.isBuild = true;
+requirejs.config(config);
 
 NLS_PATHS.forEach(function(path) {
   fs.readdirSync(__dirname + '/js/' + path).forEach(function(filename) {

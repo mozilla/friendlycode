@@ -6,6 +6,7 @@
  *  3. command `node build-require.js` or `npm start`
  */
 var requirejs = require('requirejs'),
+  jsdom = require('jsdom').jsdom,
   resolve = require('path').resolve,
   requireConfig = require('./js/require-config'),
   baseUrl = resolve(__dirname, 'js'),
@@ -19,7 +20,7 @@ function optimize(done) {
   });
 }
 
-function generateConfig() {
+var generateConfig = exports.generateConfig = function() {
   var config = {
     name: name,
     out: out,
@@ -30,6 +31,16 @@ function generateConfig() {
       // beautify for debugging
       // beautify: true,
       mangle: true
+    },
+    makeDocument: function() {
+      return jsdom('<html></html>', null, {
+        features: {
+          FetchExternalResources: false,
+          ProcessExternalResources: false,
+          MutationEvents: false,
+          QuerySelector: true
+        }
+      });
     },
     // TODO  above config setting is temporary, it shuould use mainConfigFile
     // https://github.com/toolness/friendlycode/pull/112#issuecomment-6625412
