@@ -73,9 +73,13 @@ var require = {
   }
 };
 
-if (typeof(module) == 'object' && module.exports)
+if (typeof(module) == 'object' && module.exports) {
+  // We're running in node.
   module.exports = require;
-else (function() {
+  // For some reason requirejs in node doesn't like shim function exports.
+  require.shim['underscore'].exports = '_';
+  require.shim['backbone'].exports = 'Backbone';
+} else (function() {
   var RE = /^(https?:)\/\/([^\/]+)\/(.*)\/require-config\.js$/;
   var me = document.querySelector('script[src$="require-config.js"]');
   var console = window.console || {log: function() {}};

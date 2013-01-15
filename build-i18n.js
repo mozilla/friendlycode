@@ -12,9 +12,6 @@ var requirejs = require('requirejs');
 var requireConfig = require('./js/require-config');
 var bundles = {};
 
-// For some reason r.js doesn't like our default underscore shim.
-requireConfig.shim['underscore'].exports = '_';
-
 requirejs.config(requireConfig);
 
 NLS_PATHS.forEach(function(path) {

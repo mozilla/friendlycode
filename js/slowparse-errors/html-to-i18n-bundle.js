@@ -2,7 +2,10 @@ define(function() {
   function getDocument() {
     if (typeof(document) == "undefined") {
       // We're being run in node, so make a document using jsdom.
-      var jsdom = require("jsdom").jsdom;
+      // Rename require to syncRequire so the r.js optimizer doesn't
+      // think the Web version of this file needs jsdom.
+      var syncRequire = require;
+      var jsdom = syncRequire("jsdom").jsdom;
       var doc = jsdom('<html></html>', null, {
         features: {
           FetchExternalResources: false,
