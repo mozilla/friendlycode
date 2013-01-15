@@ -6,9 +6,11 @@
   "main": "build-require.js",
   "dependencies": {
     "requirejs": "2.1.x",
-    "jsdom": "0.2.19"
+    "jsdom": "0.2.19",
+    "tap": "0.3.x"
   },
   "scripts": {
-    "start": "node build-require.js"
+    "optimize": "node bin/build-require.js",
+    "test": "tap ./test/node-tap"
   }
 }

@@ -44,6 +44,7 @@ var generateConfig = exports.generateConfig = function() {
   Object.keys(requireConfig).forEach(function(name) {
     config[name] = requireConfig[name];
   });
+  config.baseUrl = rootDir;
   return config;
 }
 

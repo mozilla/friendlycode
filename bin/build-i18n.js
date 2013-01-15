@@ -3,10 +3,12 @@
 var MODULE_FILTER = process.argv.slice(2);
 
 var fs = require('fs');
+var resolve = require('path').resolve;
 var buildRequire = require('./build-require');
 var rootDir = buildRequire.rootDir;
+var templateDir = resolve(rootDir, '..', 'templates');
 var requirejs = require('requirejs');
-var bundles = {};
+var bundles = exports.bundles = {};
 var config = buildRequire.generateConfig();
 
 function findNlsPaths(root, subdir) {
@@ -48,11 +50,11 @@ findNlsPaths(rootDir).forEach(function(path) {
 
 // Parse all inline l10n strings out of all templates and fill them into
 // the fc/nls/ui bundle.
-fs.readdirSync('templates').forEach(function(filename) {
+fs.readdirSync(templateDir).forEach(function(filename) {
   var InlineL10n = requirejs('inline-l10n');
   var root = bundles['fc/nls/ui'].root;
   var metadata = bundles['fc/nls/ui'].metadata;
-  var content = fs.readFileSync('templates/' + filename, 'utf8');
+  var content = fs.readFileSync(templateDir + '/' + filename, 'utf8');
   var defaultValues = InlineL10n.parse(content);
   for (var key in defaultValues) {
     var value = defaultValues[key];
@@ -67,4 +69,5 @@ fs.readdirSync('templates').forEach(function(filename) {
   }
 });
 
-require('sys').puts(JSON.stringify(bundles, null, 2));
+if (!module.parent)
+  require('sys').puts(JSON.stringify(bundles, null, 2));

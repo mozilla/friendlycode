@@ -22,7 +22,7 @@ define(["text"], function(text) {
         var template;
         if (config.isBuild) {
           buildMap[name] = htmlToI18nBundle(config.makeDocument(), html);
-          onLoad();
+          onLoad(buildMap[name]);
         } else {
           onLoad(htmlToI18nBundle(document, html));
         }
