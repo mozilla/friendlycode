@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/toolness/friendlycode.png?branch=i18n)](http://travis-ci.org/toolness/friendlycode)
+
 This is a friendly HTML editor that uses [slowparse][] and [hacktionary][]
 to provide ultra-friendly real-time help to novice webmakers.
 
