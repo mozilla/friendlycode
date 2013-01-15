@@ -48,34 +48,20 @@ var generateConfig = exports.generateConfig = function() {
   return config;
 }
 
-function selfTest() {
-  var assert = require('assert'),
-      config = generateConfig();
-      
-  assert('paths' in config);
-  assert('jquery' in config.shim);
-}
-
 if (!module.parent) {
-  if (process.argv[2] == 'test') {
-    selfTest();
-    console.log("Tests pass!");
-    process.exit(0);
-  } else {
-    console.log("Generating", out);
+  console.log("Generating", out);
 
-    optimize(function (buildResponse) {
-      // buildResponse is just a text output of the modules
-      // included.
-      console.log("Done. About " + buildResponse.split('\n').length +
-                  " modules are inside the generated JS file.");
-      requirejs.optimize({
-        cssIn: "css/friendlycode.css",
-        out: "css/friendlycode-built.css"
-      }, function() {
-        console.log("Optimized CSS.");
-        process.exit();
-      });
+  optimize(function (buildResponse) {
+    // buildResponse is just a text output of the modules
+    // included.
+    console.log("Done. About " + buildResponse.split('\n').length +
+                " modules are inside the generated JS file.");
+    requirejs.optimize({
+      cssIn: "css/friendlycode.css",
+      out: "css/friendlycode-built.css"
+    }, function() {
+      console.log("Optimized CSS.");
+      process.exit();
     });
-  }
+  });
 }
