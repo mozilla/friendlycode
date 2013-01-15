@@ -11,6 +11,6 @@
   },
   "scripts": {
     "optimize": "node bin/build-require.js",
-    "test": "tap ./test/node-tap"
+    "test": "tap ./test/node-tap --tap"
   }
 }
