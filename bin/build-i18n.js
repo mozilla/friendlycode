@@ -4,6 +4,7 @@ var MODULE_FILTER = process.argv.slice(2);
 
 var fs = require('fs');
 var buildRequire = require('./build-require');
+var rootDir = buildRequire.rootDir;
 var requirejs = require('requirejs');
 var bundles = {};
 var config = buildRequire.generateConfig();
@@ -28,8 +29,8 @@ function findNlsPaths(root, subdir) {
 config.isBuild = true;
 requirejs.config(config);
 
-findNlsPaths(__dirname + '/js').forEach(function(path) {
-  fs.readdirSync(__dirname + '/js/' + path).forEach(function(filename) {
+findNlsPaths(rootDir).forEach(function(path) {
+  fs.readdirSync(rootDir + '/' + path).forEach(function(filename) {
     var match = filename.match(/^(.*)\.js$/);
     if (match) {
       var moduleName = path + '/' + match[1];

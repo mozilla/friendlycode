@@ -1,17 +1,10 @@
-/**
- * to run this script,
- *  1. install npm, `curl http://npmjs.org/install.sh | sh`
- *     https://github.com/isaacs/npm
- *  2. command `npm install` at this directory.
- *  3. command `node build-require.js` or `npm start`
- */
 var requirejs = require('requirejs'),
   jsdom = require('jsdom').jsdom,
   resolve = require('path').resolve,
-  requireConfig = require('./js/require-config'),
-  baseUrl = resolve(__dirname, 'js'),
+  requireConfig = require('../js/require-config'),
+  rootDir = resolve(__dirname, '..', 'js'),
   name = 'friendlycode',
-  out = resolve(baseUrl, 'friendlycode-built.js');
+  out = resolve(rootDir, 'friendlycode-built.js');
 
 function optimize(done) {
   requirejs.optimize(generateConfig(), done, function(err) {
@@ -19,6 +12,8 @@ function optimize(done) {
     process.exit(1);
   });
 }
+
+exports.rootDir = rootDir;
 
 var generateConfig = exports.generateConfig = function() {
   var config = {
