@@ -5,7 +5,7 @@
   "description": "requirejs optimization script",
   "main": "build-require.js",
   "dependencies": {
-    "requirejs": "~2.x",
+    "requirejs": "2.1.x",
     "jsdom": "0.2.19"
   },
   "scripts": {
