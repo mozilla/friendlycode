@@ -38,6 +38,29 @@ here:
 
     http://localhost:8005/examples/alternate-publisher.html
 
+## Localization
+
+Before localizing, please read the [requirejs i18n bundle][i18n] 
+documentation.
+
+To create a localization, first run `node bin/build-i18n.js list`
+to display a list of i18n bundle modules that can be localized. You'll
+need to localize all of these to create a complete localization, but
+anything you don't localize will just fall-back to English.
+
+Suppose you decide you want to localize the `fc/nls/ui` module to `fr-fr`.
+Just do the following:
+
+1. Create the `fc/nls/fr-fr` directory if it doesn't already exist.
+2. Run `node bin/build-i18n.js template fc/nls/ui > fc/nls/fr-fr/ui.js`.
+3. Localize the strings in `fc/nls/fr-fr/ui.js`.
+4. Edit `fc/nls/ui.js` and add `"fr-fr": true` to the object being returned
+   by the module.
+
+You can test out your localization by setting your browser's language
+preference to `fr-fr` and then loading any embedding of your repository's
+friendlycode widget in your browser.
+
 ## Updating CodeMirror
 
 In the `codemirror2` directory is a mini-distribution of [CodeMirror][]
@@ -61,6 +84,7 @@ for dirpath, dirnames, filenames in os.walk(OUR_CODEMIRROR_PATH):
             open(ourpath, "wb").write(open(newpath, "rb").read())
 ```
 
+  [i18n]: http://requirejs.org/docs/api.html#i18n
   [slowparse]: https://github.com/toolness/slowparse
   [hacktionary]: https://github.com/toolness/hacktionary
   [CodeMirror]: http://codemirror.net/
