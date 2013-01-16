@@ -93,6 +93,7 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
   
   PreviewToEditorMapping._pathTo = pathTo;
   PreviewToEditorMapping._nodeToCode = nodeToCode;
+  PreviewToEditorMapping._getParallelNode = getParallelNode;
   
   return PreviewToEditorMapping;
 });
