@@ -1,5 +1,6 @@
 define(function(require) {
   var $ = require("jquery"),
+      i18nBundle = require("i18n!fc/nls/ui"),
       Preferences = require("fc/prefs"),
       Editor = require("fc/ui/editor"),
       Modals = require("fc/ui/modals"),
@@ -87,7 +88,7 @@ define(function(require) {
       publisher.loadCode(pageManager.currentPage(), function(err, data, url) {
         if (err) {
           modals.showErrorDialog({
-            text: 'Sorry, an error occurred while trying to get the page.'
+            text: i18nBundle['page-load-err']
           });
         } else {
           editor.panes.codeMirror.setValue(data);

@@ -2,6 +2,7 @@
 
 define(function (require) {
   var $ = require("jquery"),
+      i18nBundle = require("i18n!fc/nls/ui"),
       BackboneEvents = require("backbone-events"),
       SocialMedia = require("./social-media"),
       ConfirmDialogTemplate = require("template!confirm-dialog"),
@@ -68,8 +69,7 @@ define(function (require) {
         if (err) {
           publishDialog.stop().hide();
           modals.showErrorDialog({
-            text: "Sorry, an error occurred while trying to publish. " +
-                  err.responseText
+            text: i18nBundle['publish-err'] + " " + err.responseText
           });
           publishErrorOccurred = true;
         } else {
