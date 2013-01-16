@@ -70,7 +70,8 @@ var require = {
     i18n: "require-plugins/i18n",
     test: "../test",
     templates: "../templates"
-  }
+  },
+  githubUrl: "https://github.com/mozilla/friendlycode"
 };
 
 if (typeof(module) == 'object' && module.exports) {

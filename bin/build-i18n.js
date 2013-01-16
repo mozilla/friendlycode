@@ -63,8 +63,8 @@ fs.readdirSync(templateDir).forEach(function(filename) {
     root[key] = value;
     metadata[key] = {
       help: 'This string appears in ' +
-            '<a href="https://github.com/mozilla/friendlycode/blob/gh-pages/templates/' + filename + '">' +
-            filename + '</a>.'
+            '<a href="' + config.githubUrl + '/blob/gh-pages/templates/' +
+            filename + '">' + filename + '</a>.'
     };
   }
 });
