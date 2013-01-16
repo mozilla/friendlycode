@@ -61,6 +61,14 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
     return parallelNode;
   }
 
+  function intervalForElement(element, docFrag) {
+    var tagName = element.tagName.toLowerCase();
+    var interval = null;
+    if (tagName !== "html" && tagName !== "body")
+      return nodeToCode(element, docFrag);
+    return null;
+  }
+
   function PreviewToEditorMapping(livePreview) {
     var codeMirror = livePreview.codeMirror;
     var marks = MarkTracker(codeMirror);
@@ -69,30 +77,31 @@ define(["jquery", "./mark-tracker"], function($, MarkTracker) {
     livePreview.on("refresh", function(event) {
       var docFrag = event.documentFragment;
       marks.clear();
-      $(event.window).on("mousedown", function(event) {
-        marks.clear();
-        var tagName = event.target.tagName.toLowerCase();
-        var interval = null;
-        if (tagName !== "html" && tagName !== "body")
-          interval = nodeToCode(event.target, docFrag);
+      $(event.window).on("mousedown", "*", function(event) {
+        var interval = intervalForElement(this, docFrag);
         if (interval) {
           var start = codeMirror.posFromIndex(interval.start);
-          var end = codeMirror.posFromIndex(interval.end);
-          var contentStart = codeMirror.posFromIndex(interval.contentStart);
           var startCoords = codeMirror.charCoords(start, "local");
           codeMirror.scrollTo(startCoords.x, startCoords.y);
+          codeMirror.focus();
+        }
+      });
+      $(event.window).on("mouseleave", "html", function(event) {
+        marks.clear();
+      });
+      $(event.window).on("mouseover", function(event) {
+        marks.clear();
+        var interval = intervalForElement(event.target, docFrag);
+        if (interval)
           marks.mark(interval.start, interval.end,
                      "preview-to-editor-highlight");
-          codeMirror.focus();
-          event.preventDefault();
-          event.stopPropagation();
-        }
       });
     });
   }
   
   PreviewToEditorMapping._pathTo = pathTo;
   PreviewToEditorMapping._nodeToCode = nodeToCode;
+  PreviewToEditorMapping._getParallelNode = getParallelNode;
   
   return PreviewToEditorMapping;
 });

@@ -8,7 +8,8 @@ defineTests([
   
   var nodeToCode = PreviewToEditorMapping._nodeToCode;
   var pathTo = PreviewToEditorMapping._pathTo;
-
+  var getParallelNode = PreviewToEditorMapping._getParallelNode;
+  
   function spaces(n) {
     var s = [];
     for (var i = 0; i < n; i++) s.push(" ");
@@ -38,12 +39,16 @@ defineTests([
         var p = wind.document.querySelector(options.selector);
         if (!p)
           throw new Error("selector doesn't map to anything");
+        var parallelNode = getParallelNode(p, docFrag);
         var interval = nodeToCode(p, docFrag);
         if (!options.expect)
-          ok(interval === null, desc + "doesn't map to any code");
-        else
+          ok(interval === null && parallelNode === null,
+             desc + "doesn't map to any code");
+        else {
+          ok(parallelNode !== null, "parallel DOM node exists");
           equal(html.slice(interval.start, interval.end), options.expect,
                 desc + "maps to code " + JSON.stringify(options.expect));
+        }
         equal(domStructure(docFrag), originalDom,
               "DOM structure of document fragment is unchanged");
       });
