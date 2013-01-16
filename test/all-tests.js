@@ -1,5 +1,6 @@
 defineTests.combine([
   "test/test-app",
+  "test/test-inline-l10n",
   "test/test-help",
   "test/test-templates",
   "test/test-indexable-codemirror",

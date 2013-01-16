@@ -52,6 +52,7 @@ var require = {
       exports: "CodeMirror"
     }
   },
+  packages: ['slowparse-errors'],
   paths: {
     jquery: "jquery.no-conflict",
     "jquery-tipsy": "jquery.tipsy",
@@ -66,14 +67,26 @@ var require = {
     "codemirror/html": "../codemirror2/mode/htmlmixed/htmlmixed",
     text: "require-plugins/text",
     template: "require-plugins/template",
+    i18n: "require-plugins/i18n",
     test: "../test",
     templates: "../templates"
-  }
+  },
+  config: {
+    template: {
+      htmlPath: "templates",
+      i18nPath: "fc/nls/ui"
+    }
+  },
+  githubUrl: "https://github.com/mozilla/friendlycode"
 };
 
-if (typeof(module) == 'object' && module.exports)
+if (typeof(module) == 'object' && module.exports) {
+  // We're running in node.
   module.exports = require;
-else (function() {
+  // For some reason requirejs in node doesn't like shim function exports.
+  require.shim['underscore'].exports = '_';
+  require.shim['backbone'].exports = 'Backbone';
+} else (function() {
   var RE = /^(https?:)\/\/([^\/]+)\/(.*)\/require-config\.js$/;
   var me = document.querySelector('script[src$="require-config.js"]');
   var console = window.console || {log: function() {}};
