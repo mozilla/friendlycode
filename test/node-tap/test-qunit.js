@@ -2,7 +2,17 @@ var test = require("tap").test;
 var rootDir = require('path').resolve(__dirname, '..', '..');
 var express = require('express');
 var path = require('path');
+var fs = require('fs');
 var spawn = require('child_process').spawn;
+
+function exists(filename) {
+  return fs.existsSync(path.resolve(rootDir, filename));
+}
+
+function rm(filename) {
+  if (exists(filename))
+    fs.unlinkSync(path.resolve(rootDir, filename));
+}
 
 function loggedSpawn(command, args, options) {
   var process = spawn(command, args, options);
@@ -40,10 +50,18 @@ test("unoptimized test suite works", function(t) {
 });
 
 test("optimized build and test suite work", function(t) {
-  var optimize = loggedSpawn('node', [rootDir + '/bin/build-require.js']);
+  var optimize;
+  var builtJs = 'js/friendlycode-built.js';
+  var builtCss = 'css/friendlycode-built.css';
+  
+  rm(builtJs);
+  rm(builtCss);
+  optimize = loggedSpawn('node', [rootDir + '/bin/build-require.js']);
   optimize.on('exit', function(status) {
     console.log('build-require.js exited with code', status);
     t.equal(status, 0, "build-require.js should exit with no errors");
+    t.ok(exists(builtJs), builtJs + " was created");
+    t.ok(exists(builtCss), builtCss + " was created");
     runQUnitTests("/test/index-optimized.html", t);
   });
 });
