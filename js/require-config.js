@@ -71,6 +71,12 @@ var require = {
     test: "../test",
     templates: "../templates"
   },
+  config: {
+    template: {
+      htmlPath: "templates",
+      i18nPath: "fc/nls/ui"
+    }
+  },
   githubUrl: "https://github.com/mozilla/friendlycode"
 };
 

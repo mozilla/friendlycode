@@ -6,7 +6,8 @@ var fs = require('fs');
 var resolve = require('path').resolve;
 var buildRequire = require('./build-require');
 var rootDir = buildRequire.rootDir;
-var templateDir = resolve(rootDir, '..', 'templates');
+var templateDir;
+var templateI18n;
 var requirejs = require('requirejs');
 var bundles = exports.bundles = {};
 var config = buildRequire.generateConfig();
@@ -49,11 +50,15 @@ findNlsPaths(rootDir).forEach(function(path) {
 });
 
 // Parse all inline l10n strings out of all templates and fill them into
-// the fc/nls/ui bundle.
+// the template i18n bundle.
+templateDir = requirejs.toUrl(config.config.template.htmlPath)
+  .replace(".js", "");
+templateI18n = config.config.template.i18nPath;
+
 fs.readdirSync(templateDir).forEach(function(filename) {
   var InlineL10n = requirejs('inline-l10n');
-  var root = bundles['fc/nls/ui'].root;
-  var metadata = bundles['fc/nls/ui'].metadata;
+  var root = bundles[templateI18n].root;
+  var metadata = bundles[templateI18n].metadata;
   var content = fs.readFileSync(templateDir + '/' + filename, 'utf8');
   var defaultValues = InlineL10n.parse(content);
   for (var key in defaultValues) {
