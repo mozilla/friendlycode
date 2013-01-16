@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/toolness/friendlycode.png?branch=i18n)](http://travis-ci.org/toolness/friendlycode)
+[![Build Status](https://travis-ci.org/mozilla/friendlycode.png?branch=gh-pages)](http://travis-ci.org/mozilla/friendlycode)
 
 This is a friendly HTML editor that uses [slowparse][] and [hacktionary][]
 to provide ultra-friendly real-time help to novice webmakers.
@@ -12,9 +12,8 @@ builds and run the test suites, you'll need node, npm, and phantomjs.
 ## Quick Start
 
 ```bash
-git clone --recursive git://github.com/toolness/friendlycode.git
+git clone --recursive git://github.com/mozilla/friendlycode.git
 cd friendlycode
-git checkout i18n
 npm install
 npm test
 ```
@@ -85,6 +84,6 @@ for dirpath, dirnames, filenames in os.walk(OUR_CODEMIRROR_PATH):
 ```
 
   [i18n]: http://requirejs.org/docs/api.html#i18n
-  [slowparse]: https://github.com/toolness/slowparse
+  [slowparse]: https://github.com/mozilla/slowparse
   [hacktionary]: https://github.com/toolness/hacktionary
   [CodeMirror]: http://codemirror.net/
