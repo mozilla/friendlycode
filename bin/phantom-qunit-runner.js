@@ -14,6 +14,12 @@
 /*jshint latedef:false */
 /*global phantom:false, require:false, console:false, window:false, QUnit:false */
 
+// The comment in this file says 1.6+ is required, but stenington
+// reported problems with that version in #167; toolness is using 1.7
+// successfully, so we'll check for that at runtime.
+if (!(phantom.version.major == 1 && phantom.version.minor >= 7))
+  throw new Error("PhantomJS version must be >= 1.7 and < 2.");
+
 (function() {
 	'use strict';
 

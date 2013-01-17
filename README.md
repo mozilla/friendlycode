@@ -7,7 +7,8 @@ to provide ultra-friendly real-time help to novice webmakers.
 
 Using Friendlycode doesn't actually require anything other than a
 static file server like Apache. However, if you want to generate optimized
-builds and run the test suites, you'll need node, npm, and phantomjs.
+builds and run the test suites, you'll need node 0.8+, npm 1.1+, and
+phantomjs 1.7+.
 
 ## Quick Start
 
