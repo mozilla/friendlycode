@@ -50,10 +50,10 @@ anything you don't localize will just fall-back to English.
 Suppose you decide you want to localize the `fc/nls/ui` module to `fr-fr`.
 Just do the following:
 
-1. Create the `fc/nls/fr-fr` directory if it doesn't already exist.
-2. Run `node bin/build-i18n.js template fc/nls/ui > fc/nls/fr-fr/ui.js`.
-3. Localize the strings in `fc/nls/fr-fr/ui.js`.
-4. Edit `fc/nls/ui.js` and add `"fr-fr": true` to the object being returned
+1. Create the `js/fc/nls/fr-fr` directory if it doesn't already exist.
+2. Run `node bin/build-i18n.js template fc/nls/ui > js/fc/nls/fr-fr/ui.js`.
+3. Localize the strings in `js/fc/nls/fr-fr/ui.js`.
+4. Edit `js/fc/nls/ui.js` and add `"fr-fr": true` to the object being returned
    by the module.
 
 You can test out your localization by setting your browser's language
