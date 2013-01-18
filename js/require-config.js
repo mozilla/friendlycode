@@ -54,6 +54,7 @@ var require = {
   },
   packages: ['slowparse-errors'],
   paths: {
+    // Vendor paths
     "jquery": "../vendor/jquery.no-conflict",
     "jquery.min": "../vendor/jquery.min",
     "jquery-tipsy": "../vendor/jquery.tipsy",
@@ -68,10 +69,11 @@ var require = {
     "codemirror/css": "../vendor/codemirror2/mode/css/css",
     "codemirror/html": "../vendor/codemirror2/mode/htmlmixed/htmlmixed",
     "text": "../vendor/require.text",
-    "template": "require.template",
     "i18n": "../vendor/require.i18n",
-    "test": "../test",
     "lscache": "../vendor/lscache",
+    // Non-vendor paths
+    "template": "require.template",
+    "test": "../test",
     "templates": "../templates"
   },
   config: {
