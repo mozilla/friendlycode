@@ -32,8 +32,8 @@ define(function(require) {
       tabSize: 2,
       extraKeys: {
         Tab: function(codeMirror) {
-          // replace tab key input with two spaces, and unselect
-          // the selection normally effected by the tab key.
+          // Replace tab key input with two spaces, and unselect
+          // the selection normally effected by replaceSelection().
           codeMirror.replaceSelection("  ", "end");
         }
       },
