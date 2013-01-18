@@ -58,7 +58,7 @@ var require = {
     "jquery.min": "../vendor/jquery.min",
     "jquery-tipsy": "../vendor/jquery.tipsy",
     "jquery-slowparse": "../vendor/slowparse/spec/errors.jquery",
-    underscore: "underscore.min",
+    underscore: "../vendor/underscore.min",
     backbone: "../vendor/backbone.min",
     "backbone-events": "../vendor/backbone-events",
     slowparse: "../vendor/slowparse",
