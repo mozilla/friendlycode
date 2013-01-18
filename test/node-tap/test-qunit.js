@@ -49,6 +49,11 @@ test("unoptimized test suite works", function(t) {
   runQUnitTests("/test/index.html", t);
 });
 
+function ensureCssHasNoImports(t, builtCss) {
+  var css = fs.readFileSync(path.resolve(rootDir, builtCss), 'utf-8');
+  t.ok(!/@import/.test(css), builtCss + " has no @import rules");
+}
+
 test("optimized build and test suite work", function(t) {
   var optimize;
   var builtJs = 'js/friendlycode-built.js';
@@ -62,6 +67,7 @@ test("optimized build and test suite work", function(t) {
     t.equal(status, 0, "build-require.js should exit with no errors");
     t.ok(exists(builtJs), builtJs + " was created");
     t.ok(exists(builtCss), builtCss + " was created");
+    ensureCssHasNoImports(t, builtCss);
     runQUnitTests("/test/index-optimized.html", t);
   });
 });
