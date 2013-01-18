@@ -63,9 +63,9 @@ friendlycode widget in your browser.
 
 ## Updating CodeMirror
 
-In the `codemirror2` directory is a mini-distribution of [CodeMirror][]
-which contains only the files necessary for HTML editing. It can be updated
-with the `bin/update-codemirror.py` script.
+In the `vendor/codemirror2` directory is a mini-distribution of
+[CodeMirror][] which contains only the files necessary for HTML editing. It 
+can be updated with the `bin/update-codemirror.py` script.
 
   [i18n]: http://requirejs.org/docs/api.html#i18n
   [slowparse]: https://github.com/mozilla/slowparse

@@ -6,7 +6,7 @@
  * [1] http://www.stevesouders.com/blog/2009/04/09/dont-use-import/
  */
 
-@import url(../codemirror2/lib/codemirror.css);
+@import url(../vendor/codemirror2/lib/codemirror.css);
 
 @import url(jsbin-codemirror-theme.css);
 @import url(tipsy.css);
