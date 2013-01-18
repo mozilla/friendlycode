@@ -54,8 +54,9 @@ var require = {
   },
   packages: ['slowparse-errors'],
   paths: {
-    jquery: "jquery.no-conflict",
-    "jquery-tipsy": "jquery.tipsy",
+    jquery: "../vendor/jquery.no-conflict",
+    "jquery.min": "../vendor/jquery.min",
+    "jquery-tipsy": "../vendor/jquery.tipsy",
     "jquery-slowparse": "../vendor/slowparse/spec/errors.jquery",
     underscore: "underscore.min",
     backbone: "backbone.min",
