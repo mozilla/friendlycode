@@ -68,7 +68,7 @@ var require = {
     "codemirror/css": "../vendor/codemirror2/mode/css/css",
     "codemirror/html": "../vendor/codemirror2/mode/htmlmixed/htmlmixed",
     text: "../vendor/require.text",
-    template: "require-plugins/template",
+    template: "require.template",
     i18n: "../vendor/require.i18n",
     test: "../test",
     templates: "../templates"
