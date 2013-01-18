@@ -71,6 +71,7 @@ var require = {
     template: "require.template",
     i18n: "../vendor/require.i18n",
     test: "../test",
+    lscache: "../vendor/lscache",
     templates: "../templates"
   },
   config: {
