@@ -7,6 +7,37 @@ var requirejs = require('requirejs');
 var config = buildRequire.generateConfig();
 var bundles = exports.bundles = {};
 
+var makePlist = exports.makePlist = function(bundle) {
+  var escapeXML = function(str) {
+    return str.replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;');
+  };
+  var lines = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" ' +
+    '"http://www.apple.com/DTDs/PropertyList-1.0.dtd">',
+    '<plist version="1.0">',
+    '  <dict>'
+  ];
+  
+  Object.keys(bundle.root).forEach(function(key) {
+    if (bundle.metadata && bundle.metadata[key]) {
+      var metadata = bundle.metadata[key];
+      var helpText = metadata.helpText || metadata.help;
+      if (helpText)
+        lines.push('    <!-- ' + escapeXML(helpText) + ' -->');
+    }
+    lines.push('    <key>' + escapeXML(key) + '</key>');
+    lines.push('    <string>' + escapeXML(bundle.root[key]) + '</string>');
+  });
+  
+  lines.push('  </dict>');
+  lines.push('</plist>');
+  return lines.join('\n');
+};
+
 function findNlsPaths(root, subdir) {
   var nlsPaths = [];
   subdir = subdir || '';
@@ -48,13 +79,15 @@ function loadInlineL10nStrings() {
     var defaultValues = InlineL10n.parse(content);
     for (var key in defaultValues) {
       var value = defaultValues[key];
+      var githubUrl = config.githubUrl + '/blob/gh-pages/templates/' +
+                      filename;
       if (key in root && root[key] != value)
         throw new Error("conflicting definitions for key: " + key);
       root[key] = value;
       metadata[key] = {
+        helpText: 'This string appears in ' + githubUrl + '.',
         help: 'This string appears in ' +
-              '<a href="' + config.githubUrl + '/blob/gh-pages/templates/' +
-              filename + '">' + filename + '</a>.'
+              '<a href="' + githubUrl + '">' + filename + '</a>.'
       };
     }
   });
@@ -100,6 +133,13 @@ function main() {
                  'all i18n bundles')
     .action(function() {
       sys.puts(JSON.stringify(bundles, null, 2));
+    });
+  program
+    .command('plist [module-name]')
+    .description('output plist file for an i18n bundle module')
+    .action(function(moduleName) {
+      validateNlsModuleName(moduleName);
+      sys.puts(makePlist(bundles[moduleName]));
     });
   program.parse(process.argv);
   if (process.argv.length == 2)
