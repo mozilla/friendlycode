@@ -54,22 +54,27 @@ var require = {
   },
   packages: ['slowparse-errors'],
   paths: {
-    jquery: "jquery.no-conflict",
-    "jquery-tipsy": "jquery.tipsy",
-    "jquery-slowparse": "../slowparse/spec/errors.jquery",
-    underscore: "underscore.min",
-    backbone: "backbone.min",
-    slowparse: "../slowparse",
-    codemirror: "../codemirror2/lib/codemirror",
-    "codemirror/xml": "../codemirror2/mode/xml/xml",
-    "codemirror/javascript": "../codemirror2/mode/javascript/javascript",
-    "codemirror/css": "../codemirror2/mode/css/css",
-    "codemirror/html": "../codemirror2/mode/htmlmixed/htmlmixed",
-    text: "require-plugins/text",
-    template: "require-plugins/template",
-    i18n: "require-plugins/i18n",
-    test: "../test",
-    templates: "../templates"
+    // Vendor paths
+    "jquery.min": "../vendor/jquery.min",
+    "jquery-tipsy": "../vendor/jquery.tipsy",
+    "jquery-slowparse": "../vendor/slowparse/spec/errors.jquery",
+    "underscore": "../vendor/underscore.min",
+    "backbone": "../vendor/backbone.min",
+    "slowparse": "../vendor/slowparse",
+    "codemirror": "../vendor/codemirror2/lib/codemirror",
+    "codemirror/xml": "../vendor/codemirror2/mode/xml/xml",
+    "codemirror/javascript": "../vendor/codemirror2/mode/javascript/javascript",
+    "codemirror/css": "../vendor/codemirror2/mode/css/css",
+    "codemirror/html": "../vendor/codemirror2/mode/htmlmixed/htmlmixed",
+    "text": "../vendor/require.text",
+    "i18n": "../vendor/require.i18n",
+    "lscache": "../vendor/lscache",
+    // Non-vendor paths
+    "jquery": "shims/jquery.no-conflict",
+    "backbone-events": "shims/backbone-events",
+    "template": "require.template",
+    "test": "../test",
+    "templates": "../templates"
   },
   config: {
     template: {
