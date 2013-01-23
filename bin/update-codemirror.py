@@ -1,9 +1,9 @@
 #! /usr/bin/env python
 
 """
-    In the ../codemirror2 directory is a mini-distribution of CodeMirror
-    which contains only the files necessary for HTML editing. It can be
-    updated with this Python script.
+    In the ../vendor/codemirror2 directory is a mini-distribution of
+    CodeMirror which contains only the files necessary for HTML editing. It
+    can be updated with this Python script.
 """
 
 import os
@@ -16,7 +16,7 @@ if len(sys.argv) < 2:
 rootdir = os.path.dirname(os.path.abspath(__file__))
 
 NEW_CODEMIRROR_PATH = sys.argv[1]
-OUR_CODEMIRROR_PATH = os.path.join(rootdir, "..", "codemirror2")
+OUR_CODEMIRROR_PATH = os.path.join(rootdir, "..", "vendor", "codemirror2")
 
 for dirpath, dirnames, filenames in os.walk(OUR_CODEMIRROR_PATH):
     for filename in filenames:
