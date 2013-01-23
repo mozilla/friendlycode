@@ -5,7 +5,7 @@
   "description": "requirejs optimization script",
   "main": "build-require.js",
   "dependencies": {
-    "requirejs": "2.1.x",
+    "requirejs": "2.1.2",
     "jsdom": "0.2.19",
     "tap": "0.3.x",
     "express": "2.5.x",
