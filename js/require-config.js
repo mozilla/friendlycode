@@ -55,13 +55,11 @@ var require = {
   packages: ['slowparse-errors'],
   paths: {
     // Vendor paths
-    "jquery": "../vendor/jquery.no-conflict",
     "jquery.min": "../vendor/jquery.min",
     "jquery-tipsy": "../vendor/jquery.tipsy",
     "jquery-slowparse": "../vendor/slowparse/spec/errors.jquery",
     "underscore": "../vendor/underscore.min",
     "backbone": "../vendor/backbone.min",
-    "backbone-events": "../vendor/backbone-events",
     "slowparse": "../vendor/slowparse",
     "codemirror": "../vendor/codemirror2/lib/codemirror",
     "codemirror/xml": "../vendor/codemirror2/mode/xml/xml",
@@ -72,6 +70,8 @@ var require = {
     "i18n": "../vendor/require.i18n",
     "lscache": "../vendor/lscache",
     // Non-vendor paths
+    "jquery": "shims/jquery.no-conflict",
+    "backbone-events": "shims/backbone-events",
     "template": "require.template",
     "test": "../test",
     "templates": "../templates"
