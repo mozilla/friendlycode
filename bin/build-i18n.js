@@ -1,6 +1,6 @@
 var fs = require('fs');
 var sys = require('sys');
-var resolve = require('path').resolve;
+var path = require('path');
 var buildRequire = require('./build-require');
 var rootDir = buildRequire.rootDir;
 var requirejs = require('requirejs');
@@ -73,14 +73,16 @@ function loadInlineL10nStrings() {
   var templateDir = requirejs.toUrl(templateCfg.htmlPath).replace(".js", "");
   var root = bundles[templateCfg.i18nPath].root;
   var metadata = bundles[templateCfg.i18nPath].metadata;
+  var relTemplateDir = path.relative(path.normalize(__dirname + '/..'),
+                                     templateDir);
 
   fs.readdirSync(templateDir).forEach(function(filename) {
     var content = fs.readFileSync(templateDir + '/' + filename, 'utf8');
     var defaultValues = InlineL10n.parse(content);
     for (var key in defaultValues) {
       var value = defaultValues[key];
-      var githubUrl = config.githubUrl + '/blob/gh-pages/templates/' +
-                      filename;
+      var githubUrl = config.githubUrl + '/blob/' + config.githubBranch +
+                      '/' + relTemplateDir + '/' + filename;
       if (key in root && root[key] != value)
         throw new Error("conflicting definitions for key: " + key);
       root[key] = value;
