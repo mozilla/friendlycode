@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html class="deployment-type-development">
+  <head>
+    <meta charset="utf-8">
+    <base target="_blank">
+
+    <title>Friendlycode Editor with Transifex Localization</title>
+    <link rel="stylesheet" href="../css/friendlycode.css">
+  </head>
+  <body style="margin: 0">
+    <div id="bare-fc-holder" class="friendlycode-loading"></div>
+
+    <script src="../js/require-config.js"></script>
+    <script>
+    // We need to change the requirejs configuration to redirect
+    // all i18n bundles to our transifex export.
+    require.paths['fc/nls'] = '../transifex/fc/nls';
+    require.paths['slowparse-errors/nls'] = '../transifex/slowparse-errors/nls';
+    </script>
+    <script src="../vendor/require.min.js"></script>
+    <script>
+    require(["jquery", "friendlycode"], function($, FriendlycodeEditor) {
+      return FriendlycodeEditor({
+        publishURL: "https://webpagemaker-dev.allizom.org",
+        container: $("#bare-fc-holder")
+      });
+    });
+    </script>
+  </body>
+</html>
