@@ -38,23 +38,6 @@ var makePlist = exports.makePlist = function(bundle) {
   return lines.join('\n');
 };
 
-function findNlsPaths(root, subdir) {
-  var nlsPaths = [];
-  subdir = subdir || '';
-  fs.readdirSync(root + subdir).forEach(function(filename) {
-    var relpath = subdir + '/' + filename;
-    var stat = fs.statSync(root + relpath);
-    if (stat.isDirectory()) {
-      if (filename == 'nls') {
-        nlsPaths.push(relpath.slice(1));
-      } else
-        nlsPaths = nlsPaths.concat(findNlsPaths(root, relpath));
-    }
-  });
-  
-  return nlsPaths;
-}
-
 function loadModulesInNlsPath(path) {
   fs.readdirSync(rootDir + '/' + path).forEach(function(filename) {
     var match = filename.match(/^(.*)\.js$/);
@@ -151,7 +134,7 @@ function main() {
 config.isBuild = true;
 requirejs.config(config);
 
-findNlsPaths(rootDir).forEach(loadModulesInNlsPath);
+buildRequire.findNlsPaths(rootDir).forEach(loadModulesInNlsPath);
 loadInlineL10nStrings();
 
 if (!module.parent) main();

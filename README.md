@@ -55,7 +55,8 @@ following steps.
 2. Run `node bin/transifex.js -u user:pass`, where `user:pass` is your
    Transifex username and password. You can run `node bin/transifex.js --help`
    for information on more options, such as only importing strings that
-   have been reviewed.
+   have been reviewed. This will export all Transifex localizations as
+   requirejs i18n bundles in the `transifex` directory.
 
 3. Run `node bin/server.js` and then visit 
    http://localhost:8005/examples/transifex.html to see your localizations.
@@ -86,7 +87,14 @@ plist file for the existing module instead of creating a new one.
 ### Deploying an internationalized widget
 
 See the source code in `examples/transifex.html` for information
-on how to do this.
+on how to do this with unoptimized builds.
+
+For optimized builds, use the `--i18n-url` option to `bin/build-require.js`
+to create an optimized build that retrieves its localizations at run-time
+from a different URL. For instance, if you deploy your Transifex
+requirejs i18n bundles to `/locale`, running
+`node bin/build-require.js --i18n-url="/locale/"` will create an
+optimized build that loads localizations from that URL at runtime.
 
 ## Updating CodeMirror
 
