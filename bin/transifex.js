@@ -2,8 +2,28 @@ const BASE_URL = 'https://www.transifex.com/api/2/project/';
 
 var request = require('request');
 
+var toTransifexLocale = exports.toTransifexLocale = function(locale) {
+  var parts = locale.split(/[-_]/);
+  if (parts.length >= 2)
+    return parts[0].toLowerCase() + "_" + parts[1].toUpperCase();
+  return parts[0].toLowerCase();
+};
+
 var toBundleLocale = exports.toBundleLocale = function(locale) {
   return locale.toLowerCase().replace(/_/g, '-');
+};
+
+var parseProjectDetails = exports.parseProjectDetails = function(project) {
+  var details = {};
+  project.resources.forEach(function(resource) {
+    var parts = resource.name.split('/');
+    details[resource.name] = {
+      slug: resource.slug,
+      path: parts.slice(0, -1).join('/'),
+      moduleName: parts[parts.length-1]
+    };
+  });
+  return details;
 };
 
 var toBundleMetadata = exports.toBundleMetadata = function(resource) {

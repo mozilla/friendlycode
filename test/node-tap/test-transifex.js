@@ -98,6 +98,74 @@ var resourceDetails = {
   "slug": "slowparse-errorsnlsforbidjs"
 };
 
+// Example response from a URL of the form:
+//
+//   /api/2/project/<project_slug>/?details
+//
+// For more information, see:
+//
+//   http://help.transifex.com/features/api/index.html#project-instance-methods
+
+var projectDetails = {
+  "feed": "",
+  "source_language_code": "en",
+  "description": "World's friendliest HTML editor.",
+  "created": "2013-01-23 14:45:08",
+  "trans_instructions": "",
+  "tags": "",
+  "teams": [
+    "en_US"
+  ],
+  "maintainers": [
+    {
+      "username": "toolness"
+    }
+  ],
+  "private": false,
+  "slug": "friendlycode",
+  "anyone_submit": false,
+  "outsource": null,
+  "fill_up_resources": false,
+  "bug_tracker": "",
+  "owner": {
+    "username": "toolness"
+  },
+  "homepage": "",
+  "long_description": "",
+  "resources": [
+    {
+      "slug": "slowparse-errorsnlsforbidjs",
+      "name": "slowparse-errors/nls/forbidjs"
+    }
+  ],
+  "name": "Friendlycode"
+};
+
+test("toBundleLocale() works", function(t) {
+  t.equal(transifex.toBundleLocale("en_US"), "en-us", "with region");
+  t.equal(transifex.toBundleLocale("en-us"), "en-us", "idempotency");
+  t.equal(transifex.toBundleLocale("en"), "en", "without region");
+  t.end();
+});
+
+test("toTransifexLocale() works", function(t) {
+  t.equal(transifex.toTransifexLocale("en-us"), "en_US", "with region");
+  t.equal(transifex.toTransifexLocale("en_US"), "en_US", "idempotency");
+  t.equal(transifex.toTransifexLocale("en"), "en", "without region");
+  t.end();
+});
+
+test("parseProjectDetails() works", function(t) {
+  t.deepEqual(transifex.parseProjectDetails(projectDetails), {
+    "slowparse-errors/nls/forbidjs": {
+      slug: "slowparse-errorsnlsforbidjs",
+      path: "slowparse-errors/nls",
+      moduleName: "forbidjs"
+    }
+  });
+  t.end();
+});
+
 test("toBundleMetadata() works", function(t) {
   t.deepEqual(transifex.toBundleMetadata(resourceDetails), {
     "root": true,
