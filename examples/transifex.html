@@ -13,9 +13,12 @@
     <script src="../js/require-config.js"></script>
     <script>
     // We need to change the requirejs configuration to redirect
-    // all i18n bundles to our transifex export.
-    require.paths['fc/nls'] = '../transifex/fc/nls';
-    require.paths['slowparse-errors/nls'] = '../transifex/slowparse-errors/nls';
+    // all i18n bundles to transifex.
+    ['fc/nls', 'slowparse-errors/nls'].forEach(function(i18nBundle) {
+      var baseUrl = "http://transifex-to-requirejs-i18n-server.toolness.org/";
+      if (window.location.search.match(/local=1/)) baseUrl = "../transifex/";
+      require.paths[i18nBundle] = baseUrl + i18nBundle;
+    });
     </script>
     <script src="../vendor/require.min.js"></script>
     <script>

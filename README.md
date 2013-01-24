@@ -45,21 +45,25 @@ in your language, please visit the
 [Transifex friendlycode project][transifex]. Any strings you don't
 translate will fall-back to English.
 
-### Trying a Localization
+### Trying out a Localization
 
-You can test out your Transifex localization in friendlycode with the
-following steps.
+First, set your browser's language preference to the language you're 
+localizing.
 
-1. Set your browser's language preference to the language you're localizing.
+Then, run `node bin/server.js` and visit 
+`http://localhost:8005/examples/transifex.html`. If this doesn't work,
+however&mdash;or if it runs too slowly for your tastes&mdash;you will have
+to take the following steps.
 
-2. Run `node bin/transifex.js -u user:pass`, where `user:pass` is your
+1. Run `node bin/transifex.js -u user:pass`, where `user:pass` is your
    Transifex username and password. You can run `node bin/transifex.js --help`
    for information on more options, such as only importing strings that
    have been reviewed. This will export all Transifex localizations as
    requirejs i18n bundles in the `transifex` directory.
 
-3. Run `node bin/server.js` and then visit 
-   http://localhost:8005/examples/transifex.html to see your localizations.
+2. Run `node bin/server.js` and then visit 
+   `http://localhost:8005/examples/transifex.html?local=1` to see your 
+   localizations.
 
 ### Adding a new i18n bundle module
 
