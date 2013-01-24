@@ -3,6 +3,10 @@ const DEFAULT_DIR = 'transifex';
 const DEFAULT_PROJECT = 'friendlycode';
 
 var request = require('request');
+var fs = require('fs');
+var sys = require('sys');
+var path = require('path');
+var mkpath = require('mkpath');
 
 var toTransifexLocale = exports.toTransifexLocale = function(locale) {
   var parts = locale.split(/[-_]/);
@@ -50,10 +54,13 @@ var toBundleDict = exports.toBundleDict = function(options) {
 
 function importFromTransifex(options) {
   var authHeader = 'Basic ' + new Buffer(options.user).toString('base64');
-  var writeModule = function(path, exports) {
-    // TODO make path
-    // TODO write file
-    console.log(path, ":", exports);
+  var writeModule = function(relPath, exports) {
+    var absPath = path.join(options.dir, relPath);
+    var js = "define(" + JSON.stringify(exports, null, 2) + ");";
+
+    mkpath.sync(path.dirname(absPath));
+    fs.writeFileSync(absPath, js, "utf-8");
+    sys.puts("wrote " + absPath + ".");
   };
   var projectRequest = function(path, cb) {
     var url = BASE_URL + options.project + path;
@@ -111,7 +118,7 @@ function main() {
     .option('-d, --dir <path>', 'root output dir for exported i18n bundles')
     .parse(process.argv);
   if (!program.user) {
-    console.log('please specify credentials with "-u user:pass".');
+    sys.puts('please specify credentials with "-u user:pass".');
     process.exit(1);
   }
   if (!program.project)
