@@ -1,4 +1,6 @@
 const BASE_URL = 'https://www.transifex.com/api/2/project/';
+const DEFAULT_DIR = 'transifex';
+const DEFAULT_PROJECT = 'friendlycode';
 
 var request = require('request');
 
@@ -46,28 +48,77 @@ var toBundleDict = exports.toBundleDict = function(options) {
   return dict;
 };
 
+function importFromTransifex(options) {
+  var authHeader = 'Basic ' + new Buffer(options.user).toString('base64');
+  var writeModule = function(path, exports) {
+    // TODO make path
+    // TODO write file
+    console.log(path, ":", exports);
+  };
+  var projectRequest = function(path, cb) {
+    var url = BASE_URL + options.project + path;
+    request.get({
+      url: url,
+      headers: {'Authorization': authHeader}
+    }, function(error, response, body) {
+      if (error)
+        throw error;
+      if (response.statusCode !== 200)
+        throw new Error(url + " returned " + response.statusCode);
+      cb(JSON.parse(body));
+    });
+  };
+  
+  projectRequest("/?details", function(projectDetails) {
+    var resources = parseProjectDetails(projectDetails);
+    Object.keys(resources).forEach(function(modulePath) {
+      var resourcePath = "/resource/" + resources[modulePath].slug;
+      projectRequest(resourcePath + "/?details", function(resourceDetails) {
+        var bundleMetadata = toBundleMetadata(resourceDetails);
+        
+        writeModule(modulePath + ".js", bundleMetadata);
+        Object.keys(bundleMetadata).forEach(function(bundleLocale) {
+          var transifexLocale;
+          if (bundleLocale == "root")
+            transifexLocale = resourceDetails.source_language_code;
+          else
+            transifexLocale = toTransifexLocale(bundleLocale);
+          projectRequest(
+            resourcePath + "/translation/" + transifexLocale + "/strings/",
+            function(strings) {
+              var bundleDict = toBundleDict({
+                strings: strings,
+                reviewedOnly: options.reviewedOnly
+              });
+              writeModule(resources[modulePath].path + "/" +
+                          bundleLocale + "/" +
+                          resources[modulePath].moduleName + ".js",
+                          bundleDict);
+            }
+          );
+        });
+      });
+    });
+  });
+}
+
 function main() {
   var program = require('commander');
   program
     .option('-u, --user <user:pass>', 'specify username and password')
     .option('-p, --project <slug>', 'specify project slug')
+    .option('-r, --reviewed-only', 'only include reviewed strings')
+    .option('-d, --dir <path>', 'root output dir for exported i18n bundles')
     .parse(process.argv);
   if (!program.user) {
-    console.log('please specify username and password.');
+    console.log('please specify credentials with "-u user:pass".');
     process.exit(1);
   }
-  if (!program.project) {
-    console.log('please specify a project.');
-    process.exit(1);
-  }
-  request.get({
-    url: BASE_URL + program.project + "/?details",
-    headers: {
-      'Authorization': 'Basic ' + new Buffer(program.user).toString('base64')
-    }
-  }, function(error, response, body) {
-    console.log("RESPONSE", error, response.statusCode, body);
-  });
+  if (!program.project)
+    program.project = DEFAULT_PROJECT;
+  if (!program.dir)
+    program.dir = DEFAULT_DIR;
+  importFromTransifex(program);
 }
 
 if (!module.parent) main();
