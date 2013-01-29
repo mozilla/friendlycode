@@ -6,6 +6,9 @@ var rootDir = buildRequire.rootDir;
 var requirejs = require('requirejs');
 var config = buildRequire.generateConfig();
 var bundles = exports.bundles = {};
+var packageJson = JSON.parse(fs.readFileSync(path.join(rootDir, "..",
+                                                       "package.json"),
+                                             "utf-8"));
 
 var makePlist = exports.makePlist = function(bundle) {
   var escapeXML = function(str) {
@@ -64,7 +67,8 @@ function loadInlineL10nStrings() {
     var defaultValues = InlineL10n.parse(content);
     for (var key in defaultValues) {
       var value = defaultValues[key];
-      var githubUrl = config.githubUrl + '/blob/' + config.githubBranch +
+      var githubUrl = packageJson.repository.url.replace(".git", "/blob/") +
+                      packageJson.repository.defaultBranch +
                       '/' + relTemplateDir + '/' + filename;
       if (key in root && root[key] != value)
         throw new Error("conflicting definitions for key: " + key);

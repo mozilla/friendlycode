@@ -81,9 +81,7 @@ var require = {
       htmlPath: "templates",
       i18nPath: "fc/nls/ui"
     }
-  },
-  githubUrl: "https://github.com/mozilla/friendlycode",
-  githubBranch: "gh-pages"
+  }
 };
 
 if (typeof(module) == 'object' && module.exports) {
