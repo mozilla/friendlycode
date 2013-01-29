@@ -1,28 +1,45 @@
 var fs = require('fs');
 var sys = require('sys');
-var resolve = require('path').resolve;
+var path = require('path');
 var buildRequire = require('./build-require');
 var rootDir = buildRequire.rootDir;
 var requirejs = require('requirejs');
 var config = buildRequire.generateConfig();
 var bundles = exports.bundles = {};
+var packageJson = JSON.parse(fs.readFileSync(path.join(rootDir, "..",
+                                                       "package.json"),
+                                             "utf-8"));
 
-function findNlsPaths(root, subdir) {
-  var nlsPaths = [];
-  subdir = subdir || '';
-  fs.readdirSync(root + subdir).forEach(function(filename) {
-    var relpath = subdir + '/' + filename;
-    var stat = fs.statSync(root + relpath);
-    if (stat.isDirectory()) {
-      if (filename == 'nls') {
-        nlsPaths.push(relpath.slice(1));
-      } else
-        nlsPaths = nlsPaths.concat(findNlsPaths(root, relpath));
+var makePlist = exports.makePlist = function(bundle) {
+  var escapeXML = function(str) {
+    return str.replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;');
+  };
+  var lines = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" ' +
+    '"http://www.apple.com/DTDs/PropertyList-1.0.dtd">',
+    '<plist version="1.0">',
+    '  <dict>'
+  ];
+  
+  Object.keys(bundle.root).forEach(function(key) {
+    if (bundle.metadata && bundle.metadata[key]) {
+      var metadata = bundle.metadata[key];
+      var helpText = metadata.helpText || metadata.help;
+      if (helpText)
+        lines.push('    <!-- ' + escapeXML(helpText) + ' -->');
     }
+    lines.push('    <key>' + escapeXML(key) + '</key>');
+    lines.push('    <string>' + escapeXML(bundle.root[key]) + '</string>');
   });
   
-  return nlsPaths;
-}
+  lines.push('  </dict>');
+  lines.push('</plist>');
+  return lines.join('\n');
+};
 
 function loadModulesInNlsPath(path) {
   fs.readdirSync(rootDir + '/' + path).forEach(function(filename) {
@@ -42,19 +59,24 @@ function loadInlineL10nStrings() {
   var templateDir = requirejs.toUrl(templateCfg.htmlPath).replace(".js", "");
   var root = bundles[templateCfg.i18nPath].root;
   var metadata = bundles[templateCfg.i18nPath].metadata;
+  var relTemplateDir = path.relative(path.normalize(__dirname + '/..'),
+                                     templateDir);
 
   fs.readdirSync(templateDir).forEach(function(filename) {
     var content = fs.readFileSync(templateDir + '/' + filename, 'utf8');
     var defaultValues = InlineL10n.parse(content);
     for (var key in defaultValues) {
       var value = defaultValues[key];
+      var githubUrl = packageJson.repository.url.replace(".git", "/blob/") +
+                      packageJson.repository.defaultBranch +
+                      '/' + relTemplateDir + '/' + filename;
       if (key in root && root[key] != value)
         throw new Error("conflicting definitions for key: " + key);
       root[key] = value;
       metadata[key] = {
+        helpText: 'This string appears in ' + githubUrl + '.',
         help: 'This string appears in ' +
-              '<a href="' + config.githubUrl + '/blob/gh-pages/templates/' +
-              filename + '">' + filename + '</a>.'
+              '<a href="' + githubUrl + '">' + filename + '</a>.'
       };
     }
   });
@@ -101,6 +123,13 @@ function main() {
     .action(function() {
       sys.puts(JSON.stringify(bundles, null, 2));
     });
+  program
+    .command('plist [module-name]')
+    .description('output plist file for an i18n bundle module')
+    .action(function(moduleName) {
+      validateNlsModuleName(moduleName);
+      sys.puts(makePlist(bundles[moduleName]));
+    });
   program.parse(process.argv);
   if (process.argv.length == 2)
     program.help();
@@ -109,7 +138,7 @@ function main() {
 config.isBuild = true;
 requirejs.config(config);
 
-findNlsPaths(rootDir).forEach(loadModulesInNlsPath);
+buildRequire.findNlsPaths(rootDir).forEach(loadModulesInNlsPath);
 loadInlineL10nStrings();
 
 if (!module.parent) main();

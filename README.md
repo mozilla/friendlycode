@@ -40,26 +40,62 @@ here:
 
 ## Localization
 
-Before localizing, please read the [requirejs i18n bundle][i18n] 
+We currently use Transifex for localization. To localize Friendlycode
+in your language, please visit the 
+[Transifex friendlycode project][transifex]. Any strings you don't
+translate will fall-back to English.
+
+### Trying out a Localization
+
+Run `node bin/server.js` and visit 
+`http://localhost:8005/examples/transifex.html`. If this doesn't work,
+however&mdash;or if it runs too slowly for your tastes&mdash;you will have
+to take the following steps.
+
+1. Run `node bin/transifex.js -u user:pass`, where `user:pass` is your
+   Transifex username and password. You can run `node bin/transifex.js --help`
+   for information on more options, such as only importing strings that
+   have been reviewed. This will export all Transifex localizations as
+   requirejs i18n bundles in the `transifex` directory.
+
+2. Run `node bin/server.js` and then visit 
+   `http://localhost:8005/examples/transifex.html?local=1` to see your 
+   localizations.
+
+### Adding a new i18n bundle module
+
+Before adding a new i18n bundle, first read the [requirejs i18n bundle][i18n] 
 documentation.
 
-To create a localization, first run `node bin/build-i18n.js list`
-to display a list of i18n bundle modules that can be localized. You'll
-need to localize all of these to create a complete localization, but
-anything you don't localize will just fall-back to English.
+When creating an i18n bundle, you only need to provide the root localization.
+The following instructions assume that your new i18n bundle module is at
+`js/fc/nls/foo`.
 
-Suppose you decide you want to localize the `fc/nls/ui` module to `fr-fr`.
-Just do the following:
+1. Run `node bin/build-i18n.js plist fc/nls/foo > foo.plist`. This will
+   output a [Property List][] file to `foo.plist`, which Transifex can
+   use as a template for localization.
 
-1. Create the `js/fc/nls/fr-fr` directory if it doesn't already exist.
-2. Run `node bin/build-i18n.js template fc/nls/ui > js/fc/nls/fr-fr/ui.js`.
-3. Localize the strings in `js/fc/nls/fr-fr/ui.js`.
-4. Edit `js/fc/nls/ui.js` and add `"fr-fr": true` to the object being returned
-   by the module.
+2. Under friendlycode's [resource management page][] on Transifex, add
+   a new resource with name `fc/nls/foo` and i18n type 
+   `Apple PLIST files (.plist)`. Then upload the `foo.plist` file.
 
-You can test out your localization by setting your browser's language
-preference to `fr-fr` and then loading any embedding of your repository's
-friendlycode widget in your browser.
+### Updating an existing i18n bundle module
+
+If the root localization for an i18n bundle module has changed, follow the 
+same steps for adding a new i18n bundle (above), but simply re-upload the
+plist file for the existing module instead of creating a new one.
+
+### Deploying an internationalized widget
+
+See the source code in `examples/transifex.html` for information
+on how to do this with unoptimized builds.
+
+For optimized builds, use the `--i18n-url` option to `bin/build-require.js`
+to create an optimized build that retrieves its localizations at run-time
+from a different URL. For instance, if you deploy your Transifex
+requirejs i18n bundles to `/locale`, running
+`node bin/build-require.js --i18n-url="/locale/"` will create an
+optimized build that loads localizations from that URL at runtime.
 
 ## Updating CodeMirror
 
@@ -71,3 +107,6 @@ can be updated with the `bin/update-codemirror.py` script.
   [slowparse]: https://github.com/mozilla/slowparse
   [hacktionary]: https://github.com/toolness/hacktionary
   [CodeMirror]: http://codemirror.net/
+  [transifex]: https://www.transifex.com/projects/p/friendlycode/
+  [resource management page]: https://www.transifex.com/projects/p/friendlycode/resources/
+  [Property List]: http://help.transifex.com/features/formats.html#plist-format
