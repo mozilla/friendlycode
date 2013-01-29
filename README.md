@@ -47,10 +47,7 @@ translate will fall-back to English.
 
 ### Trying out a Localization
 
-First, set your browser's language preference to the language you're 
-localizing.
-
-Then, run `node bin/server.js` and visit 
+Run `node bin/server.js` and visit 
 `http://localhost:8005/examples/transifex.html`. If this doesn't work,
 however&mdash;or if it runs too slowly for your tastes&mdash;you will have
 to take the following steps.
