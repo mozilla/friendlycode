@@ -1,4 +1,6 @@
 var requirejs = require('requirejs'),
+  fs = require('fs'),
+  url = require('url'),
   jsdom = require('jsdom').jsdom,
   resolve = require('path').resolve,
   requireConfig = require('../js/require-config'),
@@ -13,7 +15,26 @@ var bailOnError = function(err) {
   process.exit(1);
 };
 
-var generateConfig = exports.generateConfig = function() {
+var findNlsPaths = exports.findNlsPaths = function(root, subdir) {
+  var nlsPaths = [];
+  subdir = subdir || '';
+  fs.readdirSync(root + subdir).forEach(function(filename) {
+    var relpath = subdir + '/' + filename;
+    var stat = fs.statSync(root + relpath);
+    if (stat.isDirectory()) {
+      if (filename == 'nls') {
+        nlsPaths.push(relpath.slice(1));
+      } else
+        nlsPaths = nlsPaths.concat(findNlsPaths(root, relpath));
+    }
+  });
+  
+  return nlsPaths;
+};
+
+var generateConfig = exports.generateConfig = function(options) {
+  options = options || {};
+  
   var config = {
     name: name,
     out: jsOut,
@@ -42,15 +63,34 @@ var generateConfig = exports.generateConfig = function() {
     config[name] = requireConfig[name];
   });
   config.baseUrl = rootDir;
+  
+  if (options.i18nUrl) {
+    var runtimePathConfig = {paths: {}};
+    findNlsPaths(rootDir).forEach(function(path) {
+      config.paths[path] = "empty:";
+      runtimePathConfig.paths[path] = url.resolve(options.i18nUrl, path);
+    });
+    config.wrap = {
+      start: "require.config(" + JSON.stringify(runtimePathConfig) + ");",
+      end: ""
+    };
+  }
+  
   return config;
 };
 
 exports.rootDir = rootDir;
 
-if (!module.parent) {
+function main() {
+  var program = require('commander');
+
+  program
+    .option('--i18n-url [url]', "base URL to i18n bundles")
+    .parse(process.argv);
+
   console.log("Generating", jsOut);
 
-  requirejs.optimize(generateConfig(), function (buildResponse) {
+  requirejs.optimize(generateConfig(program), function (buildResponse) {
     // buildResponse is just a text output of the modules
     // included.
     console.log("Done. About " + buildResponse.split('\n').length +
@@ -64,3 +104,5 @@ if (!module.parent) {
     }, bailOnError);
   }, bailOnError);
 }
+
+if (!module.parent) main();
