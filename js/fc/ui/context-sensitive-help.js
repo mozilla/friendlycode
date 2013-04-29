@@ -18,8 +18,16 @@ define([
     var timeout = null;
     var lastHelp = null;
     var HELP_DISPLAY_DELAY = 250;
-    
-    // The escape key should close hints 
+
+    function clearHelp() {
+      clearTimeout(timeout);
+      lastHelp = null;
+      cursorHelpMarks.clear();
+      helpArea.hide();
+      relocator.cleanup();
+    }
+
+    // The escape key should close hints
     $(document).keyup(function(event) {
       if (event.keyCode == 27)
         clearHelp();
@@ -35,7 +43,7 @@ define([
       if (!event.error)
         helpIndex.build(event.document, event.sourceCode);
     });
-    
+
     function showHelp(cursorIndex, help) {
       cursorHelpMarks.clear();
 
@@ -68,20 +76,17 @@ define([
           helpArea.fadeIn();
         }
       }
+      // clicking the dismiss link should also close error help
+      var dismiss = helpArea.find(".dismiss");
+      if(dismiss) {
+        dismiss.click(clearHelp);
+      }
     }
 
-    function clearHelp() {
-      clearTimeout(timeout);
-      lastHelp = null;
-      cursorHelpMarks.clear();
-      helpArea.hide();
-      relocator.cleanup();
-    }
-    
     codeMirror.on("change", clearHelp);
     codeMirror.on("cursor-activity", function() {
       clearTimeout(timeout);
-      
+
       if (Preferences.get("showHints") === false)
         return;
 
@@ -111,7 +116,7 @@ define([
       if (Preferences.get("showHints") === false)
         clearHelp();
     });
-    
+
     Preferences.trigger("change:showHints");
     return self;
   };

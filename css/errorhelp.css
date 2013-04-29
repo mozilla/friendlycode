@@ -190,6 +190,25 @@ html .flipped .down-arrow {
   background-image: url("../img/hint-up-arrow.png");
 }
 
+.error .dismiss,
+.help .dismiss {
+  position: absolute;
+  display: inline-block;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.error .dismiss {
+  color: #FF2A04;
+}
+
+.help .dismiss {
+  color: #FF9933;
+}
+
+
 .hint-marker-positioning {
   left: auto !important; /* CodeMirror will set this value, but we don't want it set! */
   right: 1em;
