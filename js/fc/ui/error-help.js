@@ -39,7 +39,7 @@ define(["jquery-slowparse", "./mark-tracker"], function($, MarkTracker) {
       relocator.cleanup();
     }
 
-    // The escape key should close error help 
+    // The escape key should close error help
     $(document).keyup(function(event) {
       if (event.keyCode == 27)
         clearError();
@@ -47,12 +47,12 @@ define(["jquery-slowparse", "./mark-tracker"], function($, MarkTracker) {
 
     // Keep track of error highlighting.
     var errorHelpMarks = MarkTracker(codeMirror, relocator);
-  
+
     // Report the given Slowparse error.
     function reportError(error) {
       var startMark = null;
       var errorHTML = $("<div></div>").fillError(error);
-      errorArea.html(template({error: errorHTML.html()})).show();         
+      errorArea.html(template({error: errorHTML.html()})).show();
       errorArea.eachErrorHighlight(function(start, end, i) {
         // Point the error message's arrow at the first occurrence of
         // the word "here" in the error message.
@@ -67,7 +67,7 @@ define(["jquery-slowparse", "./mark-tracker"], function($, MarkTracker) {
       });
       relocator.relocate(errorArea, startMark, "error");
 
-      // clicking the dismiss link should also close error help 
+      // clicking the dismiss link should also close error help
       var dismiss = errorArea.find(".dismiss");
       if(dismiss) {
         dismiss.click(clearError);
@@ -75,7 +75,7 @@ define(["jquery-slowparse", "./mark-tracker"], function($, MarkTracker) {
 
       errorArea.hide();
     }
-     
+
     codeMirror.on("change", clearError);
     codeMirror.on("reparse", function(event) {
       clearError();

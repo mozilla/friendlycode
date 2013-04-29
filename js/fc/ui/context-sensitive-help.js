@@ -27,7 +27,7 @@ define([
       relocator.cleanup();
     }
 
-    // The escape key should close hints 
+    // The escape key should close hints
     $(document).keyup(function(event) {
       if (event.keyCode == 27)
         clearHelp();
@@ -43,7 +43,7 @@ define([
       if (!event.error)
         helpIndex.build(event.document, event.sourceCode);
     });
-    
+
     function showHelp(cursorIndex, help) {
       cursorHelpMarks.clear();
 
@@ -76,17 +76,17 @@ define([
           helpArea.fadeIn();
         }
       }
-      // clicking the dismiss link should also close error help 
+      // clicking the dismiss link should also close error help
       var dismiss = helpArea.find(".dismiss");
       if(dismiss) {
         dismiss.click(clearHelp);
-      }      
+      }
     }
-   
+
     codeMirror.on("change", clearHelp);
     codeMirror.on("cursor-activity", function() {
       clearTimeout(timeout);
-      
+
       if (Preferences.get("showHints") === false)
         return;
 
@@ -116,7 +116,7 @@ define([
       if (Preferences.get("showHints") === false)
         clearHelp();
     });
-    
+
     Preferences.trigger("change:showHints");
     return self;
   };
