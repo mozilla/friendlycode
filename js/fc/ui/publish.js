@@ -7,7 +7,7 @@ define(function (require) {
       SocialMedia = require("./social-media"),
       ConfirmDialogTemplate = require("template!confirm-dialog"),
       PublishDialogTemplate = require("template!publish-dialog");
-  
+
   function makeSharingHotLoader(options) {
     return function hotLoadEventHandler() {
       var socialMedia = options.socialMedia,
@@ -46,21 +46,21 @@ define(function (require) {
       accordions.addClass("collapsed");
       $(this).removeClass("collapsed");
     });
-    
+
     // If the user's code has errors, warn them before publishing.
     codeMirror.on("reparse", function(event) {
       var hasErrors = event.error ? true : false;
       confirmDialog.toggleClass("has-errors", hasErrors);
     });
-    
-    $(".yes-button", confirmDialog).click(function(){
+
+    var performPublish = function(){
       // Reset the publish modal.
       shareResult.unbind('.hotLoad');
       $(".accordion", publishDialog).addClass("collapsed");
       $(".publication-result", publishDialog).removeClass("collapsed");
       $(".thimble-additionals", shareResult).html(origShareHTML);
       publishDialog.addClass("is-publishing");
-      
+
       // Start the actual publishing process, so that hopefully by the
       // time the transition has finished, the user's page is published.
       var code = codeMirror.getValue(),
@@ -78,7 +78,7 @@ define(function (require) {
                                               escape(info.path));
           viewLink.attr('href', viewURL).text(viewURL);
           remixLink.attr('href', remixURL).text(remixURL);
-          
+
           shareResult.bind('click.hotLoad', makeSharingHotLoader({
             urlToShare: viewURL,
             socialMedia: socialMedia
@@ -114,8 +114,10 @@ define(function (require) {
           $(".thimble-modal-menu", publishDialog).hide().fadeIn();
         }
       });
-    });
-    
+    };
+
+    $(".yes-button", confirmDialog).click(performPublish);
+
     var self = {
       setCurrentURL: function(url) {
         currURL = url;
@@ -127,10 +129,14 @@ define(function (require) {
           top: bounds.bottom + 'px',
           left: (bounds.right - dialogBoxes.width()) + 'px'
         });
-        confirmDialog.fadeIn();
+        if(confirmDialog.hasClass("has-errors")) {
+          confirmDialog.fadeIn();
+        } else {
+          performPublish();
+        }
       }
     };
-    
+
     BackboneEvents.mixin(self);
     return self;
   };
