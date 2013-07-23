@@ -1,9 +1,9 @@
 define([
   "jquery",
-  "backbone-events",
+  "codemirror",
   "fc/ui/live-preview",
   "slowparse/slowparse"
-], function($, BackboneEvents, LivePreview, Slowparse) {
+], function($, CodeMirror, LivePreview, Slowparse) {
   return function lpTest(name, html, cb) {
     if (typeof(html) == 'function') {
       cb = html;
@@ -11,13 +11,16 @@ define([
     }
     test(name, function() {
       var div = $('<div></div>').appendTo('body').css({visibility: "hidden"});
-      var cm = BackboneEvents.mixin({});
+      var cm = CodeMirror(div[0],{
+        value: "",
+        lineNumbers: true
+      });
       var preview = LivePreview({
         codeMirror: cm,
         previewArea: div
       });
       var result = Slowparse.HTML(document, html);
-      cm.trigger('reparse', {
+      CodeMirror.signal(cm, "reparse", {
         error: null,
         sourceCode: html,
         document: result.document

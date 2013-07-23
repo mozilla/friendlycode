@@ -50,8 +50,9 @@ define(["jquery-slowparse", "./mark-tracker"], function($, MarkTracker) {
 
     // Report the given Slowparse error.
     function reportError(error) {
-      var startMark = null;
-      var errorHTML = $("<div></div>").fillError(error);
+      var startMark = null,
+          endMark = null,
+          errorHTML = $("<div></div>").fillError(error);
       errorArea.html(template({error: errorHTML.html()})).show();
       errorArea.eachErrorHighlight(function(start, end, i) {
         // Point the error message's arrow at the first occurrence of
@@ -64,8 +65,9 @@ define(["jquery-slowparse", "./mark-tracker"], function($, MarkTracker) {
           codeMirror.setCursor(pos);
           pointAtPosition(codeMirror, pos);
         });
+        endMark = end;
       });
-      relocator.relocate(errorArea, startMark, "error");
+      relocator.relocate(errorArea, startMark, endMark, "error");
 
       // clicking the dismiss link should also close error help
       var dismiss = errorArea.find(".dismiss");

@@ -5,7 +5,7 @@ defineTests([
   "fc/ui/parsing-codemirror"
 ], function($, ParsingCodeMirror) {
   module("ParsingCodeMirror");
-  
+
   function pcmTest(name, cb) {
     test(name, function() {
       var place = $("<div></div>").appendTo(document.body);
@@ -32,8 +32,14 @@ defineTests([
         },
         time: fakeTime
       });
-      cm.on("all", function(eventName, arg) {
-        events.push("cm.trigger('" + eventName + "')");
+      cm.on("change", function() {
+        events.push("cm.signal('change')");
+      });
+      cm.on("reparse", function() {
+        events.push("cm.signal('reparse')");
+      });
+      cm.on("cursor-activity", function() {
+        events.push("cm.signal('cursor-activity')");
       });
       try {
         cb(cm, events, fakeTime);
@@ -42,13 +48,14 @@ defineTests([
       }
     });
   }
-  
+
   pcmTest("change triggered and timeout set on codeMirror.setValue()",
     function(cm, events, fakeTime) {
       cm.setValue("hello");
       deepEqual(events, [
-        "cm.trigger('change')",
         "time.setTimeout(fn, 1) -> 0",
+        "cm.signal('change')",
+        "cm.signal('cursor-activity')"
       ]);
     });
 
@@ -57,33 +64,35 @@ defineTests([
       cm.reparseEnabled = false;
       cm.setValue("hello");
       deepEqual(events, [
-        "cm.trigger('change')"
+        "cm.signal('change')",
+        "cm.signal('cursor-activity')"
       ]);
     });
-  
+
   pcmTest("reparse() triggers events and passes expected arguments",
     function(cm, events, fakeTime) {
       cm.setValue("hello"); events.splice(0);
-      cm.on("reparse", function(arg) {
-        equal(arg.document, "here is a document", "document passed");
-        equal(arg.error, "here is an error", "error passed");
-        equal(arg.sourceCode, "hello", "source code passed");
+      cm.on("reparse", function(evt) {
+        equal(evt.document, "here is a document", "document passed");
+        equal(evt.error, "here is an error", "error passed");
+        equal(evt.sourceCode, "hello", "source code passed");
       });
       cm.reparse();
       deepEqual(events, [
-        "cm.trigger('reparse')",
-        "cm.trigger('cursor-activity')",
+        "cm.signal('reparse')",
+        "cm.signal('cursor-activity')",
        ]);
     });
-  
+
   pcmTest("old timeout cancelled on multiple content changes",
     function(cm, events, fakeTime) {
       cm.setValue("hello"); events.splice(0);
       cm.setValue("hello goober");
       deepEqual(events, [
-        "cm.trigger('change')",
         "time.clearTimeout(0)",
-        "time.setTimeout(fn, 1) -> 1"
+        "time.setTimeout(fn, 1) -> 1",
+        "cm.signal('change')",
+        "cm.signal('cursor-activity')"
       ]);
     });
 
@@ -96,8 +105,8 @@ defineTests([
       });
       fakeTime.cb();
       deepEqual(events, [
-        "cm.trigger('reparse')",
-        "cm.trigger('cursor-activity')"
+        "cm.signal('reparse')",
+        "cm.signal('cursor-activity')"
       ], "events are triggered");
     });
 
@@ -105,6 +114,8 @@ defineTests([
     function(cm, events, fakeTime) {
       cm.setValue("hello"); events.splice(0);
       cm.setCursor({line: 0, ch: 2});
-      deepEqual(events, ["cm.trigger('cursor-activity')"]);
+      deepEqual(events, [
+        "cm.signal('cursor-activity')"
+      ]);
     });
 });

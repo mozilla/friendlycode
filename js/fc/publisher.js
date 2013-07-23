@@ -4,7 +4,7 @@
 // to save and load published code.
 define(["jquery"], function($) {
   var myOrigin = window.location.protocol + "//" + window.location.host;
-  
+
   function Publisher(baseURL) {
     // We want to support CORS for development but in production it doesn't
     // matter because all requests will be same-origin. However, browsers
@@ -53,7 +53,7 @@ define(["jquery"], function($) {
       }
     };
   }
-  
+
   // This is a fix for https://github.com/mozilla/webpagemaker/issues/20.
   function fixDoctypeHeadBodyMunging(html) {
     var lines = html.split('\n');
@@ -65,9 +65,9 @@ define(["jquery"], function($) {
     }
     return html;
   }
-  
+
   // Exposing this for unit testing purposes only.
   Publisher._fixDoctypeHeadBodyMunging = fixDoctypeHeadBodyMunging;
-  
+
   return Publisher;
 });
