@@ -2,23 +2,23 @@
 
 defineTests([
   "jquery",
-  "backbone-events",
+  "codemirror",
   "test/lptest",
   "fc/ui/live-preview"
-], function($, BackboneEvents, lpTest, LivePreview) {
+], function($, CodeMirror, lpTest, LivePreview) {
   module("LivePreview");
-  
+
   test("does nothing if preview area isn't attached", function() {
     var div = $("<div></div>");
-    var cm = BackboneEvents.mixin({});
+    var cm = CodeMirror(div[0]);
     var lp = LivePreview({
       previewArea: div,
       codeMirror: cm
     });
-    cm.trigger('reparse', {error: null});
+    CodeMirror.signal(cm, "reparse", {error: null});
     ok(true);
   });
-  
+
   lpTest(
     "title property reflects document title",
     "<title>hello</title>",
@@ -37,7 +37,7 @@ defineTests([
         equal(preview.title, title);
         start();
       });
-      cm.trigger('reparse', {
+      CodeMirror.signal(cm, 'reparse', {
         error: null,
         sourceCode: '<title>yo</title>'
       });
@@ -50,24 +50,24 @@ defineTests([
     function(previewArea, preview, cm) {
       var changed = 0;
       preview.on('change:title', function(title) { changed++; });
-      cm.trigger('reparse', {
+      CodeMirror.signal(cm, 'reparse', {
         error: null,
         sourceCode: '<title>hello</title><p>there</p>'
       });
       equal(changed, 0);
     }
   );
-    
+
   lpTest("HTML is written into document", function(previewArea, preview, cm) {
     equal($("body", previewArea.contents()).html(),
           "<p>hi <em>there</em></p>",
           "HTML source code is written into preview area");
   });
-  
+
   lpTest('<base target="_blank"> inserted', function(previewArea) {
     equal($('base[target="_blank"]', previewArea.contents()).length, 1);
   });
-  
+
   lpTest("refresh event is triggered", function(previewArea, preview, cm) {
     var refreshTriggered = false;
     equal(preview.codeMirror, cm, "codeMirror property exists");
@@ -76,28 +76,28 @@ defineTests([
       ok(event.window, "window is passed");
       refreshTriggered = true;
     });
-    cm.trigger('reparse', {
+    CodeMirror.signal(cm, 'reparse', {
       error: null,
       sourceCode: '',
       document: "blop"
     });
     ok(refreshTriggered, "refresh event is triggered");
   });
-  
+
   lpTest('scrolling is preserved across refresh',
     function(previewArea, preview, cm) {
       var wind;
       preview.on('refresh', function(event) {
         wind = event.window;
       });
-      
-      cm.trigger('reparse', {
+
+      CodeMirror.signal(cm, 'reparse', {
         error: null,
         sourceCode: '<p style="font-size: 400px">hi <em>there</em></p>'
       });
       wind.scroll(5, 6);
       var oldWind = wind;
-      cm.trigger('reparse', {
+      CodeMirror.signal(cm, 'reparse', {
         error: null,
         sourceCode: '<p style="font-size: 400px">hi <em>dood</em></p>'
       });
@@ -114,7 +114,7 @@ defineTests([
         ok(true, "PhantomJS SKIP - y scroll is preserved across refresh");
       }
     });
-  
+
   return {
     lpTest: lpTest
   };

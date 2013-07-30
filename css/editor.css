@@ -31,11 +31,11 @@
   background-repeat: no-repeat;
   -webkit-box-shadow: 0 5px 5px 0 rgba(233,233,233,0.5);
   box-shadow: 0 5px 5px 0 rgba(233,233,233,0.5);
-  
+
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  
+
   -moz-animation-duration: 4s;
   -moz-animation-name: friendlycode-loading-fadein;
   -webkit-animation-duration: 4s;
@@ -47,11 +47,11 @@
    * connections will see it, but users on fast connections won't
    * see the distracting flicker of a loading message that only shows
    * itself for a split-second. */
-  
+
   from {
     color: white;
   }
-  
+
   to {
     color: lightgray;
   }
@@ -61,7 +61,7 @@
   from {
     color: white;
   }
-  
+
   to {
     color: lightgray;
   }
@@ -82,9 +82,9 @@
   padding: 0;
 
   border-bottom: 1px solid #D6D6D6;
-  
+
   background: white;
-  
+
   -webkit-box-shadow: 0 5px 5px 0 rgba(233,233,233,0.5);
   box-shadow: 0 5px 5px 0 rgba(233,233,233,0.5);
 }
@@ -134,7 +134,7 @@
   -moz-transition: opacity 0.5s;
   -webkit-transition: opacity 0.5s;
   -o-transition: opacity 0.5s;
-  
+
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -454,11 +454,6 @@ div.editor-actions {
   background-color: white;
 }
 
-.source-code .CodeMirror, .source-code .CodeMirror-scroll {
-  height: 100%;
-  overflow: auto;
-}
-
 .tipsy.friendlycode-base {
   /* Make tipsy tooltips slightly larger than the default. */
   font-size: 12px;
@@ -483,7 +478,7 @@ div.editor-actions {
   pointer-events: none;
 }
 .friendlycode-base .breadcrumbs:after {
-  border-left-color: #fff; 
+  border-left-color: #fff;
   border-width: 5px;
   top: 50%;
   margin-top: -5px;
@@ -493,4 +488,14 @@ div.editor-actions {
   border-width: 7px;
   top: 50%;
   margin-top: -7px;
+}
+
+.source-code .CodeMirror {
+  height:100%;
+  overflow:hidden;
+}
+
+.source-code .CodeMirror-scroll {
+  height: 100%;
+  overflow: auto;
 }

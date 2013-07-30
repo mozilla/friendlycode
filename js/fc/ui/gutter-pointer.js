@@ -8,7 +8,7 @@
 //   |  \
 //   |  /
 //   --/
-// 
+//
 // It also puts the shape between the gutter and the content of a
 // CodeMirror line. The shape will be vertically stretched to take up the
 // entire height of the line.
@@ -17,7 +17,7 @@
 // class as the highlightClass argument.
 //
 // Arguments:
-// 
+//
 //   codeMirror: The CodeMirror instance to apply the pointer to.
 //
 //   highlightClass: The class name used to "highlight" the desired
@@ -30,27 +30,28 @@
 
 define(["jquery"], function($) {
   var SVG_NS = "http://www.w3.org/2000/svg";
-  
+
   function attrs(element, attributes) {
     for (var name in attributes)
       element.setAttribute(name, attributes[name].toString());
   }
-  
-  return function gutterPointer(codeMirror, highlightClass) {    
-    var wrapper = $(codeMirror.getWrapperElement());
-    var highlight = $(".CodeMirror-gutter-text ." + highlightClass, wrapper);
-    var svg = document.createElementNS(SVG_NS, "svg");
-    var pointer = document.createElementNS(SVG_NS, "polygon");
-    var w = ($(".CodeMirror-gutter", wrapper).outerWidth() -
-             highlight.width()) * 2;
-    var h = highlight[0].getBoundingClientRect().height;
-    var pos = highlight.position();
-    
-    pos.left += highlight.width();
+
+  return function gutterPointer(codeMirror, highlightClass) {
+    var wrapper = $(codeMirror.getWrapperElement()),
+        svg = document.createElementNS(SVG_NS, "svg"),
+        pointer = document.createElementNS(SVG_NS, "polygon"),
+        w = $(".CodeMirror-gutters").width()/2,
+        selector = ".gutter-mark."+highlightClass,
+        collection = $(selector, wrapper),
+        first = collection.first()[0],
+        last = collection.last()[0],
+        h = last.getBoundingClientRect().bottom - first.getBoundingClientRect().top;
+
     attrs(svg, {
       'class': "gutter-pointer " + highlightClass,
       viewBox: [0, 0, w, h].join(" ")
     });
+
     attrs(pointer, {
       points: [
         "0,0",
@@ -60,17 +61,17 @@ define(["jquery"], function($) {
         "0," + h
       ].join(" ")
     });
+
     svg.appendChild(pointer);
     $(svg).css({
       position: 'absolute',
       width: w + "px",
       height: h + "px",
-      top: pos.top + "px",
-      left: pos.left + "px"
+      right: "-" + w + "px"
     });
 
-    $(".CodeMirror-scroll", wrapper).append(svg);
-    
+    $(first).append(svg);
+
     return $(svg);
   };
 });

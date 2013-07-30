@@ -1,3 +1,4 @@
+var codemirror = "codemirror3";
 var require = {
   baseUrl: "js",
   shim: {
@@ -61,11 +62,11 @@ var require = {
     "underscore": "../vendor/underscore.min",
     "backbone": "../vendor/backbone.min",
     "slowparse": "../vendor/slowparse",
-    "codemirror": "../vendor/codemirror2/lib/codemirror",
-    "codemirror/xml": "../vendor/codemirror2/mode/xml/xml",
-    "codemirror/javascript": "../vendor/codemirror2/mode/javascript/javascript",
-    "codemirror/css": "../vendor/codemirror2/mode/css/css",
-    "codemirror/html": "../vendor/codemirror2/mode/htmlmixed/htmlmixed",
+    "codemirror": "../vendor/" + codemirror + "/lib/codemirror",
+    "codemirror/xml": "../vendor/" + codemirror + "/mode/xml/xml",
+    "codemirror/javascript": "../vendor/" + codemirror + "/mode/javascript/javascript",
+    "codemirror/css": "../vendor/" + codemirror + "/mode/css/css",
+    "codemirror/html": "../vendor/" + codemirror + "/mode/htmlmixed/htmlmixed",
     "text": "../vendor/require.text",
     "i18n": "../vendor/require.i18n",
     "lscache": "../vendor/lscache",

@@ -13,18 +13,18 @@ define(["jquery", "./gutter-pointer"], function($, gutterPointer) {
       var bottomChar = {line: codeMirror.lineCount(), ch: 0};
       var bottomCoords = codeMirror.charCoords(bottomChar, "local");
       var height = lastElement.height();
-      var bottom = Math.max(bottomCoords.yBot,
+      var bottom = Math.max(bottomCoords.bottom,
                             $(codeMirror.getScrollerElement()).height());
-      var isPointingDown = coords.yBot + height > bottom;
+      var isPointingDown = coords.bottom + height > bottom;
       lastElement.toggleClass("flipped", isPointingDown);
     }
-    
+
     var relocator = {
       // clear old markings
       cleanup: function() {
+        codeMirror.clearGutter("gutter-markers");
         if (lastPos) {
-          codeMirror.setLineClass(lastPos.line, null, null);
-          codeMirror.clearMarker(lastPos.line);
+          codeMirror.removeLineClass(lastPos.line, null, null);
           lastPos = null;
         }
         if (lastElement) {
@@ -41,7 +41,7 @@ define(["jquery", "./gutter-pointer"], function($, gutterPointer) {
       },
 
       // relocate an element to inside CodeMirror, pointing "at" the line for startMark
-      relocate: function(element, startMark, type) {
+      relocate: function(element, startMark, endMark, type) {
         var highlightClass = "gutter-highlight-" + type;
 
         this.cleanup();
@@ -52,9 +52,23 @@ define(["jquery", "./gutter-pointer"], function($, gutterPointer) {
         // to soft-wrapping, so we want to make sure that we point at
         // the right one.
         lastPos = codeMirror.posFromIndex(startMark);
-        codeMirror.setLineClass(lastPos.line, null, "CodeMirror-line-highlight");
-        codeMirror.setMarker(lastPos.line, null, highlightClass);
-        lastGutterPointer = gutterPointer(codeMirror, highlightClass);
+        var startLine = lastPos.line,
+            endLine = codeMirror.posFromIndex(endMark).line,
+            mark;
+        if(startLine > endLine) {
+          var _ = endLine;
+          endLine = startLine;
+          startLine = _;
+        }
+
+        for(var l = startLine; l <= endLine; l++) {
+          mark = document.createElement("span");
+          jQuery(mark).attr("class","gutter-mark " + highlightClass);
+          mark.innerHTML = "...";
+          codeMirror.setGutterMarker(l, "gutter-markers", mark);
+        }
+
+        gutterPointer(codeMirror, highlightClass)
 
         codeMirror.addWidget(lastPos, lastElement[0], false);
         $(".up-arrow, .down-arrow", lastElement).css({
@@ -73,7 +87,7 @@ define(["jquery", "./gutter-pointer"], function($, gutterPointer) {
         lastToggle.lastElement = lastElement;
         codeMirror.addWidget(lastPos, lastToggle, false);
         lastToggle.onclick = function() {
-          lastToggle.lastElement.toggle(); 
+          lastToggle.lastElement.toggle();
           codeMirror.focus();
         };
         $(lastToggle).attr("class", "hint-marker-positioning hint-marker-" + type).show();

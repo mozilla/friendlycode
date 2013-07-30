@@ -5,7 +5,7 @@
 // to this code:
 //
 //   BackboneEvents.mixin(object)
-// 
+//
 // This is useful in two ways:
 //
 // * A bunch of our modules only import underscore and backbone for
@@ -23,7 +23,9 @@
 define(["underscore", "backbone"], function(_, Backbone) {
   return {
     mixin: function(target) {
-      return _.extend(target, Backbone.Events);
+      Object.keys(Backbone.Events).forEach(function(eventName) {
+        _.extend(target,Backbone.Events);
+      });
     }
   };
 });

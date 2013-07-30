@@ -21,7 +21,7 @@ define(["jquery", "backbone-events"], function($, BackboneEvents) {
         var x = 0,
             y = 0,
             doc, wind;
-        
+
         if (iframe) {
           doc = $(iframe).contents()[0];
           wind = doc.defaultView;
@@ -32,7 +32,7 @@ define(["jquery", "backbone-events"], function($, BackboneEvents) {
 
         iframe = document.createElement("iframe");
         options.previewArea.append(iframe);
-        
+
         // Update the preview area with the given HTML.
         doc = $(iframe).contents()[0];
         wind = doc.defaultView;
@@ -46,13 +46,13 @@ define(["jquery", "backbone-events"], function($, BackboneEvents) {
         var baseTag = doc.createElement('base');
         baseTag.setAttribute('target', '_blank');
         doc.querySelector("head").appendChild(baseTag);
-        
+
         // TODO: If the document has images that take a while to load
         // and the previous scroll position of the document depends on
         // their dimensions being set on load, we may need to refresh
         // this scroll position after the document has loaded.
         wind.scroll(x, y);
-        
+
         self.trigger("refresh", {
           window: wind,
           documentFragment: event.document
@@ -68,6 +68,6 @@ define(["jquery", "backbone-events"], function($, BackboneEvents) {
     BackboneEvents.mixin(self);
     return self;
   };
-  
+
   return LivePreview;
 });

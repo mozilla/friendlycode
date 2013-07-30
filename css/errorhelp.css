@@ -223,6 +223,7 @@ html .flipped .down-arrow {
   margin-top: -1.3em;
 
   background-size: 100% 100%;
+  z-index: 999;
 }
 
 .hint-marker-help {
@@ -243,4 +244,26 @@ svg.gutter-pointer.gutter-highlight-error polygon {
 
 svg.gutter-pointer.gutter-highlight-help polygon {
   fill: #FF9933;
+}
+
+.gutter-markers {
+  position: relative;
+  width: 0px;
+}
+
+.gutter-mark {
+  display: inline-block;
+  position: relative;
+  width: 1000px;
+  margin-left: -1000px;
+  opacity: 0.5;
+  z-index:999;
+}
+
+.gutter-mark.gutter-highlight-error {
+  background: #FF2A04;
+}
+
+.gutter-mark.gutter-highlight-help {
+  background: #FF9933;
 }

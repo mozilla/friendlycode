@@ -11,10 +11,10 @@ define(function(require) {
       Relocator = require("fc/ui/relocator"),
       HelpMsgTemplate = require("template!help-msg"),
       ErrorMsgTemplate = require("template!error-msg");
-  
+
   require('slowparse-errors');
   require("codemirror/html");
-  
+
   return function EditorPanes(options) {
     var self = {},
         div = options.container,
@@ -24,13 +24,17 @@ define(function(require) {
         previewArea = $('<div class="preview-holder"></div>').appendTo(div),
         helpArea = $('<div class="help hidden"></div>').appendTo(div),
         errorArea =  $('<div class="error hidden"></div>').appendTo(div);
-    
+
     var codeMirror = self.codeMirror = ParsingCodeMirror(sourceCode[0], {
       mode: "text/html",
       theme: "jsbin",
       tabMode: "indent",
       lineWrapping: true,
       lineNumbers: true,
+      gutters: [
+        "CodeMirror-linenumbers",
+        "gutter-markers"
+      ],
       value: initialValue,
       parse: function(html) {
         return Slowparse.HTML(document, html,
@@ -57,7 +61,7 @@ define(function(require) {
       previewArea: previewArea
     });
     var previewToEditorMapping = PreviewToEditorMapping(preview);
-    
+
     return self;
   };
 });
