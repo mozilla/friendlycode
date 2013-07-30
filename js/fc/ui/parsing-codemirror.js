@@ -12,7 +12,7 @@ define([
     function reparse() {
       var sourceCode = codeMirror.getValue();
       var result = givenOptions.parse(sourceCode);
-      codeMirror.trigger("reparse", {
+      CodeMirror.signal(codeMirror, "reparse", {
         error: result.error,
         sourceCode: sourceCode,
         document: result.document
@@ -20,12 +20,7 @@ define([
       // Cursor activity would've been fired before us, so call it again
       // to make sure it displays the right context-sensitive help based
       // on the new state of the document.
-      onCursorActivity();
-    }
-
-    // Called whenever the user moves their cursor in the editor area.
-    function onCursorActivity() {
-      codeMirror.trigger("cursor-activity");
+      CodeMirror.signal(codeMirror, "cursor-activity");
     }
 
     // The number of milliseconds to wait before re-parsing the editor
@@ -34,17 +29,21 @@ define([
     var time = givenOptions.time || window;
     var reparseTimeout;
 
-    givenOptions.onChange = function() {
-      codeMirror.trigger("change");
-      if (reparseTimeout !== undefined)
-        time.clearTimeout(reparseTimeout);
-      if (codeMirror.reparseEnabled)
-        reparseTimeout = time.setTimeout(reparse, parseDelay);
-    };
-    givenOptions.onCursorActivity = onCursorActivity;
-
     var codeMirror = IndexableCodeMirror(place, givenOptions);
-    BackboneEvents.mixin(codeMirror);
+
+    codeMirror.on("change", function(cm, event) {
+      if (reparseTimeout !== undefined) {
+        time.clearTimeout(reparseTimeout);
+      }
+      if (codeMirror.reparseEnabled) {
+        reparseTimeout = time.setTimeout(reparse, parseDelay);
+      }
+    });
+
+    codeMirror.on("cursorActivity", function(cm, activity) {
+      CodeMirror.signal(codeMirror, "cursor-activity");
+    });
+
     codeMirror.reparse = reparse;
     codeMirror.reparseEnabled = true;
     return codeMirror;

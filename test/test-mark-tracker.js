@@ -6,11 +6,14 @@ defineTests([
   "codemirror"
 ], function($, MarkTracker, CodeMirror) {
   module("MarkTracker");
-  
+
+  var className = "cm-debug";
+
   function mtTest(name, cb) {
     test(name, function() {
-      var place = $("<div></div>").appendTo(document.body);
-      var cm = CodeMirror(place[0], {mode: "text/plain"});
+      var place = $("<div></div>");
+      place.appendTo(document.body);
+      var cm = CodeMirror(place[0]);
       var mt = MarkTracker(cm);
       try {
         cb(place, cm, mt);
@@ -19,21 +22,23 @@ defineTests([
       }
     });
   }
-  
+
   mtTest("codeMirror content mark/clear works", function(place, cm, mt) {
     cm.setValue("hello");
-    mt.mark(2, 4, "blah");
-    equal(place.find(".blah").text(), "ll", "source code is marked w/ class");
+    mt.mark(2, 4, className);
+    var fragment = $(".CodeMirror-measure ."+className).text();
+    equal(fragment, "ll", "source code is marked w/ class");
     mt.clear();
-    equal(place.find(".blah").length, 0, "source code class is cleared");
+    fragment = $(".CodeMirror-measure ."+className).text();
+    equal(fragment, "", "source code class is cleared");
   });
-  
+
   mtTest("related element mark/clear works", function(place, cm, mt) {
     var thing = $("<div></div>");
     cm.setValue("hello");
-    mt.mark(1, 4, "foo", thing[0]);
-    ok(thing.hasClass("foo"), "related element is marked w/ class");
+    mt.mark(1, 4, className, thing[0]);
+    ok(thing.hasClass(className), "related element is marked w/ class");
     mt.clear();
-    ok(!thing.hasClass("foo"), "related element class is cleared");
+    ok(!thing.hasClass(className), "related element class is cleared");
   });
 });

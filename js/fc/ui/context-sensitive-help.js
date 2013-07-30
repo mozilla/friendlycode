@@ -57,18 +57,21 @@ define([
       }
       var oldOffset = helpArea.offset();
       helpArea.html(template(help)).show();
-      var startMark = null;
+      var startMark = null,
+          endMark = null;
       help.highlights.forEach(function(interval) {
         var start = interval.start,
             end = interval.end;
         // Show the help message closest to the highlight that
         // encloses the current cursor position.
-        if (start <= cursorIndex && end >= cursorIndex)
+        if (start <= cursorIndex && end >= cursorIndex) {
           startMark = start;
+          endMark = end;
+        }
         cursorHelpMarks.mark(start, end, "cursor-help-highlight");
       });
       if (startMark !== null) {
-        relocator.relocate(helpArea, startMark, "help");
+        relocator.relocate(helpArea, startMark, endMark, "help");
         var newOffset = helpArea.offset();
         if (newOffset.top != oldOffset.top ||
             newOffset.left != oldOffset.left) {

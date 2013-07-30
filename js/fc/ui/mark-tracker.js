@@ -20,7 +20,13 @@ define(["jquery"], function($) {
         }
         start = codeMirror.posFromIndex(start);
         end = codeMirror.posFromIndex(end);
-        marks.push(codeMirror.markText(start, end, className));
+        var mark = codeMirror.markText(start, end, {
+          className: className,
+          inclusiveLeft: true,
+          inclusiveRight: false
+        });
+        marks.push(mark);
+        return mark;
       },
       // Clear all marks made so far and remove the class from any elements
       // it was previously given to.
@@ -45,4 +51,3 @@ define(["jquery"], function($) {
     };
   };
 });
-  

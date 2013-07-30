@@ -3,26 +3,26 @@ define(function() {
     // We don't currently support dynamically changing the URL
     // without a full page reload, unfortunately, so just trigger a
     // reload if the user clicked the 'back' button after we pushed
-    // a new URL to it.    
+    // a new URL to it.
     return function() { window.location.reload() };
   }
-  
+
   return function CurrentPageManager(options) {
     var self = {},
         window = options.window,
         pageToLoad = options.currentPage,
         loadPage = options.loadPage || defaultLoadPage(window),
         supportsPushState = window.history.pushState ? true : false;
-    
+
     if (supportsPushState)
       window.history.replaceState({pageToLoad: pageToLoad}, "",
                                   window.location.href);
-    
+
     // If a URL hash is specified, it should override anything provided by
     // a server.
     if (window.location.hash.slice(1))
       pageToLoad = window.location.hash.slice(1);
-    
+
     window.addEventListener("hashchange", function(event) {
       var newPageToLoad = window.location.hash.slice(1);
       if (newPageToLoad != pageToLoad) {
@@ -41,7 +41,7 @@ define(function() {
           loadPage(pageToLoad);
         }
       }, false);
-    
+
     self.currentPage = function() { return pageToLoad; };
     self.changePage = function(page, url) {
       pageToLoad = page;
@@ -50,7 +50,7 @@ define(function() {
       else
         window.location.hash = "#" + page;
     };
-    
+
     return self;
   };
 });
