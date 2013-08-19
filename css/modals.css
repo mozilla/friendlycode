@@ -149,7 +149,6 @@
 .thimble-url-box {
   background-color: #FFFFFF;
   color: blue;
-  height: 25px;
   margin: 10px auto 1em;
   padding-left: 1em;
   padding-top: 5px;
@@ -202,7 +201,7 @@
 }
 
 div.accordion:not(.collapsed) .accordion-content {
-  height: 50px;
+  min-height: 50px;
 }
 
 .thimble-grey-bar .thimble-additionals {
