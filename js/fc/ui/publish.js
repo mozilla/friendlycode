@@ -5,6 +5,8 @@ define(function (require) {
       i18nBundle = require("i18n!fc/nls/ui"),
       BackboneEvents = require("backbone-events"),
       SocialMedia = require("./social-media"),
+      DetailsForm = require('./details-form'),
+      Make = require('/external/make-api.js'),
       ConfirmDialogTemplate = require("template!confirm-dialog"),
       PublishDialogTemplate = require("template!publish-dialog");
 
@@ -37,7 +39,9 @@ define(function (require) {
         accordions = $("div.accordion", publishDialog),
         origShareHTML = $(".thimble-additionals", shareResult).html(),
         currURL = null,
-        socialMedia = SocialMedia();
+        socialMedia = SocialMedia(),
+        detailsForm,
+        makeData;
 
     modals.add(dialogs);
 
@@ -53,6 +57,17 @@ define(function (require) {
       confirmDialog.toggleClass("has-errors", hasErrors);
     });
 
+    // Search for the make, and apply details to metadata form
+    var makeEndpoint = $('body').data('make-endpoint');
+    var makeUrl = $('body').data('make-url');
+    if ( makeUrl ) {
+      var make = Make({ apiURL: makeEndpoint });
+      make.find({
+        url: makeUrl
+      }).then(function(err, data) {
+        makeData = data[0];
+      });
+    }
     var performPublish = function(){
       // Reset the publish modal.
       shareResult.unbind('.hotLoad');
@@ -65,7 +80,10 @@ define(function (require) {
       // time the transition has finished, the user's page is published.
       var code = codeMirror.getValue(),
           publishErrorOccurred = false;
-      publisher.saveCode(code, currURL, function(err, info) {
+      publisher.saveCode({
+        html: code,
+        metaData: detailsForm.getValue()
+      }, currURL, function(err, info) {
         if (err) {
           publishDialog.stop().hide();
           modals.showErrorDialog({
@@ -129,11 +147,17 @@ define(function (require) {
           top: bounds.bottom + 'px',
           left: (bounds.right - dialogBoxes.width()) + 'px'
         });
-        if(confirmDialog.hasClass("has-errors")) {
-          confirmDialog.fadeIn();
+        if (!detailsForm) {
+          detailsForm = new DetailsForm({
+            container: '.details-container',
+            codeMirror: codeMirror
+          });
+          detailsForm.updateAll(makeData);
         } else {
-          performPublish();
+          detailsForm.updateAll();
         }
+
+        confirmDialog.fadeIn();
       }
     };
 
