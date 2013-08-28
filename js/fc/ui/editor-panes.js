@@ -58,7 +58,8 @@ define(function(require) {
     var preview = self.preview = LivePreview({
       codeMirror: codeMirror,
       ignoreErrors: true,
-      previewArea: previewArea
+      previewArea: previewArea,
+      previewLoader: options.previewLoader
     });
     var previewToEditorMapping = PreviewToEditorMapping(preview);
 

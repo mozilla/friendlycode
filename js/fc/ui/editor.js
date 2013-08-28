@@ -11,20 +11,21 @@ define([
           .appendTo(container),
         panesDiv = $('<div class="friendlycode-panes"></div>')
           .appendTo(container);
-    
+
     var panes = EditorPanes({
       container: panesDiv,
       value: value,
-      allowJS: options.allowJS
+      allowJS: options.allowJS,
+      previewLoader: options.previewLoader
     });
     var toolbar = EditorToolbar({
       container: toolbarDiv,
       panes: panes
     });
-    
+
     container.removeClass("friendlycode-loading");
     panes.codeMirror.refresh();
-    
+
     return {
       container: container,
       panes: panes,
