@@ -9,7 +9,7 @@ define(['template!details-form'], function (detailsFormHTML) {
 
   var $container;
   var $thumbnailChoices;
-  var documentIframe;
+  var codeMirror;
 
   function $input(name) {
     return $('[name="' + name + '"]', $container);
@@ -31,8 +31,9 @@ define(['template!details-form'], function (detailsFormHTML) {
     $container = $(options.container);
     $container.html(detailsFormHTML());
 
-    documentIframe = options.documentIframe;
+    codeMirror = options.codeMirror;
     $thumbnailChoices = $('.thumbnail-choices', $container);
+
 
     // Setup
     $input('tag-input').on('keydown', function (e) {
@@ -61,10 +62,15 @@ define(['template!details-form'], function (detailsFormHTML) {
     self.tags = [];
   };
 
+  DetailsForm.prototype.getCodeMirrorValue = function() {
+    var self = this;
+    return $('<div></div>').html(codeMirror.getValue());
+  };
+
   // Update thumbnail choices based on contents of documentIframe
   DetailsForm.prototype.updateThumbnails = function (selectedImg) {
     var self = this;
-    var $currentHTML = $(documentIframe).contents();
+    var $currentHTML = self.getCodeMirrorValue();
     var imgs = [];
 
     // First add selected image, if it exists
@@ -105,14 +111,15 @@ define(['template!details-form'], function (detailsFormHTML) {
 
   // Find meta tags in HTML content. Returns an array of strings;
   DetailsForm.prototype.findMetaTagInfo = function (name) {
-
+    var self = this;
     // Different syntax for author and description
     if (name !== 'description' & name !== 'author') {
       name = 'webmaker:' + name;
     }
 
-    var $currentHTML = $(documentIframe).contents();
+    var $currentHTML = self.getCodeMirrorValue();
     var $tags = $currentHTML.find('meta[name="' + name + '"]');
+
     var content = [];
 
     $tags.each(function (i, el) {
@@ -150,7 +157,7 @@ define(['template!details-form'], function (detailsFormHTML) {
 
     switch (field) {
       case 'title':
-        val = val || currentVal || $(documentIframe).contents().find('title').text();
+        val = val || currentVal || self.getCodeMirrorValue().find('title').text();
         $fieldInput.val(val);
         break;
       case 'thumbnail':
@@ -170,6 +177,7 @@ define(['template!details-form'], function (detailsFormHTML) {
 
   // Update all fields with an object of make data
   DetailsForm.prototype.updateAll = function (data) {
+    var self = this;
     data = data || {};
     var self = this;
     ALL_FIELDS.forEach(function (field, i) {
