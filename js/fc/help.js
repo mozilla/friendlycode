@@ -1,10 +1,9 @@
 "use strict";
 
 define([
-  "i18n!fc/nls/html-element-docs",
-  "i18n!fc/nls/css-property-docs",
-  "i18n!fc/nls/hacktionary"
-], function(HtmlElementDocs, CssPropertyDocs, Hacktionary) {
+  "i18n!fc/nls/resourcelinks",
+  "localized"
+], function(Resourcelinks, Localized) {
   // A help index provides context-sensitive help for an HTML document,
   // indexed by characters in the HTML source code.
   function HelpIndex() {
@@ -33,26 +32,27 @@ define([
   // Return the context-sensitive help information for a particular
   // position in the source code, or undefined if no help is available.
   function getHelp(index, helpIndex) {
+    Localized.ready(function(){});
     var help = helpIndex[index];
     if (help) {
-      if (help.type == "tag" && help.value in HtmlElementDocs)
+      if (help.type == "tag")
         return {
           type: help.type,
-          html: HtmlElementDocs[help.value],
+          html: Localized.get(help.value),
           url: Help.MDN_URLS.html + help.value,
           highlights: help.highlights
         };
-      else if (help.type == "cssProperty" && help.value in CssPropertyDocs)
+      else if (help.type == "cssProperty")
         return {
           type: help.type,
-          html: CssPropertyDocs[help.value],
+          html: Localized.get(help.value),
           url: Help.MDN_URLS.css + help.value,
           highlights: help.highlights
         };
       else if (help.type == "cssSelector")
         return {
           type: help.type,
-          html: Hacktionary["css-selector-docs"],
+          html: Localized.get("css-selector-docs"),
           url: Help.MDN_URLS.cssSelectors,
           highlights: help.highlights
         };
@@ -123,9 +123,9 @@ define([
     Index: HelpIndex,
     // URLs for help on the Mozilla Developer Network.
     MDN_URLS: {
-      html: Hacktionary["mdn_url_html"],
-      css: Hacktionary["mdn_url_css"],
-      cssSelectors: Hacktionary["mdn_url_css_selectors"]
+      html: Resourcelinks["mdn_url_html"],
+      css: Resourcelinks["mdn_url_css"],
+      cssSelectors: Resourcelinks["mdn_url_css_selectors"]
     }
   };
 

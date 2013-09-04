@@ -1,6 +1,5 @@
 define(function(require) {
   var $ = require("jquery"),
-      i18nBundle = require("i18n!fc/nls/ui"),
       Preferences = require("fc/prefs"),
       Editor = require("fc/ui/editor"),
       Modals = require("fc/ui/modals"),
@@ -8,7 +7,8 @@ define(function(require) {
       CurrentPageManager = require("fc/current-page-manager"),
       Publisher = require("fc/publisher"),
       PublishUI = require("fc/ui/publish"),
-      DefaultContentTemplate = require("template!default-content");
+      DefaultContentTemplate = require("template!default-content"),
+      Localized = require("localized");
 
   Preferences.fetch();
 
@@ -89,7 +89,7 @@ define(function(require) {
       publisher.loadCode(pageManager.currentPage(), function(err, data, url) {
         if (err) {
           modals.showErrorDialog({
-            text: i18nBundle['page-load-err']
+            text: Localized.get('page-load-err')
           });
         } else {
           editor.panes.codeMirror.setValue(data);
