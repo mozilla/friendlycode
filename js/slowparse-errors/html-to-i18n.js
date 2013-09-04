@@ -1,4 +1,4 @@
-define(["text"], function(text) {
+define(["text", "localized"], function(text, localized) {
   var buildMap = {};
   
   function htmlToI18nBundle(document, html) {
@@ -10,16 +10,15 @@ define(["text"], function(text) {
       var name = el.className.split(' ').slice(-1)[0];
       result[name] = el.innerHTML;
     });
-
     return result;
   };
 
   return {
     load: function(name, req, onLoad, config) {
+      name = name.replace( /^\//, "/" + localized.getCurrentLang() + "/" );
       var url = req.toUrl(name).replace(".js", ".html");
       
       text.get(url, function(html) {
-        var template;
         if (config.isBuild) {
           buildMap[name] = htmlToI18nBundle(config.makeDocument(), html);
           onLoad(buildMap[name]);
@@ -27,11 +26,6 @@ define(["text"], function(text) {
           onLoad(htmlToI18nBundle(document, html));
         }
       });
-    },
-    write: function(pluginName, moduleName, write) {
-      var content = JSON.stringify(buildMap[moduleName]);
-      write.asModule(pluginName + "!" + moduleName,
-                     "define(function() { return " + content + "; });\n");
     }
   };
 });
