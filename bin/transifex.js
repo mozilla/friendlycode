@@ -47,9 +47,18 @@ var toBundleDict = exports.toBundleDict = function(options) {
   options.strings.forEach(function(info) {
     if (!info.translation) return;
     if (options.reviewedOnly && !info.reviewed) return;
-    dict[info.key] = info.translation;
+    // We're unescaping info.key due to what appears to be a strange
+    // Transifex bug: https://github.com/mozilla/friendlycode/issues/176
+    dict[unescapeXML(info.key)] = info.translation;
   });
   return dict;
+};
+
+var unescapeXML = exports.unescapeXML = function(str) {
+  return str.replace(/&amp;/g, '&')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&quot;/g, '"');
 };
 
 function importFromTransifex(options) {

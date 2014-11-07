@@ -23,10 +23,14 @@ var translationsForACollectionOfStrings = [
   {
     "comment": "This string appears in https://github.com/mozilla/blah.",
     "context": "",
-    "key": "Are you sure you want to publish your page?",
+    // Yes, Transifex doesn't seem to unescape &amp; on its own, and
+    // chooses instead to interpret the content of <key> elements in the
+    // PLIST file as though it's CDATA. For more information, see
+    // https://github.com/mozilla/friendlycode/issues/176.
+    "key": "Are you sure you want to publish your page &amp; stuff?",
     "reviewed": false,
     "pluralized": false,
-    "source_string": "Are you sure you want to publish your page?",
+    "source_string": "Are you sure you want to publish your page & stuff?",
     "translation": "blargyblarg?"
   },
   {
@@ -184,12 +188,20 @@ test("toBundleDict({reviewedOnly: true}) works", function(t) {
   t.end();
 });
 
+test("unescapeXML() works", function(t) {
+  t.equal(transifex.unescapeXML("blah&quot;u"), 'blah"u');
+  t.equal(transifex.unescapeXML("blah &gt; u"), 'blah > u');
+  t.equal(transifex.unescapeXML("&lt;3"), '<3');
+  t.equal(transifex.unescapeXML("&amp;hellip;"), '&hellip;');
+  t.end();
+});
+
 test("toBundleDict({reviewedOnly: false}) works", function(t) {
   t.deepEqual(transifex.toBundleDict({
     strings: translationsForACollectionOfStrings,
     reviewedOnly: false
   }), {
-    "Are you sure you want to publish your page?": "blargyblarg?",
+    "Are you sure you want to publish your page & stuff?": "blargyblarg?",
     "error-warning": "<strong>Achtung!</strong>"
   });
   t.end();
